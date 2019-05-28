@@ -1,0 +1,19 @@
+
+
+RUSTFLAGS=-C link-args=-Wl,-rpath,/opt/data/dev/rust/beeem/lib
+
+
+cargo build
+
+
+
+
+
+
+
+LIBRARY_PATH=snappy/lib cargo build
+
+
+LD_PRELOAD=snappy/lib/libsnappy.so.1 cargo run
+
+
