@@ -1,0 +1,50 @@
+use std::sync::Arc;
+
+use rtdlib::types::*;
+
+use crate::api::Api;
+use crate::types::*;
+
+#[derive(Clone)]
+pub struct Listener {
+  {% for key, value in mapper %}l_{{key}}: Option<Arc<Fn((&Api, &{{value}})) + Send + Sync + 'static>>,
+  {% endfor %}
+}
+
+impl Listener {
+  pub fn new() -> Self {
+    Self {
+      {% for key, value in mapper %}l_{{key}}: None,
+      {% endfor %}
+    }
+  }
+
+  pub(crate) fn has_update_listen(&self) -> bool {
+    self.l_update.is_some()
+  }
+
+  pub(crate) fn lout(&self) -> Lout {
+    Lout::new(self.clone())
+  }
+{% for key, value in mapper %}
+  pub fn on_{{key}}<F>(&mut self, fnc: F) -> &mut Self where F: Fn((&Api, &{{value}})) + Send + Sync + 'static {
+    self.l_{{key}} = Some(Arc::new(fnc));
+    self
+  }
+{% endfor %}
+}
+
+pub struct Lout {
+  listener: Listener
+}
+
+impl Lout {
+  fn new(listener: Listener) -> Self {
+    Self { listener }
+  }
+{% for key, value in mapper %}
+  pub fn {{key}}(&self) -> &Option<Arc<Fn((&Api, &{{value}})) + Send + Sync + 'static>> {
+    &self.listener.l_{{key}}
+  }
+{% endfor %}
+}

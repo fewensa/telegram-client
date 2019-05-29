@@ -1,5 +1,7 @@
 use std::path::Path;
 
+mod gen;
+
 fn lib_path() -> &'static Path {
   let path: &'static str = match std::env::var("LIB_PATH") {
     Ok(path) => Box::leak(path.into_boxed_str()),
@@ -27,12 +29,12 @@ fn canonicalize_lib_path() -> &'static str {
 fn main() {
 
   println!("cargo:rustc-link-search=native={}", canonicalize_lib_path());
+//  println!("cargo:rustc-link-search=native=/usr/lib");
   println!("cargo:rustc-link-lib=dylib=tdjson");
 
-//  println!("cargo:rustc-link-search=native=/opt/data/dev/rust/beeem/lib");
-//  println!("cargo:rustc-link-lib=dylib=tdjson");
 
 
+  gen::gen_listener();
 
 }
 
