@@ -14,10 +14,10 @@ impl<'a> TProxy<'a> {
 
   pub fn add(&self) {
     let proxy = AddProxy::builder()
-      .server("127.0.0.1".to_string())
+      .server("127.0.0.1")
       .port(1080)
       .enable(true)
-      .type_(Box::new(ProxyTypeSocks5::builder().build())) // todo tdlib change type_ to type
+      .type_(Box::new(ProxyTypeSocks5::builder().build()))
       .build();
     self.api.send(proxy);
   }

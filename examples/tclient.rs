@@ -39,15 +39,15 @@ fn main() {
   listener.on_authorization_state_wait_tdlibparameters(|(api, _)| {
     let paras = SetTdlibParameters::builder()
       .parameters(TdlibParameters::builder()
-        .database_directory("tdlib".to_string())
+        .database_directory("tdlib")
         .use_message_database(true)
         .use_secret_chats(true)
         .api_id(toolkit::number::as_i32(env!("API_ID")).unwrap())
-        .api_hash(env!("API_HASH").to_string())
-        .system_language_code("en".to_string())
-        .device_model("Desktop".to_string())
-        .system_version("Unknown".to_string())
-        .application_version(env!("CARGO_PKG_VERSION").to_string())
+        .api_hash(env!("API_HASH"))
+        .system_language_code("en")
+        .device_model("Desktop")
+        .system_version("Unknown")
+        .application_version(env!("CARGO_PKG_VERSION"))
         .enable_storage_optimizer(true)
         .build())
       .build();
@@ -59,11 +59,11 @@ fn main() {
     debug!(exmlog::examples(), "Set encryption key");
   });
   listener.on_authorization_state_wait_phone_number(|(api, _)| {
-    api.send(SetAuthenticationPhoneNumber::builder().phone_number(env!("TG_PHONE").to_string()).build());
+    api.send(SetAuthenticationPhoneNumber::builder().phone_number(env!("TG_PHONE")).build());
     debug!(exmlog::examples(), "Set phone number");
   });
   listener.on_authorization_state_wait_password(|(api, _)| {
-    api.send(CheckAuthenticationPassword::builder().password(env!("TG_PASSWORD").to_string()).build());
+    api.send(CheckAuthenticationPassword::builder().password(env!("TG_PASSWORD")).build());
     debug!(exmlog::examples(), "Set password");
   });
 
