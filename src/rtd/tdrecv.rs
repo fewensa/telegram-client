@@ -18,10 +18,9 @@ impl TdRecv {
 
   pub fn start(&self, api: Arc<Api>, stop_flag: Arc<Mutex<bool>>, lout: Arc<Lout>) {
     thread::spawn(move || {
-      let tdlib = api.tdlib();
       let is_stop = stop_flag.lock().unwrap();
       while !*is_stop {
-        let recv = tdlib.receive(2.0);
+        let recv = api.receive(2.0);
         // recv.map(|text| tdkit::fill_json_struct(text))
         if recv.is_none() {
           continue;

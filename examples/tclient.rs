@@ -10,14 +10,20 @@ use telegram_client::api::Api;
 use telegram_client::client::Client;
 use std::sync::{Arc, Mutex};
 use std::rc::Rc;
+use crate::proxy::TProxy;
 
 mod exmlog;
+mod proxy;
 
 fn main() {
-  let apix = Api::default();
-  let mut client = Client::new(apix.clone());
-  let listener = client.listener();
+  let api = Api::default();
+  let mut client = Client::new(api.clone());
 
+  let tproxy = TProxy::new(&api);
+  tproxy.add();
+
+
+  let listener = client.listener();
 
 
 //  listener.on_update(|(api, update)| {
@@ -36,8 +42,8 @@ fn main() {
         .database_directory("tdlib".to_string())
         .use_message_database(true)
         .use_secret_chats(true)
-        .api_id(self::api_id())
-        .api_hash(self::api_hash())
+        .api_id(toolkit::number::as_i32(env!("API_ID")).unwrap())
+        .api_hash(env!("API_HASH").to_string())
         .system_language_code("en".to_string())
         .device_model("Desktop".to_string())
         .system_version("Unknown".to_string())
@@ -86,15 +92,5 @@ fn main() {
 
 
   client.daemon("telegram-rs");
-}
-
-
-fn api_id() -> i32 {
-  let v = std::env::var("API_ID").unwrap();
-  toolkit::number::as_i32(v).unwrap()
-}
-
-fn api_hash() -> String {
-  std::env::var("API_HASH").unwrap()
 }
 

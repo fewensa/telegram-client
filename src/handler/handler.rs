@@ -19,7 +19,6 @@ impl<'a> Handler<'a> {
   }
 
   pub fn handle(&self, json: &'a String, update: &'a Box<Update>) {
-    info!(tglog::telegram(), "<=== {}", json);
     match self.lout.update() {
       Some(fnc) => (*fnc)((self.api, update)),
       None => {
