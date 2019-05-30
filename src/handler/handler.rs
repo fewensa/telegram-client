@@ -18,15 +18,20 @@ impl<'a> Handler<'a> {
     }
   }
 
-  pub fn handle(&self, json: &'a String, update: &'a Box<Update>) {
-    match self.lout.update() {
-      Some(fnc) => (*fnc)((self.api, update)),
-      None => {
-        match UpdateHandler::new(self.api, self.lout).handle(update) {
-          Ok(_) => {}
-          Err(e) => error!(tglog::telegram(), "{:?}", e)
-        }
-      }
+  pub fn handle(&self, json: &'a String) {
+
+    let object: Option<Box<Object>> = Object::from_json(json);
+    if object.is_none() {
+      error!(tglog::telegram(), "Json fail, can not covert to Box<Object>    {:?}", json);
+      return;
+    }
+    let object = object.unwrap();
+
+//    if let Some(fnc) = self.lout.update() {
+//      (*fnc)((self.api, &update));
+//    }
+    if let Err(e) = UpdateHandler::new(self.api, self.lout).handle(&object) {
+      error!(tglog::telegram(), "{:?}", e);
     }
   }
 }

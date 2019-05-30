@@ -19,6 +19,9 @@ Cargo.lock
 lib/**/*.so
 lib/**/*.so.**
 
+*.log
+tdlib
+
 listener.rs
 
 

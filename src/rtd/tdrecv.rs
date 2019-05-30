@@ -2,12 +2,9 @@ use core::borrow::Borrow;
 use std::sync::{Arc, Mutex};
 use std::thread;
 
-use rtdlib::tdjson;
-use rtdlib::types::Update;
-
+use crate::api::Api;
 use crate::handler::handler::Handler;
 use crate::listener::Lout;
-use crate::api::Api;
 
 pub struct TdRecv {}
 
@@ -26,14 +23,8 @@ impl TdRecv {
           continue;
         }
         let json = recv.unwrap();
-        let update: Option<Box<Update>> = Update::from_json(&json);
-        if update.is_none() {
-          continue;
-        }
-        let update = update.unwrap();
-
         Handler::new(api.borrow(), lout.borrow())
-          .handle(&json, &update);
+          .handle(&json);
       }
     });
   }

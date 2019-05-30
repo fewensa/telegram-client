@@ -4,18 +4,31 @@ extern crate lazy_static;
 extern crate slog;
 extern crate slog_term;
 
+use std::fs::File;
+use std::path::Path;
+use std::rc::Rc;
+use std::sync::{Arc, Mutex};
+
 use rtdlib::types::*;
 
 use telegram_client::api::Api;
 use telegram_client::client::Client;
-use std::sync::{Arc, Mutex};
-use std::rc::Rc;
+
 use crate::proxy::TProxy;
 
 mod exmlog;
 mod proxy;
 
 fn main() {
+  let log_file = Path::new(&toolkit::path::root_dir()[..]).join("tdlib.log");
+  if log_file.exists() {
+    std::fs::remove_file(&log_file);
+  }
+  File::create(&log_file).unwrap();
+
+  Client::set_log_verbosity_level(1);
+//  Client::set_log_file_path(Some(&toolkit::path::canonicalize_path(log_file).unwrap()[..]));
+
   let api = Api::default();
   let mut client = Client::new(api.clone());
 
@@ -78,12 +91,12 @@ fn main() {
   });
   listener.on_authorization_state_logging_out(move |(api, _)| {
     let mut have_authorization = have_authorization_out.lock().unwrap();
-    *have_authorization = true;
+    *have_authorization = false;
     debug!(exmlog::examples(), "Logging out");
   });
   listener.on_authorization_state_closing(move |(api, _)| {
     let mut have_authorization = have_authorization_close.lock().unwrap();
-    *have_authorization = true;
+    *have_authorization = false;
     debug!(exmlog::examples(), "Closing");
   });
   listener.on_authorization_state_closed(|(api, _)| {

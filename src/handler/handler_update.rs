@@ -17,15 +17,15 @@ impl<'a> UpdateHandler<'a> {
     Self { api, lout }
   }
 
-  pub fn handle(&self, update: &'a Box<Update>) -> TGResult<()> {
-    let td_type = update.td_type();
+  pub fn handle(&self, object: &'a Box<Object>) -> TGResult<()> {
+    let td_type = object.td_type();
 //    debug!(tglog::telegram(), "Update td type: {:?}", td_type);
 
-    let tdupdatetype = TDUpdateType::of(update.td_name());
+    let tdupdatetype = RTDUpdateType::of(object.td_name());
     if tdupdatetype.is_none() {
       return Ok(());
     }
-    let json = update.to_json();
+    let json = object.to_json();
     let tdupdatetype = tdupdatetype.unwrap();
 
     /// auto generate trait handler,
@@ -55,16 +55,16 @@ impl<'a> UpdateHandler<'a> {
     }
 
     let r = match tdupdatetype {
-      TDUpdateType::UpdateOption => {
-        handler_trait!(UpdateOption, value, TDOptionValueType, (
+      RTDUpdateType::UpdateOption => {
+        handler_trait!(UpdateOption, value, RTDOptionValueType, (
           (OptionValueBoolean, option_bool);
           (OptionValueEmpty, option_empty);
           (OptionValueInteger, option_integer);
           (OptionValueString, option_string);
         ))
       }
-      TDUpdateType::UpdateAuthorizationState => {
-        handler_trait!(UpdateAuthorizationState, authorization_state, TDAuthorizationStateType, (
+      RTDUpdateType::UpdateAuthorizationState => {
+        handler_trait!(UpdateAuthorizationState, authorization_state, RTDAuthorizationStateType, (
           (AuthorizationStateClosed, authorization_state_closed);
           (AuthorizationStateClosing, authorization_state_closing);
           (AuthorizationStateLoggingOut, authorization_state_logging_out);
