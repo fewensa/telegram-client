@@ -44,10 +44,10 @@ fn main() {
 //    api.clone().test();
 //  });
 
-  // todo support option name
-  listener.on_option_string(|(api, option)| {
-    debug!(exmlog::examples(), "option value : {:?}", option.value())
-  });
+//  // todo support option name
+//  listener.on_option_string(|(api, option)| {
+//    debug!(exmlog::examples(), "option value : {:?}", option.value())
+//  });
 
   listener.on_authorization_state_wait_tdlibparameters(|(api, _)| {
     let paras = SetTdlibParameters::builder()

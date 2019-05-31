@@ -1,0 +1,20 @@
+
+
+[tmod]
+
+def_use = [
+  "self::tgclient::*"
+]
+
+def_mod = [
+  "tgclient"
+]
+
+
+[tgypes]
+
+[tgypes.update_option]
+imports = []
+typen = "TGUpdateOption"
+inner = "UpdateOption"
+comment = "An option changed its value."

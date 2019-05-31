@@ -22,6 +22,10 @@ lib/**/*.so.**
 *.log
 tdlib
 
+src/types/mod.rs
+src/types/t_*.rs
+
+
 listener.rs
 
 

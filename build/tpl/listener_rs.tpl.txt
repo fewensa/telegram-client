@@ -1,50 +1,65 @@
-use std::sync::Arc;
 
-use rtdlib::types::*;
+{% for item in imports %}use {{item}};
+{% endfor %}
 
-use crate::api::Api;
-use crate::types::*;
-
+{% if comment_listener %}{{comment_listener}}{% endif %}
 #[derive(Clone)]
 pub struct Listener {
-  {% for key, value in mapper %}l_{{key}}: Option<Arc<Fn((&Api, &{{value}})) + Send + Sync + 'static>>,
+  {% for ttm in ttms %}l_{{ttm.name}}: Option<Arc<Fn((&Api{% if ttm.tts_len > 0 %}, {% endif %}{% for tt in ttm.tts%}&{{tt}}{% if loop.index < ttm.tts_len %}, {% endif %}{% endfor %})) + Send + Sync + 'static>>,
   {% endfor %}
 }
 
 impl Listener {
   pub fn new() -> Self {
     Self {
-      {% for key, value in mapper %}l_{{key}}: None,
+      {% for ttm in ttms %}l_{{ttm.name}}: None,
       {% endfor %}
     }
   }
 
-  pub(crate) fn has_update_listen(&self) -> bool {
-    self.l_update.is_some()
+  pub(crate) fn has_receive_listen(&self) -> bool {
+    self.l_receive.is_some()
   }
 
   pub(crate) fn lout(&self) -> Lout {
     Lout::new(self.clone())
   }
-{% for key, value in mapper %}
-  pub fn on_{{key}}<F>(&mut self, fnc: F) -> &mut Self where F: Fn((&Api, &{{value}})) + Send + Sync + 'static {
-    self.l_{{key}} = Some(Arc::new(fnc));
+{% for ttm in ttms %}{% if ttm.comment %}  {{ ttm.comment }}{% endif %}
+  pub fn on_{{ttm.name}}<F>(&mut self, fnc: F) -> &mut Self where F: Fn((&Api{% if ttm.tts_len > 0 %}, {% endif %}{% for tt in ttm.tts%}&{{tt}}{% if loop.index < ttm.tts_len %}, {% endif %}{% endfor %})) + Send + Sync + 'static {
+    self.l_{{ttm.name}} = Some(Arc::new(fnc));
     self
   }
 {% endfor %}
 }
 
+{% if comment_lout %}{{comment_lout}}{% endif %}
 pub struct Lout {
-  listener: Listener
+  listener: Listener,
+  supports: Vec<&'static str>
 }
 
 impl Lout {
   fn new(listener: Listener) -> Self {
-    Self { listener }
+    let supports = vec![
+      {% for item in mappers %}"{{item}}",
+      {% endfor %}
+    ];
+    Self {
+      listener,
+      supports,
+    }
   }
-{% for key, value in mapper %}
-  pub fn {{key}}(&self) -> &Option<Arc<Fn((&Api, &{{value}})) + Send + Sync + 'static>> {
-    &self.listener.l_{{key}}
+
+  pub fn is_support<S: AsRef<str>>(&self, name: S) -> bool {
+    !self.supports.iter()
+      .filter(|&&item| item.to_lowercase() == name.as_ref().to_lowercase())
+      .collect::<Vec<_>>()
+      .is_empty()
+  }
+
+{% for ttm in ttms %}{% if ttm.comment %}  {{ ttm.comment }}{% endif %}
+  pub fn {{ttm.name}}(&self) -> &Option<Arc<Fn((&Api{% if ttm.tts_len > 0 %}, {% endif %}{% for tt in ttm.tts%}&{{tt}}{% if loop.index < ttm.tts_len %}, {% endif %}{% endfor %})) + Send + Sync + 'static>> {
+    &self.listener.l_{{ttm.name}}
   }
 {% endfor %}
 }

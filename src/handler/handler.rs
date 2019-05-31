@@ -19,7 +19,6 @@ impl<'a> Handler<'a> {
   }
 
   pub fn handle(&self, json: &'a String) {
-
     let object: Option<Box<Object>> = Object::from_json(json);
     if object.is_none() {
       error!(tglog::telegram(), "Json fail, can not covert to Box<Object>    {:?}", json);
@@ -27,9 +26,13 @@ impl<'a> Handler<'a> {
     }
     let object = object.unwrap();
 
-//    if let Some(fnc) = self.lout.update() {
-//      (*fnc)((self.api, &update));
-//    }
+    if !self.lout.is_support(object.td_name()) {
+      warn!(tglog::telegram(), "NOT HAVE [{}] LISTENER, PLEASE POST AN ISSUE TO https://github.com/fewensa/telegram-client/issues , OR YOU CAN USE `on_receive` TO HANDLE THIS EVENT.", object.td_name());
+    }
+
+    if let Some(fnc) = self.lout.receive() {
+      (*fnc)((self.api, &object));
+    }
     if let Err(e) = UpdateHandler::new(self.api, self.lout).handle(&object) {
       error!(tglog::telegram(), "{:?}", e);
     }

@@ -56,12 +56,12 @@ impl<'a> UpdateHandler<'a> {
 
     let r = match tdupdatetype {
       RTDUpdateType::UpdateOption => {
-        handler_trait!(UpdateOption, value, RTDOptionValueType, (
-          (OptionValueBoolean, option_bool);
-          (OptionValueEmpty, option_empty);
-          (OptionValueInteger, option_integer);
-          (OptionValueString, option_string);
-        ))
+//        handler_trait!(UpdateOption, value, RTDOptionValueType, (
+//          (OptionValueBoolean, option_bool);
+//          (OptionValueEmpty, option_empty);
+//          (OptionValueInteger, option_integer);
+//          (OptionValueString, option_string);
+//        ))
       }
       RTDUpdateType::UpdateAuthorizationState => {
         handler_trait!(UpdateAuthorizationState, authorization_state, RTDAuthorizationStateType, (

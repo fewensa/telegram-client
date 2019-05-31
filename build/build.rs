@@ -1,5 +1,10 @@
+#[macro_use]
+extern crate serde_derive;
+
+
 use std::path::Path;
 
+mod boml;
 mod gen;
 
 fn lib_path() -> &'static Path {
@@ -35,6 +40,7 @@ fn main() {
 
 
   gen::gen_listener();
+  gen::gen_types();
 
 }
 
