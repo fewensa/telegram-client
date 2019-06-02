@@ -7,17 +7,15 @@ use rstring_builder::StringBuilder;
 use crate::boml::lima;
 
 pub fn gen_types() {
-  let _types_dir = Path::new(&toolkit::path::root_dir()[..]).join("src/types");
-  if !_types_dir.exists() {
-    fs::create_dir_all(&_types_dir);
+  let type_dir = toolkit::path::root_dir().join("src/types");
+  if !type_dir.exists() {
+    fs::create_dir_all(&type_dir);
   }
-  let _types_dir = toolkit::path::canonicalize_path(_types_dir).unwrap();
-  let type_dir = Path::new(&_types_dir[..]);
 
-  let tpl_path = &format!("{}/build/tpl", toolkit::path::root_dir())[..];
-  let tera = Tera::new(&format!("{}/**/*", tpl_path)).expect("Can not create Tera template engine.");
+  let tpl_path = toolkit::path::root_dir().join("build/tpl");
+  let tera = Tera::new("build/tpl/**/*").expect("Can not create Tera template engine.");
 
-  let toml_text = fs::read_to_string(&format!("{}/tg_types.tpl.toml", tpl_path)[..]).expect("Not found tg types toml config file");
+  let toml_text = fs::read_to_string(tpl_path.join("tg_types.tpl.toml")).expect("Not found tg types toml config file");
   let tima = Tima::new(toml_text);
 
   self::write_types(&type_dir, &tima, &tera);
@@ -28,16 +26,13 @@ fn write_types<P: AsRef<Path>>(type_dir: P, tima: &Tima, tera: &Tera) {
   let tgypes = tima.tgypes();
 
   tgypes.names().iter().for_each(|name| {
-    let cap = toolkit::path::canonicalize_path(type_dir.as_ref()).unwrap();
-    let _t_rs = format!("{}/t_{}.rs", cap, name);
-    let _f_rs = format!("{}/f_{}.rs", cap, name);
-    let t_rs = Path::new(&_t_rs[..]);
-    let f_rs = Path::new(&_f_rs[..]);
+    let t_rs = type_dir.as_ref().join(&format!("t_{}.rs", name)[..]);
+    let f_rs = type_dir.as_ref().join(&format!("f_{}.rs", name)[..]);
     if t_rs.exists() {
       fs::remove_file(t_rs);
     }
     if !f_rs.exists() {
-      File::create(f_rs).expect(&format!("Can not create [{}/f_{}.rs] file", cap, name)[..]);
+      File::create(f_rs).expect(&format!("Can not create [{:?}] file", f_rs)[..]);
     }
 
     let mut context = Context::new();
@@ -81,5 +76,6 @@ fn write_tmod<P: AsRef<Path>>(type_dir: P, tima: &Tima, tera: &Tera) {
     builder.append("mod ").append(f_rs).append(";\n");
   });
 
-  toolkit::fs::append(&mod_rs, builder.string()).expect(&format!("Can not create [{}] file", toolkit::path::canonicalize_path(mod_rs).unwrap())[..]);
+  toolkit::fs::append(&mod_rs, builder.string())
+    .expect(&format!("Can not create [{:?}] file", mod_rs)[..]);
 }

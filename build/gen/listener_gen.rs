@@ -21,24 +21,23 @@ struct Ttmval {
 
 
 pub fn gen_listener() {
-  let _p = &format!("{}/src/listener.rs", toolkit::path::root_dir())[..];
-  let out_file = Path::new(_p);
+  let out_file = toolkit::path::root_dir().join("src/listener.rs");
   if out_file.exists() {
     fs::remove_file(out_file);
   }
 
-  let tpl_path = &format!("{}/build/tpl", toolkit::path::root_dir())[..];
-  let tera = Tera::new(&format!("{}/**/*", tpl_path)).expect("Can not create Tera template engine.");
+  let tpl_path = toolkit::path::root_dir().join("build/tpl");
+  let tera = Tera::new("build/tpl/**/*").expect("Can not create Tera template engine.");
 
   let mut context = Context::new();
-  self::lima_data(tpl_path, &mut context);
+  self::lima_data(&tpl_path, &mut context);
   let rscode = tera.render("listener_rs.tpl.txt", &context).expect("Can not render listener code.");
   toolkit::fs::append(out_file, rscode).expect("Write listener.rs fail.");
 }
 
 
-fn lima_data(tpl_path: &str, context: &mut Context) {
-  let limatoml = fs::read_to_string(Path::new(tpl_path).join("listener_rs.tpl.toml")).expect("Can not read mapper file");
+fn lima_data<S: AsRef<Path>>(tpl_path: S, context: &mut Context) {
+  let limatoml = fs::read_to_string(tpl_path.as_ref().join("listener_rs.tpl.toml")).expect("Can not read mapper file");
   let lima = Lima::new(limatoml);
   let lin = lima.lin();
   let inf = lima.inf();
