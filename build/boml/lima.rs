@@ -6,7 +6,7 @@ use std::collections::HashMap;
 pub struct Lima {
   toml: toml::Value,
   lin: Lin,
-  inf: Inf,
+  info: Linfo,
 }
 
 #[derive(Debug)]
@@ -15,7 +15,7 @@ pub struct Lin {
 }
 
 #[derive(Debug)]
-pub struct Inf {
+pub struct Linfo {
   toml: toml::Value
 }
 
@@ -25,7 +25,7 @@ impl Lima {
     Self {
       toml: toml.clone(),
       lin: Lin::new(toml.clone()),
-      inf: Inf::new(toml.clone()),
+      info: Linfo::new(toml.clone()),
     }
   }
 
@@ -33,8 +33,8 @@ impl Lima {
     &self.lin
   }
 
-  pub fn inf(&self) -> &Inf {
-    &self.inf
+  pub fn info(&self) -> &Linfo {
+    &self.info
   }
 }
 
@@ -102,7 +102,7 @@ impl Lin {
 
 }
 
-impl Inf {
+impl Linfo {
   pub fn new(toml: toml::Value) -> Self {
     let atoml = toml.get("inf").expect(&format!("Listener config lose [inf] => {:?}", toml)[..]);
     if !atoml.is_table() {

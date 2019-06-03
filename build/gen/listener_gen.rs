@@ -40,7 +40,7 @@ fn lima_data<S: AsRef<Path>>(tpl_path: S, context: &mut Context) {
   let limatoml = fs::read_to_string(tpl_path.as_ref().join("listener_rs.tpl.toml")).expect("Can not read mapper file");
   let lima = Lima::new(limatoml);
   let lin = lima.lin();
-  let inf = lima.inf();
+  let info = lima.info();
 
   let ttms = lin.names().iter()
     .map(|name| {
@@ -59,8 +59,8 @@ fn lima_data<S: AsRef<Path>>(tpl_path: S, context: &mut Context) {
 
   context.insert("ttms", &ttms);
   context.insert("mappers", &lin.mappers());
-  context.insert("imports", &inf.imports());
-  context.insert("comment_listener", &inf.comment_listener().map(|comment| lima::format_comment(comment, false)));
-  context.insert("comment_lout", &inf.comment_lout().map(|comment| lima::format_comment(comment, false)));
+  context.insert("imports", &info.imports());
+  context.insert("comment_listener", &info.comment_listener().map(|comment| lima::format_comment(comment, false)));
+  context.insert("comment_lout", &info.comment_lout().map(|comment| lima::format_comment(comment, false)));
 }
 
