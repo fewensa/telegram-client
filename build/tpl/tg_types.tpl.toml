@@ -3,7 +3,8 @@
 [tmod]
 
 def_use = [
-  "self::tgclient::*"
+  "self::tgclient::*",
+  "self::f_update_option::TGOptionValue"
 ]
 
 def_mod = [
@@ -18,3 +19,9 @@ imports = []
 typen = "TGUpdateOption"
 inner = "UpdateOption"
 comment = "An option changed its value."
+
+[tgypes.authorization_state]
+imports = []
+typen = "TGAuthorizationState"
+inner = "UpdateAuthorizationState"
+comment = "The user authorization state has changed."

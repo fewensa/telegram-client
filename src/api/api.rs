@@ -46,4 +46,8 @@ impl Api {
     info!(tglog::telegram(), "===>>> {}", json);
     self.tdlib.execute(&json[..])
   }
+
+  pub fn test(&self) {
+    println!("test");
+  }
 }

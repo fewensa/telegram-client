@@ -29,10 +29,10 @@ fn write_types<P: AsRef<Path>>(type_dir: P, tima: &Tima, tera: &Tera) {
     let t_rs = type_dir.as_ref().join(&format!("t_{}.rs", name)[..]);
     let f_rs = type_dir.as_ref().join(&format!("f_{}.rs", name)[..]);
     if t_rs.exists() {
-      fs::remove_file(t_rs);
+      fs::remove_file(&t_rs);
     }
     if !f_rs.exists() {
-      File::create(f_rs).expect(&format!("Can not create [{:?}] file", f_rs)[..]);
+      File::create(&f_rs).expect(&format!("Can not create [{:?}] file", f_rs)[..]);
     }
 
     let mut context = Context::new();
@@ -42,7 +42,7 @@ fn write_types<P: AsRef<Path>>(type_dir: P, tima: &Tima, tera: &Tera) {
     context.insert("imports", &tgypes.imports(name));
 
     let rscode = tera.render("tg_types.tpl.txt", &context).expect("Can not render types code.");
-    toolkit::fs::append(t_rs, rscode).expect(&format!("Can not create [{}/t_{}.rs] file", cap, name)[..]);
+    toolkit::fs::append(&t_rs, rscode).expect(&format!("Can not create [{:?}] file", t_rs)[..]);
   });
 }
 

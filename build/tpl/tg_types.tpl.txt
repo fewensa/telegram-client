@@ -45,4 +45,8 @@ impl {{typen}} {
   pub fn from_json<S: AsRef<str>>(json: S) -> Option<{{typen}}> {
     {{inner}}::from_json(json).map(|inner| {{typen}}::new(inner))
   }
+
+  pub fn origin(&self) -> &{{inner}} {
+    &self.inner
+  }
 }

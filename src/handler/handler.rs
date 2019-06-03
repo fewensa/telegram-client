@@ -1,7 +1,7 @@
 use rtdlib::types::*;
 
 use crate::api::Api;
-use crate::handler::handler_update::UpdateHandler;
+use crate::handler::handler_receive::ReceiveHandler;
 use crate::listener::{Listener, Lout};
 use crate::tglog;
 
@@ -33,7 +33,7 @@ impl<'a> Handler<'a> {
     if let Some(fnc) = self.lout.receive() {
       (*fnc)((self.api, &object));
     }
-    if let Err(e) = UpdateHandler::new(self.api, self.lout).handle(&object) {
+    if let Err(e) = ReceiveHandler::new(self.api, self.lout).handle(&object) {
       error!(tglog::telegram(), "{:?}", e);
     }
   }

@@ -1,6 +1,102 @@
 use crate::types::TGUpdateOption;
+use rtdlib::types as td_type;
 
-impl TGUpdateOption {}
+impl TGUpdateOption {
+
+  pub fn name(&self) -> &Option<String> {
+    self.origin().name()
+  }
+
+  pub fn on_name<S: AsRef<str>, F: FnOnce(&TGOptionValue)>(&self, name: S, fnc: F) {
+    let value = TGOptionValue::new(self.origin().value());
+    match self.name() {
+      Some(oname) => {
+        if &oname[..] == name.as_ref() && value.is_some() {
+          fnc(&value)
+        }
+      },
+      None => {}
+    }
+  }
+
+}
+
+pub struct TGOptionValue<'a> {
+  value: &'a Option<Box<td_type::OptionValue>>
+}
+
+macro_rules! option_value_as {
+  ($value_class:ident, $retype:tt) => (
+    fn ovas(value: &Option<Box<td_type::OptionValue>>) -> Option<$retype> {
+      value.clone().filter(|v| v.td_type() == td_type::RTDType::$value_class)
+        .map(|v| td_type::$value_class::from_json(v.to_json()))
+        .filter(|v| v.is_some())
+        .map(|v|
+          v.map(|v| v.value().clone().map(|v| v))
+        )
+        .map_or(None, |v| v)
+        .map_or(None, |v| v)
+    }
+  )
+}
+
+impl<'a> TGOptionValue<'a> {
+
+  fn new(value: &'a Option<Box<td_type::OptionValue>>) -> Self {
+    Self { value }
+  }
+
+  fn is_some(&self) -> bool {
+    self.value.is_some()
+  }
+
+  pub fn is_bool(&self) -> bool {
+    self.value.clone().map(|v| v.td_type() == td_type::RTDType::OptionValueBoolean)
+      .map_or(false, |v| v)
+  }
+
+  pub fn is_empty(&self) -> bool {
+    self.value.clone().map(|v| v.td_type() == td_type::RTDType::OptionValueEmpty)
+      .map_or(false, |v| v)
+  }
+
+  pub fn is_string(&self) -> bool {
+    self.value.clone().map(|v| v.td_type() == td_type::RTDType::OptionValueString)
+      .map_or(false, |v| v)
+  }
+
+  pub fn is_integer(&self) -> bool {
+    self.value.clone().map(|v| v.td_type() == td_type::RTDType::OptionValueInteger)
+      .map_or(false, |v| v)
+  }
+
+  pub fn as_string(&self) -> Option<String> {
+//    self.value.clone().filter(|v| v.td_type() == RTDType::OptionValueString)
+//      .map(|v| OptionValueString::from_json(v.to_json()))
+//      .filter(|v| v.is_some())
+//      .map(|v|
+//        v.map(|v| v.value().clone().map(|v| v))
+//      )
+//      .map_or(None, |v| v)
+//      .map_or(None, |v| v)
+////    option_value_as!(OptionValueString, String);
+////    option_value_as(self.value)
+
+    option_value_as!(OptionValueString, String);
+    ovas(self.value)
+  }
+
+  pub fn as_integer(&self) -> Option<i32> {
+    option_value_as!(OptionValueInteger, i32);
+    ovas(self.value)
+  }
+
+  pub fn as_bool(&self) -> Option<bool> {
+    option_value_as!(OptionValueBoolean, bool);
+    ovas(self.value)
+  }
+
+}
 
 
 mod tgupdatetest {

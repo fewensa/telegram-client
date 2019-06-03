@@ -25,7 +25,8 @@ build = "build/build.rs"
 
 text-reader = "0.2.1"
 rstring-builder = "0.1.4"
-toolkit = { git = "https://github.com/fewensa/toolkit" }
+#toolkit = { git = "https://github.com/fewensa/toolkit" }
+toolkit = "0.1.1"
 
 rtdlib = { git = "https://github.com/fewensa/rtdlib" }
 #rtdlib = { path = "../rtdlib" }
@@ -57,5 +58,6 @@ toml = "0.5.1"
 serde = "1.0.91"
 serde_derive = "1.0.91"
 
-toolkit = { git = "https://github.com/fewensa/toolkit" }
+#toolkit = { git = "https://github.com/fewensa/toolkit" }
+toolkit = "0.1.1"
 

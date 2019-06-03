@@ -23,7 +23,7 @@ struct Ttmval {
 pub fn gen_listener() {
   let out_file = toolkit::path::root_dir().join("src/listener.rs");
   if out_file.exists() {
-    fs::remove_file(out_file);
+    fs::remove_file(&out_file);
   }
 
   let tpl_path = toolkit::path::root_dir().join("build/tpl");
@@ -32,7 +32,7 @@ pub fn gen_listener() {
   let mut context = Context::new();
   self::lima_data(&tpl_path, &mut context);
   let rscode = tera.render("listener_rs.tpl.txt", &context).expect("Can not render listener code.");
-  toolkit::fs::append(out_file, rscode).expect("Write listener.rs fail.");
+  toolkit::fs::append(&out_file, rscode).expect("Write listener.rs fail.");
 }
 
 
