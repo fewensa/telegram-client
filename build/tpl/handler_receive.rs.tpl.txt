@@ -1,6 +1,6 @@
 use error_chain_mini::ErrorKind;
 
-{% for item in imports %}use {{item}};
+{% for item in uses %}use {{item}};
 {% endfor %}
 
 use crate::listener::Lout;
@@ -51,10 +51,10 @@ impl<'a> ReceiveHandler<'a> {
 
     match rtdtype {
       {% for ttm in ttms %}{% if ttm.name != 'receive' %}
-      {% if ttm.tt and ttm.mapper %}
-      td_types::RTDType::{{ttm.mapper_u}} => handler_sec!({{ttm.tt.namespace}}, {{ttm.tt.object}}, {{ttm.name}}),
+      {% if ttm.tt and ttm.td_type %}
+      td_types::RTDType::{{ttm.tg_struct}} => handler_sec!({{ttm.tt.namespace}}, {{ttm.tt.object}}, {{ttm.name}}),
       {% else %}
-      td_types::RTDType::{{ttm.mapper_u}} => handler_noarg!({{ttm.name}}),
+      td_types::RTDType::{{ttm.tg_struct}} => handler_noarg!({{ttm.name}}),
       {% endif %}
       {% endif %}{% endfor %}
 //      td_types::RTDType::UpdateOption => handler_sec!(tg_types, TGUpdateOption, option),

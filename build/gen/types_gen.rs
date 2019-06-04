@@ -39,7 +39,7 @@ fn write_types<P: AsRef<Path>>(type_dir: P, tima: &Tima, tera: &Tera) {
     context.insert("comment", &tgypes.comment(name).map(|comment| lima::format_comment(comment, false)));
     context.insert("typen", &tgypes.typen(name));
     context.insert("inner", &tgypes.inner(name));
-    context.insert("imports", &tgypes.imports(name));
+    context.insert("uses", &tgypes.uses(name));
 
     let rscode = tera.render("tg_types.tpl.txt", &context).expect("Can not render types code.");
     toolkit::fs::append(&t_rs, rscode).expect(&format!("Can not create [{:?}] file", t_rs)[..]);
@@ -57,7 +57,7 @@ fn write_tmod<P: AsRef<Path>>(type_dir: P, tima: &Tima, tera: &Tera) {
 
   let mut builder = StringBuilder::new();
 
-  tmod.def_use().iter().for_each(|item| { builder.append("pub use ").append(item.clone()).append(";\n\n"); });
+  tmod.def_use().iter().for_each(|item| { builder.append("pub use ").append(item.clone()).append(";\n"); });
 
 
   tgypes.names().iter().for_each(|name| {

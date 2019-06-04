@@ -70,17 +70,17 @@ impl Lin {
         .map(|v| v.unwrap().to_string()))
   }
 
-  pub fn mappers(&self) -> Vec<String> {
+  pub fn td_types(&self) -> Vec<String> {
     self.names().iter()
-      .map(|name| self.mapper(name))
+      .map(|name| self.td_type(name))
       .filter(|item| item.is_some())
       .map(|item| item.unwrap())
       .filter(|item| !item.is_empty())
       .collect()
   }
 
-  pub fn mapper<S: AsRef<str>>(&self, name: S) -> Option<String> {
-    self.string(name, "mapper")
+  pub fn td_type<S: AsRef<str>>(&self, name: S) -> Option<String> {
+    self.string(name, "td_type")
   }
 
   pub fn tt<S: AsRef<str>>(&self, name: S) -> Option<Ltt> {
@@ -123,8 +123,8 @@ impl Linfo {
     Self { toml: atoml.clone() }
   }
 
-  pub fn imports(&self) -> Vec<String> {
-    self.toml.get("imports")
+  pub fn uses(&self) -> Vec<String> {
+    self.toml.get("uses")
       .filter(|value| value.is_array())
       .map(|value| value.as_array())
       .filter(|value| value.is_some())

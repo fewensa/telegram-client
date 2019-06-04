@@ -92,10 +92,10 @@ impl Tgypes {
         .map(|v| v.unwrap().to_string()))
   }
 
-  pub fn imports<S: AsRef<str>>(&self, name: S) -> Vec<String> {
+  pub fn uses<S: AsRef<str>>(&self, name: S) -> Vec<String> {
     self.toml.get(name.as_ref())
       .filter(|&value| value.is_table())
-      .map(|value| value.as_table().unwrap().get("imports")
+      .map(|value| value.as_table().unwrap().get("uses")
         .filter(|&value| value.is_array())
         .map(|value| value.as_array().unwrap())
         .map(|value| {

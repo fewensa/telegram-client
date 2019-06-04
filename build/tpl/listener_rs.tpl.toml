@@ -1,7 +1,7 @@
 
 [info]
 
-imports = [
+uses = [
   "rtdlib::types as td_types",
   "crate::types as tg_types",
   "crate::api::Api",
@@ -20,34 +20,38 @@ comment_lout = "Get listener"
 receive = { tt = { object = "Box<td_types::Object>" }, comment = "when receive data from tdlib" }
 
 [lin.option]
-mapper = "updateOption"
+td_type = "updateOption"
 tt = { namespace = "tg_types", object = "TGUpdateOption"}
 comment = "An option changed its value."
 
 [lin.authorization_state]
-mapper = "updateAuthorizationState"
+td_type = "updateAuthorizationState"
 tt = { namespace = "tg_types", object = "TGAuthorizationState" }
 comment = "The user authorization state has changed."
 
 [lin.connection_state]
-mapper = "updateConnectionState"
+td_type = "updateConnectionState"
 tt = { namespace = "tg_types", object = "TGUpdateConnectionState" }
 comment = "The connection state has changed."
 
 [lin.error]
-mapper = "error"
+td_type = "error"
 tt = { namespace = "td_types", object = "Error" }
 comment = "An object of this type can be returned on every function call, in case of an error."
 
 [lin.ok]
-mapper = "ok"
+td_type = "ok"
 tt = {}
 comment = "An object of this type is returned on a successful function call for certain functions."
 
 [lin.proxy]
-mapper = "proxy"
+td_type = "proxy"
 tt = { namespace = "tg_types", object = "TGProxy" }
 comment = "Contains information about a proxy server."
 
+[lin.update_user]
+td_type = "updateUser"
+tt = { namespace = "tg_types", object = "TGUser" }
+comment = "Represents a user. "
 
 

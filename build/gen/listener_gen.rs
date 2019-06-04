@@ -4,7 +4,6 @@ use std::path::Path;
 
 use rstring_builder::StringBuilder;
 use tera::{Context, Tera};
-use text_reader::TextReader;
 
 use crate::boml::lima;
 use crate::boml::lima::{Lima, Ltt};
@@ -12,8 +11,8 @@ use crate::boml::lima::{Lima, Ltt};
 #[derive(Debug, Serialize)]
 struct Ttmval {
   name: String,
-  mapper: Option<String>,
-  mapper_u: Option<String>,
+  td_type: Option<String>,
+  tg_struct: Option<String>,
   comment: Option<String>,
   tt: Option<Ltt>,
 }
@@ -59,11 +58,11 @@ fn lima_data<S: AsRef<Path>>(tpl_path: S, context: &mut Context) {
 
   let ttms = lin.names().iter()
     .map(|name| {
-      let mapper = lin.mapper(name);
+      let td_type = lin.td_type(name);
       let ttmval = Ttmval {
         name: name.clone(),
-        mapper: mapper.clone(),
-        mapper_u: mapper.map(|value| toolkit::text::uppercase_first_char(value)),
+        td_type: td_type.clone(),
+        tg_struct: td_type.map(|value| toolkit::text::uppercase_first_char(value)),
         comment: lin.comment(name).map(|comment| lima::format_comment(comment, true)),
         tt: lin.tt(name),
       };
@@ -73,8 +72,8 @@ fn lima_data<S: AsRef<Path>>(tpl_path: S, context: &mut Context) {
 
 
   context.insert("ttms", &ttms);
-  context.insert("mappers", &lin.mappers());
-  context.insert("imports", &info.imports());
+  context.insert("td_types", &lin.td_types());
+  context.insert("uses", &info.uses());
   context.insert("comment_listener", &info.comment_listener().map(|comment| lima::format_comment(comment, false)));
   context.insert("comment_lout", &info.comment_lout().map(|comment| lima::format_comment(comment, false)));
 }

@@ -12,11 +12,20 @@ macro_rules! fn_noarg {
 }
 
 macro_rules! fn_td {
-  ($class:ident) => (
-    fn fn_td<F: FnOnce(&td_types::$class)>(state: &Option<Box<td_types::AuthorizationState>>, fnc: F) {
+  ($namespace:ident, $class:ident) => (
+    fn fn_td<F: FnOnce(&$namespace::$class)>(state: &Option<Box<td_types::AuthorizationState>>, fnc: F) {
       state.clone()
         .filter(|ae| td_types::RTDType::of(ae.td_name()) == Some(td_types::RTDType::$class))
-        .map(|ae| td_types::$class::from_json(ae.to_json()))
+        .map(|ae| $namespace::$class::from_json(ae.to_json()))
+        .filter(|we| we.is_some())
+        .map(|we| we.clone().map(|we| fnc(&we)));
+    }
+  );
+  ($namespace:ident, $class:ident, $rtdtype:ident) => (
+    fn fn_td<F: FnOnce(&$namespace::$class)>(state: &Option<Box<td_types::AuthorizationState>>, fnc: F) {
+      state.clone()
+        .filter(|ae| td_types::RTDType::of(ae.td_name()) == Some(td_types::RTDType::$rtdtype))
+        .map(|ae| $namespace::$class::from_json(ae.to_json()))
         .filter(|we| we.is_some())
         .map(|we| we.clone().map(|we| fnc(&we)));
     }
@@ -35,7 +44,7 @@ impl TGAuthorizationState {
   }
 
   pub fn on_wait_encryption_key<F: FnOnce(&td_types::AuthorizationStateWaitEncryptionKey)>(&self, fnc: F) -> &Self {
-    fn_td!(AuthorizationStateWaitEncryptionKey);
+    fn_td!(td_types, AuthorizationStateWaitEncryptionKey);
     fn_td(self.authorization_state(), fnc);
     self
   }
@@ -47,30 +56,36 @@ impl TGAuthorizationState {
   }
 
   pub fn on_wait_password<F: FnOnce(&td_types::AuthorizationStateWaitPassword)>(&self, fnc: F) -> &Self {
-    fn_td!(AuthorizationStateWaitPassword);
+    fn_td!(td_types, AuthorizationStateWaitPassword);
     fn_td(self.authorization_state(), fnc);
     self
   }
 
-  pub fn on_state_ready<F: FnOnce()>(&self, fnc: F) -> &Self {
+  pub fn on_wait_code<F: FnOnce(&td_types::AuthorizationStateWaitCode)>(&self, fnc: F) -> &Self {
+    fn_td!(td_types, AuthorizationStateWaitCode);
+    fn_td(self.authorization_state(), fnc);
+    self
+  }
+
+  pub fn on_ready<F: FnOnce()>(&self, fnc: F) -> &Self {
     fn_noarg!(AuthorizationStateReady);
     fn_noarg(self.authorization_state(), fnc);
     self
   }
 
-  pub fn on_state_logging_out<F: FnOnce()>(&self, fnc: F) -> &Self {
+  pub fn on_logging_out<F: FnOnce()>(&self, fnc: F) -> &Self {
     fn_noarg!(AuthorizationStateLoggingOut);
     fn_noarg(self.authorization_state(), fnc);
     self
   }
 
-  pub fn on_state_closing<F: FnOnce()>(&self, fnc: F) -> &Self {
+  pub fn on_closing<F: FnOnce()>(&self, fnc: F) -> &Self {
     fn_noarg!(AuthorizationStateClosing);
     fn_noarg(self.authorization_state(), fnc);
     self
   }
 
-  pub fn on_state_closed<F: FnOnce()>(&self, fnc: F) -> &Self {
+  pub fn on_closed<F: FnOnce()>(&self, fnc: F) -> &Self {
     fn_noarg!(AuthorizationStateClosed);
     fn_noarg(self.authorization_state(), fnc);
     self

@@ -1,7 +1,7 @@
 
 use std::sync::Arc;
 
-{% for item in imports %}use {{item}};
+{% for item in uses %}use {{item}};
 {% endfor %}
 
 {% if comment_listener %}{{comment_listener}}{% endif %}
@@ -43,7 +43,7 @@ pub struct Lout {
 impl Lout {
   fn new(listener: Listener) -> Self {
     let supports = vec![
-      {% for item in mappers %}"{{item}}",
+      {% for item in td_types %}"{{item}}",
       {% endfor %}
     ];
     Self {

@@ -21,7 +21,7 @@ impl<'a> Handler<'a> {
   pub fn handle(&self, json: &'a String) {
     let object: Option<Box<Object>> = Object::from_json(json);
     if object.is_none() {
-      error!(tglog::telegram(), "Json fail, can not covert to Box<Object>    {:?}", json);
+      error!(tglog::telegram(), "Json fail, can not covert to Box<Object>    {}", json);
       return;
     }
     let object = object.unwrap();

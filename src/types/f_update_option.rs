@@ -1,21 +1,21 @@
 use crate::types::TGUpdateOption;
 use rtdlib::types as td_type;
+use crate::errors;
 
 impl TGUpdateOption {
 
-  pub fn name(&self) -> &Option<String> {
-    self.origin().name()
+  pub fn name(&self) -> String {
+    self.origin().name().clone().expect(errors::TELEGRAM_DATA_FAIL)
+  }
+
+  pub fn value(&self) -> TGOptionValue<'_> {
+    TGOptionValue::new(self.origin().value())
   }
 
   pub fn on_name<S: AsRef<str>, F: FnOnce(&TGOptionValue)>(&self, name: S, fnc: F) {
     let value = TGOptionValue::new(self.origin().value());
-    match self.name() {
-      Some(oname) => {
-        if &oname[..] == name.as_ref() && value.is_some() {
-          fnc(&value)
-        }
-      },
-      None => {}
+    if &self.name()[..] == name.as_ref() && value.is_some() {
+      fnc(&value)
     }
   }
 

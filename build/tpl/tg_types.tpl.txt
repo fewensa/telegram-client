@@ -1,5 +1,5 @@
 
-{% for item in imports %}use {{item}};
+{% for item in uses %}use {{item}};
 {% endfor %}
 use rtdlib::types::*;
 use serde::{Serialize, Serializer, Deserialize, Deserializer};
