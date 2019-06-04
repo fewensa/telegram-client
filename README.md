@@ -14,7 +14,7 @@ This crate use libtdjson call telegram client api, libtdjson create is [rtdlib](
 
 ```toml
 telegram-client="0.1"
-````
+```
 
 # Examples
 
