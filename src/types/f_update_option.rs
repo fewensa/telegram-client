@@ -31,9 +31,7 @@ macro_rules! option_value_as {
       value.clone().filter(|v| v.td_type() == td_type::RTDType::$value_class)
         .map(|v| td_type::$value_class::from_json(v.to_json()))
         .filter(|v| v.is_some())
-        .map(|v|
-          v.map(|v| v.value().clone().map(|v| v))
-        )
+        .map(|v| v.map(|v| v.value().clone().map(|v| v)))
         .map_or(None, |v| v)
         .map_or(None, |v| v)
     }
