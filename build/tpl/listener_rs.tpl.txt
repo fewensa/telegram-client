@@ -1,11 +1,13 @@
 
+use std::sync::Arc;
+
 {% for item in imports %}use {{item}};
 {% endfor %}
 
 {% if comment_listener %}{{comment_listener}}{% endif %}
 #[derive(Clone)]
 pub struct Listener {
-  {% for ttm in ttms %}l_{{ttm.name}}: Option<Arc<Fn((&Api{% if ttm.tts_len > 0 %}, {% endif %}{% for tt in ttm.tts%}&{{tt}}{% if loop.index < ttm.tts_len %}, {% endif %}{% endfor %})) + Send + Sync + 'static>>,
+  {% for ttm in ttms %}l_{{ttm.name}}: Option<Arc<Fn((&Api{% if ttm.tt %}, &{% if ttm.tt.namespace and ttm.tt.object %}{{ttm.tt.namespace}}::{% endif %}{% if ttm.tt.object %}{{ttm.tt.object}}{% endif %}{% endif %})) + Send + Sync + 'static>>,
   {% endfor %}
 }
 
@@ -25,7 +27,7 @@ impl Listener {
     Lout::new(self.clone())
   }
 {% for ttm in ttms %}{% if ttm.comment %}  {{ ttm.comment }}{% endif %}
-  pub fn on_{{ttm.name}}<F>(&mut self, fnc: F) -> &mut Self where F: Fn((&Api{% if ttm.tts_len > 0 %}, {% endif %}{% for tt in ttm.tts%}&{{tt}}{% if loop.index < ttm.tts_len %}, {% endif %}{% endfor %})) + Send + Sync + 'static {
+  pub fn on_{{ttm.name}}<F>(&mut self, fnc: F) -> &mut Self where F: Fn((&Api{% if ttm.tt %}, &{% if ttm.tt.namespace and ttm.tt.object %}{{ttm.tt.namespace}}::{% endif %}{% if ttm.tt.object %}{{ttm.tt.object}}{% endif %}{% endif %})) + Send + Sync + 'static {
     self.l_{{ttm.name}} = Some(Arc::new(fnc));
     self
   }
@@ -58,7 +60,7 @@ impl Lout {
   }
 
 {% for ttm in ttms %}{% if ttm.comment %}  {{ ttm.comment }}{% endif %}
-  pub fn {{ttm.name}}(&self) -> &Option<Arc<Fn((&Api{% if ttm.tts_len > 0 %}, {% endif %}{% for tt in ttm.tts%}&{{tt}}{% if loop.index < ttm.tts_len %}, {% endif %}{% endfor %})) + Send + Sync + 'static>> {
+  pub fn {{ttm.name}}(&self) -> &Option<Arc<Fn((&Api{% if ttm.tt %}, &{% if ttm.tt.namespace and ttm.tt.object %}{{ttm.tt.namespace}}::{% endif %}{% if ttm.tt.object %}{{ttm.tt.object}}{% endif %}{% endif %})) + Send + Sync + 'static>> {
     &self.listener.l_{{ttm.name}}
   }
 {% endfor %}

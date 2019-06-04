@@ -5,7 +5,8 @@
 def_use = [
   "self::tgclient::*",
   "self::f_update_option::TGOptionValue",
-  "self::f_authorization_state::*"
+  "self::f_connection_state::TGConnectionState",
+  "self::f_proxy::TGProxyType"
 ]
 
 def_mod = [
@@ -26,3 +27,15 @@ imports = []
 typen = "TGAuthorizationState"
 inner = "UpdateAuthorizationState"
 comment = "The user authorization state has changed."
+
+[tgypes.connection_state]
+imports = []
+typen = "TGUpdateConnectionState"
+inner = "UpdateConnectionState"
+comment = "The connection state has changed."
+
+[tgypes.proxy]
+import = []
+typen = "TGProxy"
+inner = "Proxy"
+comment = "Contains information about a proxy server."

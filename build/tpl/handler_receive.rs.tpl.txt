@@ -1,0 +1,70 @@
+use error_chain_mini::ErrorKind;
+
+{% for item in imports %}use {{item}};
+{% endfor %}
+
+use crate::listener::Lout;
+use crate::errors::TGResult;
+use crate::tglog;
+
+pub struct ReceiveHandler<'a> {
+  api: &'a Api,
+  lout: &'a Lout,
+}
+
+impl<'a> ReceiveHandler<'a> {
+  pub fn new(api: &'a Api, lout: &'a Lout) -> Self {
+    Self { api, lout }
+  }
+
+  pub fn handle(&self, object: &'a Box<td_types::Object>) -> TGResult<()> {
+    let td_type = object.td_type();
+//    debug!(tglog::telegram(), "Receive td type => {:?}", td_type);
+
+    let rtdname = object.td_name();
+    let rtdtype = td_types::RTDType::of(rtdname);
+    if rtdtype.is_none() {
+      return Ok(());
+    }
+    let json = object.to_json();
+    let rtdtype = rtdtype.unwrap();
+
+    macro_rules! handler_sec {
+      ($namespace:ident, $obj:tt, $listen_fname:ident) => {
+        match self.lout.$listen_fname() {
+          Some(fnc) => match $namespace::$obj::from_json(&json) {
+            Some(t) => (*fnc)((self.api, &t)),
+            None => warn!(tglog::telegram(), "Json fail => {}", json)
+          }
+          None => warn!(tglog::telegram(), "Not found handler for {}", rtdname)
+        }
+      }
+    }
+    macro_rules! handler_noarg {
+      ($listen_fname:ident) => {
+        match self.lout.$listen_fname() {
+          Some(fnc) => (*fnc)((self.api)),
+          None => warn!(tglog::telegram(), "Not found handler for {}", rtdname)
+        }
+      };
+    }
+
+    match rtdtype {
+      {% for ttm in ttms %}{% if ttm.name != 'receive' %}
+      {% if ttm.tt and ttm.mapper %}
+      td_types::RTDType::{{ttm.mapper_u}} => handler_sec!({{ttm.tt.namespace}}, {{ttm.tt.object}}, {{ttm.name}}),
+      {% else %}
+      td_types::RTDType::{{ttm.mapper_u}} => handler_noarg!({{ttm.name}}),
+      {% endif %}
+      {% endif %}{% endfor %}
+//      td_types::RTDType::UpdateOption => handler_sec!(tg_types, TGUpdateOption, option),
+//      td_types::RTDType::UpdateAuthorizationState => handler_sec!(tg_types, TGAuthorizationState, authorization_state),
+      _ => ()
+    };
+    Ok(())
+  }
+}
+
+
+
+

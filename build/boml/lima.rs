@@ -1,12 +1,11 @@
-use std::fs;
 use std::collections::HashMap;
-
+use std::fs;
 
 #[derive(Debug)]
 pub struct Lima {
   toml: toml::Value,
   lin: Lin,
-  inf: Inf,
+  info: Linfo,
 }
 
 #[derive(Debug)]
@@ -15,8 +14,14 @@ pub struct Lin {
 }
 
 #[derive(Debug)]
-pub struct Inf {
+pub struct Linfo {
   toml: toml::Value
+}
+
+#[derive(Debug, Serialize)]
+pub struct Ltt {
+  namespace: Option<String>,
+  object: Option<String>,
 }
 
 impl Lima {
@@ -25,7 +30,7 @@ impl Lima {
     Self {
       toml: toml.clone(),
       lin: Lin::new(toml.clone()),
-      inf: Inf::new(toml.clone()),
+      info: Linfo::new(toml.clone()),
     }
   }
 
@@ -33,8 +38,8 @@ impl Lima {
     &self.lin
   }
 
-  pub fn inf(&self) -> &Inf {
-    &self.inf
+  pub fn info(&self) -> &Linfo {
+    &self.info
   }
 }
 
@@ -78,35 +83,42 @@ impl Lin {
     self.string(name, "mapper")
   }
 
-  pub fn tts<S: AsRef<str>>(&self, name: S) -> Vec<String> {
+  pub fn tt<S: AsRef<str>>(&self, name: S) -> Option<Ltt> {
     self.toml.get(name.as_ref())
       .filter(|&value| value.is_table())
       .map(|value| value.as_table().unwrap().get("tt")
-        .filter(|&value| value.is_array())
-        .map(|value| value.as_array().unwrap())
-        .map(|value| {
-          value.iter()
-            .filter(|&value| value.is_str() && !value.as_str().unwrap().is_empty())
-            .map(|value| value.as_str().unwrap().to_string())
-            .collect::<Vec<String>>()
+        .filter(|&value| value.is_table())
+        .map(|value| value.as_table().unwrap())
+        .filter(|&value| {
+          let ns = value.get("namespace");
+          let obj = value.get("object");
+          if ns.is_none() && obj.is_none() {
+            return false;
+          }
+          true
         })
-        .map_or(vec![], |value| value)
+        .map(|value| {
+          let ns = value.get("namespace");
+          let obj = value.get("object");
+          Ltt {
+            namespace: ns.map_or(None, |v| Some(v.as_str().unwrap().to_string())),
+            object: obj.map_or(None, |v| Some(v.as_str().unwrap().to_string()))
+          }
+        })
       )
-      .map_or(vec![], |value| value)
-
+      .map_or(None, |v| v)
   }
 
   pub fn comment<S: AsRef<str>>(&self, name: S) -> Option<String> {
     self.string(name, "comment")
   }
-
 }
 
-impl Inf {
+impl Linfo {
   pub fn new(toml: toml::Value) -> Self {
-    let atoml = toml.get("inf").expect(&format!("Listener config lose [inf] => {:?}", toml)[..]);
+    let atoml = toml.get("info").expect(&format!("Listener config lose [info] => {:?}", toml)[..]);
     if !atoml.is_table() {
-      panic!("inf is not a table  => {:?}", toml);
+      panic!("info is not a table  => {:?}", toml);
     }
     Self { toml: atoml.clone() }
   }
@@ -139,12 +151,11 @@ impl Inf {
 }
 
 
-
 pub fn format_comment<S: AsRef<str>>(comment: S, fill_space: bool) -> String {
   let comment = comment.as_ref();
   if comment.is_empty() {
     return comment.to_string();
   }
-  let comment = comment.replace("\n", if fill_space { "\n  /// " } else { "\n/// " } );
+  let comment = comment.replace("\n", if fill_space { "\n  /// " } else { "\n/// " });
   format!("/// {}", comment)
 }

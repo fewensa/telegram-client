@@ -13,6 +13,7 @@ use rtdlib::types::*;
 
 use telegram_client::api::Api;
 use telegram_client::client::Client;
+use telegram_client::types::*;
 
 use crate::proxy::TProxy;
 
@@ -103,6 +104,42 @@ fn main() {
     state.on_state_closed(|| {
       debug!(exmlog::examples(), "Closed");
     });
+  });
+
+  listener.on_connection_state(|(api, update)| {
+    update.on_state(|state| {
+      match state {
+        TGConnectionState::WaitingForNetwork => {
+          debug!(exmlog::examples(), "Waiting for network")
+        },
+        TGConnectionState::ConnectingToProxy => {
+          debug!(exmlog::examples(), "connection to proxy")
+        },
+        TGConnectionState::Connecting => {
+          debug!(exmlog::examples(), "connecting")
+        },
+        TGConnectionState::Updating => {
+          debug!(exmlog::examples(), "updateing...")
+        },
+        TGConnectionState::Ready => {
+          debug!(exmlog::examples(), "connection ready")
+        },
+      }
+    });
+  });
+
+  listener.on_error(|(api, error)| {
+    let code = error.code().clone().map_or(-1, |v| v);
+    let message = error.message().clone().map_or("None".to_string(), |v| v);
+    error!(exmlog::examples(), "ERROR [{}] {}", code, message);
+  });
+
+  listener.on_ok(|api| {
+    debug!(exmlog::examples(), "OK");
+  });
+
+  listener.on_proxy(|(api, pxy)| {
+    debug!(exmlog::examples(), "Proxy info => {:?}", pxy);
   });
 
 

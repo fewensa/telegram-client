@@ -1,8 +1,7 @@
 
-[inf]
+[info]
 
 imports = [
-  "std::sync::Arc",
   "rtdlib::types as td_types",
   "crate::types as tg_types",
   "crate::api::Api",
@@ -18,70 +17,37 @@ comment_lout = "Get listener"
 
 [lin]
 
-receive = { tt = [ "Box<td_types::Object>" ], comment = "when receive data from tdlib" }
+receive = { tt = { object = "Box<td_types::Object>" }, comment = "when receive data from tdlib" }
 
 [lin.option]
 mapper = "updateOption"
-tt = [ "tg_types::TGUpdateOption" ]
+tt = { namespace = "tg_types", object = "TGUpdateOption"}
 comment = "An option changed its value."
 
 [lin.authorization_state]
 mapper = "updateAuthorizationState"
-tt = [ "tg_types::TGAuthorizationState" ]
+tt = { namespace = "tg_types", object = "TGAuthorizationState" }
 comment = "The user authorization state has changed."
 
-#[lin.authorization_state_closed]
-#mapper = "authorizationStateClosed"
-#tt = [ "td_types::AuthorizationStateClosed" ]
-#comment = """TDLib client is in its final state. All databases are closed and all resources are released.
-#No other updates will be received after this. All queries will be responded to with error code 500.
-#To continue working, one should create a new instance of the TDLib client. """
-#
-#[lin.authorization_state_closing]
-#mapper = "authorizationStateClosing"
-#tt = [ "td_types::AuthorizationStateClosing" ]
-#comment = """TDLib is closing, all subsequent queries will be answered with the error 500.
-#Note that closing TDLib can take a while. All resources will be freed only after
-#[authorizationStateClosed](https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1authorization_state_closed.html)
-#has been received. """
-#
-#[lin.authorization_state_logging_out]
-#mapper = "authorizationStateLoggingOut"
-#tt = [ "td_types::AuthorizationStateLoggingOut" ]
-#comment = "The user is currently logging out. "
-#
-#[lin.authorization_state_ready]
-#mapper = "authorizationStateReady"
-#tt = [ "td_types::AuthorizationStateReady" ]
-#comment = "The user has been successfully authorized. TDLib is now ready to answer queries."
-#
-#[lin.authorization_state_wait_code]
-#mapper = "authorizationStateWaitCode"
-#tt = [ "td_types::AuthorizationStateWaitCode" ]
-#comment = "TDLib needs the user's authentication code to finalize authorization. "
-#
-#[lin.authorization_state_wait_encryption_key]
-#mapper = "authorizationStateWaitEncryptionKey"
-#tt = [ "td_types::AuthorizationStateWaitEncryptionKey" ]
-#comment = "TDLib needs an encryption key to decrypt the local database. "
-#
-#[lin.authorization_state_wait_password]
-#mapper = "authorizationStateWaitPassword"
-#tt = [ "td_types::AuthorizationStateWaitPassword" ]
-#comment = "The user has been authorized, but needs to enter a password to start using the application. "
-#
-#[lin.authorization_state_wait_phone_number]
-#mapper = "authorizationStateWaitPhoneNumber"
-#tt = [ "td_types::AuthorizationStateWaitPhoneNumber" ]
-#comment = "TDLib needs the user's phone number to authorize. "
-#
-#[lin.authorization_state_wait_tdlibparameters]
-#mapper = "authorizationStateWaitTdlibParameters"
-#tt = [ "td_types::AuthorizationStateWaitTdlibParameters" ]
-#comment = "TDLib needs TdlibParameters for initialization. "
+[lin.connection_state]
+mapper = "updateConnectionState"
+tt = { namespace = "tg_types", object = "TGUpdateConnectionState" }
+comment = "The connection state has changed."
 
+[lin.error]
+mapper = "error"
+tt = { namespace = "td_types", object = "Error" }
+comment = "An object of this type can be returned on every function call, in case of an error."
 
+[lin.ok]
+mapper = "ok"
+tt = {}
+comment = "An object of this type is returned on a successful function call for certain functions."
 
+[lin.proxy]
+mapper = "proxy"
+tt = { namespace = "tg_types", object = "TGProxy" }
+comment = "Contains information about a proxy server."
 
 
 
