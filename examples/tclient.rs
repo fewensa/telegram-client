@@ -26,6 +26,12 @@ mod thelp;
 mod tgfn;
 
 fn main() {
+
+
+  let api_id = env!("API_ID");
+  let api_hash = env!("API_HASH");
+
+
   let log_file = toolkit::path::root_dir().join("tdlib.log");
   if log_file.exists() {
     std::fs::remove_file(&log_file);
@@ -69,8 +75,8 @@ fn main() {
           .database_directory("tdlib")
           .use_message_database(true)
           .use_secret_chats(true)
-          .api_id(toolkit::number::as_i32(env!("API_ID")).unwrap())
-          .api_hash(env!("API_HASH"))
+          .api_id(toolkit::number::as_i32(api_id).unwrap())
+          .api_hash(api_hash)
           .system_language_code("en")
           .device_model("Desktop")
           .system_version("Unknown")

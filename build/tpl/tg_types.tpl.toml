@@ -57,4 +57,4 @@ comment = "Some data of a user has changed. This update is guaranteed to come be
 uses = []
 typen = "TGUserTypeBot"
 inner = "UserTypeBot"
-comment = "/// A bot"
+comment = "A bot"
