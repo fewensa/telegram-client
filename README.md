@@ -121,7 +121,43 @@ Listen.rs will provide the user with the registration of the event,
 Generated `src/listener.rs` like this:
 
 ```rust
+use std::sync::Arc;
 
+use rtdlib::types as td_types;
+use crate::types as tg_types;
+use crate::api::Api;
+
+/// Telegram client event listener
+#[derive(Clone)]
+pub struct Listener {
+  l_authorization_state: Option<Arc<Fn((&Api, &tg_types::TGAuthorizationState)) + Send + Sync + 'static>>,
+  l_option: Option<Arc<Fn((&Api, &tg_types::TGUpdateOption)) + Send + Sync + 'static>>,
+}
+
+impl Listener {
+  pub fn new() -> Self {
+    Self {
+      l_authorization_state: None,
+      l_option: None,
+    }
+  }
+
+  /// when receive data from tdlib
+  pub fn on_receive<F>(&mut self, fnc: F) -> &mut Self where F: Fn((&Api, &Box<td_types::Object>)) + Send + Sync + 'static {
+    self.l_receive = Some(Arc::new(fnc));
+    self
+  }
+  /// The user authorization state has changed.
+  pub fn on_authorization_state<F>(&mut self, fnc: F) -> &mut Self where F: Fn((&Api, &tg_types::TGAuthorizationState)) + Send + Sync + 'static {
+    self.l_authorization_state = Some(Arc::new(fnc));
+    self
+  }
+  /// An option changed its value.
+  pub fn on_option<F>(&mut self, fnc: F) -> &mut Self where F: Fn((&Api, &tg_types::TGUpdateOption)) + Send + Sync + 'static {
+    self.l_option = Some(Arc::new(fnc));
+    self
+  }
+}
 ```
 
 And then you can use this listener

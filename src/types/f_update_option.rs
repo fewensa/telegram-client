@@ -8,7 +8,7 @@ impl TGUpdateOption {
     self.origin().name().clone().expect(errors::TELEGRAM_DATA_FAIL)
   }
 
-  pub fn value(&self) -> TGOptionValue<'_> {
+  pub fn value(&self) -> TGOptionValue {
     TGOptionValue::new(self.origin().value())
   }
 
@@ -21,8 +21,8 @@ impl TGUpdateOption {
 
 }
 
-pub struct TGOptionValue<'a> {
-  value: &'a Option<Box<td_type::OptionValue>>
+pub struct TGOptionValue {
+  value: Option<Box<td_type::OptionValue>>
 }
 
 macro_rules! option_value_as {
@@ -38,9 +38,9 @@ macro_rules! option_value_as {
   )
 }
 
-impl<'a> TGOptionValue<'a> {
+impl TGOptionValue {
 
-  fn new(value: &'a Option<Box<td_type::OptionValue>>) -> Self {
+  fn new(value: Option<Box<td_type::OptionValue>>) -> Self {
     Self { value }
   }
 
@@ -81,17 +81,17 @@ impl<'a> TGOptionValue<'a> {
 ////    option_value_as(self.value)
 
     option_value_as!(OptionValueString, String);
-    ovas(self.value)
+    ovas(&self.value)
   }
 
   pub fn as_integer(&self) -> Option<i32> {
     option_value_as!(OptionValueInteger, i32);
-    ovas(self.value)
+    ovas(&self.value)
   }
 
   pub fn as_bool(&self) -> Option<bool> {
     option_value_as!(OptionValueBoolean, bool);
-    ovas(self.value)
+    ovas(&self.value)
   }
 
 }

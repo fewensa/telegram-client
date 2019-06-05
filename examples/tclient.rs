@@ -154,9 +154,9 @@ fn main() {
     });
   });
 
-  listener.on_error(|(api, error)| {
-    let code = error.code().clone().map_or(-1, |v| v);
-    let message = error.message().clone().map_or("None".to_string(), |v| v);
+  listener.on_error(|(api, update)| {
+    let code = update.code().clone().map_or(-1, |v| v);
+    let message = update.message().clone().map_or("None".to_string(), |v| v);
     error!(exmlog::examples(), "ERROR [{}] {}", code, message);
     match code {
       8 => {
@@ -186,12 +186,24 @@ fn main() {
     debug!(exmlog::examples(), "OK");
   });
 
-  listener.on_proxy(|(api, pxy)| {
-    debug!(exmlog::examples(), "Proxy info => {:?}", pxy);
+  listener.on_proxy(|(api, update)| {
+    debug!(exmlog::examples(), "Proxy info => {:?}", update);
   });
 
-  listener.on_update_user(|(api, user)| {
-    debug!(exmlog::examples(), "Update user => {:?}", user);
+  listener.on_user(|(api, update)| {
+    debug!(exmlog::examples(), "Update user => {:?}", update);
+  });
+
+  listener.on_have_pending_notifications(|(api, update)| {
+    debug!(exmlog::examples(), "have pending notifications {:?}", update);
+  });
+
+  listener.on_scope_notification_settings(|(api, update)| {
+    debug!(exmlog::examples(), "scope notification settings {:?}", update);
+  });
+
+  listener.on_user_status(|(api, update)| {
+    debug!(exmlog::examples(), "User [{}] status is {:?}", update.user_id(), update.status());
   });
 
 

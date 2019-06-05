@@ -49,9 +49,54 @@ td_type = "proxy"
 tt = { namespace = "tg_types", object = "TGProxy" }
 comment = "Contains information about a proxy server."
 
-[lin.update_user]
+[lin.user]
 td_type = "updateUser"
-tt = { namespace = "tg_types", object = "TGUser" }
+tt = { namespace = "tg_types", object = "TGUpdateUser" }
 comment = "Represents a user. "
 
+[lin.have_pending_notifications]
+td_type = "updateHavePendingNotifications"
+tt = { namespace = "td_types", object = "UpdateHavePendingNotifications" }
+comment = "Describes, whether there are some pending notification updates. Can be used to prevent application from killing, while there are some pending notifications."
+
+[lin.scope_notification_settings]
+td_type = "updateScopeNotificationSettings"
+tt = { namespace = "tg_types", object = "TGUpdateScopeNotificationSettings" }
+comment = "Notification settings for some type of chats were updated."
+
+[lin.user_status]
+td_type = "updateUserStatus"
+tt = { namespace = "tg_types", object = "TGUpdateUserStatus" }
+comment = "The user went online or offline."
+
+[lin.chat_read_inbox]
+td_type = "updateChatReadInbox"
+tt = { namespace = "td_types", object = "UpdateChatReadInbox" }
+comment = "Incoming messages were read or number of unread messages has been changed."
+
+[lin.chat_read_outbox]
+td_type = "updateChatReadOutbox"
+tt = { namespace = "td_types", object = "UpdateChatReadOutbox" }
+comment = "Outgoing messages were read."
+
+[lin.user_full_info]
+td_type = "updateUserFullInfo"
+tt = { namespace = "td_types", object = "UpdateUserFullInfo" }
+comment = "Some data from"
+
+[lin.new_chat]
+td_type = "updateNewChat"
+tt = { namespace = "tg_types", object = "TGUpdateNewChat" }
+comment = "A new chat has been loaded/created. This update is guaranteed to come before the chat identifier is returned to the client. The chat field changes will be reported through separate updates."
+
+
+[lin.chat_last_message]
+td_type = "updateChatLastMessage"
+tt = { namespace = "tg_types", object = "TGUpdateChatLastMessage" }
+comment = "The last message of a chat was changed. If last_message is null then the last message in the chat became unknown. Some new unknown messages might be added to the chat in this case."
+
+[lin.new_message]
+td_type = "updateNewMessage"
+tt = { namespace = "tg_types", object = "TGUpdateNewMessage" }
+comment = "A new message was received; can also be an outgoing message."
 

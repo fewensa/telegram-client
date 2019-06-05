@@ -3,37 +3,39 @@ use rtdlib::types as td_types;
 use crate::errors;
 use crate::types::t_user::TGUser;
 use crate::types::t_user_type_bot::TGUserTypeBot;
+use crate::types::TGProfilePhoto;
+use rtdlib::types::RObject;
 
 impl TGUser {
-  pub fn id(&self) -> i32 { self.origin().id().clone().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn id(&self) -> i32 { self.origin().id().expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn first_name(&self) -> &Option<String> { self.origin().first_name() }
+  pub fn first_name(&self) -> Option<String> { self.origin().first_name() }
 
-  pub fn last_name(&self) -> &Option<String> { self.origin().last_name() }
+  pub fn last_name(&self) -> Option<String> { self.origin().last_name() }
 
-  pub fn username(&self) -> &Option<String> { self.origin().username() }
+  pub fn username(&self) -> Option<String> { self.origin().username() }
 
-  pub fn phone_number(&self) -> String { self.origin().phone_number().clone().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn phone_number(&self) -> String { self.origin().phone_number().expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn status(&self) -> TGUserStatus { self.origin().status().clone().map(|v| TGUserStatus::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn status(&self) -> TGUserStatus { self.origin().status().map(|v| TGUserStatus::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn profile_photo(&self) -> &Option<td_types::ProfilePhoto> { self.origin().profile_photo() }
+  pub fn profile_photo(&self) -> Option<TGProfilePhoto> { self.origin().profile_photo().map(|v| TGProfilePhoto::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
 
-  pub fn outgoing_link(&self) -> TGLinkState { self.origin().outgoing_link().clone().map(|v| TGLinkState::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn outgoing_link(&self) -> TGLinkState { self.origin().outgoing_link().map(|v| TGLinkState::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn incoming_link(&self) -> TGLinkState { self.origin().incoming_link().clone().map(|v| TGLinkState::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn incoming_link(&self) -> TGLinkState { self.origin().incoming_link().map(|v| TGLinkState::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn is_verified(&self) -> bool { self.origin().is_verified().clone().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn is_verified(&self) -> bool { self.origin().is_verified().expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn is_support(&self) -> bool { self.origin().is_support().clone().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn is_support(&self) -> bool { self.origin().is_support().expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn restriction_reason(&self) -> Option<String> { self.origin().restriction_reason().clone().filter(|v| !v.is_empty()) }
+  pub fn restriction_reason(&self) -> Option<String> { self.origin().restriction_reason().filter(|v| !v.is_empty()) }
 
-  pub fn have_access(&self) -> bool { self.origin().have_access().clone().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn have_access(&self) -> bool { self.origin().have_access().expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn type_(&self) -> TGUserType { self.origin().type_().clone().map(|v| TGUserType::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn type_(&self) -> TGUserType { self.origin().type_().map(|v| TGUserType::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn language_code(&self) -> Option<String> { self.origin().language_code().clone().filter(|v| !v.is_empty()) }
+  pub fn language_code(&self) -> Option<String> { self.origin().language_code().filter(|v| !v.is_empty()) }
 
   pub fn is_bot(&self) -> bool {
     match self.type_() {
@@ -124,19 +126,19 @@ pub enum TGUserStatus {
 }
 
 impl TGUserStatus {
-  fn of(td: Box<td_types::UserStatus>) -> Self {
+  pub(crate) fn of(td: Box<td_types::UserStatus>) -> Self {
     match td_types::RTDUserStatusType::of(td.td_name()) {
       Some(td_types::RTDUserStatusType::UserStatusEmpty) => TGUserStatus::Empty,
       Some(td_types::RTDUserStatusType::UserStatusLastMonth) => TGUserStatus::LastMonth,
       Some(td_types::RTDUserStatusType::UserStatusLastWeek) => TGUserStatus::LastWeek,
       Some(td_types::RTDUserStatusType::UserStatusOffline) => {
         td_types::UserStatusOffline::from_json(td.to_json())
-          .map(|v| TGUserStatus::Offline(v.was_online().clone().expect(errors::TELEGRAM_DATA_FAIL)))
+          .map(|v| TGUserStatus::Offline(v.was_online().expect(errors::TELEGRAM_DATA_FAIL)))
           .expect(errors::TELEGRAM_DATA_FAIL)
       }
       Some(td_types::RTDUserStatusType::UserStatusOnline) => {
         td_types::UserStatusOnline::from_json(td.to_json())
-          .map(|v| TGUserStatus::Online(v.expires().clone().expect(errors::TELEGRAM_DATA_FAIL)))
+          .map(|v| TGUserStatus::Online(v.expires().expect(errors::TELEGRAM_DATA_FAIL)))
           .expect(errors::TELEGRAM_DATA_FAIL)
       }
       Some(td_types::RTDUserStatusType::UserStatusRecently) => TGUserStatus::Recently,

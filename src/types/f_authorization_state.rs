@@ -4,7 +4,7 @@ use crate::types::TGAuthorizationState;
 
 macro_rules! fn_noarg {
   ($class:ident) => (
-    fn fn_noarg<F: FnOnce()>(state: &Option<Box<td_types::AuthorizationState>>, fnc: F) {
+    fn fn_noarg<F: FnOnce()>(state: Option<Box<td_types::AuthorizationState>>, fnc: F) {
       state.clone().filter(|ae| td_types::RTDType::of(ae.td_name()) == Some(td_types::RTDType::$class))
         .map(|ae| { fnc(); });
     }
@@ -13,7 +13,7 @@ macro_rules! fn_noarg {
 
 macro_rules! fn_td {
   ($namespace:ident, $class:ident) => (
-    fn fn_td<F: FnOnce(&$namespace::$class)>(state: &Option<Box<td_types::AuthorizationState>>, fnc: F) {
+    fn fn_td<F: FnOnce(&$namespace::$class)>(state: Option<Box<td_types::AuthorizationState>>, fnc: F) {
       state.clone()
         .filter(|ae| td_types::RTDType::of(ae.td_name()) == Some(td_types::RTDType::$class))
         .map(|ae| $namespace::$class::from_json(ae.to_json()))
@@ -22,7 +22,7 @@ macro_rules! fn_td {
     }
   );
   ($namespace:ident, $class:ident, $rtdtype:ident) => (
-    fn fn_td<F: FnOnce(&$namespace::$class)>(state: &Option<Box<td_types::AuthorizationState>>, fnc: F) {
+    fn fn_td<F: FnOnce(&$namespace::$class)>(state: Option<Box<td_types::AuthorizationState>>, fnc: F) {
       state.clone()
         .filter(|ae| td_types::RTDType::of(ae.td_name()) == Some(td_types::RTDType::$rtdtype))
         .map(|ae| $namespace::$class::from_json(ae.to_json()))
@@ -33,7 +33,7 @@ macro_rules! fn_td {
 }
 
 impl TGAuthorizationState {
-  fn authorization_state(&self) -> &Option<Box<td_types::AuthorizationState>> {
+  fn authorization_state(&self) -> Option<Box<td_types::AuthorizationState>> {
     self.origin().authorization_state()
   }
 

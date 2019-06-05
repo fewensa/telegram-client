@@ -7,7 +7,10 @@ def_use = [
   "self::f_update_option::TGOptionValue",
   "self::f_connection_state::TGConnectionState",
   "self::f_proxy::TGProxyType",
-  "self::f_user::*"
+  "self::f_user::*",
+  "self::f_update_scope_notification_settings::TGNotificationSettingsScope",
+  "self::f_message::*",
+  "self::f_chat::*",
 ]
 
 def_mod = [
@@ -58,3 +61,65 @@ uses = []
 typen = "TGUserTypeBot"
 inner = "UserTypeBot"
 comment = "A bot"
+
+[tgypes.update_scope_notification_settings]
+uses = []
+typen = "TGUpdateScopeNotificationSettings"
+inner = "UpdateScopeNotificationSettings"
+comment = "Notification settings for some type of chats were updated."
+
+[tgypes.scope_notification_settings]
+uses = []
+typen = "TGScopeNotificationSettings"
+inner = "ScopeNotificationSettings"
+comment = "Contains information about notification settings for several chats."
+
+[tgypes.profile_photo]
+uses = []
+typen = "TGProfilePhoto"
+inner = "ProfilePhoto"
+comment = "Describes a user profile photo"
+
+[tgypes.update_user_status]
+uses = []
+typen = "TGUpdateUserStatus"
+inner = "UpdateUserStatus"
+comment = "The user went online or offline."
+
+[tgypes.update_new_chat]
+uses = []
+typen = "TGUpdateNewChat"
+inner = "UpdateNewChat"
+comment = "A new chat has been loaded/created. This update is guaranteed to come before the chat identifier is returned to the client. The chat field changes will be reported through separate updates."
+
+[tgypes.update_new_message]
+uses = []
+typen = "TGUpdateNewMessage"
+inner = "UpdateNewMessage"
+comment = "A new message was received; can also be an outgoing message."
+
+[tgypes.update_chat_last_message]
+uses = []
+typen = "TGUpdateChatLastMessage"
+inner = "UpdateChatLastMessage"
+comment = "The last message of a chat was changed. If last_message is null then the last message in the chat became unknown. Some new unknown messages might be added to the chat in this case."
+
+[tgypes.message]
+uses = []
+typen = "TGMessage"
+inner = "Message"
+comment = "Describes a message."
+
+
+[tgypes.message_forward_info]
+uses = []
+typen = "TGMessageForwardInfo"
+inner = "MessageForwardInfo"
+comment = "Contains information about a forwarded message."
+
+[tgypes.chat]
+uses = []
+typen = "TGChat"
+inner = "Chat"
+comment = "A chat. (Can be a private chat, basic group, supergroup, or secret chat.)"
+

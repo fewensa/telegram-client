@@ -4,15 +4,15 @@ use crate::types::t_proxy::TGProxy;
 
 impl TGProxy {
 
-  pub fn id(&self) -> &Option<i32> { self.origin().id() }
+  pub fn id(&self) -> Option<i32> { self.origin().id() }
 
-  pub fn server(&self) -> &Option<String> { self.origin().server() }
+  pub fn server(&self) -> Option<String> { self.origin().server() }
 
-  pub fn port(&self) -> &Option<i32> { self.origin().port() }
+  pub fn port(&self) -> Option<i32> { self.origin().port() }
 
-  pub fn last_used_date(&self) -> &Option<i32> { self.origin().last_used_date() }
+  pub fn last_used_date(&self) -> Option<i32> { self.origin().last_used_date() }
 
-  pub fn is_enabled(&self) -> &Option<bool> { self.origin().is_enabled() }
+  pub fn is_enabled(&self) -> Option<bool> { self.origin().is_enabled() }
 
   pub fn type_(&self) -> Option<TGProxyType> {
     self.origin().type_().clone()
