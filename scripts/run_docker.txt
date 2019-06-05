@@ -1,0 +1,13 @@
+
+
+docker run -it --rm --name lor --hostname alpzin lo-rust-alpine:1
+
+
+docker run
+-v /wind/dev/rust/telegram-client/:/source
+-v /wind/opt/scoop/apps/rustup/current/.cargo/registry/:/root/.cargo/registry
+-v /wind/opt/scoop/apps/rustup/current/.cargo/git/:/root/.cargo/git
+--name tgc
+-h alpzin
+lo-rust-alpine:1 sh -f /source/scripts/run_in_container.sh
+
