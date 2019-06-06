@@ -1,23 +1,23 @@
 macro_rules! enum_is {
   ($enum_name:ident, $field:ident) => {
-    Box::new(|t: &$enum_name| {
+    |t: &$enum_name| {
       match t {
         $enum_name::$field => true,
         _ => false
       }
-    })
+    }
   };
 }
 
 /// tuple enum is field
 macro_rules! tuple_enum_is {
   ($enum_name:ident, $field:ident) => {
-    Box::new(|t: &$enum_name| {
+    |t: &$enum_name| {
       match t {
         $enum_name::$field(_) => true,
         _ => false
       }
-    })
+    }
   };
 //  ($e:ident, $t:ident, $namespace:ident) => {
 //    Box::new(|t: &$e| {
