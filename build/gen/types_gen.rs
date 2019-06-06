@@ -35,14 +35,17 @@ fn write_types<P: AsRef<Path>>(type_dir: P, tima: &Tima, tera: &Tera) {
       File::create(&f_rs).expect(&format!("Can not create [{:?}] file", f_rs)[..]);
     }
 
-    let mut context = Context::new();
-    context.insert("comment", &tgypes.comment(name).map(|comment| lima::format_comment(comment, false)));
-    context.insert("typen", &tgypes.typen(name));
-    context.insert("inner", &tgypes.inner(name));
-    context.insert("uses", &tgypes.uses(name));
-
-    let rscode = tera.render("tg_types.tpl.txt", &context).expect("Can not render types code.");
+    let rscode = tera.render("tg_types.use.tpl.txt", &Context::new()).expect("Can not render types code.");
     toolkit::fs::append(&t_rs, rscode).expect(&format!("Can not create [{:?}] file", t_rs)[..]);
+
+    tgypes.td_types(name).iter().for_each(|td| {
+      let mut context = Context::new();
+
+      context.insert("td", td);
+
+      let rscode = tera.render("tg_types.tpl.txt", &context).expect("Can not render types code.");
+      toolkit::fs::append(&t_rs, rscode).expect(&format!("Can not create [{:?}] file", t_rs)[..]);
+    });
   });
 }
 
@@ -67,7 +70,11 @@ fn write_tmod<P: AsRef<Path>>(type_dir: P, tima: &Tima, tera: &Tera) {
   builder.append("\n\n\n");
 
 
-  tmod.def_mod().iter().for_each(|item| { builder.append("mod ").append(item.clone()).append(";\n\n"); });
+  tmod.def_mod().iter().for_each(|item| {
+    builder.append(if item.macro_use { "#[macro_use] " } else { "" })
+      .append("mod ")
+      .append(item.name.clone()).append(";\n\n");
+  });
 
   tgypes.names().iter().for_each(|name| {
     let t_rs = &format!("t_{}", name)[..];

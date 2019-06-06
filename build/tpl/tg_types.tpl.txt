@@ -1,17 +1,14 @@
 
-{% for item in uses %}use {{item}};
+{% for item in td.uses %}use {{item}};
 {% endfor %}
-use rtdlib::types::*;
-use serde::{Serialize, Serializer, Deserialize, Deserializer};
-use rtdlib::types::{RObject, RTDType};
 
-{% if comment %}{{comment}}{% endif %}
+{% if td.comment %}{{td.comment}}{% endif %}
 #[derive(Debug, Clone)]
-pub struct {{typen}} {
-  inner: {{inner}}
+pub struct {{td.typen}} {
+  inner: {{td.inner}}
 }
 
-impl RObject for {{typen}} {
+impl RObject for {{td.typen}} {
   fn td_name(&self) -> &'static str {
     self.inner.td_name()
   }
@@ -25,28 +22,28 @@ impl RObject for {{typen}} {
   }
 }
 
-impl Serialize for {{typen}} {
+impl Serialize for {{td.typen}} {
   fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: Serializer {
     self.inner.serialize(serializer)
   }
 }
 
-impl<'de> Deserialize<'de> for {{typen}} {
+impl<'de> Deserialize<'de> for {{td.typen}} {
   fn deserialize<D>(deserializer: D) -> Result<Self, D::Error> where D: Deserializer<'de> {
-    {{inner}}::deserialize(deserializer).map(|inner| {{typen}}::new(inner))
+    {{td.inner}}::deserialize(deserializer).map(|inner| {{td.typen}}::new(inner))
   }
 }
 
-impl {{typen}} {
-  pub fn new(inner: {{inner}}) -> Self {
+impl {{td.typen}} {
+  pub fn new(inner: {{td.inner}}) -> Self {
     Self { inner }
   }
 
-  pub fn from_json<S: AsRef<str>>(json: S) -> Option<{{typen}}> {
-    {{inner}}::from_json(json).map(|inner| {{typen}}::new(inner))
+  pub fn from_json<S: AsRef<str>>(json: S) -> Option<{{td.typen}}> {
+    {{td.inner}}::from_json(json).map(|inner| {{td.typen}}::new(inner))
   }
 
-  pub fn origin(&self) -> &{{inner}} {
+  pub fn origin(&self) -> &{{td.inner}} {
     &self.inner
   }
 }

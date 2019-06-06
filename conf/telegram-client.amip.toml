@@ -1,0 +1,11 @@
+
+[proxy]
+server = "127.0.0.1"
+port = 1080
+enable = true
+type = "socks5"
+
+[log]
+type = "console"
+path = "tdlib.log"
+level = 1

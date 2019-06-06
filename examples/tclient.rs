@@ -19,7 +19,6 @@ use telegram_client::client::Client;
 use telegram_client::types::*;
 
 use crate::config::{Config, LogType};
-use crate::proxy::TProxy;
 
 mod exmlog;
 mod thelp;
@@ -37,8 +36,6 @@ fn main() {
   }
   File::create(&log_file).unwrap();
 
-  Client::set_log_verbosity_level(1);
-
   let config = Config::default();
   let api = Api::default();
   let mut client = Client::new(api.clone());
@@ -46,7 +43,7 @@ fn main() {
   config.proxy().map(|v| { &api.send(v); });
 
   config.log().map(|v| {
-    Client::set_log_verbosity_level(v.level.clone() as i32);
+    Client::set_log_verbosity_level(v.level.clone() as i32).unwrap();
     if v.type_ == LogType::File {
       v.path.clone().map(|v| {
         Client::set_log_file_path(Some(&v[..]));

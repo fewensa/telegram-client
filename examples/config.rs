@@ -1,7 +1,8 @@
 use std::path::Path;
 
-use rtdlib::types::{AddProxy, ProxyTypeHttp, ProxyTypeMtproto, ProxyTypeSocks5};
+use rtdlib::types::{AddProxy, ProxyTypeHttp, ProxyTypeMtproto, ProxyTypeSocks5, ProxyType};
 
+#[derive(Debug, Clone)]
 pub struct Config {
   toml: toml::Value
 }
@@ -12,9 +13,9 @@ impl Default for Config {
       Some(name) => format!("telegram-client.{}.toml", name),
       None => "telegram-client.toml".to_string()
     };
-    let mut toml_file = Path::new(&toml_file[..]);
+    let mut toml_file = toolkit::path::root_dir().join("conf").join(&toml_file[..]);
     if !toml_file.exists() {
-      toml_file = Path::new("telegram-client.toml");
+      toml_file = toolkit::path::root_dir().join("conf").join("telegram-client.toml");
     }
     if !toml_file.exists() {
       panic!("Not found config file");
@@ -41,7 +42,7 @@ impl Config {
         let port = v.get("port").unwrap().as_integer().unwrap();
         let enable = v.get("enable").unwrap().as_bool().unwrap();
         let type_ = v.get("type").unwrap().as_str().unwrap();
-        let ptype = match type_ {
+        let ptype: Box<ProxyType> = match type_ {
           "socks5" => Box::new(ProxyTypeSocks5::builder().build()),
           "http" => Box::new(ProxyTypeHttp::builder().build()),
           "mtproto" => Box::new(ProxyTypeMtproto::builder().build()),
@@ -80,12 +81,14 @@ impl Config {
   }
 }
 
+#[derive(Debug, Clone)]
 pub struct Log {
   pub type_: LogType,
   pub path: Option<String>,
   pub level: i64,
 }
 
+#[derive(Debug, Clone, PartialEq, PartialOrd, Eq, Ord)]
 pub enum LogType {
   Console,
   File,

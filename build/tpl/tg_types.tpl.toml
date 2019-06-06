@@ -3,123 +3,266 @@
 [tmod]
 
 def_use = [
-  "self::tgclient::*",
   "self::f_update_option::TGOptionValue",
   "self::f_connection_state::TGConnectionState",
   "self::f_proxy::TGProxyType",
   "self::f_user::*",
-  "self::f_update_scope_notification_settings::TGNotificationSettingsScope",
+  "self::f_chat_notification_settings::*",
   "self::f_message::*",
   "self::f_chat::*",
+  "self::f_input_message::*",
+  "self::f_input_file::*",
+  "self::f_text_entity_type::*"
 ]
 
-def_mod = [
-  "tgclient"
-]
+[[tmod.def_mod]]
+name = "tg_macro"
+macro_use = true
+
 
 
 [tgypes]
 
-[tgypes.update_option]
+## if typen not set, default is TG$inner
+
+[[tgypes.update_option]]
 uses = []
 typen = "TGUpdateOption"
 inner = "UpdateOption"
 comment = "An option changed its value."
 
-[tgypes.authorization_state]
-uses = []
+[[tgypes.authorization_state]]
 typen = "TGAuthorizationState"
 inner = "UpdateAuthorizationState"
 comment = "The user authorization state has changed."
 
-[tgypes.connection_state]
-uses = []
-typen = "TGUpdateConnectionState"
+[[tgypes.connection_state]]
 inner = "UpdateConnectionState"
 comment = "The connection state has changed."
 
-[tgypes.proxy]
-uses = []
-typen = "TGProxy"
+[[tgypes.proxy]]
 inner = "Proxy"
 comment = "Contains information about a proxy server."
 
-[tgypes.user]
-uses = []
-typen = "TGUser"
+[[tgypes.user]]
 inner = "User"
 comment = "Represents a user."
 
-[tgypes.update_user]
-uses = []
-typen = "TGUpdateUser"
+[[tgypes.update_user]]
 inner = "UpdateUser"
 comment = "Some data of a user has changed. This update is guaranteed to come before the user identifier is returned to the client. "
 
-[tgypes.user_type_bot]
-uses = []
-typen = "TGUserTypeBot"
+[[tgypes.user_type_bot]]
 inner = "UserTypeBot"
 comment = "A bot"
 
-[tgypes.update_scope_notification_settings]
-uses = []
-typen = "TGUpdateScopeNotificationSettings"
+[[tgypes.update_scope_notification_settings]]
 inner = "UpdateScopeNotificationSettings"
 comment = "Notification settings for some type of chats were updated."
 
-[tgypes.scope_notification_settings]
-uses = []
-typen = "TGScopeNotificationSettings"
+[[tgypes.scope_notification_settings]]
 inner = "ScopeNotificationSettings"
 comment = "Contains information about notification settings for several chats."
 
-[tgypes.profile_photo]
-uses = []
-typen = "TGProfilePhoto"
+[[tgypes.profile_photo]]
 inner = "ProfilePhoto"
 comment = "Describes a user profile photo"
 
-[tgypes.update_user_status]
-uses = []
-typen = "TGUpdateUserStatus"
+[[tgypes.update_user_status]]
 inner = "UpdateUserStatus"
 comment = "The user went online or offline."
 
-[tgypes.update_new_chat]
-uses = []
-typen = "TGUpdateNewChat"
+[[tgypes.update_new_chat]]
 inner = "UpdateNewChat"
 comment = "A new chat has been loaded/created. This update is guaranteed to come before the chat identifier is returned to the client. The chat field changes will be reported through separate updates."
 
-[tgypes.update_new_message]
-uses = []
-typen = "TGUpdateNewMessage"
+[[tgypes.update_new_message]]
 inner = "UpdateNewMessage"
 comment = "A new message was received; can also be an outgoing message."
 
-[tgypes.update_chat_last_message]
-uses = []
-typen = "TGUpdateChatLastMessage"
+[[tgypes.update_chat_last_message]]
 inner = "UpdateChatLastMessage"
 comment = "The last message of a chat was changed. If last_message is null then the last message in the chat became unknown. Some new unknown messages might be added to the chat in this case."
 
-[tgypes.message]
-uses = []
-typen = "TGMessage"
+[[tgypes.message]]
 inner = "Message"
 comment = "Describes a message."
 
 
-[tgypes.message_forward_info]
-uses = []
-typen = "TGMessageForwardInfo"
+[[tgypes.message_forward_info]]
 inner = "MessageForwardInfo"
 comment = "Contains information about a forwarded message."
 
-[tgypes.chat]
-uses = []
-typen = "TGChat"
+[[tgypes.chat]]
 inner = "Chat"
 comment = "A chat. (Can be a private chat, basic group, supergroup, or secret chat.)"
+
+[[tgypes.chat]]
+inner = "DraftMessage"
+comment = "Contains information about a message draft."
+
+
+[[tgypes.chat_type]]
+inner = "ChatTypePrivate"
+comment = "An ordinary chat with a user."
+
+[[tgypes.chat_type]]
+inner = "ChatTypeBasicGroup"
+comment = "A basic group (i.e., a chat with 0-200 other users). "
+
+[[tgypes.chat_type]]
+inner = "ChatTypeSupergroup"
+comment = """A supergroup (i.e. a chat with up to GetOption("supergroup_max_size") other users), or channel (with unlimited members). """
+
+[[tgypes.chat_type]]
+inner = "ChatTypeSecret"
+comment = "A secret chat with a user. "
+
+
+[[tgypes.input_message]]
+inner = "InputMessageText"
+comment = "A text message."
+
+[[tgypes.input_message]]
+inner = "InputMessageAnimation"
+comment = "An animation message (GIF-style)."
+
+[[tgypes.input_message]]
+inner = "InputMessageAudio"
+comment = "An audio message."
+
+[[tgypes.input_message]]
+inner = "InputMessageContact"
+comment = "A message containing a user contact."
+
+[[tgypes.input_message]]
+inner = "InputMessageDocument"
+comment = "A document message (general file)."
+
+[[tgypes.input_message]]
+inner = "InputMessageForwarded"
+comment = "A forwarded message."
+
+[[tgypes.input_message]]
+inner = "InputMessageGame"
+comment = "A message with a game; not supported for channels or secret chats."
+
+[[tgypes.input_message]]
+inner = "InputMessageInvoice"
+comment = "A message with an invoice; can be used only by bots and only in private chats."
+
+[[tgypes.input_message]]
+uses = []
+inner = "InputMessageLocation"
+comment = "A message with a location."
+
+[[tgypes.input_message]]
+inner = "InputMessagePhoto"
+comment = "A photo message."
+
+[[tgypes.input_message]]
+inner = "InputMessagePoll"
+comment = "A message with a poll. Polls can't be sent to private or secret chats."
+
+[[tgypes.input_message]]
+inner = "InputMessageSticker"
+comment = "A sticker message."
+
+[[tgypes.input_message]]
+inner = "InputMessageVenue"
+comment = "A message with information about a venue."
+
+[[tgypes.input_message]]
+inner = "InputMessageVideo"
+comment = "A video message."
+
+[[tgypes.input_message]]
+inner = "InputMessageVideoNote"
+comment = "A video note message."
+
+[[tgypes.input_message]]
+inner = "InputMessageVoiceNote"
+comment = "A voice note message."
+
+[[tgypes.input_message]]
+inner = "FormattedText"
+comment = "A text with some entities."
+
+[[tgypes.input_message]]
+inner = "TextEntity"
+comment = "Represents a part of the text that needs to be formatted in some unusual way."
+
+[[tgypes.input_file]]
+inner = "InputFileGenerated"
+comment = "A file generated by the client."
+
+[[tgypes.input_file]]
+inner = "InputFileId"
+comment = "A file defined by its unique ID."
+
+[[tgypes.input_file]]
+inner = "InputFileLocal"
+comment = "A file defined by a local path."
+
+[[tgypes.input_file]]
+inner = "InputFileRemote"
+comment = "A file defined by its remote ID."
+
+[[tgypes.input_file]]
+inner = "InputThumbnail"
+comment = "A thumbnail to be sent along with a file; should be in JPEG or WEBP format for stickers, and less than 200 kB in size."
+
+[[tgypes.text_entity_type]]
+inner = "TextEntityTypeBold"
+
+[[tgypes.text_entity_type]]
+inner = "TextEntityTypeBotCommand"
+
+[[tgypes.text_entity_type]]
+inner = "TextEntityTypeCashtag"
+
+[[tgypes.text_entity_type]]
+inner = "TextEntityTypeCode"
+
+[[tgypes.text_entity_type]]
+inner = "TextEntityTypeEmailAddress"
+
+[[tgypes.text_entity_type]]
+inner = "TextEntityTypeHashtag"
+
+[[tgypes.text_entity_type]]
+inner = "TextEntityTypeItalic"
+
+[[tgypes.text_entity_type]]
+inner = "TextEntityTypeMention"
+
+[[tgypes.text_entity_type]]
+inner = "TextEntityTypeMentionName"
+
+[[tgypes.text_entity_type]]
+inner = "TextEntityTypePhoneNumber"
+
+[[tgypes.text_entity_type]]
+inner = "TextEntityTypePre"
+
+[[tgypes.text_entity_type]]
+inner = "TextEntityTypePreCode"
+
+[[tgypes.text_entity_type]]
+inner = "TextEntityTypeTextUrl"
+
+[[tgypes.text_entity_type]]
+inner = "TextEntityTypeUrl"
+
+[[tgypes.invoice]]
+inner = "Invoice"
+
+[[tgypes.chat_notification_settings]]
+inner = "ChatNotificationSettings"
+
+#[[tgypes.name]]
+#inner = ""
+#comment = ""
+
+
 

@@ -1,7 +1,7 @@
-use crate::types::t_message::TGMessage;
 use rtdlib::types as td_types;
-use crate::errors;
 
+use crate::errors;
+use crate::types::t_message::TGMessage;
 
 impl TGMessage {
 
@@ -55,15 +55,13 @@ impl TGMessage {
   pub fn content(&self) -> Option<Box<td_types::MessageContent>> { self.origin().content() }
 
   pub fn reply_markup(&self) -> Option<Box<td_types::ReplyMarkup>> { self.origin().reply_markup() }
-
-
 }
 
 
 #[derive(Debug, Clone, PartialEq, PartialOrd, Eq, Ord)]
 pub enum TGMessageSendingState {
   Failed,
-  Pending
+  Pending,
 }
 
 impl TGMessageSendingState {
