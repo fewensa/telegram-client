@@ -88,7 +88,7 @@ pub enum TGChatType {
 
 impl TGChatType {
   fn of(td: Box<td_types::ChatType>) -> Self {
-    rtd_type_mapping!(
+    tuple_rtd_type_mapping!(
       ChatType,
       TGChatType,
       RTDChatTypeType,

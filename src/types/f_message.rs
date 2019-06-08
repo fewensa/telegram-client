@@ -2,6 +2,8 @@ use rtdlib::types as td_types;
 
 use crate::errors;
 use crate::types::t_message::TGMessage;
+use crate::types::TGMessageForwardInfo;
+use rtdlib::types::RObject;
 
 impl TGMessage {
 
@@ -33,7 +35,7 @@ impl TGMessage {
 
   pub fn edit_date(&self) -> Option<i32> { self.origin().edit_date() }
 
-  pub fn forward_info(&self) -> Option<td_types::MessageForwardInfo> { self.origin().forward_info() }
+  pub fn forward_info(&self) -> Option<TGMessageForwardInfo> { self.origin().forward_info().map(|v| TGMessageForwardInfo::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
 
   pub fn reply_to_message_id(&self) -> Option<i64> { self.origin().reply_to_message_id() }
 
@@ -71,6 +73,14 @@ impl TGMessageSendingState {
       Some(td_types::RTDMessageSendingStateType::MessageSendingStatePending) => TGMessageSendingState::Pending,
       None => panic!(errors::TELEGRAM_DATA_FAIL)
     }
+  }
+
+  pub fn is_failed(&self) -> bool {
+    enum_is!(TGMessageSendingState, Failed)(self)
+  }
+
+  pub fn is_pending(&self) -> bool {
+    enum_is!(TGMessageSendingState, Pending)(self)
   }
 }
 

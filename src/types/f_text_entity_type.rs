@@ -23,7 +23,7 @@ pub enum TGTextEntityType {
 
 impl TGTextEntityType {
   pub(crate) fn of(td: Box<td_types::TextEntityType>) -> Self {
-    rtd_type_mapping!(
+    tuple_rtd_type_mapping!(
       TextEntityType,
       TGTextEntityType,
       RTDTextEntityTypeType,

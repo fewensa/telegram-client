@@ -12,7 +12,8 @@ def_use = [
   "self::f_chat::*",
   "self::f_input_message::*",
   "self::f_input_file::*",
-  "self::f_text_entity_type::*"
+  "self::f_text_entity_type::*",
+  "self::f_message_content::*"
 ]
 
 [[tmod.def_mod]]
@@ -259,6 +260,127 @@ inner = "Invoice"
 
 [[tgypes.chat_notification_settings]]
 inner = "ChatNotificationSettings"
+
+[[tgypes.message_content]]
+inner = "MessageAnimation"
+
+[[tgypes.message_content]]
+inner = "MessageAudio"
+
+[[tgypes.message_content]]
+inner = "MessageBasicGroupChatCreate"
+
+[[tgypes.message_content]]
+inner = "MessageCall"
+
+[[tgypes.message_content]]
+inner = "MessageChatAddMembers"
+
+[[tgypes.message_content]]
+inner = "MessageChatChangePhoto"
+
+[[tgypes.message_content]]
+inner = "MessageChatChangeTitle"
+
+[[tgypes.message_content]]
+inner = "MessageChatDeleteMember"
+
+[[tgypes.message_content]]
+inner = "MessageChatDeletePhoto"
+
+[[tgypes.message_content]]
+inner = "MessageChatJoinByLink"
+
+[[tgypes.message_content]]
+inner = "MessageChatSetTtl"
+
+[[tgypes.message_content]]
+inner = "MessageChatUpgradeFrom"
+
+[[tgypes.message_content]]
+inner = "MessageChatUpgradeTo"
+
+[[tgypes.message_content]]
+inner = "MessageContact"
+
+[[tgypes.message_content]]
+inner = "MessageContactRegistered"
+
+[[tgypes.message_content]]
+inner = "MessageCustomServiceAction"
+
+[[tgypes.message_content]]
+inner = "MessageDocument"
+
+[[tgypes.message_content]]
+inner = "MessageExpiredPhoto"
+
+[[tgypes.message_content]]
+inner = "MessageExpiredVideo"
+
+[[tgypes.message_content]]
+inner = "MessageGame"
+
+[[tgypes.message_content]]
+inner = "MessageGameScore"
+
+[[tgypes.message_content]]
+inner = "MessageInvoice"
+
+[[tgypes.message_content]]
+inner = "MessageLocation"
+
+[[tgypes.message_content]]
+inner = "MessagePassportDataReceived"
+
+[[tgypes.message_content]]
+inner = "MessagePassportDataSent"
+
+[[tgypes.message_content]]
+inner = "MessagePaymentSuccessful"
+
+[[tgypes.message_content]]
+inner = "MessagePaymentSuccessfulBot"
+
+[[tgypes.message_content]]
+inner = "MessagePhoto"
+
+[[tgypes.message_content]]
+inner = "MessagePinMessage"
+
+[[tgypes.message_content]]
+inner = "MessagePoll"
+
+[[tgypes.message_content]]
+inner = "MessageScreenshotTaken"
+
+[[tgypes.message_content]]
+inner = "MessageSticker"
+
+[[tgypes.message_content]]
+inner = "MessageSupergroupChatCreate"
+
+[[tgypes.message_content]]
+inner = "MessageText"
+
+[[tgypes.message_content]]
+inner = "MessageUnsupported"
+
+[[tgypes.message_content]]
+inner = "MessageVenue"
+
+[[tgypes.message_content]]
+inner = "MessageVideo"
+
+[[tgypes.message_content]]
+inner = "MessageVideoNote"
+
+[[tgypes.message_content]]
+inner = "MessageVoiceNote"
+
+[[tgypes.message_content]]
+inner = "MessageWebsiteConnected"
+
 
 #[[tgypes.name]]
 #inner = ""

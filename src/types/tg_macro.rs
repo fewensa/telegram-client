@@ -40,13 +40,37 @@ macro_rules! tuple_enum_on {
   };
 }
 
+macro_rules! enum_on {
+  ($enum_name:ident, $field:ident, $fnc:expr) => {
+    |t: &$enum_name| {
+      match t {
+        $enum_name::$field => $fnc(),
+        _ => {}
+      };
+    }
+  };
+}
 
-macro_rules! rtd_type_mapping {
+
+macro_rules! tuple_rtd_type_mapping {
   ($rtd_trait:ident, $tg_type:ident, $rtd_type:ident, $(($td_type_field:ident, $tg_type_field:ident, $tg_clz:ident));*;) => (
     |td: Box<$rtd_trait>| {
       match td_types::$rtd_type::of(td.td_name()) {
       $(
         Some(td_types::$rtd_type::$td_type_field) => $tg_type::$tg_type_field($tg_clz::from_json(td.to_json()).expect(errors::TELEGRAM_DATA_FAIL)),
+      )*
+        None => panic!(errors::TELEGRAM_DATA_FAIL)
+      }
+    }
+  );
+}
+
+macro_rules! rtd_type_mapping {
+  ($rtd_trait:ident, $tg_type:ident, $rtd_type:ident, $(($td_type_field:ident, $tg_type_field:ident));*;) => (
+    |td: Box<$rtd_trait>| {
+      match td_types::$rtd_type::of(td.td_name()) {
+      $(
+        Some(td_types::$rtd_type::$td_type_field) => $tg_type::$tg_type_field,
       )*
         None => panic!(errors::TELEGRAM_DATA_FAIL)
       }
