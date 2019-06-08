@@ -117,36 +117,16 @@ impl TGTextEntityType {
   }
 }
 
-impl TGTextEntityTypeBold {}
-
-impl TGTextEntityTypeBotCommand {}
-
-impl TGTextEntityTypeCashtag {}
-
-impl TGTextEntityTypeCode {}
-
-impl TGTextEntityTypeEmailAddress {}
-
-impl TGTextEntityTypeHashtag {}
-
-impl TGTextEntityTypeItalic {}
-
-impl TGTextEntityTypeMention {}
-
 impl TGTextEntityTypeMentionName {
-  pub fn user_id(&self) -> i32 { self.origin().user_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn user_id(&self) -> i32 { self.td_origin().user_id().expect(errors::TELEGRAM_DATA_FAIL) }
 }
 
-impl TGTextEntityTypePhoneNumber {}
-
-impl TGTextEntityTypePre {}
 
 impl TGTextEntityTypePreCode {
-  pub fn language(&self) -> Option<String> { self.origin().language() }
+  pub fn language(&self) -> Option<String> { self.td_origin().language() }
 }
 
 impl TGTextEntityTypeTextUrl {
-  pub fn url(&self) -> String { self.origin().url().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn url(&self) -> String { self.td_origin().url().expect(errors::TELEGRAM_DATA_FAIL) }
 }
 
-impl TGTextEntityTypeUrl {}

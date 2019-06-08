@@ -3,7 +3,7 @@ use rtdlib::types as td_type;
 
 impl TGUpdateConnectionState {
   pub fn on_state<F: FnOnce(TGConnectionState)>(&self, fnc: F) -> &Self {
-    self.origin().state().clone().map(|val| {
+    self.td_origin().state().clone().map(|val| {
       TGConnectionState::of(val).map(|state| fnc(state))
     });
     self

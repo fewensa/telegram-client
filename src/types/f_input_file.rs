@@ -62,32 +62,32 @@ impl TGInputFile {
 
 
 impl TGInputFileGenerated {
-  pub fn original_path(&self) -> Option<String> { self.origin().original_path() }
+  pub fn original_path(&self) -> Option<String> { self.td_origin().original_path() }
 
-  pub fn conversion(&self) -> Option<String> { self.origin().conversion() }
+  pub fn conversion(&self) -> Option<String> { self.td_origin().conversion() }
 
-  pub fn expected_size(&self) -> Option<i32> { self.origin().expected_size() }
+  pub fn expected_size(&self) -> Option<i32> { self.td_origin().expected_size() }
 }
 
 impl TGInputFileId {
-  pub fn id(&self) -> i32 { self.origin().id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn id(&self) -> i32 { self.td_origin().id().expect(errors::TELEGRAM_DATA_FAIL) }
 }
 
 impl TGInputFileLocal {
-  pub fn path(&self) -> String { self.origin().path().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn path(&self) -> String { self.td_origin().path().expect(errors::TELEGRAM_DATA_FAIL) }
 }
 
 impl TGInputFileRemote {
-  pub fn id(&self) -> String { self.origin().id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn id(&self) -> String { self.td_origin().id().expect(errors::TELEGRAM_DATA_FAIL) }
 }
 
 impl TGInputThumbnail {
 
-  pub fn thumbnail(&self) -> TGInputFile { self.origin().thumbnail().map(|v| TGInputFile::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn thumbnail(&self) -> TGInputFile { self.td_origin().thumbnail().map(|v| TGInputFile::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn width(&self) -> i32 { self.origin().width().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn width(&self) -> i32 { self.td_origin().width().expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn height(&self) ->  i32 { self.origin().height().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn height(&self) ->  i32 { self.td_origin().height().expect(errors::TELEGRAM_DATA_FAIL) }
 
 }
 

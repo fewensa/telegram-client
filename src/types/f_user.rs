@@ -7,35 +7,35 @@ use crate::types::TGProfilePhoto;
 use rtdlib::types::RObject;
 
 impl TGUser {
-  pub fn id(&self) -> i32 { self.origin().id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn id(&self) -> i32 { self.td_origin().id().expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn first_name(&self) -> Option<String> { self.origin().first_name() }
+  pub fn first_name(&self) -> Option<String> { self.td_origin().first_name() }
 
-  pub fn last_name(&self) -> Option<String> { self.origin().last_name() }
+  pub fn last_name(&self) -> Option<String> { self.td_origin().last_name() }
 
-  pub fn username(&self) -> Option<String> { self.origin().username() }
+  pub fn username(&self) -> Option<String> { self.td_origin().username() }
 
-  pub fn phone_number(&self) -> String { self.origin().phone_number().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn phone_number(&self) -> String { self.td_origin().phone_number().expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn status(&self) -> TGUserStatus { self.origin().status().map(|v| TGUserStatus::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn status(&self) -> TGUserStatus { self.td_origin().status().map(|v| TGUserStatus::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn profile_photo(&self) -> Option<TGProfilePhoto> { self.origin().profile_photo().map(|v| TGProfilePhoto::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn profile_photo(&self) -> Option<TGProfilePhoto> { self.td_origin().profile_photo().map(|v| TGProfilePhoto::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
 
-  pub fn outgoing_link(&self) -> TGLinkState { self.origin().outgoing_link().map(|v| TGLinkState::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn outgoing_link(&self) -> TGLinkState { self.td_origin().outgoing_link().map(|v| TGLinkState::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn incoming_link(&self) -> TGLinkState { self.origin().incoming_link().map(|v| TGLinkState::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn incoming_link(&self) -> TGLinkState { self.td_origin().incoming_link().map(|v| TGLinkState::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn is_verified(&self) -> bool { self.origin().is_verified().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn is_verified(&self) -> bool { self.td_origin().is_verified().expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn is_support(&self) -> bool { self.origin().is_support().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn is_support(&self) -> bool { self.td_origin().is_support().expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn restriction_reason(&self) -> Option<String> { self.origin().restriction_reason().filter(|v| !v.is_empty()) }
+  pub fn restriction_reason(&self) -> Option<String> { self.td_origin().restriction_reason().filter(|v| !v.is_empty()) }
 
-  pub fn have_access(&self) -> bool { self.origin().have_access().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn have_access(&self) -> bool { self.td_origin().have_access().expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn type_(&self) -> TGUserType { self.origin().type_().map(|v| TGUserType::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn type_(&self) -> TGUserType { self.td_origin().type_().map(|v| TGUserType::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn language_code(&self) -> Option<String> { self.origin().language_code().filter(|v| !v.is_empty()) }
+  pub fn language_code(&self) -> Option<String> { self.td_origin().language_code().filter(|v| !v.is_empty()) }
 
   pub fn is_bot(&self) -> bool {
     match self.type_() {

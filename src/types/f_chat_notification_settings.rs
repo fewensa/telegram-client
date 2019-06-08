@@ -2,6 +2,7 @@ use rtdlib::types as td_types;
 
 use crate::errors;
 use crate::types::TGChatNotificationSettings;
+use rtdlib::types::NotificationSettingsScope;
 
 /// This class is an abstract base class. Describes the types of chats to which notification settings are applied.
 pub enum TGNotificationSettingsScope {
@@ -39,24 +40,24 @@ impl TGNotificationSettingsScope {
 
 
 impl TGChatNotificationSettings {
-  pub fn use_default_mute_for(&self) -> bool { self.origin().use_default_mute_for().map_or(false, |v| v) }
+  pub fn use_default_mute_for(&self) -> bool { self.td_origin().use_default_mute_for().map_or(false, |v| v) }
 
-  pub fn mute_for(&self) -> Option<i32> { self.origin().mute_for() }
+  pub fn mute_for(&self) -> Option<i32> { self.td_origin().mute_for() }
 
-  pub fn use_default_sound(&self) -> bool { self.origin().use_default_sound().map_or(false, |v| v) }
+  pub fn use_default_sound(&self) -> bool { self.td_origin().use_default_sound().map_or(false, |v| v) }
 
-  pub fn sound(&self) -> Option<String> { self.origin().sound() }
+  pub fn sound(&self) -> Option<String> { self.td_origin().sound() }
 
-  pub fn use_default_show_preview(&self) -> bool { self.origin().use_default_show_preview().map_or(false, |v| v) }
+  pub fn use_default_show_preview(&self) -> bool { self.td_origin().use_default_show_preview().map_or(false, |v| v) }
 
-  pub fn show_preview(&self) -> bool { self.origin().show_preview().map_or(false, |v| v) }
+  pub fn show_preview(&self) -> bool { self.td_origin().show_preview().map_or(false, |v| v) }
 
-  pub fn use_default_disable_pinned_message_notifications(&self) -> bool { self.origin().use_default_disable_pinned_message_notifications().map_or(false, |v| v) }
+  pub fn use_default_disable_pinned_message_notifications(&self) -> bool { self.td_origin().use_default_disable_pinned_message_notifications().map_or(false, |v| v) }
 
-  pub fn disable_pinned_message_notifications(&self) -> bool { self.origin().disable_pinned_message_notifications().map_or(false, |v| v) }
+  pub fn disable_pinned_message_notifications(&self) -> bool { self.td_origin().disable_pinned_message_notifications().map_or(false, |v| v) }
 
-  pub fn use_default_disable_mention_notifications(&self) -> bool { self.origin().use_default_disable_mention_notifications().map_or(false, |v| v) }
+  pub fn use_default_disable_mention_notifications(&self) -> bool { self.td_origin().use_default_disable_mention_notifications().map_or(false, |v| v) }
 
-  pub fn disable_mention_notifications(&self) -> bool { self.origin().disable_mention_notifications().map_or(false, |v| v) }
+  pub fn disable_mention_notifications(&self) -> bool { self.td_origin().disable_mention_notifications().map_or(false, |v| v) }
 }
 

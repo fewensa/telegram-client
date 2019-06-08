@@ -5,15 +5,15 @@ use crate::errors;
 impl TGUpdateOption {
 
   pub fn name(&self) -> String {
-    self.origin().name().clone().expect(errors::TELEGRAM_DATA_FAIL)
+    self.td_origin().name().clone().expect(errors::TELEGRAM_DATA_FAIL)
   }
 
   pub fn value(&self) -> TGOptionValue {
-    TGOptionValue::new(self.origin().value())
+    TGOptionValue::new(self.td_origin().value())
   }
 
   pub fn on_name<S: AsRef<str>, F: FnOnce(&TGOptionValue)>(&self, name: S, fnc: F) {
-    let value = TGOptionValue::new(self.origin().value());
+    let value = TGOptionValue::new(self.td_origin().value());
     if &self.name()[..] == name.as_ref() && value.is_some() {
       fnc(&value)
     }

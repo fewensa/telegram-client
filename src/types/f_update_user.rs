@@ -5,6 +5,6 @@ use rtdlib::types::RObject;
 
 impl TGUpdateUser {
 
-  pub fn user(&self) -> TGUser { TGUser::from_json(self.origin().user().expect(errors::TELEGRAM_DATA_FAIL).to_json()).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn user(&self) -> TGUser { TGUser::from_json(self.td_origin().user().expect(errors::TELEGRAM_DATA_FAIL).to_json()).expect(errors::TELEGRAM_DATA_FAIL) }
 
 }

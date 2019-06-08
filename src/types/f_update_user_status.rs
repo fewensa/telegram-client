@@ -5,10 +5,10 @@ use crate::errors;
 
 impl TGUpdateUserStatus {
 
-  pub fn user_id(&self) -> i32 { self.origin().user_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn user_id(&self) -> i32 { self.td_origin().user_id().expect(errors::TELEGRAM_DATA_FAIL) }
 
   pub fn status(&self) -> TGUserStatus {
-    TGUserStatus::of(self.origin().status().expect(errors::TELEGRAM_DATA_FAIL))
+    TGUserStatus::of(self.td_origin().status().expect(errors::TELEGRAM_DATA_FAIL))
   }
 
 }

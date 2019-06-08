@@ -13,7 +13,9 @@ def_use = [
   "self::f_input_message::*",
   "self::f_input_file::*",
   "self::f_text_entity_type::*",
-  "self::f_message_content::*"
+  "self::f_message_content::*",
+  "self::f_message_forward_info::*",
+  "self::f_reply_markup::*",
 ]
 
 [[tmod.def_mod]]
@@ -93,6 +95,15 @@ comment = "Describes a message."
 [[tgypes.message_forward_info]]
 inner = "MessageForwardInfo"
 comment = "Contains information about a forwarded message."
+
+[[tgypes.message_forward_info]]
+inner = "MessageForwardOriginChannel"
+
+[[tgypes.message_forward_info]]
+inner = "MessageForwardOriginHiddenUser"
+
+[[tgypes.message_forward_info]]
+inner = "MessageForwardOriginUser"
 
 [[tgypes.chat]]
 inner = "Chat"
@@ -381,6 +392,192 @@ inner = "MessageVoiceNote"
 [[tgypes.message_content]]
 inner = "MessageWebsiteConnected"
 
+[[tgypes.message_content]]
+inner = "Animation"
+
+[[tgypes.message_content]]
+inner = "FormattedText"
+
+[[tgypes.message_content]]
+inner = "PhotoSize"
+
+[[tgypes.message_content]]
+inner = "File"
+
+[[tgypes.message_content]]
+inner = "LocalFile"
+
+[[tgypes.message_content]]
+inner = "RemoteFile"
+
+[[tgypes.message_content]]
+inner = "Audio"
+
+[[tgypes.message_content]]
+inner = "CallDiscardReasonDeclined"
+
+[[tgypes.message_content]]
+inner = "CallDiscardReasonDisconnected"
+
+[[tgypes.message_content]]
+inner = "CallDiscardReasonEmpty"
+
+[[tgypes.message_content]]
+inner = "CallDiscardReasonHungUp"
+
+[[tgypes.message_content]]
+inner = "CallDiscardReasonMissed"
+
+[[tgypes.message_content]]
+inner = "Photo"
+
+[[tgypes.message_content]]
+inner = "Contact"
+
+[[tgypes.message_content]]
+inner = "Document"
+
+[[tgypes.message_content]]
+inner = "Game"
+
+[[tgypes.message_content]]
+inner = "Location"
+
+[[tgypes.message_content]]
+inner = "EncryptedPassportElement"
+
+[[tgypes.message_content]]
+inner = "EncryptedCredentials"
+
+[[tgypes.message_content]]
+inner = "DatedFile"
+
+[[tgypes.message_content]]
+inner = "PassportElementTypeAddress"
+
+[[tgypes.message_content]]
+inner = "PassportElementTypeBankStatement"
+
+[[tgypes.message_content]]
+inner = "PassportElementTypeDriverLicense"
+
+[[tgypes.message_content]]
+inner = "PassportElementTypeEmailAddress"
+
+[[tgypes.message_content]]
+inner = "PassportElementTypeIdentityCard"
+
+[[tgypes.message_content]]
+inner = "PassportElementTypeInternalPassport"
+
+[[tgypes.message_content]]
+inner = "PassportElementTypePassport"
+
+[[tgypes.message_content]]
+inner = "PassportElementTypePassportRegistration"
+
+[[tgypes.message_content]]
+inner = "PassportElementTypePersonalDetails"
+
+[[tgypes.message_content]]
+inner = "PassportElementTypePhoneNumber"
+
+[[tgypes.message_content]]
+inner = "PassportElementTypeRentalAgreement"
+
+[[tgypes.message_content]]
+inner = "PassportElementTypeTemporaryRegistration"
+
+[[tgypes.message_content]]
+inner = "PassportElementTypeUtilityBill"
+
+[[tgypes.message_content]]
+inner = "OrderInfo"
+
+[[tgypes.message_content]]
+inner = "Address"
+
+[[tgypes.message_content]]
+inner = "Poll"
+
+[[tgypes.message_content]]
+inner = "PollOption"
+
+[[tgypes.message_content]]
+inner = "Sticker"
+
+[[tgypes.message_content]]
+inner = "MaskPosition"
+
+[[tgypes.message_content]]
+inner = "MaskPointChin"
+
+[[tgypes.message_content]]
+inner = "MaskPointEyes"
+
+[[tgypes.message_content]]
+inner = "MaskPointForehead"
+
+[[tgypes.message_content]]
+inner = "MaskPointMouth"
+
+[[tgypes.message_content]]
+inner = "WebPage"
+
+[[tgypes.message_content]]
+inner = "Video"
+
+[[tgypes.message_content]]
+inner = "VideoNote"
+
+[[tgypes.message_content]]
+inner = "VoiceNote"
+
+[[tgypes.message_content]]
+inner = "Venue"
+
+[[tgypes.reply_markup]]
+inner = "ReplyMarkupForceReply"
+
+[[tgypes.reply_markup]]
+inner = "ReplyMarkupInlineKeyboard"
+
+[[tgypes.reply_markup]]
+inner = "ReplyMarkupRemoveKeyboard"
+
+[[tgypes.reply_markup]]
+inner = "ReplyMarkupShowKeyboard"
+
+[[tgypes.reply_markup]]
+inner = "InlineKeyboardButton"
+
+
+[[tgypes.reply_markup]]
+inner = "InlineKeyboardButtonTypeBuy"
+
+[[tgypes.reply_markup]]
+inner = "InlineKeyboardButtonTypeCallback"
+
+[[tgypes.reply_markup]]
+inner = "InlineKeyboardButtonTypeCallbackGame"
+
+[[tgypes.reply_markup]]
+inner = "InlineKeyboardButtonTypeSwitchInline"
+
+[[tgypes.reply_markup]]
+inner = "InlineKeyboardButtonTypeUrl"
+
+[[tgypes.reply_markup]]
+inner = "KeyboardButton"
+
+[[tgypes.reply_markup]]
+inner = "KeyboardButtonTypeRequestLocation"
+
+[[tgypes.reply_markup]]
+inner = "KeyboardButtonTypeRequestPhoneNumber"
+
+[[tgypes.reply_markup]]
+inner = "KeyboardButtonTypeText"
 
 #[[tgypes.name]]
 #inner = ""

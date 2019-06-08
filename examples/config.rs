@@ -52,6 +52,7 @@ impl Config {
           .server(server)
           .port(port as i32)
           .enable(enable)
+          .type_(ptype)
           .build()
       })
   }

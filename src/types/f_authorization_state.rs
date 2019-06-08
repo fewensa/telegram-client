@@ -34,7 +34,7 @@ macro_rules! fn_td {
 
 impl TGAuthorizationState {
   fn authorization_state(&self) -> Option<Box<td_types::AuthorizationState>> {
-    self.origin().authorization_state()
+    self.td_origin().authorization_state()
   }
 
   pub fn on_wait_tdlibparameters<F: FnOnce()>(&self, fnc: F) -> &Self {
