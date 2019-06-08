@@ -12,12 +12,20 @@ pub enum TGNotificationSettingsScope {
 
 impl TGNotificationSettingsScope {
   pub(crate) fn of(td: Box<td_types::NotificationSettingsScope>) -> Self {
-    match td_types::RTDNotificationSettingsScopeType::of(td.td_name()) {
-      Some(td_types::RTDNotificationSettingsScopeType::NotificationSettingsScopeChannelChats) => TGNotificationSettingsScope::ChannelChats,
-      Some(td_types::RTDNotificationSettingsScopeType::NotificationSettingsScopeGroupChats) => TGNotificationSettingsScope::GroupChats,
-      Some(td_types::RTDNotificationSettingsScopeType::NotificationSettingsScopePrivateChats) => TGNotificationSettingsScope::PrivateChats,
-      None => panic!(errors::TELEGRAM_DATA_FAIL)
-    }
+//    match td_types::RTDNotificationSettingsScopeType::of(td.td_name()) {
+//      Some(td_types::RTDNotificationSettingsScopeType::NotificationSettingsScopeChannelChats) => TGNotificationSettingsScope::ChannelChats,
+//      Some(td_types::RTDNotificationSettingsScopeType::NotificationSettingsScopeGroupChats) => TGNotificationSettingsScope::GroupChats,
+//      Some(td_types::RTDNotificationSettingsScopeType::NotificationSettingsScopePrivateChats) => TGNotificationSettingsScope::PrivateChats,
+//      None => panic!(errors::TELEGRAM_DATA_FAIL)
+//    }
+    rtd_type_mapping!(
+      NotificationSettingsScope,
+      TGNotificationSettingsScope,
+      RTDNotificationSettingsScopeType,
+      (NotificationSettingsScopeChannelChats,  ChannelChats  );
+      (NotificationSettingsScopeGroupChats  ,  GroupChats    );
+      (NotificationSettingsScopePrivateChats,  PrivateChats  );
+    )(td)
   }
 
 //  channel_chats

@@ -47,50 +47,50 @@ pub enum TGMessageContent {
 
 impl TGMessageContent {
   pub(crate) fn of(td: Box<td_types::MessageContent>) -> Self {
-    rtd_type_mapping!(
+    tuple_rtd_type_mapping!(
       MessageContent,
       TGMessageContent,
       RTDMessageContentType,
-      (MessageAnimation,                   Animation               ,    TGMessageAnimation);
-      (MessageAudio,                       Audio                   ,    TGMessageAudio);
-      (MessageBasicGroupChatCreate,        BasicGroupChatCreate    ,    TGMessageBasicGroupChatCreate);
-      (MessageCall,                        Call                    ,    TGMessageCall);
-      (MessageChatAddMembers,              ChatAddMembers          ,    TGMessageChatAddMembers);
-      (MessageChatChangePhoto,             ChatChangePhoto         ,    TGMessageChatChangePhoto);
-      (MessageChatChangeTitle,             ChatChangeTitle         ,    TGMessageChatChangeTitle);
-      (MessageChatDeleteMember,            ChatDeleteMember        ,    TGMessageChatDeleteMember);
-      (MessageChatDeletePhoto,             ChatDeletePhoto         ,    TGMessageChatDeletePhoto);
-      (MessageChatJoinByLink,              ChatJoinByLink          ,    TGMessageChatJoinByLink);
-      (MessageChatSetTtl,                  ChatSetTtl              ,    TGMessageChatSetTtl);
-      (MessageChatUpgradeFrom,             ChatUpgradeFrom         ,    TGMessageChatUpgradeFrom);
-      (MessageChatUpgradeTo,               ChatUpgradeTo           ,    TGMessageChatUpgradeTo);
-      (MessageContact,                     Contact                 ,    TGMessageContact);
-      (MessageContactRegistered,           ContactRegistered       ,    TGMessageContactRegistered);
-      (MessageCustomServiceAction,         CustomServiceAction     ,    TGMessageCustomServiceAction);
-      (MessageDocument,                    Document                ,    TGMessageDocument);
-      (MessageExpiredPhoto,                ExpiredPhoto            ,    TGMessageExpiredPhoto);
-      (MessageExpiredVideo,                ExpiredVideo            ,    TGMessageExpiredVideo);
-      (MessageGame,                        Game                    ,    TGMessageGame);
-      (MessageGameScore,                   GameScore               ,    TGMessageGameScore);
-      (MessageInvoice,                     Invoice                 ,    TGMessageInvoice);
-      (MessageLocation,                    Location                ,    TGMessageLocation);
-      (MessagePassportDataReceived,        PassportDataReceived    ,    TGMessagePassportDataReceived);
-      (MessagePassportDataSent,            PassportDataSent        ,    TGMessagePassportDataSent);
-      (MessagePaymentSuccessful,           PaymentSuccessful       ,    TGMessagePaymentSuccessful);
-      (MessagePaymentSuccessfulBot,        PaymentSuccessfulBot    ,    TGMessagePaymentSuccessfulBot);
-      (MessagePhoto,                       Photo                   ,    TGMessagePhoto);
-      (MessagePinMessage,                  PinMessage              ,    TGMessagePinMessage);
-      (MessagePoll,                        Poll                    ,    TGMessagePoll);
-      (MessageScreenshotTaken,             ScreenshotTaken         ,    TGMessageScreenshotTaken);
-      (MessageSticker,                     Sticker                 ,    TGMessageSticker);
-      (MessageSupergroupChatCreate,        SupergroupChatCreate    ,    TGMessageSupergroupChatCreate);
-      (MessageText,                        Text                    ,    TGMessageText);
-      (MessageUnsupported,                 Unsupported             ,    TGMessageUnsupported);
-      (MessageVenue,                       Venue                   ,    TGMessageVenue);
-      (MessageVideo,                       Video                   ,    TGMessageVideo);
-      (MessageVideoNote,                   VideoNote               ,    TGMessageVideoNote);
-      (MessageVoiceNote,                   VoiceNote               ,    TGMessageVoiceNote);
-      (MessageWebsiteConnected,            WebsiteConnected        ,    TGMessageWebsiteConnected);
+      (MessageAnimation              ,     Animation                ,      TGMessageAnimation               );
+      (MessageAudio                  ,     Audio                    ,      TGMessageAudio                   );
+      (MessageBasicGroupChatCreate   ,     BasicGroupChatCreate     ,      TGMessageBasicGroupChatCreate    );
+      (MessageCall                   ,     Call                     ,      TGMessageCall                    );
+      (MessageChatAddMembers         ,     ChatAddMembers           ,      TGMessageChatAddMembers          );
+      (MessageChatChangePhoto        ,     ChatChangePhoto          ,      TGMessageChatChangePhoto         );
+      (MessageChatChangeTitle        ,     ChatChangeTitle          ,      TGMessageChatChangeTitle         );
+      (MessageChatDeleteMember       ,     ChatDeleteMember         ,      TGMessageChatDeleteMember        );
+      (MessageChatDeletePhoto        ,     ChatDeletePhoto          ,      TGMessageChatDeletePhoto         );
+      (MessageChatJoinByLink         ,     ChatJoinByLink           ,      TGMessageChatJoinByLink          );
+      (MessageChatSetTtl             ,     ChatSetTtl               ,      TGMessageChatSetTtl              );
+      (MessageChatUpgradeFrom        ,     ChatUpgradeFrom          ,      TGMessageChatUpgradeFrom         );
+      (MessageChatUpgradeTo          ,     ChatUpgradeTo            ,      TGMessageChatUpgradeTo           );
+      (MessageContact                ,     Contact                  ,      TGMessageContact                 );
+      (MessageContactRegistered      ,     ContactRegistered        ,      TGMessageContactRegistered       );
+      (MessageCustomServiceAction    ,     CustomServiceAction      ,      TGMessageCustomServiceAction     );
+      (MessageDocument               ,     Document                 ,      TGMessageDocument                );
+      (MessageExpiredPhoto           ,     ExpiredPhoto             ,      TGMessageExpiredPhoto            );
+      (MessageExpiredVideo           ,     ExpiredVideo             ,      TGMessageExpiredVideo            );
+      (MessageGame                   ,     Game                     ,      TGMessageGame                    );
+      (MessageGameScore              ,     GameScore                ,      TGMessageGameScore               );
+      (MessageInvoice                ,     Invoice                  ,      TGMessageInvoice                 );
+      (MessageLocation               ,     Location                 ,      TGMessageLocation                );
+      (MessagePassportDataReceived   ,     PassportDataReceived     ,      TGMessagePassportDataReceived    );
+      (MessagePassportDataSent       ,     PassportDataSent         ,      TGMessagePassportDataSent        );
+      (MessagePaymentSuccessful      ,     PaymentSuccessful        ,      TGMessagePaymentSuccessful       );
+      (MessagePaymentSuccessfulBot   ,     PaymentSuccessfulBot     ,      TGMessagePaymentSuccessfulBot    );
+      (MessagePhoto                  ,     Photo                    ,      TGMessagePhoto                   );
+      (MessagePinMessage             ,     PinMessage               ,      TGMessagePinMessage              );
+      (MessagePoll                   ,     Poll                     ,      TGMessagePoll                    );
+      (MessageScreenshotTaken        ,     ScreenshotTaken          ,      TGMessageScreenshotTaken         );
+      (MessageSticker                ,     Sticker                  ,      TGMessageSticker                 );
+      (MessageSupergroupChatCreate   ,     SupergroupChatCreate     ,      TGMessageSupergroupChatCreate    );
+      (MessageText                   ,     Text                     ,      TGMessageText                    );
+      (MessageUnsupported            ,     Unsupported              ,      TGMessageUnsupported             );
+      (MessageVenue                  ,     Venue                    ,      TGMessageVenue                   );
+      (MessageVideo                  ,     Video                    ,      TGMessageVideo                   );
+      (MessageVideoNote              ,     VideoNote                ,      TGMessageVideoNote               );
+      (MessageVoiceNote              ,     VoiceNote                ,      TGMessageVoiceNote               );
+      (MessageWebsiteConnected       ,     WebsiteConnected         ,      TGMessageWebsiteConnected        );
     )(td)
   }
 

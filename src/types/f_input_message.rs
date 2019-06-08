@@ -41,7 +41,7 @@ impl TGInputMessageContent {
 //        }
 //      };
 //    }
-    rtd_type_mapping!(
+    tuple_rtd_type_mapping!(
       InputMessageContent,
       TGInputMessageContent,
       RTDInputMessageContentType,
