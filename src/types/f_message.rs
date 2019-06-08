@@ -9,8 +9,6 @@ use crate::types::TGReplyMarkup;
 
 impl TGMessage {
 
-  // todo
-
   pub fn id(&self) -> i64 { self.td_origin().id().expect(errors::TELEGRAM_DATA_FAIL) }
 
   pub fn sender_user_id(&self) -> i32 { self.td_origin().sender_user_id().expect(errors::TELEGRAM_DATA_FAIL) }

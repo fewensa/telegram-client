@@ -6,6 +6,7 @@ use crate::types::f_text_entity_type::TGTextEntityType;
 use crate::types::t_input_message::TGTextEntity;
 use crate::types::t_message_content::*;
 
+#[derive(Debug, Clone)]
 pub enum TGMessageContent {
   Animation(TGMessageAnimation),
   Audio(TGMessageAudio),

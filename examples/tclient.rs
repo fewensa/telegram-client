@@ -19,6 +19,8 @@ use telegram_client::client::Client;
 use telegram_client::types::*;
 
 use crate::config::{Config, LogType};
+use rtdlib::types::RObject;
+use telegram_client::errors;
 
 mod exmlog;
 mod thelp;
@@ -210,6 +212,53 @@ fn main() {
     debug!(exmlog::examples(), "User [{}] status is {:?}", update.user_id(), update.status());
   });
 
+  listener.on_new_chat(|(api, update)| {
+    let chat = update.chat();
+    debug!(exmlog::examples(), "Receive new chat, title: '{}', data: {}", chat.title(), chat.to_json());
+  });
+
+  listener.on_new_message(|(api, update)| {
+    let message = update.message();
+    let content = message.content();
+    content.on_text(|m| {
+      debug!(exmlog::examples(), "Receive text message => {} <= entities => {:?}", m.text().text(), m.text().entities());
+    });
+    debug!(exmlog::examples(), "Receive new message, from: '{}', data: {}", message.sender_user_id(), message.to_json());
+  });
+
+  listener.on_chat_read_inbox(|(api, update)| {
+    debug!(exmlog::examples(), "Read inbox unread_count: {}, chat_id: {}, last_read_inbox_message_id: {}",
+           update.unread_count().map_or(0, |v| v),
+           update.chat_id().map_or(0, |v| v),
+           update.last_read_inbox_message_id().map_or(0, |v| v),
+    );
+  });
+
+  listener.on_chat_last_message(|(api, update)| {
+    debug!(exmlog::examples(), "Chat last message: {}, data: {}", update.chat_id(), update.last_message().to_json())
+  });
+
+  listener.on_chat_read_outbox(|(api, update)| {
+    debug!(exmlog::examples(), "Read outbox chat_id: {}, last_read_outbox_message_id: {}",
+      update.chat_id().map_or(0, |v| v),
+      update.last_read_outbox_message_id().map_or(0, |v| v),
+    );
+  });
+
+  listener.on_user_full_info(|(api, update)| {
+    debug!(exmlog::examples(), "Receive user full info, user_id: {}, full_info: {}",
+           update.user_id().map_or(0, |v| v),
+           update.user_full_info().expect(errors::TELEGRAM_DATA_FAIL).to_json()
+    );
+  });
+
+  listener.on_delete_messages(|(api, update)| {
+    debug!(exmlog::examples(), "Receive delete messages, chat_id: {}, message_ids: {:?}, data: {}",
+      update.chat_id(),
+      update.message_ids(),
+      update.to_json()
+    );
+  });
 
   client.daemon("telegram-rs");
 }

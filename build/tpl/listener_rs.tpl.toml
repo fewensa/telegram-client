@@ -100,3 +100,8 @@ td_type = "updateNewMessage"
 tt = { namespace = "tg_types", object = "TGUpdateNewMessage" }
 comment = "A new message was received; can also be an outgoing message."
 
+[lin.delete_messages]
+td_type = "updateDeleteMessages"
+tt = { namespace = "tg_types", object = "TGUpdateDeleteMessages" }
+comment = "Some messages were deleted."
+
