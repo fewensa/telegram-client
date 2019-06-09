@@ -41,6 +41,7 @@ fn main() {
 
   gen::gen_listener();
   gen::gen_types();
+  gen::gen_api();
 
 }
 

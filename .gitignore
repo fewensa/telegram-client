@@ -26,6 +26,7 @@ src/types/mod.rs
 src/types/t_*.rs
 src/handler/handler_receive.rs
 
+schema/*
 
 listener.rs
 
