@@ -60,7 +60,7 @@ fn write_tmod<P: AsRef<Path>>(type_dir: P, tima: &Tima, tera: &Tera) {
 
   let mut builder = StringBuilder::new();
 
-  tmod.def_use().iter().for_each(|item| { builder.append("pub use ").append(item.clone()).append(";\n"); });
+  tmod.uses().iter().for_each(|item| { builder.append("pub use ").append(item.clone()).append(";\n"); });
 
 
   tgypes.names().iter().for_each(|name| {
@@ -70,7 +70,7 @@ fn write_tmod<P: AsRef<Path>>(type_dir: P, tima: &Tima, tera: &Tera) {
   builder.append("\n\n\n");
 
 
-  tmod.def_mod().iter().for_each(|item| {
+  tmod.mods().iter().for_each(|item| {
     builder.append(if item.macro_use { "#[macro_use] " } else { "" })
       .append("mod ")
       .append(item.name.clone()).append(";\n\n");

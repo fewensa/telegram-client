@@ -2,7 +2,7 @@
 
 [tmod]
 
-def_use = [
+uses = [
   "self::f_update_option::TGOptionValue",
   "self::f_connection_state::TGConnectionState",
   "self::f_proxy::TGProxyType",
@@ -18,7 +18,7 @@ def_use = [
   "self::f_reply_markup::*",
 ]
 
-[[tmod.def_mod]]
+[[tmod.mods]]
 name = "tg_macro"
 macro_use = true
 

@@ -65,3 +65,4 @@ serde_derive = "1.0.91"
 #toolkit = { git = "https://github.com/fewensa/toolkit" }
 toolkit = "0.1.1"
 
+case = "1.0.0"

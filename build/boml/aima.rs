@@ -3,7 +3,7 @@ use crate::boml::lima;
 
 
 #[derive(Debug)]
-pub struct Tima {
+pub struct Aima {
   toml: toml::Value,
   tmod: Tmod,
   tgypes: Tgypes,
@@ -21,10 +21,9 @@ pub struct Tgypes {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct GTdType {
-  uses: Vec<String>,
-  typen: String,
-  inner: String,
-  comment: Option<String>,
+  pub uses: Vec<String>,
+  pub typen: String,
+  pub mapper: String,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -33,7 +32,7 @@ pub struct DefMod {
   pub macro_use: bool
 }
 
-impl Tima {
+impl Aima {
   pub fn new(toml_text: String) -> Self {
     let toml: toml::Value = toml_text.parse().expect(&format!("Listener toml config format fail => {}", toml_text)[..]);
     Self {
@@ -79,7 +78,6 @@ impl Tmod {
   }
 
   pub fn mods(&self) -> Vec<DefMod> {
-//    self.array_string("def_mod")
     self.toml.get("mods")
       .filter(|&value| value.is_array())
       .map(|value| value.as_array().unwrap())
@@ -130,14 +128,10 @@ impl Tgypes {
         .filter(|&v| {
           let uses = v.get("uses");
           let typen = v.get("typen");
-          let inner = v.get("inner");
-          let comment = v.get("comment");
-          if inner.is_none() { return false; }
-          if !inner.unwrap().is_str() { return false; }
-          if inner.unwrap().as_str().unwrap().is_empty() { return false; }
-          if comment.is_some() {
-            if !comment.unwrap().is_str() { return false; }
-          }
+          let mapper = v.get("mapper");
+          if mapper.is_none() { return false; }
+          if !mapper.unwrap().is_str() { return false; }
+          if mapper.unwrap().as_str().unwrap().is_empty() { return false; }
           if uses.is_some() {
             if !uses.unwrap().is_array() { return false; }
           }
@@ -147,13 +141,13 @@ impl Tgypes {
           true
         })
         .map(|v| {
-          let inner = v.get("inner").unwrap().as_str().map(|v| v.to_string()).unwrap();
+          let mapper = v.get("mapper").unwrap().as_str().map(|v| v.to_string()).unwrap();
           let typen = v.get("typen")
             .filter(|&v| v.is_str())
             .map(|v| v.as_str().unwrap())
             .filter(|&v| !v.is_empty())
             .map(|v| v.to_string())
-            .map_or(format!("TG{}", inner), |v| v);
+            .map_or(format!("TG{}", mapper), |v| v);
           GTdType {
             uses: v.get("uses")
               .map(|v| v.as_array())
@@ -167,8 +161,7 @@ impl Tgypes {
                 .collect::<Vec<String>>()
               ).map_or(vec![], |v| v),
             typen,
-            inner,
-            comment: v.get("comment").map(|v| v.as_str().map(|v| lima::format_comment(v, false)).unwrap()),
+            mapper
           }
         })
         .collect::<Vec<GTdType>>()
@@ -177,47 +170,6 @@ impl Tgypes {
   }
 
 
-//  fn string<N: AsRef<str>, A: AsRef<str>>(&self, name: N, attr: A) -> Option<String> {
-//    self.toml.get(name.as_ref())
-//      .filter(|&value| value.is_table())
-//      .map(|value| value.as_table()
-//        .unwrap()
-//        .get(attr.as_ref())
-//        .filter(|&value| value.is_str())
-//        .map(|value| value.as_str())
-//      )
-//      .map_or(None, |v| v.filter(|v| v.is_some() && !v.unwrap().is_empty())
-//        .map(|v| v.unwrap().to_string()))
-//  }
-//
-//  pub fn uses<S: AsRef<str>>(&self, name: S) -> Vec<String> {
-//    self.toml.get(name.as_ref())
-//      .filter(|&value| value.is_table())
-//      .map(|value| value.as_table().unwrap().get("uses")
-//        .filter(|&value| value.is_array())
-//        .map(|value| value.as_array().unwrap())
-//        .map(|value| {
-//          value.iter()
-//            .filter(|&value| value.is_str() && !value.as_str().unwrap().is_empty())
-//            .map(|value| value.as_str().unwrap().to_string())
-//            .collect::<Vec<String>>()
-//        })
-//        .map_or(vec![], |value| value)
-//      )
-//      .map_or(vec![], |value| value)
-//  }
-//
-//  pub fn typen<S: AsRef<str>>(&self, name: S) -> String {
-//    self.string(name, "typen").expect(&format!("Lose typen => {:?}", self.toml)[..])
-//  }
-//
-//  pub fn inner<S: AsRef<str>>(&self, name: S) -> String {
-//    self.string(name, "inner").expect(&format!("Lose inner => {:?}", self.toml)[..])
-//  }
-//
-//  pub fn comment<S: AsRef<str>>(&self, name: S) -> Option<String> {
-//    self.string(name, "comment")
-//  }
 }
 
 

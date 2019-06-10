@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use rtdlib::types::{AddProxy, ProxyTypeHttp, ProxyTypeMtproto, ProxyTypeSocks5, ProxyType};
+use telegram_client::api::*;
 
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -31,7 +31,7 @@ impl Config {
     Self { toml: value }
   }
 
-  pub fn proxy(&self) -> Option<AddProxy> {
+  pub fn proxy(&self) -> Option<TGAddProxy> {
     self.toml.get("proxy")
       .filter(|&v| v.is_table())
       .map(|v| v.as_table())
@@ -42,18 +42,17 @@ impl Config {
         let port = v.get("port").unwrap().as_integer().unwrap();
         let enable = v.get("enable").unwrap().as_bool().unwrap();
         let type_ = v.get("type").unwrap().as_str().unwrap();
-        let ptype: Box<ProxyType> = match type_ {
-          "socks5" => Box::new(ProxyTypeSocks5::builder().build()),
-          "http" => Box::new(ProxyTypeHttp::builder().build()),
-          "mtproto" => Box::new(ProxyTypeMtproto::builder().build()),
+        let mut tga = TGAddProxy::new();
+        tga.server(server)
+          .port(port as i32)
+          .enable(enable);
+        match type_ {
+          "socks5" => tga.socks5(TGProxyTypeSocks5::new()),
+          "http" => tga.http(TGProxyTypeHttp::new()),
+          "mtproto" => tga.mtproto(TGProxyTypeMtproto::new()),
           _ => panic!("Not found proxy type")
         };
-        AddProxy::builder()
-          .server(server)
-          .port(port as i32)
-          .enable(enable)
-          .type_(ptype)
-          .build()
+        tga.clone()
       })
   }
 

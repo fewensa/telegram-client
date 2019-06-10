@@ -4,6 +4,7 @@ use std::sync::Arc;
 use rtdlib::tdjson;
 use rtdlib::types::Function;
 
+use crate::api::*;
 use crate::tglog;
 
 #[derive(Debug, Clone)]
@@ -27,14 +28,16 @@ impl Api {
     self.tdlib.borrow()
   }
 
-  pub fn send<Fnc: Function>(&self, fnc: Fnc) {
+  pub fn send<Fnc: Function>(&self, fnc: Fnc) -> &Self {
     let json = fnc.to_json();
     info!(tglog::telegram(), "===> {}", json);
     self.tdlib.send(&json[..]);
+    self
   }
 
   pub fn receive(&self, timeout: f64) -> Option<String> {
-    let receive = self.tdlib.receive(timeout);
+    let receive = self.tdlib.receive(timeout)
+      .map(|v| rtdlib::tdkit::fill_json_struct(v));
     if receive.is_some() {
       info!(tglog::telegram(), "<=== {}", receive.clone().unwrap());
     }
@@ -45,6 +48,13 @@ impl Api {
     let json = fnc.to_json();
     info!(tglog::telegram(), "===>>> {}", json);
     self.tdlib.execute(&json[..])
+      .map(|v| rtdlib::tdkit::fill_json_struct(v))
   }
+
+  {% for item in classes %}
+  pub fn {{item.class_snake}}<C: AsRef<TG{{item.class_name}}>>(&self, {{item.class_snake}}: C) -> &Self {
+    self.send({{item.class_snake}}.as_ref().build())
+  }
+  {% endfor %}
 
 }

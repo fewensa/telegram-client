@@ -355,7 +355,7 @@ impl TGFile {
 
 
 impl TGLocalFile {
-  pub fn path(&self) -> String { self.td_origin().path().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn path(&self) -> Option<String> { self.td_origin().path() }
 
   pub fn can_be_downloaded(&self) -> bool { self.td_origin().can_be_downloaded().map_or(false, |v| v) }
 
@@ -374,13 +374,13 @@ impl TGLocalFile {
 
 
 impl TGRemoteFile {
-  pub fn id(&self) -> String { self.td_origin().id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn id(&self) -> Option<String> { self.td_origin().id() }
 
   pub fn is_uploading_active(&self) -> bool { self.td_origin().is_uploading_active().map_or(false, |v| v) }
 
   pub fn is_uploading_completed(&self) -> bool { self.td_origin().is_uploading_completed().map_or(false, |v| v) }
 
-  pub fn uploaded_size(&self) -> Option<i32> { self.td_origin().uploaded_size() }
+  pub fn uploaded_size(&self) -> i32 { self.td_origin().uploaded_size().expect(errors::TELEGRAM_DATA_FAIL) }
 }
 
 

@@ -12,15 +12,14 @@ use std::sync::mpsc::TryRecvError;
 use std::thread;
 use std::time::Duration;
 
-use rtdlib::types as td_types;
+use rtdlib::types::RObject;
 
-use telegram_client::api::Api;
+use telegram_client::api::*;
 use telegram_client::client::Client;
+use telegram_client::errors;
 use telegram_client::types::*;
 
 use crate::config::{Config, LogType};
-use rtdlib::types::RObject;
-use telegram_client::errors;
 
 mod exmlog;
 mod thelp;
@@ -42,7 +41,7 @@ fn main() {
   let api = Api::default();
   let mut client = Client::new(api.clone());
 
-  config.proxy().map(|v| { &api.send(v); });
+  config.proxy().map(|v| { api.add_proxy(v) });
 
   config.log().map(|v| {
     Client::set_log_verbosity_level(v.level.clone() as i32).unwrap();
@@ -76,8 +75,8 @@ fn main() {
 
   listener.on_authorization_state(move |(api, state)| {
     state.on_wait_tdlibparameters(|| {
-      let paras = td_types::SetTdlibParameters::builder()
-        .parameters(td_types::TdlibParameters::builder()
+      api.set_tdlib_parameters(TGSetTdlibParameters::new().parameters(
+        TGTdlibParameters::new()
           .database_directory("tdlib")
           .use_message_database(true)
           .use_secret_chats(true)
@@ -88,13 +87,11 @@ fn main() {
           .system_version("Unknown")
           .application_version(env!("CARGO_PKG_VERSION"))
           .enable_storage_optimizer(true)
-          .build())
-        .build();
-      api.send(&paras);
+      ));
       debug!(exmlog::examples(), "Set tdlib parameters");
     });
     state.on_wait_encryption_key(|enck| {
-      api.send(td_types::CheckDatabaseEncryptionKey::builder().build());
+      api.check_database_encryption_key(TGCheckDatabaseEncryptionKey::new());
       debug!(exmlog::examples(), "Set encryption key");
     });
     state.on_wait_phone_number(|| {
@@ -102,9 +99,8 @@ fn main() {
       tgfn::type_phone_number(api);
     });
     state.on_wait_password(|aswp| {
-      api.send(td_types::CheckAuthenticationPassword::builder()
-        .password(thelp::typed_with_message("Please type your telegram password:"))
-        .build());
+      api.check_authentication_password(TGCheckAuthenticationPassword::new()
+        .password(thelp::typed_with_message("Please type your telegram password:")));
       debug!(exmlog::examples(), "Set password *****");
     });
     state.on_wait_code(|awc| {
@@ -223,6 +219,20 @@ fn main() {
     content.on_text(|m| {
       debug!(exmlog::examples(), "Receive text message => {} <= entities => {:?}", m.text().text(), m.text().entities());
     });
+    content.on_video(|m| {
+      debug!(exmlog::examples(), "Receive video message");
+      let v = m.video();
+      let f = v.video();
+      f.remote().map(|f| {
+        let size = f.uploaded_size();
+//        api.download_file(TGDownloadFile::new()
+//          .file_id(f.id()))
+        debug!(exmlog::examples(), "video remote id => {:?}", f.id());
+      });
+      f.local().map(|f| {
+        debug!(exmlog::examples(), "video local path => {:?}", f.path());
+      });
+    });
     debug!(exmlog::examples(), "Receive new message, from: '{}', data: {}", message.sender_user_id(), message.to_json());
   });
 
@@ -240,8 +250,8 @@ fn main() {
 
   listener.on_chat_read_outbox(|(api, update)| {
     debug!(exmlog::examples(), "Read outbox chat_id: {}, last_read_outbox_message_id: {}",
-      update.chat_id().map_or(0, |v| v),
-      update.last_read_outbox_message_id().map_or(0, |v| v),
+           update.chat_id().map_or(0, |v| v),
+           update.last_read_outbox_message_id().map_or(0, |v| v),
     );
   });
 
@@ -254,9 +264,9 @@ fn main() {
 
   listener.on_delete_messages(|(api, update)| {
     debug!(exmlog::examples(), "Receive delete messages, chat_id: {}, message_ids: {:?}, data: {}",
-      update.chat_id(),
-      update.message_ids(),
-      update.to_json()
+           update.chat_id(),
+           update.message_ids(),
+           update.to_json()
     );
   });
 

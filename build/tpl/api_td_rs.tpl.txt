@@ -1,0 +1,42 @@
+
+{% if td.clz_description %}/// {{td.clz_description}}{% endif %}
+#[derive(Debug, Clone)]
+pub struct TG{{td.clz_name}} {
+  {% for field in td.fields %}{% if field.name != 'td_name' %}{% if field.description %}/// {{field.description}}{% endif %}
+  {% if field.doc_hidden %}#[doc(hidden)] {% endif %}{{field.name}}: {{field.class}},
+  {% endif %}{% endfor %}
+}
+
+impl TDFB for TG{{td.clz_name}} {}
+
+impl AsRef<TG{{td.clz_name}}> for TG{{td.clz_name}} {
+  fn as_ref(&self) -> &TG{{td.clz_name}} { self }
+}
+
+impl TG{{td.clz_name}} {
+
+  pub fn new() -> Self {
+    Self {
+      {% for field in td.fields %}{% if field.name != 'td_name' %}{{field.name}}: None,
+      {% endif %}{% endfor %}
+    }
+  }
+
+  {% for field in td.fields %}{% if field.native %}{% if field.name != 'td_name' %}
+  pub fn {{field.name}}{% if field.class_real == 'String' %}<S: AsRef<str>>{% endif %}(&mut self, {{field.name}}: {% if field.class_real == 'String' %}S{% else %}{{field.class_real}}{% endif %}) -> &mut Self { self.{{field.name}} = Some({% if field.class_real == 'String' %}{{field.name}}.as_ref().to_string(){% else %}{{field.name}}{% endif %}); self }
+  {% endif %}{% endif %}{% endfor %}
+
+
+  {% for field in td.fields %}{% if not field.native %}{% if field.name != 'td_name' %}
+  // [{{field.name}}] type is [{{field.class_real}}], is not support, need add manully.
+  #[doc(hidden)] pub fn _{{field.name}}(&mut self, {{field.name}}: {{field.class_real}}) -> &mut Self { self.{{field.name}} = Some({{field.name}}); self }
+  {% endif %}{% endif %}{% endfor %}
+
+  #[doc(hidden)]
+  pub fn build(&self) -> {{td.clz_name}} {
+    {{td.clz_name}}::builder()
+      {% for field in td.fields %}{% if field.name != 'td_name' %}.{{field.name}}(self.{{field.name}}.clone())
+      {% endif %}{% endfor %}
+      .build()
+  }
+}
