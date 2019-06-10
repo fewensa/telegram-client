@@ -105,3 +105,13 @@ td_type = "updateDeleteMessages"
 tt = { namespace = "tg_types", object = "TGUpdateDeleteMessages" }
 comment = "Some messages were deleted."
 
+[lin.file]
+td_type = "file"
+tt = { namespace = "tg_types", object = "TGFile" }
+comment = "Represents a file."
+
+[lin.update_file]
+td_type = "updateFile"
+tt = { namespace = "tg_types", object = "TGUpdateFile" }
+comment = "Information about a file was updated."
+

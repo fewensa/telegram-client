@@ -582,6 +582,9 @@ inner = "KeyboardButtonTypeText"
 [[tgypes.delete_message]]
 inner = "UpdateDeleteMessages"
 
+[[tgypes.update_file]]
+inner = "UpdateFile"
+
 
 
 #[[tgypes.name]]

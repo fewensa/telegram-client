@@ -5,6 +5,7 @@
 uses = [
   "self::api::*",
   "self::function_builder::*",
+  "self::f_file::*",
 ]
 
 
@@ -14,6 +15,9 @@ macro_use = false
 
 [[tmod.mods]]
 name = "function_builder"
+
+[[tmod.mods]]
+name = "f_file"
 
 
 

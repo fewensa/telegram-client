@@ -224,9 +224,15 @@ fn main() {
       let v = m.video();
       let f = v.video();
       f.remote().map(|f| {
+
         let size = f.uploaded_size();
 //        api.download_file(TGDownloadFile::new()
 //          .file_id(f.id()))
+        f.id().map(|v| {
+          api.get_remote_file(TGGetRemoteFile::new()
+            .remote_file_id(v)
+            .file_type(TGFileType::Video))
+        });
         debug!(exmlog::examples(), "video remote id => {:?}", f.id());
       });
       f.local().map(|f| {
@@ -268,6 +274,21 @@ fn main() {
            update.message_ids(),
            update.to_json()
     );
+  });
+
+  listener.on_file(|(api, update)| {
+    debug!(exmlog::examples(), "Receive a file => {}", update.to_json());
+    let size = update.size();
+    api.download_file(TGDownloadFile::new()
+      .file_id(update.id())
+      .offset(0)
+      .limit(1024)
+      .priority(1)
+      .synchronous(false));
+  });
+
+  listener.on_update_file(|(api, update)| {
+    debug!(exmlog::examples(), "Update file => {}", update.file().to_json());
   });
 
   client.daemon("telegram-rs");
