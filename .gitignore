@@ -26,10 +26,10 @@ src/types/mod.rs
 src/types/t_*.rs
 src/handler/handler_receive.rs
 
-src/api/api.rs
-src/api/mod.rs
-src/api/function_builder.rs
-src/api/t_*.rs
+# src/api/api.rs
+# src/api/mod.rs
+# src/api/function_builder.rs
+# src/api/t_*.rs
 
 schema/*
 
