@@ -14,16 +14,18 @@ pub fn gen_api() {
   let tpl_path = toolkit::path::root_dir().join("build/tpl");
   let tera = Tera::new("build/tpl/**/*").expect("Can not create Tera template engine.");
 
-  let sima_toml = fs::read_to_string(toolkit::path::root_dir().join("schema/schema.toml")).expect("Can not read mapper file");
-  let aima_toml = fs::read_to_string(tpl_path.join("api_td_types.tpl.toml")).expect("Can not read mapper file");
+  let schema = toolkit::path::root_dir().join("schema/schema.toml");
+  if schema.exists() {
+    let sima_toml = fs::read_to_string(&schema).expect("Can not read mapper file");
+    let aima_toml = fs::read_to_string(tpl_path.join("api_td_types.tpl.toml")).expect("Can not read mapper file");
 
-  let sima = Sima::new(sima_toml);
-  let aima = Aima::new(aima_toml);
+    let sima = Sima::new(sima_toml);
+    let aima = Aima::new(aima_toml);
 
-
-  self::gen_api_rs(&tera, &sima);
-  self::gen_tdfn(&tera, &sima);
-  self::gen_aima(&tera, &sima, &aima);
+    self::gen_api_rs(&tera, &sima);
+    self::gen_tdfn(&tera, &sima);
+    self::gen_aima(&tera, &sima, &aima);
+  }
 }
 
 fn gen_api_rs(tera: &Tera, sima: &Sima) {
