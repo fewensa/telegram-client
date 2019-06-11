@@ -186,4 +186,307 @@ fn main() {
 
 ### gen_types
 
+`rtdtype` has many primitive types, if want to use it better, you can remodel it with gen_types.
+
+
+```toml
+[tmod]
+
+uses = [
+  "self::f_update_option::TGOptionValue",
+  "self::f_message_content::*",
+]
+
+[[tmod.mods]]
+name = "tg_macro"
+macro_use = true
+
+
+[tgypes]
+
+## if typen not set, default is TG$inner
+
+[[tgypes.update_option]]
+uses = []
+typen = "TGUpdateOption"
+inner = "UpdateOption"
+comment = "An option changed its value."
+
+[[tgypes.message_content]]
+inner = "VoiceNote"
+
+[[tgypes.message_content]]
+inner = "Venue"
+```
+
+You can edit [tg_types.tpl.toml](build/tpl/tg_types.tpl.toml), `tmod` will generate the `mod.rs` file, `tgypes` will generate `t_*.rs` and `f_*.rs`.
+
+
+`t_*.rs` will be rebuilt each time, `f_*.rs` will only be built once, `f_*.rs` is suitable for writing supplementary code.
+
+
+The above configuration will generate the following code
+
+
+**src/types/mod.rs**
+
+```rust
+pub use self::t_update_option::*;
+pub use self::f_update_option::TGOptionValue;
+pub use self::t_message_content::*;
+pub use self::f_message_content::*;
+
+#[macro_use] mod tg_macro;
+
+mod t_update_option;
+mod f_update_option;
+mod t_message_content;
+mod f_message_content;
+```
+
+**src/types/t_update_option.rs**
+
+```rust
+use rtdlib::types::*;
+use serde::{Serialize, Serializer, Deserialize, Deserializer};
+use rtdlib::types::{RObject, RTDType};
+
+/// An option changed its value.
+#[derive(Debug, Clone)]
+pub struct TGUpdateOption {
+  inner: UpdateOption
+}
+
+impl RObject for TGUpdateOption {
+  fn td_name(&self) -> &'static str {
+    self.inner.td_name()
+  }
+
+  fn td_type(&self) -> RTDType {
+    self.inner.td_type()
+  }
+
+  fn to_json(&self) -> String {
+    self.inner.to_json()
+  }
+}
+
+impl Serialize for TGUpdateOption {
+  fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: Serializer {
+    self.inner.serialize(serializer)
+  }
+}
+
+impl<'de> Deserialize<'de> for TGUpdateOption {
+  fn deserialize<D>(deserializer: D) -> Result<Self, D::Error> where D: Deserializer<'de> {
+    UpdateOption::deserialize(deserializer).map(|inner| TGUpdateOption::new(inner))
+  }
+}
+
+impl TGUpdateOption {
+  pub fn new(inner: UpdateOption) -> Self {
+    Self { inner }
+  }
+
+  pub fn from_json<S: AsRef<str>>(json: S) -> Option<TGUpdateOption> {
+    UpdateOption::from_json(json).map(|inner| TGUpdateOption::new(inner))
+  }
+
+  pub fn td_origin(&self) -> &UpdateOption {
+    &self.inner
+  }
+}
+```
+
+**src/types/t_message_content.rs**
+
+```rust
+#[derive(Debug, Clone)]
+pub struct TGVoiceNote {
+  inner: VoiceNote
+}
+
+impl RObject for TGVoiceNote {
+  fn td_name(&self) -> &'static str {
+    self.inner.td_name()
+  }
+
+  fn td_type(&self) -> RTDType {
+    self.inner.td_type()
+  }
+
+  fn to_json(&self) -> String {
+    self.inner.to_json()
+  }
+}
+
+impl Serialize for TGVoiceNote {
+  fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: Serializer {
+    self.inner.serialize(serializer)
+  }
+}
+
+impl<'de> Deserialize<'de> for TGVoiceNote {
+  fn deserialize<D>(deserializer: D) -> Result<Self, D::Error> where D: Deserializer<'de> {
+    VoiceNote::deserialize(deserializer).map(|inner| TGVoiceNote::new(inner))
+  }
+}
+
+impl TGVoiceNote {
+  pub fn new(inner: VoiceNote) -> Self {
+    Self { inner }
+  }
+
+  pub fn from_json<S: AsRef<str>>(json: S) -> Option<TGVoiceNote> {
+    VoiceNote::from_json(json).map(|inner| TGVoiceNote::new(inner))
+  }
+
+  pub fn td_origin(&self) -> &VoiceNote {
+    &self.inner
+  }
+}
+
+#[derive(Debug, Clone)]
+pub struct TGVenue {
+  inner: Venue
+}
+
+impl RObject for TGVenue {
+  fn td_name(&self) -> &'static str {
+    self.inner.td_name()
+  }
+
+  fn td_type(&self) -> RTDType {
+    self.inner.td_type()
+  }
+
+  fn to_json(&self) -> String {
+    self.inner.to_json()
+  }
+}
+
+impl Serialize for TGVenue {
+  fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: Serializer {
+    self.inner.serialize(serializer)
+  }
+}
+
+impl<'de> Deserialize<'de> for TGVenue {
+  fn deserialize<D>(deserializer: D) -> Result<Self, D::Error> where D: Deserializer<'de> {
+    Venue::deserialize(deserializer).map(|inner| TGVenue::new(inner))
+  }
+}
+
+impl TGVenue {
+  pub fn new(inner: Venue) -> Self {
+    Self { inner }
+  }
+
+  pub fn from_json<S: AsRef<str>>(json: S) -> Option<TGVenue> {
+    Venue::from_json(json).map(|inner| TGVenue::new(inner))
+  }
+
+  pub fn td_origin(&self) -> &Venue {
+    &self.inner
+  }
+}
+```
+
+
+The generated code is like this. Next, you can supplement the generated code.
+
+**src/types/f_update_options.rs**
+
+
+```rust
+use crate::types::TGUpdateOption;
+use rtdlib::types as td_type;
+use crate::errors;
+
+impl TGUpdateOption {
+
+  pub fn name(&self) -> String {
+    self.td_origin().name().clone().expect(errors::TELEGRAM_DATA_FAIL)
+  }
+
+  pub fn value(&self) -> TGOptionValue {
+    TGOptionValue::new(self.td_origin().value())
+  }
+
+  pub fn on_name<S: AsRef<str>, F: FnOnce(&TGOptionValue)>(&self, name: S, fnc: F) {
+    let value = TGOptionValue::new(self.td_origin().value());
+    if &self.name()[..] == name.as_ref() && value.is_some() {
+      fnc(&value)
+    }
+  }
+
+}
+
+pub struct TGOptionValue {
+  value: Option<Box<td_type::OptionValue>>
+}
+
+macro_rules! option_value_as {
+  ($value_class:ident, $retype:tt) => (
+    fn ovas(value: &Option<Box<td_type::OptionValue>>) -> Option<$retype> {
+      value.clone().filter(|v| v.td_type() == td_type::RTDType::$value_class)
+        .map(|v| td_type::$value_class::from_json(v.to_json()))
+        .filter(|v| v.is_some())
+        .map(|v| v.map(|v| v.value().clone().map(|v| v)))
+        .map_or(None, |v| v)
+        .map_or(None, |v| v)
+    }
+  )
+}
+
+impl TGOptionValue {
+
+  fn new(value: Option<Box<td_type::OptionValue>>) -> Self {
+    Self { value }
+  }
+
+  fn is_some(&self) -> bool {
+    self.value.is_some()
+  }
+
+  pub fn is_bool(&self) -> bool {
+    self.value.clone().map(|v| v.td_type() == td_type::RTDType::OptionValueBoolean)
+      .map_or(false, |v| v)
+  }
+
+  pub fn is_empty(&self) -> bool {
+    self.value.clone().map(|v| v.td_type() == td_type::RTDType::OptionValueEmpty)
+      .map_or(false, |v| v)
+  }
+
+  pub fn is_string(&self) -> bool {
+    self.value.clone().map(|v| v.td_type() == td_type::RTDType::OptionValueString)
+      .map_or(false, |v| v)
+  }
+
+  pub fn is_integer(&self) -> bool {
+    self.value.clone().map(|v| v.td_type() == td_type::RTDType::OptionValueInteger)
+      .map_or(false, |v| v)
+  }
+
+  pub fn as_string(&self) -> Option<String> {
+    option_value_as!(OptionValueString, String);
+    ovas(&self.value)
+  }
+
+  pub fn as_integer(&self) -> Option<i32> {
+    option_value_as!(OptionValueInteger, i32);
+    ovas(&self.value)
+  }
+
+  pub fn as_bool(&self) -> Option<bool> {
+    option_value_as!(OptionValueBoolean, bool);
+    ovas(&self.value)
+  }
+
+}
+```
+
+
+
 
