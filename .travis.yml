@@ -13,7 +13,7 @@ jobs:
     - stage: usually
       name: Package telegram-client
       script:
-        - cargo package
+        - cargo package --allow-dirty
     - stage: publish
       name: Publish telegram-client to crates.io
       script:
