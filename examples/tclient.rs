@@ -279,16 +279,20 @@ fn main() {
   listener.on_file(|(api, update)| {
     debug!(exmlog::examples(), "Receive a file => {}", update.to_json());
     let size = update.size();
+    if update.local().map_or(false, |v| v.is_downloading_completed()) {
+      debug!(exmlog::examples(), "File {} download complete => {:?}", update.id(), update.local().map(|v| v.path()).expect("Can not get download path"));
+      return;
+    }
     api.download_file(TGDownloadFile::new()
       .file_id(update.id())
       .offset(0)
-      .limit(1024)
+      .limit(0)
       .priority(1)
       .synchronous(false));
   });
 
   listener.on_update_file(|(api, update)| {
-    debug!(exmlog::examples(), "Update file => {}", update.file().to_json());
+//    debug!(exmlog::examples(), "Update file => {}", update.file().to_json());
   });
 
   client.daemon("telegram-rs");

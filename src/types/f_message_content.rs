@@ -355,7 +355,7 @@ impl TGFile {
 
 
 impl TGLocalFile {
-  pub fn path(&self) -> Option<String> { self.td_origin().path() }
+  pub fn path(&self) -> Option<String> { self.td_origin().path().filter(|v| !v.is_empty()) }
 
   pub fn can_be_downloaded(&self) -> bool { self.td_origin().can_be_downloaded().map_or(false, |v| v) }
 
