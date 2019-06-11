@@ -12,6 +12,7 @@ include = [
   "Cargo.toml",
   "**/*.rs",
   "**/*.tpl.rs",
+  "**/*.tpl.txt",
   "**/*.tpl.toml",
   "README.md",
   "LICENSE"
