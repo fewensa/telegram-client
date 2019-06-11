@@ -17,7 +17,6 @@ jobs:
     - stage: publish
       name: Publish telegram-client to crates.io
       script:
-        - cargo package --allow-dirty --no-verify
         - cargo login $CRATES_TOKEN
-        - cargo publish
+        - cargo publish --allow-dirty --no-verify
 
