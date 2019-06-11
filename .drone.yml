@@ -1,0 +1,91 @@
+---
+kind: pipeline
+name: default
+
+steps:
+  - name: sync_push
+    image: alpine/git:1.0.7
+    environment:
+      REPO_REMOTE: https://github.com/fewensa/telegram-client.git
+    volumes:
+      - name: git_credentials
+        path: /root/.git-credentials
+      - name: git_config
+        path: /root/.gitconfig
+    when:
+      event:
+        - push
+    commands:
+      - git remote add github $REPO_REMOTE
+      - git push github $DRONE_BRANCH
+
+  - name: sync_tag
+    image: alpine/git:1.0.7
+    environment:
+      REPO_REMOTE: https://github.com/fewensa/telegram-client.git
+    volumes:
+      - name: git_credentials
+        path: /root/.git-credentials
+      - name: git_config
+        path: /root/.gitconfig
+    when:
+      event:
+        - tag
+    commands:
+      - git remote add github $REPO_REMOTE
+      - git fetch origin
+      - git push github $DRONE_TAG
+
+volumes:
+  - name: git_credentials
+    host:
+      path: /data/mount/git/.git-credentials
+  - name: git_config
+    host:
+      path: /data/mount/git/.gitconfig
+
+#---
+#kind: pipeline
+#name: publish
+#
+#steps:
+#  - name: publish
+#    image: rust:1.33-slim
+#    volumes:
+#      - name: cargo
+#        path: /root/.cargo
+#    commands:
+#      - apt update -y
+#      - apt install -y libssl-dev pkg-config
+##      - cargo test
+#      - sh -f /root/.cargo/credentials
+#      - cargo publish
+#
+#volumes:
+#  - name: cargo
+#    host:
+#      path: /data/mount/cargo
+#
+#trigger:
+#  #  branch:
+#  #    - master
+#  event:
+#    - tag
+#
+#
+#---
+#kind: pipeline
+#name: build
+#
+#steps:
+#  - name: build
+#    image: rust:1.33-slim
+#    commands:
+#      - apt update -y
+#      - apt install -y libssl-dev pkg-config
+##      - cargo test
+#      - cargo package
+#
+#trigger:
+#  branch:
+#    - master

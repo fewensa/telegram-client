@@ -1,0 +1,22 @@
+language: rust
+
+rust:
+  - stable
+
+stages:
+  - usually
+  - name: publish
+    if: tag IS present
+
+jobs:
+  include:
+    - stage: usually
+      name: Package telegram-client
+      script:
+        - cargo package
+    - stage: publish
+      name: Publish telegram-client to crates.io
+      script:
+        - cargo login $CRATES_TOKEN
+        - cargo publish
+
