@@ -53,7 +53,7 @@ impl Api {
 
   {% for item in classes %}
   pub fn {{item.class_snake}}<C: AsRef<TG{{item.class_name}}>>(&self, {{item.class_snake}}: C) -> &Self {
-    self.send({{item.class_snake}}.as_ref().build())
+    self.send({{item.class_snake}}.as_ref().td_origin().clone())
   }
   {% endfor %}
 

@@ -1,9 +1,9 @@
 
-#[doc(hidden)] pub struct _TG{{td.clz_name}}Builder { inner: TG{{td.clz_name}} }
+#[doc(hidden)] pub struct _{{tgype.typen}}Builder { inner: {{tgype.typen}} }
 
-impl _TG{{td.clz_name}}Builder {
+impl _{{tgype.typen}}Builder {
 
-  pub fn build(&self) -> TG{{td.clz_name}} { self.inner.clone() }
+  pub fn build(&self) -> {{tgype.typen}} { self.inner.clone() }
 
   {% for field in td.fields %}{% if field.native %}{% if field.name != 'td_name' %}{% if field.description %}/// {{field.description}}{% endif %}
   pub fn {{field.name}}{% if field.class_real == 'String' %}<S: AsRef<str>>{% endif %}(&mut self, {{field.name}}: {% if field.class_real == 'String' %}S{% else %}{{field.class_real}}{% endif %}) -> &mut Self {
@@ -21,35 +21,18 @@ impl _TG{{td.clz_name}}Builder {
   {% endif %}{% endif %}{% endfor %}
 }
 
-
-{% if td.clz_description %}/// {{td.clz_description}}{% endif %}
-#[derive(Debug, Clone)]
-pub struct TG{{td.clz_name}} {
-  inner: {{td.clz_name}}
+impl {{tgype.typen}} {
+  pub fn builder() -> _{{tgype.typen}}Builder {
+    _{{tgype.typen}}Builder { inner: Self::new({{tgype.inner}}::_new()) }
+  }
 }
 
 impl TDFB for TG{{td.clz_name}} {}
 
-impl AsRef<TG{{td.clz_name}}> for TG{{td.clz_name}} {
-  fn as_ref(&self) -> &TG{{td.clz_name}} { self }
+impl AsRef<{{tgype.typen}}> for {{tgype.typen}} {
+  fn as_ref(&self) -> &{{tgype.typen}} { self }
 }
 
-impl AsRef<TG{{td.clz_name}}> for _TG{{td.clz_name}}Builder {
-  fn as_ref(&self) -> &TG{{td.clz_name}} { &self.inner }
-}
-
-impl TG{{td.clz_name}} {
-
-  pub fn builder() -> _TG{{td.clz_name}}Builder {
-    _TG{{td.clz_name}}Builder { inner: Self::new({{td.clz_name}}::_new()) }
-  }
-
-  pub fn new(inner: {{td.clz_name}}) -> Self {
-    Self { inner }
-  }
-
-  pub fn td_origin(&self) -> &{{td.clz_name}} { &self.inner }
-
-  pub fn td_origin_mut(&mut self) -> &mut {{td.clz_name}} { &mut self.inner }
-
+impl AsRef<{{tgype.typen}}> for _{{tgype.typen}}Builder {
+  fn as_ref(&self) -> &{{tgype.typen}} { &self.inner }
 }

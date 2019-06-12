@@ -103,11 +103,12 @@ fn write_types<P: AsRef<Path>>(type_dir: P, sima: &Sima, aima: &Aima, tera: &Ter
     tgypes.td_types(name).iter().for_each(|td| {
       let mut context = Context::new();
 
-      let clz = sima.clz(td.mapper.clone()).expect(&format!("Fail td mapper => {} => {}", td.typen.clone(), td.mapper.clone())[..]);
+      let clz = sima.clz(td.inner.clone()).expect(&format!("Fail td mapper => {} => {}", td.typen.clone(), td.inner.clone())[..]);
       context.insert("td", &clz);
       context.insert("tgype", &td);
 
-      let rscode = tera.render("api_td_types.tpl.txt", &context).expect("Can not render types code.");
+      let template_name = if td.already_define { "api_td_types_already_define.tpl.txt" } else { "api_td_types_no_define.tpl.txt" };
+      let rscode = tera.render(template_name, &context).expect("Can not render types code.");
       toolkit::fs::append(&t_rs, rscode).expect(&format!("Can not create [{:?}] file", t_rs)[..]);
     });
   });

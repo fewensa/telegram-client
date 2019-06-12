@@ -6,6 +6,7 @@ uses = [
   "self::api::*",
   "self::function_builder::*",
   "self::f_file::*",
+  "self::f_message::*",
 ]
 
 
@@ -26,15 +27,18 @@ name = "f_file"
 [[tgypes.proxy]]
 uses = []
 typen = "TGProxyTypeHttp"
-mapper = "ProxyTypeHttp"
+inner = "ProxyTypeHttp"
+already_define = false
 
 [[tgypes.proxy]]
-mapper = "ProxyTypeMtproto"
+inner = "ProxyTypeMtproto"
 
 [[tgypes.proxy]]
-mapper = "ProxyTypeSocks5"
+inner = "ProxyTypeSocks5"
 
 [[tgypes.authorization_state]]
-mapper = "TdlibParameters"
+inner = "TdlibParameters"
 
-
+[[tgypes.message]]
+inner = "InputMessageAnimation"
+already_define = true

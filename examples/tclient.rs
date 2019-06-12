@@ -75,8 +75,8 @@ fn main() {
 
   listener.on_authorization_state(move |(api, state)| {
     state.on_wait_tdlibparameters(|| {
-      api.set_tdlib_parameters(TGSetTdlibParameters::new().parameters(
-        TGTdlibParameters::new()
+      api.set_tdlib_parameters(TGSetTdlibParameters::builder().parameters(
+        TGTdlibParameters::builder()
           .database_directory("tdlib")
           .use_message_database(true)
           .use_secret_chats(true)
@@ -87,11 +87,12 @@ fn main() {
           .system_version("Unknown")
           .application_version(env!("CARGO_PKG_VERSION"))
           .enable_storage_optimizer(true)
-      ));
+          .build()
+      ).build());
       debug!(exmlog::examples(), "Set tdlib parameters");
     });
     state.on_wait_encryption_key(|enck| {
-      api.check_database_encryption_key(TGCheckDatabaseEncryptionKey::new());
+      api.check_database_encryption_key(TGCheckDatabaseEncryptionKey::builder().build());
       debug!(exmlog::examples(), "Set encryption key");
     });
     state.on_wait_phone_number(|| {
@@ -99,8 +100,9 @@ fn main() {
       tgfn::type_phone_number(api);
     });
     state.on_wait_password(|aswp| {
-      api.check_authentication_password(TGCheckAuthenticationPassword::new()
-        .password(thelp::typed_with_message("Please type your telegram password:")));
+      api.check_authentication_password(TGCheckAuthenticationPassword::builder()
+        .password(thelp::typed_with_message("Please type your telegram password:"))
+        .build());
       debug!(exmlog::examples(), "Set password *****");
     });
     state.on_wait_code(|awc| {
@@ -229,9 +231,10 @@ fn main() {
 //        api.download_file(TGDownloadFile::new()
 //          .file_id(f.id()))
         f.id().map(|v| {
-          api.get_remote_file(TGGetRemoteFile::new()
+          api.get_remote_file(TGGetRemoteFile::builder()
             .remote_file_id(v)
-            .file_type(TGFileType::Video))
+            .file_type(TGFileType::Video)
+            .build())
         });
         debug!(exmlog::examples(), "video remote id => {:?}", f.id());
       });
@@ -283,12 +286,13 @@ fn main() {
       debug!(exmlog::examples(), "File {} download complete => {:?}", update.id(), update.local().map(|v| v.path()).expect("Can not get download path"));
       return;
     }
-    api.download_file(TGDownloadFile::new()
+    api.download_file(TGDownloadFile::builder()
       .file_id(update.id())
       .offset(0)
       .limit(0)
       .priority(1)
-      .synchronous(false));
+      .synchronous(false)
+      .build());
   });
 
   listener.on_update_file(|(api, update)| {

@@ -42,17 +42,17 @@ impl Config {
         let port = v.get("port").unwrap().as_integer().unwrap();
         let enable = v.get("enable").unwrap().as_bool().unwrap();
         let type_ = v.get("type").unwrap().as_str().unwrap();
-        let mut tga = TGAddProxy::new();
+        let mut tga = TGAddProxy::builder();
         tga.server(server)
           .port(port as i32)
           .enable(enable);
         match type_ {
-          "socks5" => tga.socks5(TGProxyTypeSocks5::new()),
-          "http" => tga.http(TGProxyTypeHttp::new()),
-          "mtproto" => tga.mtproto(TGProxyTypeMtproto::new()),
+          "socks5" => tga.socks5(TGProxyTypeSocks5::builder().build()),
+          "http" => tga.http(TGProxyTypeHttp::builder().build()),
+          "mtproto" => tga.mtproto(TGProxyTypeMtproto::builder().build()),
           _ => panic!("Not found proxy type")
         };
-        tga.clone()
+        tga.build()
       })
   }
 

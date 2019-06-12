@@ -43,7 +43,7 @@ impl {{td.typen}} {
     {{td.inner}}::from_json(json).map(|inner| {{td.typen}}::new(inner))
   }
 
-  pub fn td_origin(&self) -> &{{td.inner}} {
-    &self.inner
-  }
+  pub fn td_origin(&self) -> &{{td.inner}} { &self.inner }
+
+  pub fn td_origin_mut(&mut self) -> &mut {{td.inner}} { &mut self.inner }
 }

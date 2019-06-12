@@ -23,7 +23,8 @@ pub struct Tgypes {
 pub struct GTdType {
   pub uses: Vec<String>,
   pub typen: String,
-  pub mapper: String,
+  pub inner: String,
+  pub already_define: bool,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -128,10 +129,10 @@ impl Tgypes {
         .filter(|&v| {
           let uses = v.get("uses");
           let typen = v.get("typen");
-          let mapper = v.get("mapper");
-          if mapper.is_none() { return false; }
-          if !mapper.unwrap().is_str() { return false; }
-          if mapper.unwrap().as_str().unwrap().is_empty() { return false; }
+          let inner = v.get("inner");
+          if inner.is_none() { return false; }
+          if !inner.unwrap().is_str() { return false; }
+          if inner.unwrap().as_str().unwrap().is_empty() { return false; }
           if uses.is_some() {
             if !uses.unwrap().is_array() { return false; }
           }
@@ -141,13 +142,14 @@ impl Tgypes {
           true
         })
         .map(|v| {
-          let mapper = v.get("mapper").unwrap().as_str().map(|v| v.to_string()).unwrap();
+          let inner = v.get("inner").unwrap().as_str().map(|v| v.to_string()).unwrap();
           let typen = v.get("typen")
             .filter(|&v| v.is_str())
             .map(|v| v.as_str().unwrap())
             .filter(|&v| !v.is_empty())
             .map(|v| v.to_string())
-            .map_or(format!("TG{}", mapper), |v| v);
+            .map_or(format!("TG{}", inner), |v| v);
+          let already_define = v.get("already_define").filter(|&v| v.is_bool()).map(|v| v.as_bool().unwrap()).map_or(false, |v| v);
           GTdType {
             uses: v.get("uses")
               .map(|v| v.as_array())
@@ -161,7 +163,8 @@ impl Tgypes {
                 .collect::<Vec<String>>()
               ).map_or(vec![], |v| v),
             typen,
-            mapper
+            inner: inner,
+            already_define
           }
         })
         .collect::<Vec<GTdType>>()

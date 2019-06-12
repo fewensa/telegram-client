@@ -1,4 +1,5 @@
 use rtdlib::types as td_types;
+use rtdlib::types::MessageSendingState;
 use rtdlib::types::RObject;
 
 use crate::errors;
@@ -68,11 +69,13 @@ pub enum TGMessageSendingState {
 
 impl TGMessageSendingState {
   fn of(td: Box<td_types::MessageSendingState>) -> Self {
-    match td_types::RTDMessageSendingStateType::of(td.to_json()) {
-      Some(td_types::RTDMessageSendingStateType::MessageSendingStateFailed) => TGMessageSendingState::Failed,
-      Some(td_types::RTDMessageSendingStateType::MessageSendingStatePending) => TGMessageSendingState::Pending,
-      None => panic!(errors::TELEGRAM_DATA_FAIL)
-    }
+    rtd_type_mapping!(
+      MessageSendingState,
+      TGMessageSendingState,
+      RTDMessageSendingStateType,
+      (MessageSendingStateFailed   , Failed );
+      (MessageSendingStatePending  , Pending);
+    )(td)
   }
 
   pub fn is_failed(&self) -> bool {
