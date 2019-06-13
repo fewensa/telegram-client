@@ -197,10 +197,6 @@ inner = "InputMessageVoiceNote"
 comment = "A voice note message."
 
 [[tgypes.input_message]]
-inner = "FormattedText"
-comment = "A text with some entities."
-
-[[tgypes.input_message]]
 inner = "TextEntity"
 comment = "Represents a part of the text that needs to be formatted in some unusual way."
 
@@ -268,6 +264,9 @@ inner = "TextEntityTypeUrl"
 
 [[tgypes.invoice]]
 inner = "Invoice"
+
+[[tgypes.invoice]]
+inner = "LabeledPricePart"
 
 [[tgypes.chat_notification_settings]]
 inner = "ChatNotificationSettings"

@@ -115,3 +115,8 @@ td_type = "updateFile"
 tt = { namespace = "tg_types", object = "TGUpdateFile" }
 comment = "Information about a file was updated."
 
+[lin.message]
+td_type = "message"
+tt = { namespace = "tg_types", object = "TGMessage" }
+comment = "Describes a message."
+

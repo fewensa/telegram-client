@@ -5,6 +5,7 @@ use crate::errors;
 use crate::types::f_input_file::*;
 use crate::types::t_input_file::*;
 use crate::types::t_input_message::*;
+use crate::types::t_message_content::TGFormattedText;
 use crate::types::TGInvoice;
 use crate::types::TGTextEntityType;
 
@@ -346,18 +347,6 @@ impl TGInputMessageVoiceNote {
   pub fn waveform(&self) -> Option<String> { self.td_origin().waveform() }
 
   pub fn caption(&self) -> Option<TGFormattedText> { self.td_origin().caption().map(|v| TGFormattedText::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
-}
-
-impl TGFormattedText {
-  pub fn text(&self) -> String { self.td_origin().text().expect(errors::TELEGRAM_DATA_FAIL) }
-
-  pub fn entities(&self) -> Vec<TGTextEntity> {
-    self.td_origin().entities().map(|v| v.iter()
-      .map(|v| TGTextEntity::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL))
-      .collect::<Vec<TGTextEntity>>()
-    )
-      .map_or(vec![], |v| v)
-  }
 }
 
 impl TGTextEntity {

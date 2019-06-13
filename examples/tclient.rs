@@ -217,8 +217,19 @@ fn main() {
 
   listener.on_new_message(|(api, update)| {
     let message = update.message();
+    if message.is_outgoing() {
+      return;
+    }
     let content = message.content();
     content.on_text(|m| {
+      // Send origin message
+      api.send_message(TGSendMessage::builder()
+        .chat_id(message.chat_id())
+        .input_message_content(TGInputMessageContent::text(TGInputMessageText::builder()
+          .text(TGFormattedText::builder().text(m.text().text()).build())
+          .clear_draft(true)
+          .build()))
+        .build());
       debug!(exmlog::examples(), "Receive text message => {} <= entities => {:?}", m.text().text(), m.text().entities());
     });
     content.on_video(|m| {
@@ -297,6 +308,10 @@ fn main() {
 
   listener.on_update_file(|(api, update)| {
 //    debug!(exmlog::examples(), "Update file => {}", update.file().to_json());
+  });
+
+  listener.on_message(|(api, update)| {
+    debug!(exmlog::examples(), "Message => {}", update.to_json());
   });
 
   client.daemon("telegram-rs");

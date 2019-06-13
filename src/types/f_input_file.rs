@@ -2,25 +2,29 @@ use rtdlib::types as td_types;
 
 use crate::errors;
 use crate::types::t_input_file::*;
+use rtdlib::types::InputFile;
+
 
 #[derive(Debug, Clone)]
 pub enum TGInputFile {
   Generated(TGInputFileGenerated),
-  Id(TGInputFileId),
-  Local(TGInputFileLocal),
-  Remote(TGInputFileRemote),
+  Id       (TGInputFileId       ),
+  Local    (TGInputFileLocal    ),
+  Remote   (TGInputFileRemote   ),
 }
 
 
 impl TGInputFile {
   pub(crate) fn of(td: Box<td_types::InputFile>) -> Self {
-    match td_types::RTDInputFileType::of(td.td_name()) {
-      Some(td_types::RTDInputFileType::InputFileGenerated) => TGInputFile::Generated(TGInputFileGenerated::from_json(td.to_json()).expect(errors::TELEGRAM_DATA_FAIL)),
-      Some(td_types::RTDInputFileType::InputFileId) => TGInputFile::Id(TGInputFileId::from_json(td.to_json()).expect(errors::TELEGRAM_DATA_FAIL)),
-      Some(td_types::RTDInputFileType::InputFileLocal) => TGInputFile::Local(TGInputFileLocal::from_json(td.to_json()).expect(errors::TELEGRAM_DATA_FAIL)),
-      Some(td_types::RTDInputFileType::InputFileRemote) => TGInputFile::Remote(TGInputFileRemote::from_json(td.to_json()).expect(errors::TELEGRAM_DATA_FAIL)),
-      None => panic!(errors::TELEGRAM_DATA_FAIL)
-    }
+    tuple_rtd_type_mapping!(
+      InputFile,
+      TGInputFile,
+      RTDInputFileType,
+      (InputFileGenerated , Generated , TGInputFileGenerated   );
+      (InputFileId        , Id        , TGInputFileId          );
+      (InputFileLocal     , Local     , TGInputFileLocal       );
+      (InputFileRemote    , Remote    , TGInputFileRemote      );
+    )(td)
   }
 
   pub fn is_generated(&self) -> bool {
@@ -82,13 +86,11 @@ impl TGInputFileRemote {
 }
 
 impl TGInputThumbnail {
-
   pub fn thumbnail(&self) -> TGInputFile { self.td_origin().thumbnail().map(|v| TGInputFile::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
 
   pub fn width(&self) -> i32 { self.td_origin().width().expect(errors::TELEGRAM_DATA_FAIL) }
 
-  pub fn height(&self) ->  i32 { self.td_origin().height().expect(errors::TELEGRAM_DATA_FAIL) }
-
+  pub fn height(&self) -> i32 { self.td_origin().height().expect(errors::TELEGRAM_DATA_FAIL) }
 }
 
 

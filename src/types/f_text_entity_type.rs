@@ -4,6 +4,7 @@ use rtdlib::types::{RObject, TextEntityType};
 use crate::errors;
 use crate::types::t_text_entity_type::*;
 
+#[derive(Debug, Clone)]
 pub enum TGTextEntityType {
   Bold(TGTextEntityTypeBold),
   BotCommand(TGTextEntityTypeBotCommand),
@@ -27,20 +28,20 @@ impl TGTextEntityType {
       TextEntityType,
       TGTextEntityType,
       RTDTextEntityTypeType,
-      (TextEntityTypeBold,          Bold,         TGTextEntityTypeBold         );
-      (TextEntityTypeBotCommand,    BotCommand,   TGTextEntityTypeBotCommand   );
-      (TextEntityTypeCashtag,       Cashtag,      TGTextEntityTypeCashtag      );
-      (TextEntityTypeCode,          Code,         TGTextEntityTypeCode         );
-      (TextEntityTypeEmailAddress,  EmailAddress, TGTextEntityTypeEmailAddress );
-      (TextEntityTypeHashtag,       Hashtag,      TGTextEntityTypeHashtag      );
-      (TextEntityTypeItalic,        Italic,       TGTextEntityTypeItalic       );
-      (TextEntityTypeMention,       Mention,      TGTextEntityTypeMention      );
-      (TextEntityTypeMentionName,   MentionName,  TGTextEntityTypeMentionName  );
-      (TextEntityTypePhoneNumber,   PhoneNumber,  TGTextEntityTypePhoneNumber  );
-      (TextEntityTypePre,           Pre,          TGTextEntityTypePre          );
-      (TextEntityTypePreCode,       PreCode,      TGTextEntityTypePreCode      );
-      (TextEntityTypeTextUrl,       TextUrl,      TGTextEntityTypeTextUrl      );
-      (TextEntityTypeUrl,           Url,          TGTextEntityTypeUrl          );
+      (TextEntityTypeBold          , Bold         , TGTextEntityTypeBold         );
+      (TextEntityTypeBotCommand    , BotCommand   , TGTextEntityTypeBotCommand   );
+      (TextEntityTypeCashtag       , Cashtag      , TGTextEntityTypeCashtag      );
+      (TextEntityTypeCode          , Code         , TGTextEntityTypeCode         );
+      (TextEntityTypeEmailAddress  , EmailAddress , TGTextEntityTypeEmailAddress );
+      (TextEntityTypeHashtag       , Hashtag      , TGTextEntityTypeHashtag      );
+      (TextEntityTypeItalic        , Italic       , TGTextEntityTypeItalic       );
+      (TextEntityTypeMention       , Mention      , TGTextEntityTypeMention      );
+      (TextEntityTypeMentionName   , MentionName  , TGTextEntityTypeMentionName  );
+      (TextEntityTypePhoneNumber   , PhoneNumber  , TGTextEntityTypePhoneNumber  );
+      (TextEntityTypePre           , Pre          , TGTextEntityTypePre          );
+      (TextEntityTypePreCode       , PreCode      , TGTextEntityTypePreCode      );
+      (TextEntityTypeTextUrl       , TextUrl      , TGTextEntityTypeTextUrl      );
+      (TextEntityTypeUrl           , Url          , TGTextEntityTypeUrl          );
     )(td)
   }
 

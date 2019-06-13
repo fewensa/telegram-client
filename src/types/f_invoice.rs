@@ -1,6 +1,8 @@
 use rtdlib::types::LabeledPricePart;
 
+use crate::errors;
 use crate::types::TGInvoice;
+use crate::types::TGLabeledPricePart;
 
 impl TGInvoice {
   pub fn currency(&self) -> Option<String> { self.td_origin().currency() }
@@ -22,5 +24,11 @@ impl TGInvoice {
   pub fn send_email_address_to_provider(&self) -> bool { self.td_origin().send_email_address_to_provider().map_or(false, |v| v) }
 
   pub fn is_flexible(&self) -> bool { self.td_origin().is_flexible().map_or(false, |v| v) }
+}
+
+impl TGLabeledPricePart {
+  pub fn label(&self) -> String { self.td_origin().label().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
+
+  pub fn amount(&self) -> i64 { self.td_origin().amount().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
 }
 
