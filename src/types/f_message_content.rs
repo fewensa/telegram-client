@@ -1183,3 +1183,15 @@ impl TGMessageVoiceNote {
 impl TGMessageWebsiteConnected {
   pub fn domain_name(&self) -> String { self.td_origin().domain_name().expect(errors::TELEGRAM_DATA_FAIL) }
 }
+
+impl TGPhotoSize {
+
+  pub fn type_(&self) -> String { self.td_origin().type_().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
+
+  pub fn photo(&self) -> TGFile { self.td_origin().photo().map(|v| TGFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+
+  pub fn width(&self) -> i32 { self.td_origin().width().expect(errors::TELEGRAM_DATA_FAIL) }
+
+  pub fn height(&self) -> i32 { self.td_origin().height().expect(errors::TELEGRAM_DATA_FAIL) }
+
+}
