@@ -91,6 +91,10 @@ comment = "The last message of a chat was changed. If last_message is null then 
 inner = "Message"
 comment = "Describes a message."
 
+[[tgypes.message]]
+inner = "UpdateMessageEdited"
+comment = "A message was edited. Changes in the message content will come in a separate"
+
 
 [[tgypes.message_forward_info]]
 inner = "MessageForwardInfo"
@@ -534,6 +538,9 @@ inner = "VoiceNote"
 
 [[tgypes.message_content]]
 inner = "Venue"
+
+[[tgypes.message_content]]
+inner = "UpdateMessageContent"
 
 [[tgypes.reply_markup]]
 inner = "ReplyMarkupForceReply"

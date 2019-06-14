@@ -5,6 +5,7 @@ use rtdlib::types::RObject;
 use crate::errors;
 use crate::types::t_message::TGMessage;
 use crate::types::TGMessageContent;
+use crate::types::TGUpdateMessageEdited;
 use crate::types::TGMessageForwardInfo;
 use crate::types::TGReplyMarkup;
 
@@ -87,3 +88,15 @@ impl TGMessageSendingState {
   }
 }
 
+
+impl TGUpdateMessageEdited {
+
+  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(errors::TELEGRAM_DATA_FAIL) }
+
+  pub fn message_id(&self) -> i64 { self.td_origin().message_id().expect(errors::TELEGRAM_DATA_FAIL) }
+
+  pub fn edit_date(&self) -> i32 { self.td_origin().edit_date().expect(errors::TELEGRAM_DATA_FAIL) }
+
+  pub fn reply_markup(&self) -> Option<TGReplyMarkup> { self.td_origin().reply_markup().map(|v| TGReplyMarkup::of(v)) }
+
+}

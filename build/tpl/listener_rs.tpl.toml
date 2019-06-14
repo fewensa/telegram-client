@@ -120,3 +120,12 @@ td_type = "message"
 tt = { namespace = "tg_types", object = "TGMessage" }
 comment = "Describes a message."
 
+[lin.update_message_content]
+td_type = "updateMessageContent"
+tt = { namespace = "tg_types", object = "TGUpdateMessageContent" }
+comment = "The message content has changed."
+
+[lin.message_edited]
+td_type = "updateMessageEdited"
+tt = { namespace = "tg_types", object = "TGUpdateMessageEdited" }
+comment = "A message was edited. Changes in the message content will come in a separate"

@@ -1195,3 +1195,13 @@ impl TGPhotoSize {
   pub fn height(&self) -> i32 { self.td_origin().height().expect(errors::TELEGRAM_DATA_FAIL) }
 
 }
+
+impl TGUpdateMessageContent {
+
+  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(errors::TELEGRAM_DATA_FAIL) }
+
+  pub fn message_id(&self) -> i64 { self.td_origin().message_id().expect(errors::TELEGRAM_DATA_FAIL) }
+
+  pub fn new_content(&self) -> TGMessageContent { self.td_origin().new_content().map(|v| TGMessageContent::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+
+}
