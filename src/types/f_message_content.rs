@@ -917,7 +917,8 @@ impl TGMessagePoll {
 
 
 impl TGPoll {
-  pub fn id(&self) -> i64 { self.td_origin().id().expect(errors::TELEGRAM_DATA_FAIL) }
+  // https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1poll.html
+  pub fn id(&self) -> i64 { self.td_origin().id().map(|v| toolkit::number::as_i64(v).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
 
   pub fn question(&self) -> String { self.td_origin().question().expect(errors::TELEGRAM_DATA_FAIL) }
 
@@ -951,7 +952,8 @@ impl TGMessageSticker {}
 
 
 impl TGSticker {
-  pub fn set_id(&self) -> i64 { self.td_origin().set_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  // https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1sticker.html
+  pub fn set_id(&self) -> i64 { self.td_origin().set_id().map(|v| toolkit::number::as_i64(v).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
 
   pub fn width(&self) -> i32 { self.td_origin().width().expect(errors::TELEGRAM_DATA_FAIL) }
 
