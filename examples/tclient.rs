@@ -143,7 +143,7 @@ fn main() {
           debug!(exmlog::examples(), "waiting for network")
         }
         TGConnectionState::ConnectingToProxy => {
-          debug!(exmlog::examples(), "connection to proxy")
+          debug!(exmlog::examples(), "connecting to proxy")
         }
         TGConnectionState::Connecting => {
           debug!(exmlog::examples(), "connecting")
