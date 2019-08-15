@@ -129,3 +129,8 @@ comment = "The message content has changed."
 td_type = "updateMessageEdited"
 tt = { namespace = "tg_types", object = "TGUpdateMessageEdited" }
 comment = "A message was edited. Changes in the message content will come in a separate"
+
+[lin.supergroup_full_info]
+td_type = "updateSupergroupFullInfo"
+tt = { namespace = "tg_types", object = "TGUpdateSupergroupFullInfo" }
+comment = "Some data from"

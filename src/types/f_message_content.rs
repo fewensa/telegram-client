@@ -1187,7 +1187,6 @@ impl TGMessageWebsiteConnected {
 }
 
 impl TGPhotoSize {
-
   pub fn type_(&self) -> String { self.td_origin().type_().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
 
   pub fn photo(&self) -> TGFile { self.td_origin().photo().map(|v| TGFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
@@ -1195,15 +1194,93 @@ impl TGPhotoSize {
   pub fn width(&self) -> i32 { self.td_origin().width().expect(errors::TELEGRAM_DATA_FAIL) }
 
   pub fn height(&self) -> i32 { self.td_origin().height().expect(errors::TELEGRAM_DATA_FAIL) }
-
 }
 
 impl TGUpdateMessageContent {
-
   pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(errors::TELEGRAM_DATA_FAIL) }
 
   pub fn message_id(&self) -> i64 { self.td_origin().message_id().expect(errors::TELEGRAM_DATA_FAIL) }
 
   pub fn new_content(&self) -> TGMessageContent { self.td_origin().new_content().map(|v| TGMessageContent::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
-
 }
+
+#[derive(Debug, Clone)]
+pub enum TGThumbnailType {
+  S, M, X, Y, W, A, B, C, D,
+}
+
+impl TGThumbnailType {
+  pub fn of<S: AsRef<str>>(type_: S) -> Self {
+    let type_ = type_.as_ref();
+    match &type_.to_lowercase()[..] {
+      "s" => TGThumbnailType::S,
+      "m" => TGThumbnailType::M,
+      "x" => TGThumbnailType::X,
+      "y" => TGThumbnailType::Y,
+      "w" => TGThumbnailType::W,
+      "a" => TGThumbnailType::A,
+      "b" => TGThumbnailType::B,
+      "c" => TGThumbnailType::C,
+      "d" => TGThumbnailType::D,
+      _ => panic!("TELEGRAM PHOTO SIZE THUMBNAIL NOT HAVE THIS TYPE {}, ( DOCUMENT: https://core.telegram.org/constructor/photoSize ) PLEASE POST AN ISSUE TO https://github.com/fewensa/telegram-client/issues", type_),
+    }
+  }
+
+  pub fn type_string(&self) -> &'static str {
+    match self {
+      TGThumbnailType::S => "s",
+      TGThumbnailType::M => "m",
+      TGThumbnailType::X => "x",
+      TGThumbnailType::Y => "y",
+      TGThumbnailType::W => "w",
+      TGThumbnailType::A => "a",
+      TGThumbnailType::B => "b",
+      TGThumbnailType::C => "c",
+      TGThumbnailType::D => "d",
+    }
+  }
+
+  pub fn size_limits(&self) -> &'static str {
+    match self {
+      TGThumbnailType::S => "100x100",
+      TGThumbnailType::M => "320x320",
+      TGThumbnailType::X => "800x800",
+      TGThumbnailType::Y => "1280x1280",
+      TGThumbnailType::W => "2560x2560",
+      TGThumbnailType::A => "160x160",
+      TGThumbnailType::B => "320x320",
+      TGThumbnailType::C => "640x640",
+      TGThumbnailType::D => "1280x1280",
+    }
+  }
+
+  pub fn size_width(&self) -> &'static str {
+    match self {
+      TGThumbnailType::S => "100",
+      TGThumbnailType::M => "320",
+      TGThumbnailType::X => "800",
+      TGThumbnailType::Y => "1280",
+      TGThumbnailType::W => "2560",
+      TGThumbnailType::A => "160",
+      TGThumbnailType::B => "320",
+      TGThumbnailType::C => "640",
+      TGThumbnailType::D => "1280",
+    }
+  }
+
+  pub fn size_height(&self) -> &'static str {
+    match self {
+      TGThumbnailType::S => "100",
+      TGThumbnailType::M => "320",
+      TGThumbnailType::X => "800",
+      TGThumbnailType::Y => "1280",
+      TGThumbnailType::W => "2560",
+      TGThumbnailType::A => "160",
+      TGThumbnailType::B => "320",
+      TGThumbnailType::C => "640",
+      TGThumbnailType::D => "1280",
+    }
+  }
+}
+
+

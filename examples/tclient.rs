@@ -222,6 +222,9 @@ fn main() {
     }
     let content = message.content();
     content.on_text(|m| {
+      if message.chat_id() != 102993 {
+        return;
+      }
       // Send origin message
       api.send_message(TGSendMessage::builder()
         .chat_id(message.chat_id())
@@ -312,6 +315,10 @@ fn main() {
 
   listener.on_message(|(api, update)| {
     debug!(exmlog::examples(), "Message => {}", update.to_json());
+  });
+
+  listener.on_supergroup_full_info(|(api, update)| {
+    debug!(exmlog::examples(), "Supergroup full info => {}", update.to_json());
   });
 
   client.daemon("telegram-rs");

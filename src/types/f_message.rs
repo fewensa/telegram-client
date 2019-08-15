@@ -49,7 +49,7 @@ impl TGMessage {
 
   pub fn author_signature(&self) -> Option<String> { self.td_origin().author_signature() }
 
-  pub fn views(&self) -> Option<i32> { self.td_origin().views() }
+  pub fn views(&self) -> i32 { self.td_origin().views().map_or(0, |v| v) }
 
   pub fn media_album_id(&self) -> Option<i64> {
     // https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1message.html

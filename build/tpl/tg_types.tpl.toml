@@ -591,6 +591,12 @@ inner = "UpdateDeleteMessages"
 [[tgypes.update_file]]
 inner = "UpdateFile"
 
+[[tgypes.group]]
+inner = "UpdateSupergroupFullInfo"
+
+[[tgypes.group]]
+inner = "SupergroupFullInfo"
+
 
 
 #[[tgypes.name]]

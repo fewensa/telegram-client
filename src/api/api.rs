@@ -39,7 +39,7 @@ impl Api {
     let receive = self.tdlib.receive(timeout)
       .map(|v| rtdlib::tdkit::fill_json_struct(v));
     if receive.is_some() {
-      info!(tglog::telegram(), "<--- {}", receive.clone().unwrap());
+      info!(tglog::telegram(), "<=== {}", receive.clone().unwrap());
     }
     receive
   }
