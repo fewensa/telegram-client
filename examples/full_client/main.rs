@@ -21,6 +21,7 @@ use telegram_client::types::*;
 
 use crate::config::{Config, LogType};
 
+#[path = "../../examples_shared/exmlog.rs"]
 mod exmlog;
 mod thelp;
 mod tgfn;

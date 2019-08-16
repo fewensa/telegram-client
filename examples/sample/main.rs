@@ -17,6 +17,7 @@ use telegram_client::types::*;
 
 use crate::proxy::TProxy;
 
+#[path = "../../examples_shared/exmlog.rs"]
 mod exmlog;
 mod proxy;
 
