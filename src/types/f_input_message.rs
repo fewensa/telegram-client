@@ -2,8 +2,8 @@ use rtdlib::types as td_types;
 use rtdlib::types::{InputMessageContent, RObject};
 
 use crate::errors;
-use crate::types::f_input_file::*;
-use crate::types::t_input_file::*;
+use crate::types::t_file::*;
+use crate::types::f_file::*;
 use crate::types::t_input_message::*;
 use crate::types::t_message_content::TGFormattedText;
 use crate::types::TGInvoice;

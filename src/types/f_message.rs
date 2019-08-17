@@ -4,10 +4,17 @@ use rtdlib::types::RObject;
 
 use crate::errors;
 use crate::types::t_message::TGMessage;
+use crate::types::TGUpdateDeleteMessages;
 use crate::types::TGMessageContent;
 use crate::types::TGUpdateMessageEdited;
 use crate::types::TGMessageForwardInfo;
 use crate::types::TGReplyMarkup;
+use crate::types::TGUpdateNewMessage;
+
+impl TGUpdateNewMessage {
+  pub fn message(&self) -> TGMessage { TGMessage::from_json(self.td_origin().message().expect(errors::TELEGRAM_DATA_FAIL).to_json()).expect(errors::TELEGRAM_DATA_FAIL) }
+}
+
 
 impl TGMessage {
 
@@ -100,3 +107,20 @@ impl TGUpdateMessageEdited {
   pub fn reply_markup(&self) -> Option<TGReplyMarkup> { self.td_origin().reply_markup().map(|v| TGReplyMarkup::of(v)) }
 
 }
+
+
+impl TGUpdateDeleteMessages {
+
+  // {"@type":"updateDeleteMessages","chat_id":690763082,"message_ids":[145752064],"is_permanent":true,"from_cache":false}
+
+  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(errors::TELEGRAM_DATA_FAIL) }
+
+  pub fn message_ids(&self) -> Vec<i64> { self.td_origin().message_ids().map_or(vec![], |v| v) }
+
+  pub fn is_permanent(&self) -> bool { self.td_origin().is_permanent().map_or(false, |v| v) }
+
+  pub fn from_cache(&self) -> bool { self.td_origin().from_cache().map_or(false, |v| v) }
+
+}
+
+

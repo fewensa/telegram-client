@@ -1,13 +1,14 @@
 use rtdlib::types as td_types;
 use rtdlib::types::ChatType;
 use rtdlib::types::RObject;
+use rtdlib::types::NotificationSettingsScope;
 
 use crate::errors;
 use crate::types::f_input_message::TGInputMessageContent;
 use crate::types::t_chat::*;
-use crate::types::t_chat_type::*;
 use crate::types::t_message::TGMessage;
-use crate::types::TGChatNotificationSettings;
+
+
 
 impl TGChat {
   pub fn id(&self) -> i64 { self.td_origin().id().expect(errors::TELEGRAM_DATA_FAIL) }
@@ -135,6 +136,108 @@ impl TGDraftMessage {
 
   pub fn input_message_text(&self) -> Option<TGInputMessageContent> { self.td_origin().input_message_text().map(|v| TGInputMessageContent::of(v)) }
 }
+
+
+
+impl TGChatTypeBasicGroup {
+  pub fn basic_group_id(&self) -> i32 { self.td_origin().basic_group_id().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
+}
+
+impl TGChatTypePrivate {
+  pub fn user_id(&self) -> i32 { self.td_origin().user_id().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
+}
+
+impl TGChatTypeSecret {
+  pub fn secret_chat_id(&self) -> i32 { self.td_origin().secret_chat_id().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
+
+  pub fn user_id(&self) -> i32 { self.td_origin().user_id().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
+}
+
+impl TGChatTypeSupergroup {
+  pub fn supergroup_id(&self) -> i32 { self.td_origin().supergroup_id().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
+
+  pub fn is_channel(&self) -> bool { self.td_origin().is_channel().map_or(false, |v| v) }
+}
+
+
+
+
+/// This class is an abstract base class. Describes the types of chats to which notification settings are applied.
+pub enum TGNotificationSettingsScope {
+  ChannelChats,
+  GroupChats,
+  PrivateChats,
+}
+
+impl TGNotificationSettingsScope {
+  pub(crate) fn of(td: Box<td_types::NotificationSettingsScope>) -> Self {
+//    match td_types::RTDNotificationSettingsScopeType::of(td.td_name()) {
+//      Some(td_types::RTDNotificationSettingsScopeType::NotificationSettingsScopeChannelChats) => TGNotificationSettingsScope::ChannelChats,
+//      Some(td_types::RTDNotificationSettingsScopeType::NotificationSettingsScopeGroupChats) => TGNotificationSettingsScope::GroupChats,
+//      Some(td_types::RTDNotificationSettingsScopeType::NotificationSettingsScopePrivateChats) => TGNotificationSettingsScope::PrivateChats,
+//      None => panic!(errors::TELEGRAM_DATA_FAIL)
+//    }
+    rtd_type_mapping!(
+      NotificationSettingsScope,
+      TGNotificationSettingsScope,
+      RTDNotificationSettingsScopeType,
+      (NotificationSettingsScopeChannelChats,  ChannelChats  );
+      (NotificationSettingsScopeGroupChats  ,  GroupChats    );
+      (NotificationSettingsScopePrivateChats,  PrivateChats  );
+    )(td)
+  }
+
+//  channel_chats
+//  group_chats
+//  private_chats
+
+  pub fn is_channel_chats(&self) -> bool { enum_is!(TGNotificationSettingsScope, ChannelChats )(self) }
+  pub fn is_group_chats(&self) -> bool { enum_is!(TGNotificationSettingsScope, GroupChats   )(self) }
+  pub fn is_private_chats(&self) -> bool { enum_is!(TGNotificationSettingsScope, PrivateChats )(self) }
+}
+
+
+impl TGChatNotificationSettings {
+  pub fn use_default_mute_for(&self) -> bool { self.td_origin().use_default_mute_for().map_or(false, |v| v) }
+
+  pub fn mute_for(&self) -> Option<i32> { self.td_origin().mute_for() }
+
+  pub fn use_default_sound(&self) -> bool { self.td_origin().use_default_sound().map_or(false, |v| v) }
+
+  pub fn sound(&self) -> Option<String> { self.td_origin().sound() }
+
+  pub fn use_default_show_preview(&self) -> bool { self.td_origin().use_default_show_preview().map_or(false, |v| v) }
+
+  pub fn show_preview(&self) -> bool { self.td_origin().show_preview().map_or(false, |v| v) }
+
+  pub fn use_default_disable_pinned_message_notifications(&self) -> bool { self.td_origin().use_default_disable_pinned_message_notifications().map_or(false, |v| v) }
+
+  pub fn disable_pinned_message_notifications(&self) -> bool { self.td_origin().disable_pinned_message_notifications().map_or(false, |v| v) }
+
+  pub fn use_default_disable_mention_notifications(&self) -> bool { self.td_origin().use_default_disable_mention_notifications().map_or(false, |v| v) }
+
+  pub fn disable_mention_notifications(&self) -> bool { self.td_origin().disable_mention_notifications().map_or(false, |v| v) }
+}
+
+
+
+
+impl TGUpdateChatLastMessage {
+
+  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(errors::TELEGRAM_DATA_FAIL) }
+
+  pub fn last_message(&self) -> Option<TGMessage> { self.td_origin().last_message().map(|v| TGMessage::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+
+  pub fn order(&self) -> i64 { self.td_origin().order().map(|v| toolkit::number::as_i64(v).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+
+
+}
+
+
+impl TGUpdateNewChat {
+  pub fn chat(&self) -> TGChat { self.td_origin().chat().map(|v| TGChat::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+}
+
 
 
 

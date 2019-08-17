@@ -1,10 +1,12 @@
 use rtdlib::types as td_types;
+use rtdlib::types::RObject;
 
 use crate::errors;
 use crate::types::t_user::TGUser;
-use crate::types::t_user_type_bot::TGUserTypeBot;
+use crate::types::t_user::TGUserTypeBot;
+use crate::types::t_user::TGUpdateUser;
+use crate::types::t_user::TGUpdateUserStatus;
 use crate::types::TGProfilePhoto;
-use rtdlib::types::RObject;
 
 impl TGUser {
   pub fn id(&self) -> i32 { self.td_origin().id().expect(errors::TELEGRAM_DATA_FAIL) }
@@ -145,6 +147,43 @@ impl TGUserStatus {
       None => panic!(errors::TELEGRAM_DATA_FAIL)
     }
   }
+}
+
+
+
+impl TGUserTypeBot {
+  /// True, if the bot can be invited to basic group and supergroup chats.
+  pub fn can_join_groups(&self) -> bool { self.td_origin().can_join_groups().map_or(false, |v| v) }
+
+  /// True, if the bot can read all messages in basic group or supergroup chats and not just those addressed to the bot. In private and channel chats a bot can always read all messages.
+  pub fn can_read_all_group_messages(&self) -> bool { self.td_origin().can_read_all_group_messages().map_or(false, |v| v) }
+
+  /// True, if the bot supports inline queries.
+  pub fn is_inline(&self) -> bool { self.td_origin().is_inline().map_or(false, |v| v) }
+
+  /// Placeholder for inline queries (displayed on the client input field).
+  pub fn inline_query_placeholder(&self) -> Option<String> { self.td_origin().inline_query_placeholder().clone() }
+
+  /// True, if the location of the user should be sent with every inline query to this bot.
+  pub fn need_location(&self) -> bool { self.td_origin().need_location().map_or(false, |v| v) }
+}
+
+
+
+impl TGUpdateUser {
+
+  pub fn user(&self) -> TGUser { TGUser::from_json(self.td_origin().user().expect(errors::TELEGRAM_DATA_FAIL).to_json()).expect(errors::TELEGRAM_DATA_FAIL) }
+
+}
+
+impl TGUpdateUserStatus {
+
+  pub fn user_id(&self) -> i32 { self.td_origin().user_id().expect(errors::TELEGRAM_DATA_FAIL) }
+
+  pub fn status(&self) -> TGUserStatus {
+    TGUserStatus::of(self.td_origin().status().expect(errors::TELEGRAM_DATA_FAIL))
+  }
+
 }
 
 

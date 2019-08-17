@@ -2,6 +2,7 @@ use rtdlib::types as td_types;
 use rtdlib::types::{CallDiscardReason, MaskPoint, MessageCall, MessageContent, PassportElementType, PollOption, RObject, TextEntityType};
 
 use crate::errors;
+use crate::types::t_file::*;
 use crate::types::f_text_entity_type::TGTextEntityType;
 use crate::types::t_input_message::TGTextEntity;
 use crate::types::t_message_content::*;
@@ -339,48 +340,6 @@ impl TGFormattedText {
         .collect::<Vec<TGTextEntity>>(),
       )
   }
-}
-
-impl TGFile {
-  pub fn id(&self) -> i32 { self.td_origin().id().expect(errors::TELEGRAM_DATA_FAIL) }
-
-  pub fn size(&self) -> i32 { self.td_origin().size().expect(errors::TELEGRAM_DATA_FAIL) }
-
-  pub fn expected_size(&self) -> Option<i32> { self.td_origin().expected_size() }
-
-  pub fn local(&self) -> Option<TGLocalFile> { self.td_origin().local().map(|v| TGLocalFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
-
-  pub fn remote(&self) -> Option<TGRemoteFile> { self.td_origin().remote().map(|v| TGRemoteFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
-}
-
-
-impl TGLocalFile {
-  pub fn path(&self) -> Option<String> { self.td_origin().path().filter(|v| !v.is_empty()) }
-
-  pub fn can_be_downloaded(&self) -> bool { self.td_origin().can_be_downloaded().map_or(false, |v| v) }
-
-  pub fn can_be_deleted(&self) -> bool { self.td_origin().can_be_deleted().map_or(false, |v| v) }
-
-  pub fn is_downloading_active(&self) -> bool { self.td_origin().is_downloading_active().map_or(false, |v| v) }
-
-  pub fn is_downloading_completed(&self) -> bool { self.td_origin().is_downloading_completed().map_or(false, |v| v) }
-
-  pub fn download_offset(&self) -> Option<i32> { self.td_origin().download_offset() }
-
-  pub fn downloaded_prefix_size(&self) -> Option<i32> { self.td_origin().downloaded_prefix_size() }
-
-  pub fn downloaded_size(&self) -> Option<i32> { self.td_origin().downloaded_size() }
-}
-
-
-impl TGRemoteFile {
-  pub fn id(&self) -> Option<String> { self.td_origin().id() }
-
-  pub fn is_uploading_active(&self) -> bool { self.td_origin().is_uploading_active().map_or(false, |v| v) }
-
-  pub fn is_uploading_completed(&self) -> bool { self.td_origin().is_uploading_completed().map_or(false, |v| v) }
-
-  pub fn uploaded_size(&self) -> i32 { self.td_origin().uploaded_size().expect(errors::TELEGRAM_DATA_FAIL) }
 }
 
 
