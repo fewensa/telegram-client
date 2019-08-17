@@ -1,7 +1,7 @@
 use error_chain_mini::ChainedError;
 use error_chain_mini::ErrorKind;
 
-pub const TELEGRAM_DATA_FAIL: &'static str = "TELEGRAM DATA FAIL. IF YOU SEE THIS MESSAGE, PLEASE POST A ISSUE TO https://github.com/fewensa/telegram-client/issues";
+pub const TELEGRAM_DATA_FAIL: &'static str = "TELEGRAM DATA FAIL. IF YOU SEE THIS MESSAGE, PLEASE POST AN ISSUE TO https://github.com/fewensa/telegram-client/issues";
 
 #[derive(ErrorKind)]
 pub enum TGErrorKind {
