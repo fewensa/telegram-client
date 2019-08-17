@@ -597,6 +597,48 @@ inner = "UpdateSupergroupFullInfo"
 [[tgypes.group]]
 inner = "SupergroupFullInfo"
 
+[[tgypes.chat]]
+inner = "UpdateUserChatAction"
+comment = "User activity in the chat has changed."
+
+[[tgypes.chat]]
+inner = "ChatActionCancel"
+
+[[tgypes.chat]]
+inner = "ChatActionChoosingContact"
+
+[[tgypes.chat]]
+inner = "ChatActionChoosingLocation"
+
+[[tgypes.chat]]
+inner = "ChatActionRecordingVideo"
+
+[[tgypes.chat]]
+inner = "ChatActionRecordingVideoNote"
+
+[[tgypes.chat]]
+inner = "ChatActionRecordingVoiceNote"
+
+[[tgypes.chat]]
+inner = "ChatActionStartPlayingGame"
+
+[[tgypes.chat]]
+inner = "ChatActionTyping"
+
+[[tgypes.chat]]
+inner = "ChatActionUploadingDocument"
+
+[[tgypes.chat]]
+inner = "ChatActionUploadingPhoto"
+
+[[tgypes.chat]]
+inner = "ChatActionUploadingVideo"
+
+[[tgypes.chat]]
+inner = "ChatActionUploadingVideoNote"
+
+[[tgypes.chat]]
+inner = "ChatActionUploadingVoiceNote"
 
 
 #[[tgypes.name]]

@@ -134,3 +134,8 @@ comment = "A message was edited. Changes in the message content will come in a s
 td_type = "updateSupergroupFullInfo"
 tt = { namespace = "tg_types", object = "TGUpdateSupergroupFullInfo" }
 comment = "Some data from"
+
+[lin.user_chat_action]
+td_type = "updateUserChatAction"
+tt = { namespace = "tg_types", object = "TGUpdateUserChatAction" }
+comment = "User activity in the chat has changed."

@@ -322,6 +322,10 @@ fn main() {
     debug!(exmlog::examples(), "Supergroup full info => {}", update.to_json());
   });
 
+  listener.on_user_chat_action(|(api, update)| {
+    debug!(exmlog::examples(), "User chat action => {}", update.to_json());
+  });
+
   client.daemon("telegram-rs");
 }
 

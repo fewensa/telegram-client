@@ -2,12 +2,13 @@ use rtdlib::types as td_types;
 use rtdlib::types::ChatType;
 use rtdlib::types::RObject;
 use rtdlib::types::NotificationSettingsScope;
+use rtdlib::types::RTDChatActionType;
+use rtdlib::types::ChatAction;
 
 use crate::errors;
 use crate::types::f_input_message::TGInputMessageContent;
 use crate::types::t_chat::*;
 use crate::types::t_message::TGMessage;
-
 
 
 impl TGChat {
@@ -138,7 +139,6 @@ impl TGDraftMessage {
 }
 
 
-
 impl TGChatTypeBasicGroup {
   pub fn basic_group_id(&self) -> i32 { self.td_origin().basic_group_id().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
 }
@@ -158,8 +158,6 @@ impl TGChatTypeSupergroup {
 
   pub fn is_channel(&self) -> bool { self.td_origin().is_channel().map_or(false, |v| v) }
 }
-
-
 
 
 /// This class is an abstract base class. Describes the types of chats to which notification settings are applied.
@@ -194,6 +192,11 @@ impl TGNotificationSettingsScope {
   pub fn is_channel_chats(&self) -> bool { enum_is!(TGNotificationSettingsScope, ChannelChats )(self) }
   pub fn is_group_chats(&self) -> bool { enum_is!(TGNotificationSettingsScope, GroupChats   )(self) }
   pub fn is_private_chats(&self) -> bool { enum_is!(TGNotificationSettingsScope, PrivateChats )(self) }
+
+  pub fn on_channel_chats <F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGNotificationSettingsScope,  ChannelChats , || fnc()  )(self); self }
+  pub fn on_group_chats   <F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGNotificationSettingsScope,  GroupChats   , || fnc()  )(self); self }
+  pub fn on_private_chats <F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGNotificationSettingsScope,  PrivateChats , || fnc()  )(self); self }
+
 }
 
 
@@ -220,17 +223,12 @@ impl TGChatNotificationSettings {
 }
 
 
-
-
 impl TGUpdateChatLastMessage {
-
   pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(errors::TELEGRAM_DATA_FAIL) }
 
   pub fn last_message(&self) -> Option<TGMessage> { self.td_origin().last_message().map(|v| TGMessage::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
 
   pub fn order(&self) -> i64 { self.td_origin().order().map(|v| toolkit::number::as_i64(v).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
-
-
 }
 
 
@@ -238,6 +236,124 @@ impl TGUpdateNewChat {
   pub fn chat(&self) -> TGChat { self.td_origin().chat().map(|v| TGChat::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
 }
 
+
+impl TGUpdateUserChatAction {
+
+  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(errors::TELEGRAM_DATA_FAIL) }
+
+  pub fn user_id(&self) -> i32 { self.td_origin().user_id().expect(errors::TELEGRAM_DATA_FAIL) }
+
+  pub fn action(&self) -> TGChatAction { self.td_origin().action().map(|v| TGChatAction::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+
+}
+
+
+/// This class is an abstract base class. Describes the type of a chat.
+#[derive(Debug, Clone)]
+pub enum TGChatAction {
+  Cancel                (TGChatActionCancel                ),
+  ChoosingContact       (TGChatActionChoosingContact       ),
+  ChoosingLocation      (TGChatActionChoosingLocation      ),
+  RecordingVideo        (TGChatActionRecordingVideo        ),
+  RecordingVideoNote    (TGChatActionRecordingVideoNote    ),
+  RecordingVoiceNote    (TGChatActionRecordingVoiceNote    ),
+  StartPlayingGame      (TGChatActionStartPlayingGame      ),
+  Typing                (TGChatActionTyping                ),
+  UploadingDocument     (TGChatActionUploadingDocument     ),
+  UploadingPhoto        (TGChatActionUploadingPhoto        ),
+  UploadingVideo        (TGChatActionUploadingVideo        ),
+  UploadingVideoNote    (TGChatActionUploadingVideoNote    ),
+  UploadingVoiceNote    (TGChatActionUploadingVoiceNote    ),
+}
+
+impl TGChatAction {
+  pub(crate) fn of(td: Box<td_types::ChatAction>) -> Self {
+    tuple_rtd_type_mapping!(
+      ChatAction,
+      TGChatAction,
+      RTDChatActionType,
+      (ChatActionCancel             ,  Cancel             , TGChatActionCancel              );
+      (ChatActionChoosingContact    ,  ChoosingContact    , TGChatActionChoosingContact     );
+      (ChatActionChoosingLocation   ,  ChoosingLocation   , TGChatActionChoosingLocation    );
+      (ChatActionRecordingVideo     ,  RecordingVideo     , TGChatActionRecordingVideo      );
+      (ChatActionRecordingVideoNote ,  RecordingVideoNote , TGChatActionRecordingVideoNote  );
+      (ChatActionRecordingVoiceNote ,  RecordingVoiceNote , TGChatActionRecordingVoiceNote  );
+      (ChatActionStartPlayingGame   ,  StartPlayingGame   , TGChatActionStartPlayingGame    );
+      (ChatActionTyping             ,  Typing             , TGChatActionTyping              );
+      (ChatActionUploadingDocument  ,  UploadingDocument  , TGChatActionUploadingDocument   );
+      (ChatActionUploadingPhoto     ,  UploadingPhoto     , TGChatActionUploadingPhoto      );
+      (ChatActionUploadingVideo     ,  UploadingVideo     , TGChatActionUploadingVideo      );
+      (ChatActionUploadingVideoNote ,  UploadingVideoNote , TGChatActionUploadingVideoNote  );
+      (ChatActionUploadingVoiceNote ,  UploadingVoiceNote , TGChatActionUploadingVoiceNote  );
+    )(td)
+  }
+
+  pub fn is_cancel                 (&self) -> bool { tuple_enum_is!(TGChatAction, Cancel            )(self) }
+  pub fn is_choosing_contact       (&self) -> bool { tuple_enum_is!(TGChatAction, ChoosingContact   )(self) }
+  pub fn is_choosing_location      (&self) -> bool { tuple_enum_is!(TGChatAction, ChoosingLocation  )(self) }
+  pub fn is_recording_video        (&self) -> bool { tuple_enum_is!(TGChatAction, RecordingVideo    )(self) }
+  pub fn is_recording_video_note   (&self) -> bool { tuple_enum_is!(TGChatAction, RecordingVideoNote)(self) }
+  pub fn is_recording_voice_note   (&self) -> bool { tuple_enum_is!(TGChatAction, RecordingVoiceNote)(self) }
+  pub fn is_start_playing_game     (&self) -> bool { tuple_enum_is!(TGChatAction, StartPlayingGame  )(self) }
+  pub fn is_typing                 (&self) -> bool { tuple_enum_is!(TGChatAction, Typing            )(self) }
+  pub fn is_uploading_document     (&self) -> bool { tuple_enum_is!(TGChatAction, UploadingDocument )(self) }
+  pub fn is_uploading_photo        (&self) -> bool { tuple_enum_is!(TGChatAction, UploadingPhoto    )(self) }
+  pub fn is_uploading_video        (&self) -> bool { tuple_enum_is!(TGChatAction, UploadingVideo    )(self) }
+  pub fn is_uploading_video_note   (&self) -> bool { tuple_enum_is!(TGChatAction, UploadingVideoNote)(self) }
+  pub fn is_uploading_voice_note   (&self) -> bool { tuple_enum_is!(TGChatAction, UploadingVoiceNote)(self) }
+
+  pub fn on_cancel                <F: FnOnce(&TGChatActionCancel             )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGChatAction, Cancel            , |t| fnc(t))(self); self }
+  pub fn on_choosing_contact      <F: FnOnce(&TGChatActionChoosingContact    )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGChatAction, ChoosingContact   , |t| fnc(t))(self); self }
+  pub fn on_choosing_location     <F: FnOnce(&TGChatActionChoosingLocation   )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGChatAction, ChoosingLocation  , |t| fnc(t))(self); self }
+  pub fn on_recording_video       <F: FnOnce(&TGChatActionRecordingVideo     )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGChatAction, RecordingVideo    , |t| fnc(t))(self); self }
+  pub fn on_recording_video_note  <F: FnOnce(&TGChatActionRecordingVideoNote )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGChatAction, RecordingVideoNote, |t| fnc(t))(self); self }
+  pub fn on_recording_voice_note  <F: FnOnce(&TGChatActionRecordingVoiceNote )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGChatAction, RecordingVoiceNote, |t| fnc(t))(self); self }
+  pub fn on_start_playing_game    <F: FnOnce(&TGChatActionStartPlayingGame   )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGChatAction, StartPlayingGame  , |t| fnc(t))(self); self }
+  pub fn on_typing                <F: FnOnce(&TGChatActionTyping             )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGChatAction, Typing            , |t| fnc(t))(self); self }
+  pub fn on_uploading_document    <F: FnOnce(&TGChatActionUploadingDocument  )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGChatAction, UploadingDocument , |t| fnc(t))(self); self }
+  pub fn on_uploading_photo       <F: FnOnce(&TGChatActionUploadingPhoto     )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGChatAction, UploadingPhoto    , |t| fnc(t))(self); self }
+  pub fn on_uploading_video       <F: FnOnce(&TGChatActionUploadingVideo     )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGChatAction, UploadingVideo    , |t| fnc(t))(self); self }
+  pub fn on_uploading_video_note  <F: FnOnce(&TGChatActionUploadingVideoNote )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGChatAction, UploadingVideoNote, |t| fnc(t))(self); self }
+  pub fn on_uploading_voice_note  <F: FnOnce(&TGChatActionUploadingVoiceNote )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGChatAction, UploadingVoiceNote, |t| fnc(t))(self); self }
+
+
+}
+
+impl TGChatActionCancel {}
+
+impl TGChatActionChoosingContact {}
+
+impl TGChatActionChoosingLocation {}
+
+impl TGChatActionRecordingVideo {}
+
+impl TGChatActionRecordingVideoNote {}
+
+impl TGChatActionRecordingVoiceNote {}
+
+impl TGChatActionStartPlayingGame {}
+
+impl TGChatActionTyping {}
+
+impl TGChatActionUploadingDocument {
+  pub fn progress(&self) -> i32 { self.td_origin().progress().map_or(0, |v| v) }
+}
+
+impl TGChatActionUploadingPhoto {
+  pub fn progress(&self) -> i32 { self.td_origin().progress().map_or(0, |v| v) }
+}
+
+impl TGChatActionUploadingVideo {
+  pub fn progress(&self) -> i32 { self.td_origin().progress().map_or(0, |v| v) }
+}
+
+impl TGChatActionUploadingVideoNote {
+  pub fn progress(&self) -> i32 { self.td_origin().progress().map_or(0, |v| v) }
+}
+
+impl TGChatActionUploadingVoiceNote {
+  pub fn progress(&self) -> i32 { self.td_origin().progress().map_or(0, |v| v) }
+}
 
 
 
