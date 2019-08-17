@@ -28,7 +28,7 @@ text-reader = "0.2"
 rstring-builder = "0.1"
 toolkit = "0.1"
 
-rtdlib = { git = "https://github.com/fewensa/rtdlib" }
+rtdlib = { git = "https://github.com/fewensa/rtdlib", branch = "v3" }
 #rtdlib = "0.2.1"
 
 serde = "1"

@@ -269,7 +269,7 @@ fn main() {
   });
 
   listener.on_chat_last_message(|(api, update)| {
-    debug!(exmlog::examples(), "Chat last message: {}, data: {}", update.chat_id(), update.last_message().to_json())
+    debug!(exmlog::examples(), "Chat last message: {}, data: {}", update.chat_id(), update.last_message().map_or("None".to_string(), |v| v.to_json()))
   });
 
   listener.on_chat_read_outbox(|(api, update)| {
