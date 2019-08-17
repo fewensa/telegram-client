@@ -16,6 +16,8 @@ This crate use libtdjson call telegram client api, libtdjson create is [rtdlib](
 telegram-client="0.1"
 ```
 
+Note that you need [libtdjson.so.1.4.0](https://github.com/tdlib/td) in your path for building and running your application. See also [rtdlib](https://github.com/fewensa/rtdlib) for more details.
+
 # Examples
 
 ```rust
