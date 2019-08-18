@@ -2,7 +2,7 @@ use rtdlib::types as td_types;
 use rtdlib::types::MessageForwardOrigin;
 
 use crate::errors;
-use crate::types::t_message_forward_info::*;
+use crate::types::t_forward::*;
 
 impl TGMessageForwardInfo {
   pub fn origin(&self) -> TGMessageForwardOrigin { self.td_origin().origin().map(|v| TGMessageForwardOrigin::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }

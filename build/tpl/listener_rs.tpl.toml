@@ -26,7 +26,7 @@ comment = "An option changed its value."
 
 [lin.authorization_state]
 td_type = "updateAuthorizationState"
-tt = { namespace = "tg_types", object = "TGAuthorizationState" }
+tt = { namespace = "tg_types", object = "TGUpdateAuthorizationState" }
 comment = "The user authorization state has changed."
 
 [lin.connection_state]

@@ -75,7 +75,7 @@ fn main() {
   });
 
   listener.on_authorization_state(move |(api, state)| {
-    state.on_wait_tdlibparameters(|| {
+    state.on_wait_tdlib_parameters(|_| {
       api.set_tdlib_parameters(TGSetTdlibParameters::builder().parameters(
         TGTdlibParameters::builder()
           .database_directory("tdlib")
@@ -92,22 +92,22 @@ fn main() {
       ).build());
       debug!(exmlog::examples(), "Set tdlib parameters");
     });
-    state.on_wait_encryption_key(|enck| {
+    state.on_wait_encryption_key(|_| {
       api.check_database_encryption_key(TGCheckDatabaseEncryptionKey::builder().build());
       debug!(exmlog::examples(), "Set encryption key");
     });
-    state.on_wait_phone_number(|| {
+    state.on_wait_phone_number(|_| {
       thelp::tip("Please type your telegram phone number:");
       tgfn::type_phone_number(api);
     });
-    state.on_wait_password(|aswp| {
+    state.on_wait_password(|_| {
       api.check_authentication_password(TGCheckAuthenticationPassword::builder()
         .password(thelp::typed_with_message("Please type your telegram password:"))
         .build());
       debug!(exmlog::examples(), "Set password *****");
     });
-    state.on_wait_code(|awc| {
-      if awc.is_registered().clone().map_or(false, |v| v) {
+    state.on_wait_code(|astat| {
+      if astat.is_registered() {
         thelp::tip("Please type authentication code:");
         tgfn::type_authentication_code(api);
       } else {
@@ -117,22 +117,22 @@ fn main() {
       }
     });
 
-    state.on_ready(|| {
+    state.on_ready(|_| {
       let mut have_authorization = have_authorization.lock().unwrap();
       *have_authorization = true;
       debug!(exmlog::examples(), "Authorization ready");
     });
-    state.on_logging_out(|| {
+    state.on_logging_out(|_| {
       let mut have_authorization = have_authorization.lock().unwrap();
       *have_authorization = false;
       debug!(exmlog::examples(), "Logging out");
     });
-    state.on_closing(|| {
+    state.on_closing(|_| {
       let mut have_authorization = have_authorization.lock().unwrap();
       *have_authorization = false;
       debug!(exmlog::examples(), "Closing");
     });
-    state.on_closed(|| {
+    state.on_closed(|_| {
       debug!(exmlog::examples(), "Closed");
     });
   });

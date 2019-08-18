@@ -3,9 +3,8 @@ use rtdlib::types::{CallDiscardReason, MaskPoint, MessageCall, MessageContent, P
 
 use crate::errors;
 use crate::types::t_file::*;
-use crate::types::f_text_entity_type::TGTextEntityType;
-use crate::types::t_input_message::TGTextEntity;
 use crate::types::t_message_content::*;
+use crate::types::t_text::*;
 
 #[derive(Debug, Clone)]
 pub enum TGMessageContent {
@@ -1002,12 +1001,6 @@ impl TGMaskPointMouth {}
 
 impl TGMessageSupergroupChatCreate {
   pub fn title(&self) -> String { self.td_origin().title().expect(errors::TELEGRAM_DATA_FAIL) }
-}
-
-impl TGMessageText {
-  pub fn text(&self) -> TGFormattedText { self.td_origin().text().map(|v| TGFormattedText::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
-
-  pub fn web_page(&self) -> Option<TGWebPage> { self.td_origin().web_page().map(|v| TGWebPage::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
 }
 
 

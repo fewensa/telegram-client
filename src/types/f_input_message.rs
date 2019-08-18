@@ -2,12 +2,11 @@ use rtdlib::types as td_types;
 use rtdlib::types::{InputMessageContent, RObject};
 
 use crate::errors;
-use crate::types::t_file::*;
 use crate::types::f_file::*;
+use crate::types::t_file::*;
 use crate::types::t_input_message::*;
-use crate::types::t_message_content::TGFormattedText;
+use crate::types::t_text::TGFormattedText;
 use crate::types::TGInvoice;
-use crate::types::TGTextEntityType;
 
 #[derive(Debug, Clone)]
 pub enum TGInputMessageContent {
@@ -349,13 +348,6 @@ impl TGInputMessageVoiceNote {
   pub fn caption(&self) -> Option<TGFormattedText> { self.td_origin().caption().map(|v| TGFormattedText::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
 }
 
-impl TGTextEntity {
-  pub fn offset(&self) -> i32 { self.td_origin().offset().expect(errors::TELEGRAM_DATA_FAIL) }
-
-  pub fn length(&self) -> i32 { self.td_origin().length().expect(errors::TELEGRAM_DATA_FAIL) }
-
-  pub fn type_(&self) -> TGTextEntityType { self.td_origin().type_().map(|v| TGTextEntityType::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
-}
 
 
 

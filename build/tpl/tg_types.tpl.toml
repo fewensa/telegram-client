@@ -3,8 +3,9 @@
 [tmod]
 
 uses = [
-  "self::f_update_option::TGOptionValue",
-  "self::f_connection_state::TGConnectionState",
+  "self::f_authorization::*",
+  "self::f_option::TGOptionValue",
+  "self::f_connection::TGConnectionState",
   "self::f_proxy::TGProxyType",
   "self::f_user::*",
   "self::f_chat::*",
@@ -12,9 +13,9 @@ uses = [
   "self::f_chat::*",
   "self::f_input_message::*",
   "self::f_file::*",
-  "self::f_text_entity_type::*",
+  "self::f_text::*",
   "self::f_message_content::*",
-  "self::f_message_forward_info::*",
+  "self::f_forward::*",
   "self::f_reply_markup::*",
 ]
 
@@ -28,18 +29,74 @@ macro_use = true
 
 ## if typen not set, default is TG$inner
 
-[[tgypes.update_option]]
+[[tgypes.option]]
 uses = []
 typen = "TGUpdateOption"
 inner = "UpdateOption"
 comment = "An option changed its value."
 
-[[tgypes.authorization_state]]
-typen = "TGAuthorizationState"
+[[tgypes.authorization]]
 inner = "UpdateAuthorizationState"
 comment = "The user authorization state has changed."
 
-[[tgypes.connection_state]]
+[[tgypes.authorization]]
+inner = "AuthorizationStateClosed"
+comment = "TDLib client is in its final state. All databases are closed and all resources are released. No other updates will be received after this. All queries will be responded to with error code 500. To continue working, one should create a new instance of the TDLib client. "
+
+[[tgypes.authorization]]
+inner = "AuthorizationStateClosing"
+comment = "TDLib is closing, all subsequent queries will be answered with the error 500. Note that closing TDLib can take a while. All resources will be freed only after "
+
+[[tgypes.authorization]]
+inner = "AuthorizationStateLoggingOut"
+comment = "The user is currently logging out."
+
+[[tgypes.authorization]]
+inner = "AuthorizationStateReady"
+comment = "The user has been successfully authorized. TDLib is now ready to answer queries."
+
+[[tgypes.authorization]]
+inner = "AuthorizationStateWaitCode"
+comment = "TDLib needs the user's authentication code to finalize authorization."
+
+[[tgypes.authorization]]
+inner = "AuthorizationStateWaitEncryptionKey"
+comment = "TDLib needs an encryption key to decrypt the local database."
+
+[[tgypes.authorization]]
+inner = "AuthorizationStateWaitPassword"
+comment = "The user has been authorized, but needs to enter a password to start using the application."
+
+[[tgypes.authorization]]
+inner = "AuthorizationStateWaitPhoneNumber"
+comment = "TDLib needs the user's phone number to authorize."
+
+[[tgypes.authorization]]
+inner = "AuthorizationStateWaitTdlibParameters"
+comment = "TDLib needs TdlibParameters for initialization."
+
+[[tgypes.authorization]]
+inner = "AuthenticationCodeInfo"
+comment = "Information about the authentication code that was sent."
+
+[[tgypes.authorization]]
+inner = "AuthenticationCodeTypeCall"
+comment = "An authentication code is delivered via a phone call to the specified phone number."
+
+[[tgypes.authorization]]
+inner = "AuthenticationCodeTypeFlashCall"
+comment = "An authentication code is delivered by an immediately cancelled call to the specified phone number. The number from which the call was made is the code."
+
+[[tgypes.authorization]]
+inner = "AuthenticationCodeTypeSms"
+comment = "An authentication code is delivered via an SMS message to the specified phone number."
+
+[[tgypes.authorization]]
+inner = "AuthenticationCodeTypeTelegramMessage"
+comment = "An authentication code is delivered via a private Telegram message, which can be viewed in another client."
+
+
+[[tgypes.connection]]
 inner = "UpdateConnectionState"
 comment = "The connection state has changed."
 
@@ -59,11 +116,11 @@ comment = "Some data of a user has changed. This update is guaranteed to come be
 inner = "UserTypeBot"
 comment = "A bot"
 
-[[tgypes.update_scope_notification_settings]]
+[[tgypes.notification]]
 inner = "UpdateScopeNotificationSettings"
 comment = "Notification settings for some type of chats were updated."
 
-[[tgypes.scope_notification_settings]]
+[[tgypes.notification]]
 inner = "ScopeNotificationSettings"
 comment = "Contains information about notification settings for several chats."
 
@@ -96,17 +153,17 @@ inner = "UpdateMessageEdited"
 comment = "A message was edited. Changes in the message content will come in a separate"
 
 
-[[tgypes.message_forward_info]]
+[[tgypes.forward]]
 inner = "MessageForwardInfo"
 comment = "Contains information about a forwarded message."
 
-[[tgypes.message_forward_info]]
+[[tgypes.forward]]
 inner = "MessageForwardOriginChannel"
 
-[[tgypes.message_forward_info]]
+[[tgypes.forward]]
 inner = "MessageForwardOriginHiddenUser"
 
-[[tgypes.message_forward_info]]
+[[tgypes.forward]]
 inner = "MessageForwardOriginUser"
 
 [[tgypes.chat]]
@@ -200,7 +257,7 @@ comment = "A video note message."
 inner = "InputMessageVoiceNote"
 comment = "A voice note message."
 
-[[tgypes.input_message]]
+[[tgypes.text]]
 inner = "TextEntity"
 comment = "Represents a part of the text that needs to be formatted in some unusual way."
 
@@ -224,46 +281,46 @@ comment = "A file defined by its remote ID."
 inner = "InputThumbnail"
 comment = "A thumbnail to be sent along with a file; should be in JPEG or WEBP format for stickers, and less than 200 kB in size."
 
-[[tgypes.text_entity_type]]
+[[tgypes.text]]
 inner = "TextEntityTypeBold"
 
-[[tgypes.text_entity_type]]
+[[tgypes.text]]
 inner = "TextEntityTypeBotCommand"
 
-[[tgypes.text_entity_type]]
+[[tgypes.text]]
 inner = "TextEntityTypeCashtag"
 
-[[tgypes.text_entity_type]]
+[[tgypes.text]]
 inner = "TextEntityTypeCode"
 
-[[tgypes.text_entity_type]]
+[[tgypes.text]]
 inner = "TextEntityTypeEmailAddress"
 
-[[tgypes.text_entity_type]]
+[[tgypes.text]]
 inner = "TextEntityTypeHashtag"
 
-[[tgypes.text_entity_type]]
+[[tgypes.text]]
 inner = "TextEntityTypeItalic"
 
-[[tgypes.text_entity_type]]
+[[tgypes.text]]
 inner = "TextEntityTypeMention"
 
-[[tgypes.text_entity_type]]
+[[tgypes.text]]
 inner = "TextEntityTypeMentionName"
 
-[[tgypes.text_entity_type]]
+[[tgypes.text]]
 inner = "TextEntityTypePhoneNumber"
 
-[[tgypes.text_entity_type]]
+[[tgypes.text]]
 inner = "TextEntityTypePre"
 
-[[tgypes.text_entity_type]]
+[[tgypes.text]]
 inner = "TextEntityTypePreCode"
 
-[[tgypes.text_entity_type]]
+[[tgypes.text]]
 inner = "TextEntityTypeTextUrl"
 
-[[tgypes.text_entity_type]]
+[[tgypes.text]]
 inner = "TextEntityTypeUrl"
 
 [[tgypes.invoice]]
@@ -374,7 +431,7 @@ inner = "MessageSticker"
 [[tgypes.message_content]]
 inner = "MessageSupergroupChatCreate"
 
-[[tgypes.message_content]]
+[[tgypes.text]]
 inner = "MessageText"
 
 [[tgypes.message_content]]
@@ -398,7 +455,7 @@ inner = "MessageWebsiteConnected"
 [[tgypes.message_content]]
 inner = "Animation"
 
-[[tgypes.message_content]]
+[[tgypes.text]]
 inner = "FormattedText"
 
 [[tgypes.message_content]]
@@ -639,6 +696,10 @@ inner = "ChatActionUploadingVideoNote"
 
 [[tgypes.chat]]
 inner = "ChatActionUploadingVoiceNote"
+
+[[tgypes.terms]]
+inner = "TermsOfService"
+comment = "Contains Telegram terms of service."
 
 
 #[[tgypes.name]]
