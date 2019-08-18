@@ -61,20 +61,20 @@ impl TGTextEntityType {
   pub fn is_text_url      (&self) -> bool { tuple_enum_is!(TGTextEntityType, TextUrl     )(self) }
   pub fn is_url           (&self) -> bool { tuple_enum_is!(TGTextEntityType, Url         )(self) }
 
-  pub fn on_bold          <F: FnOnce(TGTextEntityTypeBold        )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, Bold         , |t| fnc(t))(self); self }
-  pub fn on_bot_command   <F: FnOnce(TGTextEntityTypeBotCommand  )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, BotCommand   , |t| fnc(t))(self); self }
-  pub fn on_cashtag       <F: FnOnce(TGTextEntityTypeCashtag     )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, Cashtag      , |t| fnc(t))(self); self }
-  pub fn on_code          <F: FnOnce(TGTextEntityTypeCode        )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, Code         , |t| fnc(t))(self); self }
-  pub fn on_email_address <F: FnOnce(TGTextEntityTypeEmailAddress)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, EmailAddress , |t| fnc(t))(self); self }
-  pub fn on_hashtag       <F: FnOnce(TGTextEntityTypeHashtag     )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, Hashtag      , |t| fnc(t))(self); self }
-  pub fn on_italic        <F: FnOnce(TGTextEntityTypeItalic      )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, Italic       , |t| fnc(t))(self); self }
-  pub fn on_mention       <F: FnOnce(TGTextEntityTypeMention     )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, Mention      , |t| fnc(t))(self); self }
-  pub fn on_mention_name  <F: FnOnce(TGTextEntityTypeMentionName )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, MentionName  , |t| fnc(t))(self); self }
-  pub fn on_phone_number  <F: FnOnce(TGTextEntityTypePhoneNumber )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, PhoneNumber  , |t| fnc(t))(self); self }
-  pub fn on_pre           <F: FnOnce(TGTextEntityTypePre         )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, Pre          , |t| fnc(t))(self); self }
-  pub fn on_pre_code      <F: FnOnce(TGTextEntityTypePreCode     )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, PreCode      , |t| fnc(t))(self); self }
-  pub fn on_text_url      <F: FnOnce(TGTextEntityTypeTextUrl     )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, TextUrl      , |t| fnc(t))(self); self }
-  pub fn on_url           <F: FnOnce(TGTextEntityTypeUrl         )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, Url          , |t| fnc(t))(self); self }
+  pub fn on_bold          <F: FnOnce(&TGTextEntityTypeBold        )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, Bold         , |t| fnc(t))(self); self }
+  pub fn on_bot_command   <F: FnOnce(&TGTextEntityTypeBotCommand  )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, BotCommand   , |t| fnc(t))(self); self }
+  pub fn on_cashtag       <F: FnOnce(&TGTextEntityTypeCashtag     )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, Cashtag      , |t| fnc(t))(self); self }
+  pub fn on_code          <F: FnOnce(&TGTextEntityTypeCode        )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, Code         , |t| fnc(t))(self); self }
+  pub fn on_email_address <F: FnOnce(&TGTextEntityTypeEmailAddress)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, EmailAddress , |t| fnc(t))(self); self }
+  pub fn on_hashtag       <F: FnOnce(&TGTextEntityTypeHashtag     )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, Hashtag      , |t| fnc(t))(self); self }
+  pub fn on_italic        <F: FnOnce(&TGTextEntityTypeItalic      )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, Italic       , |t| fnc(t))(self); self }
+  pub fn on_mention       <F: FnOnce(&TGTextEntityTypeMention     )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, Mention      , |t| fnc(t))(self); self }
+  pub fn on_mention_name  <F: FnOnce(&TGTextEntityTypeMentionName )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, MentionName  , |t| fnc(t))(self); self }
+  pub fn on_phone_number  <F: FnOnce(&TGTextEntityTypePhoneNumber )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, PhoneNumber  , |t| fnc(t))(self); self }
+  pub fn on_pre           <F: FnOnce(&TGTextEntityTypePre         )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, Pre          , |t| fnc(t))(self); self }
+  pub fn on_pre_code      <F: FnOnce(&TGTextEntityTypePreCode     )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, PreCode      , |t| fnc(t))(self); self }
+  pub fn on_text_url      <F: FnOnce(&TGTextEntityTypeTextUrl     )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, TextUrl      , |t| fnc(t))(self); self }
+  pub fn on_url           <F: FnOnce(&TGTextEntityTypeUrl         )>(&self, fnc: F) -> &Self { tuple_enum_on!(TGTextEntityType, Url          , |t| fnc(t))(self); self }
 
 }
 

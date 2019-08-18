@@ -701,6 +701,11 @@ inner = "ChatActionUploadingVoiceNote"
 inner = "TermsOfService"
 comment = "Contains Telegram terms of service."
 
+[[tgypes.terms]]
+inner = "UpdateTermsOfService"
+comment = "New terms of service must be accepted by the user. If the terms of service are declined, then the"
+
+
 
 #[[tgypes.name]]
 #inner = ""
