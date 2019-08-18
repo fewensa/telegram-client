@@ -10,22 +10,22 @@ use crate::types::TGInvoice;
 
 #[derive(Debug, Clone)]
 pub enum TGInputMessageContent {
-  Animation(TGInputMessageAnimation),
-  Audio(TGInputMessageAudio),
-  Contact(TGInputMessageContact),
-  Document(TGInputMessageDocument),
-  Forwarded(TGInputMessageForwarded),
-  Game(TGInputMessageGame),
-  Invoice(TGInputMessageInvoice),
-  Location(TGInputMessageLocation),
-  Photo(TGInputMessagePhoto),
-  Poll(TGInputMessagePoll),
-  Sticker(TGInputMessageSticker),
-  Text(TGInputMessageText),
-  Venue(TGInputMessageVenue),
-  Video(TGInputMessageVideo),
-  VideoNote(TGInputMessageVideoNote),
-  VoiceNote(TGInputMessageVoiceNote),
+  Animation(TGInputMessageAnimation ),
+  Audio    (TGInputMessageAudio     ),
+  Contact  (TGInputMessageContact   ),
+  Document (TGInputMessageDocument  ),
+  Forwarded(TGInputMessageForwarded ),
+  Game     (TGInputMessageGame      ),
+  Invoice  (TGInputMessageInvoice   ),
+  Location (TGInputMessageLocation  ),
+  Photo    (TGInputMessagePhoto     ),
+  Poll     (TGInputMessagePoll      ),
+  Sticker  (TGInputMessageSticker   ),
+  Text     (TGInputMessageText      ),
+  Venue    (TGInputMessageVenue     ),
+  Video    (TGInputMessageVideo     ),
+  VideoNote(TGInputMessageVideoNote ),
+  VoiceNote(TGInputMessageVoiceNote ),
 }
 
 
@@ -83,88 +83,40 @@ impl TGInputMessageContent {
 //  voice_note
 
 
-  pub fn is_animation(&self) -> bool { tuple_enum_is!(TGInputMessageContent, Animation)(self) }
-  pub fn is_audio(&self) -> bool { tuple_enum_is!(TGInputMessageContent, Audio    )(self) }
-  pub fn is_contact(&self) -> bool { tuple_enum_is!(TGInputMessageContent, Contact  )(self) }
-  pub fn is_document(&self) -> bool { tuple_enum_is!(TGInputMessageContent, Document )(self) }
-  pub fn is_forwarded(&self) -> bool { tuple_enum_is!(TGInputMessageContent, Forwarded)(self) }
-  pub fn is_game(&self) -> bool { tuple_enum_is!(TGInputMessageContent, Game     )(self) }
-  pub fn is_invoice(&self) -> bool { tuple_enum_is!(TGInputMessageContent, Invoice  )(self) }
-  pub fn is_location(&self) -> bool { tuple_enum_is!(TGInputMessageContent, Location )(self) }
-  pub fn is_photo(&self) -> bool { tuple_enum_is!(TGInputMessageContent, Photo    )(self) }
-  pub fn is_poll(&self) -> bool { tuple_enum_is!(TGInputMessageContent, Poll     )(self) }
-  pub fn is_sticker(&self) -> bool { tuple_enum_is!(TGInputMessageContent, Sticker  )(self) }
-  pub fn is_text(&self) -> bool { tuple_enum_is!(TGInputMessageContent, Text     )(self) }
-  pub fn is_venue(&self) -> bool { tuple_enum_is!(TGInputMessageContent, Venue    )(self) }
-  pub fn is_video(&self) -> bool { tuple_enum_is!(TGInputMessageContent, Video    )(self) }
+  pub fn is_animation (&self) -> bool { tuple_enum_is!(TGInputMessageContent, Animation)(self) }
+  pub fn is_audio     (&self) -> bool { tuple_enum_is!(TGInputMessageContent, Audio    )(self) }
+  pub fn is_contact   (&self) -> bool { tuple_enum_is!(TGInputMessageContent, Contact  )(self) }
+  pub fn is_document  (&self) -> bool { tuple_enum_is!(TGInputMessageContent, Document )(self) }
+  pub fn is_forwarded (&self) -> bool { tuple_enum_is!(TGInputMessageContent, Forwarded)(self) }
+  pub fn is_game      (&self) -> bool { tuple_enum_is!(TGInputMessageContent, Game     )(self) }
+  pub fn is_invoice   (&self) -> bool { tuple_enum_is!(TGInputMessageContent, Invoice  )(self) }
+  pub fn is_location  (&self) -> bool { tuple_enum_is!(TGInputMessageContent, Location )(self) }
+  pub fn is_photo     (&self) -> bool { tuple_enum_is!(TGInputMessageContent, Photo    )(self) }
+  pub fn is_poll      (&self) -> bool { tuple_enum_is!(TGInputMessageContent, Poll     )(self) }
+  pub fn is_sticker   (&self) -> bool { tuple_enum_is!(TGInputMessageContent, Sticker  )(self) }
+  pub fn is_text      (&self) -> bool { tuple_enum_is!(TGInputMessageContent, Text     )(self) }
+  pub fn is_venue     (&self) -> bool { tuple_enum_is!(TGInputMessageContent, Venue    )(self) }
+  pub fn is_video     (&self) -> bool { tuple_enum_is!(TGInputMessageContent, Video    )(self) }
   pub fn is_video_note(&self) -> bool { tuple_enum_is!(TGInputMessageContent, VideoNote)(self) }
   pub fn is_voice_note(&self) -> bool { tuple_enum_is!(TGInputMessageContent, VoiceNote)(self) }
 
 
-  pub fn on_animation<F: FnOnce(&TGInputMessageAnimation)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputMessageContent, Animation, |t| fnc(t))(self);
-    self
-  }
-  pub fn on_audio<F: FnOnce(&TGInputMessageAudio)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputMessageContent, Audio    , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_contact<F: FnOnce(&TGInputMessageContact)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputMessageContent, Contact  , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_document<F: FnOnce(&TGInputMessageDocument)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputMessageContent, Document , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_forwarded<F: FnOnce(&TGInputMessageForwarded)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputMessageContent, Forwarded, |t| fnc(t))(self);
-    self
-  }
-  pub fn on_game<F: FnOnce(&TGInputMessageGame)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputMessageContent, Game     , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_invoice<F: FnOnce(&TGInputMessageInvoice)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputMessageContent, Invoice  , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_location<F: FnOnce(&TGInputMessageLocation)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputMessageContent, Location , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_photo<F: FnOnce(&TGInputMessagePhoto)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputMessageContent, Photo    , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_poll<F: FnOnce(&TGInputMessagePoll)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputMessageContent, Poll     , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_sticker<F: FnOnce(&TGInputMessageSticker)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputMessageContent, Sticker  , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_text<F: FnOnce(&TGInputMessageText)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputMessageContent, Text     , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_venue<F: FnOnce(&TGInputMessageVenue)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputMessageContent, Venue    , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_video<F: FnOnce(&TGInputMessageVideo)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputMessageContent, Video    , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_video_note<F: FnOnce(&TGInputMessageVideoNote)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputMessageContent, VideoNote, |t| fnc(t))(self);
-    self
-  }
-  pub fn on_voice_note<F: FnOnce(&TGInputMessageVoiceNote)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputMessageContent, VoiceNote, |t| fnc(t))(self);
-    self
-  }
+  pub fn on_animation <F: FnOnce(&TGInputMessageAnimation)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGInputMessageContent, Animation, |t| fnc(t))(self); self }
+  pub fn on_audio     <F: FnOnce(&TGInputMessageAudio)>    (&self, fnc: F) -> &Self { tuple_enum_on!(TGInputMessageContent, Audio    , |t| fnc(t))(self); self }
+  pub fn on_contact   <F: FnOnce(&TGInputMessageContact)>  (&self, fnc: F) -> &Self { tuple_enum_on!(TGInputMessageContent, Contact  , |t| fnc(t))(self); self }
+  pub fn on_document  <F: FnOnce(&TGInputMessageDocument)> (&self, fnc: F) -> &Self { tuple_enum_on!(TGInputMessageContent, Document , |t| fnc(t))(self); self }
+  pub fn on_forwarded <F: FnOnce(&TGInputMessageForwarded)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGInputMessageContent, Forwarded, |t| fnc(t))(self); self }
+  pub fn on_game      <F: FnOnce(&TGInputMessageGame)>     (&self, fnc: F) -> &Self { tuple_enum_on!(TGInputMessageContent, Game     , |t| fnc(t))(self); self }
+  pub fn on_invoice   <F: FnOnce(&TGInputMessageInvoice)>  (&self, fnc: F) -> &Self { tuple_enum_on!(TGInputMessageContent, Invoice  , |t| fnc(t))(self); self }
+  pub fn on_location  <F: FnOnce(&TGInputMessageLocation)> (&self, fnc: F) -> &Self { tuple_enum_on!(TGInputMessageContent, Location , |t| fnc(t))(self); self }
+  pub fn on_photo     <F: FnOnce(&TGInputMessagePhoto)>    (&self, fnc: F) -> &Self { tuple_enum_on!(TGInputMessageContent, Photo    , |t| fnc(t))(self); self }
+  pub fn on_poll      <F: FnOnce(&TGInputMessagePoll)>     (&self, fnc: F) -> &Self { tuple_enum_on!(TGInputMessageContent, Poll     , |t| fnc(t))(self); self }
+  pub fn on_sticker   <F: FnOnce(&TGInputMessageSticker)>  (&self, fnc: F) -> &Self { tuple_enum_on!(TGInputMessageContent, Sticker  , |t| fnc(t))(self); self }
+  pub fn on_text      <F: FnOnce(&TGInputMessageText)>     (&self, fnc: F) -> &Self { tuple_enum_on!(TGInputMessageContent, Text     , |t| fnc(t))(self); self }
+  pub fn on_venue     <F: FnOnce(&TGInputMessageVenue)>    (&self, fnc: F) -> &Self { tuple_enum_on!(TGInputMessageContent, Venue    , |t| fnc(t))(self); self }
+  pub fn on_video     <F: FnOnce(&TGInputMessageVideo)>    (&self, fnc: F) -> &Self { tuple_enum_on!(TGInputMessageContent, Video    , |t| fnc(t))(self); self }
+  pub fn on_video_note<F: FnOnce(&TGInputMessageVideoNote)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGInputMessageContent, VideoNote, |t| fnc(t))(self); self }
+  pub fn on_voice_note<F: FnOnce(&TGInputMessageVoiceNote)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGInputMessageContent, VoiceNote, |t| fnc(t))(self); self }
 }
 
 

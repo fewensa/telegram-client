@@ -86,13 +86,11 @@ impl TGMessageSendingState {
     )(td)
   }
 
-  pub fn is_failed(&self) -> bool {
-    enum_is!(TGMessageSendingState, Failed)(self)
-  }
+  pub fn is_failed (&self) -> bool { enum_is!(TGMessageSendingState, Failed )(self) }
+  pub fn is_pending(&self) -> bool { enum_is!(TGMessageSendingState, Pending)(self) }
 
-  pub fn is_pending(&self) -> bool {
-    enum_is!(TGMessageSendingState, Pending)(self)
-  }
+  pub fn on_failed <F: FnOnce()> (&self, fnc: F) -> &self { enum_on!(TGMessageSendingState, Failed , || fnc()); self }
+  pub fn on_pending<F: FnOnce()> (&self, fnc: F) -> &self { enum_on!(TGMessageSendingState, Pending, || fnc()); self }
 }
 
 

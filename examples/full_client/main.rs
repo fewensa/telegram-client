@@ -138,25 +138,11 @@ fn main() {
   });
 
   listener.on_connection_state(|(api, update)| {
-    update.on_state(|state| {
-      match state {
-        TGConnectionState::WaitingForNetwork => {
-          debug!(exmlog::examples(), "waiting for network")
-        }
-        TGConnectionState::ConnectingToProxy => {
-          debug!(exmlog::examples(), "connecting to proxy")
-        }
-        TGConnectionState::Connecting => {
-          debug!(exmlog::examples(), "connecting")
-        }
-        TGConnectionState::Updating => {
-          debug!(exmlog::examples(), "updating...")
-        }
-        TGConnectionState::Ready => {
-          debug!(exmlog::examples(), "connection ready")
-        }
-      }
-    });
+    update.on_waiting_for_network(|| { debug!(exmlog::examples(), "waiting for network"); });
+    update.on_connecting_to_proxy(|| { debug!(exmlog::examples(), "connecting to proxy"); });
+    update.on_connecting(|| { debug!(exmlog::examples(), "connecting"); });
+    update.on_updating(|| { debug!(exmlog::examples(), "updating..."); });
+    update.on_ready(|| { debug!(exmlog::examples(), "connection ready") });
   });
 
   listener.on_error(|(api, update)| {

@@ -40,22 +40,13 @@ impl TGMessageForwardOrigin {
     )(td)
   }
 
-  pub fn is_channel(&self) -> bool { tuple_enum_is!(TGMessageForwardOrigin, Channel     )(self) }
+  pub fn is_channel    (&self) -> bool { tuple_enum_is!(TGMessageForwardOrigin, Channel     )(self) }
   pub fn is_hidden_user(&self) -> bool { tuple_enum_is!(TGMessageForwardOrigin, HiddenUser  )(self) }
-  pub fn is_user(&self) -> bool { tuple_enum_is!(TGMessageForwardOrigin, User        )(self) }
+  pub fn is_user       (&self) -> bool { tuple_enum_is!(TGMessageForwardOrigin, User        )(self) }
 
-  pub fn on_channel<F: FnOnce(&TGMessageForwardOriginChannel)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGMessageForwardOrigin, Channel    , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_hidden_user<F: FnOnce(&TGMessageForwardOriginHiddenUser)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGMessageForwardOrigin, HiddenUser , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_user<F: FnOnce(&TGMessageForwardOriginUser)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGMessageForwardOrigin, User       , |t| fnc(t))(self);
-    self
-  }
+  pub fn on_channel    <F: FnOnce(&TGMessageForwardOriginChannel)>   (&self, fnc: F) -> &Self { tuple_enum_on!(TGMessageForwardOrigin, Channel    , |t| fnc(t))(self);self }
+  pub fn on_hidden_user<F: FnOnce(&TGMessageForwardOriginHiddenUser)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGMessageForwardOrigin, HiddenUser , |t| fnc(t))(self);self }
+  pub fn on_user       <F: FnOnce(&TGMessageForwardOriginUser)>      (&self, fnc: F) -> &Self { tuple_enum_on!(TGMessageForwardOrigin, User       , |t| fnc(t))(self);self }
 }
 
 

@@ -6,10 +6,10 @@ use crate::types::t_reply_markup::*;
 
 #[derive(Debug, Clone)]
 pub enum TGReplyMarkup {
-  ForceReply(TGReplyMarkupForceReply),
-  InlineKeyboard(TGReplyMarkupInlineKeyboard),
-  RemoveKeyboard(TGReplyMarkupRemoveKeyboard),
-  ShowKeyboard(TGReplyMarkupShowKeyboard),
+  ForceReply    (TGReplyMarkupForceReply     ),
+  InlineKeyboard(TGReplyMarkupInlineKeyboard ),
+  RemoveKeyboard(TGReplyMarkupRemoveKeyboard ),
+  ShowKeyboard  (TGReplyMarkupShowKeyboard   ),
 }
 
 
@@ -26,28 +26,16 @@ impl TGReplyMarkup {
     )(td)
   }
 
-  pub fn is_force_reply(&self) -> bool { tuple_enum_is!(TGReplyMarkup, ForceReply       )(self) }
+  pub fn is_force_reply    (&self) -> bool { tuple_enum_is!(TGReplyMarkup, ForceReply       )(self) }
   pub fn is_inline_keyboard(&self) -> bool { tuple_enum_is!(TGReplyMarkup, InlineKeyboard   )(self) }
   pub fn is_remove_keyboard(&self) -> bool { tuple_enum_is!(TGReplyMarkup, RemoveKeyboard   )(self) }
-  pub fn is_show_keyboard(&self) -> bool { tuple_enum_is!(TGReplyMarkup, ShowKeyboard     )(self) }
+  pub fn is_show_keyboard  (&self) -> bool { tuple_enum_is!(TGReplyMarkup, ShowKeyboard     )(self) }
 
 
-  pub fn on_force_reply<F: FnOnce(&TGReplyMarkupForceReply)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGReplyMarkup, ForceReply         , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_inline_keyboard<F: FnOnce(&TGReplyMarkupInlineKeyboard)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGReplyMarkup, InlineKeyboard     , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_remove_keyboard<F: FnOnce(&TGReplyMarkupRemoveKeyboard)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGReplyMarkup, RemoveKeyboard     , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_show_keyboard<F: FnOnce(&TGReplyMarkupShowKeyboard)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGReplyMarkup, ShowKeyboard       , |t| fnc(t))(self);
-    self
-  }
+  pub fn on_force_reply    <F: FnOnce(&TGReplyMarkupForceReply)>    (&self, fnc: F) -> &Self { tuple_enum_on!(TGReplyMarkup, ForceReply         , |t| fnc(t))(self); self }
+  pub fn on_inline_keyboard<F: FnOnce(&TGReplyMarkupInlineKeyboard)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGReplyMarkup, InlineKeyboard     , |t| fnc(t))(self); self }
+  pub fn on_remove_keyboard<F: FnOnce(&TGReplyMarkupRemoveKeyboard)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGReplyMarkup, RemoveKeyboard     , |t| fnc(t))(self); self }
+  pub fn on_show_keyboard  <F: FnOnce(&TGReplyMarkupShowKeyboard)>  (&self, fnc: F) -> &Self { tuple_enum_on!(TGReplyMarkup, ShowKeyboard       , |t| fnc(t))(self); self }
 }
 
 
@@ -81,11 +69,11 @@ impl TGInlineKeyboardButton {
 
 #[derive(Debug, Clone)]
 pub enum TGInlineKeyboardButtonType {
-  Buy(TGInlineKeyboardButtonTypeBuy),
-  Callback(TGInlineKeyboardButtonTypeCallback),
-  CallbackGame(TGInlineKeyboardButtonTypeCallbackGame),
-  SwitchInline(TGInlineKeyboardButtonTypeSwitchInline),
-  Url(TGInlineKeyboardButtonTypeUrl),
+  Buy         (TGInlineKeyboardButtonTypeBuy          ),
+  Callback    (TGInlineKeyboardButtonTypeCallback     ),
+  CallbackGame(TGInlineKeyboardButtonTypeCallbackGame ),
+  SwitchInline(TGInlineKeyboardButtonTypeSwitchInline ),
+  Url         (TGInlineKeyboardButtonTypeUrl          ),
 }
 
 impl TGInlineKeyboardButtonType {
@@ -102,32 +90,17 @@ impl TGInlineKeyboardButtonType {
     )(td)
   }
 
-  pub fn is_buy(&self) -> bool { tuple_enum_is!(TGInlineKeyboardButtonType, Buy           )(self) }
-  pub fn is_callback(&self) -> bool { tuple_enum_is!(TGInlineKeyboardButtonType, Callback      )(self) }
+  pub fn is_buy          (&self) -> bool { tuple_enum_is!(TGInlineKeyboardButtonType, Buy           )(self) }
+  pub fn is_callback     (&self) -> bool { tuple_enum_is!(TGInlineKeyboardButtonType, Callback      )(self) }
   pub fn is_callback_game(&self) -> bool { tuple_enum_is!(TGInlineKeyboardButtonType, CallbackGame  )(self) }
   pub fn is_switch_inline(&self) -> bool { tuple_enum_is!(TGInlineKeyboardButtonType, SwitchInline  )(self) }
-  pub fn is_url(&self) -> bool { tuple_enum_is!(TGInlineKeyboardButtonType, Url           )(self) }
+  pub fn is_url          (&self) -> bool { tuple_enum_is!(TGInlineKeyboardButtonType, Url           )(self) }
 
-  pub fn on_buy<F: FnOnce(&TGInlineKeyboardButtonTypeBuy)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInlineKeyboardButtonType, Buy            , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_callback<F: FnOnce(&TGInlineKeyboardButtonTypeCallback)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInlineKeyboardButtonType, Callback       , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_callback_game<F: FnOnce(&TGInlineKeyboardButtonTypeCallbackGame)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInlineKeyboardButtonType, CallbackGame   , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_switch_inline<F: FnOnce(&TGInlineKeyboardButtonTypeSwitchInline)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInlineKeyboardButtonType, SwitchInline   , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_url<F: FnOnce(&TGInlineKeyboardButtonTypeUrl)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInlineKeyboardButtonType, Url            , |t| fnc(t))(self);
-    self
-  }
+  pub fn on_buy          <F: FnOnce(&TGInlineKeyboardButtonTypeBuy)>         (&self, fnc: F) -> &Self { tuple_enum_on!(TGInlineKeyboardButtonType, Buy            , |t| fnc(t))(self);self }
+  pub fn on_callback     <F: FnOnce(&TGInlineKeyboardButtonTypeCallback)>    (&self, fnc: F) -> &Self { tuple_enum_on!(TGInlineKeyboardButtonType, Callback       , |t| fnc(t))(self);self }
+  pub fn on_callback_game<F: FnOnce(&TGInlineKeyboardButtonTypeCallbackGame)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGInlineKeyboardButtonType, CallbackGame   , |t| fnc(t))(self);self }
+  pub fn on_switch_inline<F: FnOnce(&TGInlineKeyboardButtonTypeSwitchInline)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGInlineKeyboardButtonType, SwitchInline   , |t| fnc(t))(self);self }
+  pub fn on_url          <F: FnOnce(&TGInlineKeyboardButtonTypeUrl)>         (&self, fnc: F) -> &Self { tuple_enum_on!(TGInlineKeyboardButtonType, Url            , |t| fnc(t))(self);self }
 }
 
 
@@ -184,9 +157,9 @@ impl TGKeyboardButton {
 
 #[derive(Debug, Clone)]
 pub enum TGKeyboardButtonType {
-  RequestLocation(TGKeyboardButtonTypeRequestLocation),
-  RequestPhoneNumber(TGKeyboardButtonTypeRequestPhoneNumber),
-  Text(TGKeyboardButtonTypeText),
+  RequestLocation   (TGKeyboardButtonTypeRequestLocation    ),
+  RequestPhoneNumber(TGKeyboardButtonTypeRequestPhoneNumber ),
+  Text              (TGKeyboardButtonTypeText               ),
 }
 
 impl TGKeyboardButtonType {
@@ -201,23 +174,14 @@ impl TGKeyboardButtonType {
     )(td)
   }
 
-  pub fn is_request_location(&self) -> bool { tuple_enum_is!(TGKeyboardButtonType, RequestLocation    )(self) }
+  pub fn is_request_location    (&self) -> bool { tuple_enum_is!(TGKeyboardButtonType, RequestLocation    )(self) }
   pub fn is_request_phone_number(&self) -> bool { tuple_enum_is!(TGKeyboardButtonType, RequestPhoneNumber )(self) }
-  pub fn is_text(&self) -> bool { tuple_enum_is!(TGKeyboardButtonType, Text               )(self) }
+  pub fn is_text                (&self) -> bool { tuple_enum_is!(TGKeyboardButtonType, Text               )(self) }
 
 
-  pub fn on_request_location<F: FnOnce(&TGKeyboardButtonTypeRequestLocation)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGKeyboardButtonType, RequestLocation    , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_request_phone_number<F: FnOnce(&TGKeyboardButtonTypeRequestPhoneNumber)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGKeyboardButtonType, RequestPhoneNumber , |t| fnc(t))(self);
-    self
-  }
-  pub fn on_text<F: FnOnce(&TGKeyboardButtonTypeText)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGKeyboardButtonType, Text               , |t| fnc(t))(self);
-    self
-  }
+  pub fn on_request_location    <F: FnOnce(&TGKeyboardButtonTypeRequestLocation)>   (&self, fnc: F) -> &Self { tuple_enum_on!(TGKeyboardButtonType, RequestLocation    , |t| fnc(t))(self); self }
+  pub fn on_request_phone_number<F: FnOnce(&TGKeyboardButtonTypeRequestPhoneNumber)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGKeyboardButtonType, RequestPhoneNumber , |t| fnc(t))(self); self }
+  pub fn on_text                <F: FnOnce(&TGKeyboardButtonTypeText)>              (&self, fnc: F) -> &Self { tuple_enum_on!(TGKeyboardButtonType, Text               , |t| fnc(t))(self); self }
 }
 
 

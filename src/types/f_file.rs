@@ -77,41 +77,15 @@ impl TGInputFile {
     )(td)
   }
 
-  pub fn is_generated(&self) -> bool {
-    tuple_enum_is!(TGInputFile, Generated)(self)
-  }
+  pub fn is_generated(&self) -> bool { tuple_enum_is!(TGInputFile, Generated)(self) }
+  pub fn is_id       (&self) -> bool { tuple_enum_is!(TGInputFile, Id)       (self) }
+  pub fn is_local    (&self) -> bool { tuple_enum_is!(TGInputFile, Local)    (self) }
+  pub fn is_remote   (&self) -> bool { tuple_enum_is!(TGInputFile, Remote)   (self) }
 
-  pub fn is_id(&self) -> bool {
-    tuple_enum_is!(TGInputFile, Id)(self)
-  }
-
-  pub fn is_local(&self) -> bool {
-    tuple_enum_is!(TGInputFile, Local)(self)
-  }
-
-  pub fn is_remote(&self) -> bool {
-    tuple_enum_is!(TGInputFile, Remote)(self)
-  }
-
-  pub fn on_generated<F: FnOnce(&TGInputFileGenerated)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputFile, Generated, |t| fnc(t))(self);
-    self
-  }
-
-  pub fn on_id<F: FnOnce(&TGInputFileId)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputFile, Id, |t| fnc(t))(self);
-    self
-  }
-
-  pub fn on_local<F: FnOnce(&TGInputFileLocal)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputFile, Local, |t| fnc(t))(self);
-    self
-  }
-
-  pub fn on_remove<F: FnOnce(&TGInputFileRemote)>(&self, fnc: F) -> &Self {
-    tuple_enum_on!(TGInputFile, Remote, |t| fnc(t))(self);
-    self
-  }
+  pub fn on_generated<F: FnOnce(&TGInputFileGenerated)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGInputFile, Generated, |t| fnc(t))(self); self }
+  pub fn on_id       <F: FnOnce(&TGInputFileId)>       (&self, fnc: F) -> &Self { tuple_enum_on!(TGInputFile, Id, |t| fnc(t))       (self); self }
+  pub fn on_local    <F: FnOnce(&TGInputFileLocal)>    (&self, fnc: F) -> &Self { tuple_enum_on!(TGInputFile, Local, |t| fnc(t))    (self); self }
+  pub fn on_remove   <F: FnOnce(&TGInputFileRemote)>   (&self, fnc: F) -> &Self { tuple_enum_on!(TGInputFile, Remote, |t| fnc(t))   (self); self }
 }
 
 
