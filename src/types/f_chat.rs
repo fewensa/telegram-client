@@ -12,19 +12,19 @@ use crate::types::t_message::TGMessage;
 
 
 impl TGChat {
-  pub fn id(&self) -> i64 { self.td_origin().id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn id(&self) -> i64 { self.td_origin().id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn type_(&self) -> TGChatType { self.td_origin().type_().map(|v| TGChatType::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn type_(&self) -> TGChatType { self.td_origin().type_().map(|v| TGChatType::of(v)).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn title(&self) -> String { self.td_origin().title().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn title(&self) -> String { self.td_origin().title().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn photo(&self) -> Option<td_types::ChatPhoto> { self.td_origin().photo() }
 
-  pub fn last_message(&self) -> Option<TGMessage> { self.td_origin().last_message().map(|v| TGMessage::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn last_message(&self) -> Option<TGMessage> { self.td_origin().last_message().map(|v| TGMessage::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
   pub fn order(&self) -> i64 {
     // https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1chat.html
-    self.td_origin().order().map(|v| toolkit::number::as_i64(v).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL)
+    self.td_origin().order().map(|v| toolkit::number::as_i64(v).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..])
   }
 
   pub fn is_pinned(&self) -> bool { self.td_origin().is_pinned().map_or(false, |v| v) }
@@ -43,21 +43,21 @@ impl TGChat {
 
   pub fn unread_count(&self) -> i32 { self.td_origin().unread_count().map_or(0, |v| v) }
 
-  pub fn last_read_inbox_message_id(&self) -> i64 { self.td_origin().last_read_inbox_message_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn last_read_inbox_message_id(&self) -> i64 { self.td_origin().last_read_inbox_message_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn last_read_outbox_message_id(&self) -> i64 { self.td_origin().last_read_outbox_message_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn last_read_outbox_message_id(&self) -> i64 { self.td_origin().last_read_outbox_message_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn unread_mention_count(&self) -> i32 { self.td_origin().unread_mention_count().map_or(0, |v| v) }
 
   pub fn notification_settings(&self) -> Option<TGChatNotificationSettings> {
-    self.td_origin().notification_settings().map(|v| TGChatNotificationSettings::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL))
+    self.td_origin().notification_settings().map(|v| TGChatNotificationSettings::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..]))
   }
 
   pub fn pinned_message_id(&self) -> Option<i64> { self.td_origin().pinned_message_id() }
 
   pub fn reply_markup_message_id(&self) -> Option<i64> { self.td_origin().reply_markup_message_id() }
 
-  pub fn draft_message(&self) -> Option<TGDraftMessage> { self.td_origin().draft_message().map(|v| TGDraftMessage::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn draft_message(&self) -> Option<TGDraftMessage> { self.td_origin().draft_message().map(|v| TGDraftMessage::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
   pub fn client_data(&self) -> Option<String> { self.td_origin().client_data() }
 
@@ -140,21 +140,21 @@ impl TGDraftMessage {
 
 
 impl TGChatTypeBasicGroup {
-  pub fn basic_group_id(&self) -> i32 { self.td_origin().basic_group_id().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn basic_group_id(&self) -> i32 { self.td_origin().basic_group_id().map(|v| v).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGChatTypePrivate {
-  pub fn user_id(&self) -> i32 { self.td_origin().user_id().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn user_id(&self) -> i32 { self.td_origin().user_id().map(|v| v).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGChatTypeSecret {
-  pub fn secret_chat_id(&self) -> i32 { self.td_origin().secret_chat_id().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn secret_chat_id(&self) -> i32 { self.td_origin().secret_chat_id().map(|v| v).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn user_id(&self) -> i32 { self.td_origin().user_id().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn user_id(&self) -> i32 { self.td_origin().user_id().map(|v| v).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGChatTypeSupergroup {
-  pub fn supergroup_id(&self) -> i32 { self.td_origin().supergroup_id().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn supergroup_id(&self) -> i32 { self.td_origin().supergroup_id().map(|v| v).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn is_channel(&self) -> bool { self.td_origin().is_channel().map_or(false, |v| v) }
 }
@@ -173,7 +173,7 @@ impl TGNotificationSettingsScope {
 //      Some(td_types::RTDNotificationSettingsScopeType::NotificationSettingsScopeChannelChats) => TGNotificationSettingsScope::ChannelChats,
 //      Some(td_types::RTDNotificationSettingsScopeType::NotificationSettingsScopeGroupChats) => TGNotificationSettingsScope::GroupChats,
 //      Some(td_types::RTDNotificationSettingsScopeType::NotificationSettingsScopePrivateChats) => TGNotificationSettingsScope::PrivateChats,
-//      None => panic!(errors::TELEGRAM_DATA_FAIL)
+//      None => panic!(&errors::data_fail_with_rtd(self.td_origin())[..])
 //    }
     rtd_type_mapping!(
       NotificationSettingsScope,
@@ -224,26 +224,26 @@ impl TGChatNotificationSettings {
 
 
 impl TGUpdateChatLastMessage {
-  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn last_message(&self) -> Option<TGMessage> { self.td_origin().last_message().map(|v| TGMessage::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn last_message(&self) -> Option<TGMessage> { self.td_origin().last_message().map(|v| TGMessage::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn order(&self) -> i64 { self.td_origin().order().map(|v| toolkit::number::as_i64(v).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn order(&self) -> i64 { self.td_origin().order().map(|v| toolkit::number::as_i64(v).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 
 impl TGUpdateNewChat {
-  pub fn chat(&self) -> TGChat { self.td_origin().chat().map(|v| TGChat::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn chat(&self) -> TGChat { self.td_origin().chat().map(|v| TGChat::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 
 impl TGUpdateUserChatAction {
 
-  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn user_id(&self) -> i32 { self.td_origin().user_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn user_id(&self) -> i32 { self.td_origin().user_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn action(&self) -> TGChatAction { self.td_origin().action().map(|v| TGChatAction::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn action(&self) -> TGChatAction { self.td_origin().action().map(|v| TGChatAction::of(v)).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
 }
 

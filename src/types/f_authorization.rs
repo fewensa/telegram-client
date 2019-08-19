@@ -7,7 +7,7 @@ use crate::types::TGTermsOfService;
 
 
 impl TGUpdateAuthorizationState {
-  pub fn authorization_state(&self) -> TGAuthorizationState { self.td_origin().authorization_state().map(|v| TGAuthorizationState::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn authorization_state(&self) -> TGAuthorizationState { self.td_origin().authorization_state().map(|v| TGAuthorizationState::of(v)).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn is_closed                 (&self) -> bool { self.authorization_state().is_closed                () }
   pub fn is_closing                (&self) -> bool { self.authorization_state().is_closing               () }
@@ -92,9 +92,9 @@ impl TGAuthorizationStateReady {}
 impl TGAuthorizationStateWaitCode {
   pub fn is_registered(&self) -> bool { self.td_origin().is_registered().map_or(false, |v| v) }
 
-  pub fn terms_of_service(&self) -> Option<TGTermsOfService> { self.td_origin().terms_of_service().map(|v| TGTermsOfService::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn terms_of_service(&self) -> Option<TGTermsOfService> { self.td_origin().terms_of_service().map(|v| TGTermsOfService::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn code_info(&self) -> TGAuthenticationCodeInfo { self.td_origin().code_info().map(|v| TGAuthenticationCodeInfo::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn code_info(&self) -> TGAuthenticationCodeInfo { self.td_origin().code_info().map(|v| TGAuthenticationCodeInfo::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGAuthorizationStateWaitEncryptionKey {
@@ -116,9 +116,9 @@ impl TGAuthorizationStateWaitTdlibParameters {}
 
 impl TGAuthenticationCodeInfo {
 
-  pub fn phone_number(&self) -> String { self.td_origin().phone_number().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn phone_number(&self) -> String { self.td_origin().phone_number().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn type_(&self) -> TGAuthenticationCodeType { self.td_origin().type_().map(|v| TGAuthenticationCodeType::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn type_(&self) -> TGAuthenticationCodeType { self.td_origin().type_().map(|v| TGAuthenticationCodeType::of(v)).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn next_type(&self) -> Option<TGAuthenticationCodeType> { self.td_origin().next_type().map(|v| TGAuthenticationCodeType::of(v)) }
 
@@ -163,7 +163,7 @@ impl TGAuthenticationCodeTypeCall {
 }
 
 impl TGAuthenticationCodeTypeFlashCall {
-  pub fn pattern(&self) -> String { self.td_origin().pattern().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn pattern(&self) -> String { self.td_origin().pattern().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGAuthenticationCodeTypeSms {

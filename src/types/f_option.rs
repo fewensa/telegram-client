@@ -5,7 +5,7 @@ use crate::errors;
 impl TGUpdateOption {
 
   pub fn name(&self) -> String {
-    self.td_origin().name().clone().expect(errors::TELEGRAM_DATA_FAIL)
+    self.td_origin().name().expect(&errors::data_fail_with_rtd(self.td_origin())[..])
   }
 
   pub fn value(&self) -> TGOptionValue {

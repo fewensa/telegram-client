@@ -186,9 +186,9 @@ impl TGMessageContent {
 
 
 impl TGMessageAnimation {
-  pub fn animation(&self) -> TGAnimation { self.td_origin().animation().map(|v| TGAnimation::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn animation(&self) -> TGAnimation { self.td_origin().animation().map(|v| TGAnimation::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn caption(&self) -> Option<TGFormattedText> { self.td_origin().caption().map(|v| TGFormattedText::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn caption(&self) -> Option<TGFormattedText> { self.td_origin().caption().map(|v| TGFormattedText::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
   pub fn is_secret(&self) -> bool { self.td_origin().is_secret().map_or(false, |v| v) }
 }
@@ -196,27 +196,27 @@ impl TGMessageAnimation {
 impl TGAnimation {
   pub fn duration(&self) -> Option<i32> { self.td_origin().duration() }
 
-  pub fn width(&self) -> i32 { self.td_origin().width().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn width(&self) -> i32 { self.td_origin().width().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn height(&self) -> i32 { self.td_origin().height().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn height(&self) -> i32 { self.td_origin().height().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn file_name(&self) -> String { self.td_origin().file_name().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn file_name(&self) -> String { self.td_origin().file_name().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn mime_type(&self) -> String { self.td_origin().mime_type().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn mime_type(&self) -> String { self.td_origin().mime_type().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn thumbnail(&self) -> Option<TGPhotoSize> { self.td_origin().thumbnail().map(|v| TGPhotoSize::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn thumbnail(&self) -> Option<TGPhotoSize> { self.td_origin().thumbnail().map(|v| TGPhotoSize::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn animation(&self) -> TGFile { self.td_origin().animation().map(|v| TGFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn animation(&self) -> TGFile { self.td_origin().animation().map(|v| TGFile::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGFormattedText {
-  pub fn text(&self) -> String { self.td_origin().text().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn text(&self) -> String { self.td_origin().text().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn entities(&self) -> Vec<TGTextEntity> {
     self.td_origin()
       .entities()
       .map_or(vec![], |v| v.iter()
-        .map(|v| TGTextEntity::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL))
+        .map(|v| TGTextEntity::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..]))
         .collect::<Vec<TGTextEntity>>(),
       )
   }
@@ -224,9 +224,9 @@ impl TGFormattedText {
 
 
 impl TGMessageAudio {
-  pub fn audio(&self) -> TGAudio { self.td_origin().audio().map(|v| TGAudio::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn audio(&self) -> TGAudio { self.td_origin().audio().map(|v| TGAudio::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn caption(&self) -> Option<TGFormattedText> { self.td_origin().caption().map(|v| TGFormattedText::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn caption(&self) -> Option<TGFormattedText> { self.td_origin().caption().map(|v| TGFormattedText::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 }
 
 
@@ -241,20 +241,20 @@ impl TGAudio {
 
   pub fn mime_type(&self) -> Option<String> { self.td_origin().mime_type() }
 
-  pub fn album_cover_thumbnail(&self) -> Option<TGPhotoSize> { self.td_origin().album_cover_thumbnail().map(|v| TGPhotoSize::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn album_cover_thumbnail(&self) -> Option<TGPhotoSize> { self.td_origin().album_cover_thumbnail().map(|v| TGPhotoSize::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn audio(&self) -> TGFile { self.td_origin().audio().map(|v| TGFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn audio(&self) -> TGFile { self.td_origin().audio().map(|v| TGFile::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 
 impl TGMessageBasicGroupChatCreate {
-  pub fn title(&self) -> String { self.td_origin().title().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn title(&self) -> String { self.td_origin().title().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn member_user_ids(&self) -> Vec<i32> { self.td_origin().member_user_ids().map_or(vec![], |v| v) }
 }
 
 impl TGMessageCall {
-  pub fn discard_reason(&self) -> TGCallDiscardReason { self.td_origin().discard_reason().map(|v| TGCallDiscardReason::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn discard_reason(&self) -> TGCallDiscardReason { self.td_origin().discard_reason().map(|v| TGCallDiscardReason::of(v)).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn duration(&self) -> Option<i32> { self.td_origin().duration() }
 
@@ -310,7 +310,7 @@ impl TGMessageChatAddMembers {
 }
 
 impl TGMessageChatChangePhoto {
-  pub fn photo(&self) -> TGPhoto { self.td_origin().photo().map(|v| TGPhoto::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn photo(&self) -> TGPhoto { self.td_origin().photo().map(|v| TGPhoto::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGPhoto {
@@ -320,16 +320,16 @@ impl TGPhoto {
     self.td_origin()
       .sizes()
       .map_or(vec![], |v| v.iter()
-        .map(|v| TGPhotoSize::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).collect::<Vec<TGPhotoSize>>())
+        .map(|v| TGPhotoSize::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).collect::<Vec<TGPhotoSize>>())
   }
 }
 
 impl TGMessageChatChangeTitle {
-  pub fn title(&self) -> String { self.td_origin().title().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn title(&self) -> String { self.td_origin().title().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGMessageChatDeleteMember {
-  pub fn user_id(&self) -> i32 { self.td_origin().user_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn user_id(&self) -> i32 { self.td_origin().user_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGMessageChatDeletePhoto {}
@@ -337,25 +337,25 @@ impl TGMessageChatDeletePhoto {}
 impl TGMessageChatJoinByLink {}
 
 impl TGMessageChatSetTtl {
-  pub fn ttl(&self) -> i32 { self.td_origin().ttl().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn ttl(&self) -> i32 { self.td_origin().ttl().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGMessageChatUpgradeFrom {
-  pub fn title(&self) -> String { self.td_origin().title().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn title(&self) -> String { self.td_origin().title().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn basic_group_id(&self) -> i32 { self.td_origin().basic_group_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn basic_group_id(&self) -> i32 { self.td_origin().basic_group_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGMessageChatUpgradeTo {
-  pub fn supergroup_id(&self) -> i32 { self.td_origin().supergroup_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn supergroup_id(&self) -> i32 { self.td_origin().supergroup_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGMessageContact {
-  pub fn contact(&self) -> TGContact { self.td_origin().contact().map(|v| TGContact::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn contact(&self) -> TGContact { self.td_origin().contact().map(|v| TGContact::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGContact {
-  pub fn phone_number(&self) -> String { self.td_origin().phone_number().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn phone_number(&self) -> String { self.td_origin().phone_number().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn first_name(&self) -> Option<String> { self.td_origin().first_name() }
 
@@ -363,29 +363,29 @@ impl TGContact {
 
   pub fn vcard(&self) -> Option<String> { self.td_origin().vcard() }
 
-  pub fn user_id(&self) -> i32 { self.td_origin().user_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn user_id(&self) -> i32 { self.td_origin().user_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGMessageContactRegistered {}
 
 impl TGMessageCustomServiceAction {
-  pub fn text(&self) -> String { self.td_origin().text().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn text(&self) -> String { self.td_origin().text().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGMessageDocument {
-  pub fn document(&self) -> TGDocument { self.td_origin().document().map(|v| TGDocument::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn document(&self) -> TGDocument { self.td_origin().document().map(|v| TGDocument::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn caption(&self) -> Option<TGFormattedText> { self.td_origin().caption().map(|v| TGFormattedText::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn caption(&self) -> Option<TGFormattedText> { self.td_origin().caption().map(|v| TGFormattedText::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 }
 
 impl TGDocument {
-  pub fn file_name(&self) -> String { self.td_origin().file_name().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn file_name(&self) -> String { self.td_origin().file_name().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn mime_type(&self) -> Option<String> { self.td_origin().mime_type() }
 
-  pub fn thumbnail(&self) -> Option<TGPhotoSize> { self.td_origin().thumbnail().map(|v| TGPhotoSize::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn thumbnail(&self) -> Option<TGPhotoSize> { self.td_origin().thumbnail().map(|v| TGPhotoSize::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn document(&self) -> TGFile { self.td_origin().document().map(|v| TGFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn document(&self) -> TGFile { self.td_origin().document().map(|v| TGFile::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGMessageExpiredPhoto {}
@@ -395,28 +395,28 @@ impl TGMessageExpiredVideo {}
 impl TGMessageGame {}
 
 impl TGGame {
-  pub fn id(&self) -> i64 { self.td_origin().id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn id(&self) -> i64 { self.td_origin().id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn short_name(&self) -> Option<String> { self.td_origin().short_name() }
 
   pub fn title(&self) -> Option<String> { self.td_origin().title() }
 
-  pub fn text(&self) -> Option<TGFormattedText> { self.td_origin().text().map(|v| TGFormattedText::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn text(&self) -> Option<TGFormattedText> { self.td_origin().text().map(|v| TGFormattedText::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
   pub fn description(&self) -> Option<String> { self.td_origin().description() }
 
-  pub fn photo(&self) -> Option<TGPhoto> { self.td_origin().photo().map(|v| TGPhoto::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn photo(&self) -> Option<TGPhoto> { self.td_origin().photo().map(|v| TGPhoto::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn animation(&self) -> Option<TGAnimation> { self.td_origin().animation().map(|v| TGAnimation::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn animation(&self) -> Option<TGAnimation> { self.td_origin().animation().map(|v| TGAnimation::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 }
 
 
 impl TGMessageGameScore {
-  pub fn game_message_id(&self) -> i64 { self.td_origin().game_message_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn game_message_id(&self) -> i64 { self.td_origin().game_message_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn game_id(&self) -> i64 { self.td_origin().game_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn game_id(&self) -> i64 { self.td_origin().game_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn score(&self) -> i32 { self.td_origin().score().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn score(&self) -> i32 { self.td_origin().score().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGMessageInvoice {
@@ -424,7 +424,7 @@ impl TGMessageInvoice {
 
   pub fn description(&self) -> Option<String> { self.td_origin().description() }
 
-  pub fn photo(&self) -> Option<TGPhoto> { self.td_origin().photo().map(|v| TGPhoto::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn photo(&self) -> Option<TGPhoto> { self.td_origin().photo().map(|v| TGPhoto::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
   pub fn currency(&self) -> Option<String> { self.td_origin().currency() }
 
@@ -440,7 +440,7 @@ impl TGMessageInvoice {
 }
 
 impl TGMessageLocation {
-  pub fn location(&self) -> TGLocation { self.td_origin().location().map(|v| TGLocation::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn location(&self) -> TGLocation { self.td_origin().location().map(|v| TGLocation::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn live_period(&self) -> Option<i32> { self.td_origin().live_period() }
 
@@ -448,42 +448,42 @@ impl TGMessageLocation {
 }
 
 impl TGLocation {
-  pub fn latitude(&self) -> f64 { self.td_origin().latitude().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn latitude(&self) -> f64 { self.td_origin().latitude().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn longitude(&self) -> f64 { self.td_origin().longitude().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn longitude(&self) -> f64 { self.td_origin().longitude().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGMessagePassportDataReceived {
   pub fn elements(&self) -> Vec<TGEncryptedPassportElement> {
     self.td_origin().elements().map_or(vec![], |v| v.iter()
-      .map(|v| TGEncryptedPassportElement::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL))
+      .map(|v| TGEncryptedPassportElement::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..]))
       .collect::<Vec<TGEncryptedPassportElement>>(),
     )
   }
 
-  pub fn credentials(&self) -> Option<TGEncryptedCredentials> { self.td_origin().credentials().map(|v| TGEncryptedCredentials::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn credentials(&self) -> Option<TGEncryptedCredentials> { self.td_origin().credentials().map(|v| TGEncryptedCredentials::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 }
 
 impl TGEncryptedPassportElement {
-  pub fn type_(&self) -> TGPassportElementType { self.td_origin().type_().map(|v| TGPassportElementType::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn type_(&self) -> TGPassportElementType { self.td_origin().type_().map(|v| TGPassportElementType::of(v)).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn data(&self) -> String { self.td_origin().data().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn data(&self) -> String { self.td_origin().data().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn front_side(&self) -> Option<TGDatedFile> { self.td_origin().front_side().map(|v| TGDatedFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn front_side(&self) -> Option<TGDatedFile> { self.td_origin().front_side().map(|v| TGDatedFile::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn reverse_side(&self) -> Option<TGDatedFile> { self.td_origin().reverse_side().map(|v| TGDatedFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn reverse_side(&self) -> Option<TGDatedFile> { self.td_origin().reverse_side().map(|v| TGDatedFile::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn selfie(&self) -> Option<TGDatedFile> { self.td_origin().selfie().map(|v| TGDatedFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn selfie(&self) -> Option<TGDatedFile> { self.td_origin().selfie().map(|v| TGDatedFile::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
   pub fn translation(&self) -> Option<Vec<TGDatedFile>> {
     self.td_origin().translation().map(|v| v.iter()
-      .map(|v| TGDatedFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL))
+      .map(|v| TGDatedFile::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..]))
       .collect::<Vec<TGDatedFile>>())
   }
 
   pub fn files(&self) -> Option<Vec<TGDatedFile>> {
     self.td_origin().files().map(|v| v.iter()
-      .map(|v| TGDatedFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL))
+      .map(|v| TGDatedFile::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..]))
       .collect::<Vec<TGDatedFile>>())
   }
 
@@ -606,17 +606,17 @@ impl TGPassportElementTypeUtilityBill {}
 
 
 impl TGEncryptedCredentials {
-  pub fn data(&self) -> String { self.td_origin().data().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn data(&self) -> String { self.td_origin().data().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn hash(&self) -> String { self.td_origin().hash().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn hash(&self) -> String { self.td_origin().hash().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn secret(&self) -> Option<String> { self.td_origin().secret() }
 }
 
 impl TGDatedFile {
-  pub fn file(&self) -> TGFile { self.td_origin().file().map(|v| TGFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn file(&self) -> TGFile { self.td_origin().file().map(|v| TGFile::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn date(&self) -> i32 { self.td_origin().date().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn date(&self) -> i32 { self.td_origin().date().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 
@@ -638,7 +638,7 @@ impl TGMessagePaymentSuccessful {
 }
 
 impl TGMessagePaymentSuccessfulBot {
-  pub fn invoice_message_id(&self) -> i64 { self.td_origin().invoice_message_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn invoice_message_id(&self) -> i64 { self.td_origin().invoice_message_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn currency(&self) -> Option<String> { self.td_origin().currency() }
 
@@ -648,7 +648,7 @@ impl TGMessagePaymentSuccessfulBot {
 
   pub fn shipping_option_id(&self) -> Option<String> { self.td_origin().shipping_option_id() }
 
-  pub fn order_info(&self) -> Option<TGOrderInfo> { self.td_origin().order_info().map(|v| TGOrderInfo::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn order_info(&self) -> Option<TGOrderInfo> { self.td_origin().order_info().map(|v| TGOrderInfo::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
   pub fn telegram_payment_charge_id(&self) -> Option<String> { self.td_origin().telegram_payment_charge_id() }
 
@@ -657,13 +657,13 @@ impl TGMessagePaymentSuccessfulBot {
 
 
 impl TGOrderInfo {
-  pub fn name(&self) -> String { self.td_origin().name().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn name(&self) -> String { self.td_origin().name().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn phone_number(&self) -> String { self.td_origin().phone_number().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn phone_number(&self) -> String { self.td_origin().phone_number().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn email_address(&self) -> Option<String> { self.td_origin().email_address() }
 
-  pub fn shipping_address(&self) -> Option<TGAddress> { self.td_origin().shipping_address().map(|v| TGAddress::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn shipping_address(&self) -> Option<TGAddress> { self.td_origin().shipping_address().map(|v| TGAddress::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 }
 
 
@@ -683,32 +683,32 @@ impl TGAddress {
 
 
 impl TGMessagePhoto {
-  pub fn photo(&self) -> TGPhoto { self.td_origin().photo().map(|v| TGPhoto::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn photo(&self) -> TGPhoto { self.td_origin().photo().map(|v| TGPhoto::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn caption(&self) -> Option<TGFormattedText> { self.td_origin().caption().map(|v| TGFormattedText::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn caption(&self) -> Option<TGFormattedText> { self.td_origin().caption().map(|v| TGFormattedText::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
   pub fn is_secret(&self) -> bool { self.td_origin().is_secret().map_or(false, |v| v) }
 }
 
 impl TGMessagePinMessage {
-  pub fn message_id(&self) -> i64 { self.td_origin().message_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn message_id(&self) -> i64 { self.td_origin().message_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 
 impl TGMessagePoll {
-  pub fn poll(&self) -> TGPoll { self.td_origin().poll().map(|v| TGPoll::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn poll(&self) -> TGPoll { self.td_origin().poll().map(|v| TGPoll::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 
 impl TGPoll {
   // https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1poll.html
-  pub fn id(&self) -> i64 { self.td_origin().id().map(|v| toolkit::number::as_i64(v).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn id(&self) -> i64 { self.td_origin().id().map(|v| toolkit::number::as_i64(v).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn question(&self) -> String { self.td_origin().question().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn question(&self) -> String { self.td_origin().question().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn options(&self) -> Vec<TGPollOption> {
     self.td_origin().options().map_or(vec![], |v| v.iter()
-      .map(|v| TGPollOption::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL))
+      .map(|v| TGPollOption::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..]))
       .collect::<Vec<TGPollOption>>())
   }
 
@@ -718,7 +718,7 @@ impl TGPoll {
 }
 
 impl TGPollOption {
-  pub fn text(&self) -> String { self.td_origin().text().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn text(&self) -> String { self.td_origin().text().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn voter_count(&self) -> i32 { self.td_origin().voter_count().map_or(0, |v| v) }
 
@@ -737,25 +737,25 @@ impl TGMessageSticker {}
 
 impl TGSticker {
   // https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1sticker.html
-  pub fn set_id(&self) -> i64 { self.td_origin().set_id().map(|v| toolkit::number::as_i64(v).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn set_id(&self) -> i64 { self.td_origin().set_id().map(|v| toolkit::number::as_i64(v).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn width(&self) -> i32 { self.td_origin().width().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn width(&self) -> i32 { self.td_origin().width().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn height(&self) -> i32 { self.td_origin().height().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn height(&self) -> i32 { self.td_origin().height().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn emoji(&self) -> Option<String> { self.td_origin().emoji() }
 
   pub fn is_mask(&self) -> bool { self.td_origin().is_mask().map_or(false, |v| v) }
 
-  pub fn mask_position(&self) -> Option<TGMaskPosition> { self.td_origin().mask_position().map(|v| TGMaskPosition::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn mask_position(&self) -> Option<TGMaskPosition> { self.td_origin().mask_position().map(|v| TGMaskPosition::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn thumbnail(&self) -> Option<TGPhotoSize> { self.td_origin().thumbnail().map(|v| TGPhotoSize::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn thumbnail(&self) -> Option<TGPhotoSize> { self.td_origin().thumbnail().map(|v| TGPhotoSize::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn sticker(&self) -> TGFile { self.td_origin().sticker().map(|v| TGFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn sticker(&self) -> TGFile { self.td_origin().sticker().map(|v| TGFile::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGMaskPosition {
-  pub fn point(&self) -> TGMaskPoint { self.td_origin().point().map(|v| TGMaskPoint::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn point(&self) -> TGMaskPoint { self.td_origin().point().map(|v| TGMaskPoint::of(v)).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn x_shift(&self) -> f64 { self.td_origin().x_shift().map_or(0 as f64, |v| v) }
 
@@ -814,103 +814,103 @@ impl TGMaskPointMouth {}
 
 
 impl TGMessageSupergroupChatCreate {
-  pub fn title(&self) -> String { self.td_origin().title().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn title(&self) -> String { self.td_origin().title().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 
 impl TGWebPage {
-  pub fn url(&self) -> String { self.td_origin().url().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn url(&self) -> String { self.td_origin().url().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn display_url(&self) -> String { self.td_origin().display_url().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn display_url(&self) -> String { self.td_origin().display_url().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn type_(&self) -> String { self.td_origin().type_().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn type_(&self) -> String { self.td_origin().type_().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn site_name(&self) -> String { self.td_origin().site_name().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn site_name(&self) -> String { self.td_origin().site_name().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn title(&self) -> String { self.td_origin().title().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn title(&self) -> String { self.td_origin().title().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn description(&self) -> Option<String> { self.td_origin().description() }
 
-  pub fn photo(&self) -> Option<TGPhoto> { self.td_origin().photo().map(|v| TGPhoto::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn photo(&self) -> Option<TGPhoto> { self.td_origin().photo().map(|v| TGPhoto::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn embed_url(&self) -> String { self.td_origin().embed_url().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn embed_url(&self) -> String { self.td_origin().embed_url().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn embed_type(&self) -> String { self.td_origin().embed_type().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn embed_type(&self) -> String { self.td_origin().embed_type().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn embed_width(&self) -> i32 { self.td_origin().embed_width().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn embed_width(&self) -> i32 { self.td_origin().embed_width().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn embed_height(&self) -> i32 { self.td_origin().embed_height().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn embed_height(&self) -> i32 { self.td_origin().embed_height().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn duration(&self) -> i32 { self.td_origin().duration().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn duration(&self) -> i32 { self.td_origin().duration().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn author(&self) -> Option<String> { self.td_origin().author() }
 
-  pub fn animation(&self) -> Option<TGAnimation> { self.td_origin().animation().map(|v| TGAnimation::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn animation(&self) -> Option<TGAnimation> { self.td_origin().animation().map(|v| TGAnimation::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn audio(&self) -> Option<TGAudio> { self.td_origin().audio().map(|v| TGAudio::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn audio(&self) -> Option<TGAudio> { self.td_origin().audio().map(|v| TGAudio::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn document(&self) -> Option<TGDocument> { self.td_origin().document().map(|v| TGDocument::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn document(&self) -> Option<TGDocument> { self.td_origin().document().map(|v| TGDocument::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn sticker(&self) -> Option<TGSticker> { self.td_origin().sticker().map(|v| TGSticker::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn sticker(&self) -> Option<TGSticker> { self.td_origin().sticker().map(|v| TGSticker::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn video(&self) -> Option<TGVideo> { self.td_origin().video().map(|v| TGVideo::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn video(&self) -> Option<TGVideo> { self.td_origin().video().map(|v| TGVideo::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn video_note(&self) -> Option<TGVideoNote> { self.td_origin().video_note().map(|v| TGVideoNote::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn video_note(&self) -> Option<TGVideoNote> { self.td_origin().video_note().map(|v| TGVideoNote::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn voice_note(&self) -> Option<TGVoiceNote> { self.td_origin().voice_note().map(|v| TGVoiceNote::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn voice_note(&self) -> Option<TGVoiceNote> { self.td_origin().voice_note().map(|v| TGVoiceNote::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
   pub fn instant_view_version(&self) -> i32 { self.td_origin().instant_view_version().map_or(0, |v| v) }
 }
 
 impl TGVideo {
-  pub fn duration(&self) -> i32 { self.td_origin().duration().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn duration(&self) -> i32 { self.td_origin().duration().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn width(&self) -> i32 { self.td_origin().width().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn width(&self) -> i32 { self.td_origin().width().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn height(&self) -> i32 { self.td_origin().height().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn height(&self) -> i32 { self.td_origin().height().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn file_name(&self) -> String { self.td_origin().file_name().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn file_name(&self) -> String { self.td_origin().file_name().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn mime_type(&self) -> String { self.td_origin().mime_type().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn mime_type(&self) -> String { self.td_origin().mime_type().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn has_stickers(&self) -> bool { self.td_origin().has_stickers().map_or(false, |v| v) }
 
   pub fn supports_streaming(&self) -> bool { self.td_origin().supports_streaming().map_or(false, |v| v) }
 
-  pub fn thumbnail(&self) -> Option<TGPhotoSize> { self.td_origin().thumbnail().map(|v| TGPhotoSize::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn thumbnail(&self) -> Option<TGPhotoSize> { self.td_origin().thumbnail().map(|v| TGPhotoSize::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn video(&self) -> TGFile { self.td_origin().video().map(|v| TGFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn video(&self) -> TGFile { self.td_origin().video().map(|v| TGFile::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGVideoNote {
-  pub fn duration(&self) -> i32 { self.td_origin().duration().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn duration(&self) -> i32 { self.td_origin().duration().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn length(&self) -> i32 { self.td_origin().length().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn length(&self) -> i32 { self.td_origin().length().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn thumbnail(&self) -> Option<TGPhotoSize> { self.td_origin().thumbnail().map(|v| TGPhotoSize::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn thumbnail(&self) -> Option<TGPhotoSize> { self.td_origin().thumbnail().map(|v| TGPhotoSize::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
-  pub fn video(&self) -> TGFile { self.td_origin().video().map(|v| TGFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn video(&self) -> TGFile { self.td_origin().video().map(|v| TGFile::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGVoiceNote {
-  pub fn duration(&self) -> i32 { self.td_origin().duration().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn duration(&self) -> i32 { self.td_origin().duration().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn waveform(&self) -> String { self.td_origin().waveform().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn waveform(&self) -> String { self.td_origin().waveform().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn mime_type(&self) -> String { self.td_origin().mime_type().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn mime_type(&self) -> String { self.td_origin().mime_type().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn voice(&self) -> TGFile { self.td_origin().voice().map(|v| TGFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn voice(&self) -> TGFile { self.td_origin().voice().map(|v| TGFile::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 
 impl TGMessageUnsupported {}
 
 impl TGMessageVenue {
-  pub fn venue(&self) -> TGVenue { self.td_origin().venue().map(|v| TGVenue::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn venue(&self) -> TGVenue { self.td_origin().venue().map(|v| TGVenue::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGVenue {
-  pub fn location(&self) -> TGLocation { self.td_origin().location().map(|v| TGLocation::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn location(&self) -> TGLocation { self.td_origin().location().map(|v| TGLocation::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn title(&self) -> Option<String> { self.td_origin().title() }
 
@@ -924,15 +924,15 @@ impl TGVenue {
 }
 
 impl TGMessageVideo {
-  pub fn video(&self) -> TGVideo { self.td_origin().video().map(|v| TGVideo::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn video(&self) -> TGVideo { self.td_origin().video().map(|v| TGVideo::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn caption(&self) -> Option<TGFormattedText> { self.td_origin().caption().map(|v| TGFormattedText::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn caption(&self) -> Option<TGFormattedText> { self.td_origin().caption().map(|v| TGFormattedText::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
   pub fn is_secret(&self) -> bool { self.td_origin().is_secret().map_or(false, |v| v) }
 }
 
 impl TGMessageVideoNote {
-  pub fn video_note(&self) -> TGVideoNote { self.td_origin().video_note().map(|v| TGVideoNote::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn video_note(&self) -> TGVideoNote { self.td_origin().video_note().map(|v| TGVideoNote::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn is_viewed(&self) -> bool { self.td_origin().is_viewed().map_or(false, |v| v) }
 
@@ -941,33 +941,33 @@ impl TGMessageVideoNote {
 
 
 impl TGMessageVoiceNote {
-  pub fn voice_note(&self) -> TGVoiceNote { self.td_origin().voice_note().map(|v| TGVoiceNote::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn voice_note(&self) -> TGVoiceNote { self.td_origin().voice_note().map(|v| TGVoiceNote::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn caption(&self) -> Option<TGFormattedText> { self.td_origin().caption().map(|v| TGFormattedText::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn caption(&self) -> Option<TGFormattedText> { self.td_origin().caption().map(|v| TGFormattedText::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
   pub fn is_listened(&self) -> bool { self.td_origin().is_listened().map_or(false, |v| v) }
 }
 
 impl TGMessageWebsiteConnected {
-  pub fn domain_name(&self) -> String { self.td_origin().domain_name().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn domain_name(&self) -> String { self.td_origin().domain_name().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGPhotoSize {
-  pub fn type_(&self) -> String { self.td_origin().type_().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn type_(&self) -> String { self.td_origin().type_().map(|v| v).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn photo(&self) -> TGFile { self.td_origin().photo().map(|v| TGFile::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn photo(&self) -> TGFile { self.td_origin().photo().map(|v| TGFile::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn width(&self) -> i32 { self.td_origin().width().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn width(&self) -> i32 { self.td_origin().width().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn height(&self) -> i32 { self.td_origin().height().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn height(&self) -> i32 { self.td_origin().height().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGUpdateMessageContent {
-  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn message_id(&self) -> i64 { self.td_origin().message_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn message_id(&self) -> i64 { self.td_origin().message_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn new_content(&self) -> TGMessageContent { self.td_origin().new_content().map(|v| TGMessageContent::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn new_content(&self) -> TGMessageContent { self.td_origin().new_content().map(|v| TGMessageContent::of(v)).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 #[derive(Debug, Clone)]

@@ -47,7 +47,7 @@ impl TGReplyMarkupInlineKeyboard {
   pub fn rows(&self) -> Vec<Vec<TGInlineKeyboardButton>> {
     self.td_origin().rows().map_or(vec![], |v| v.iter()
       .map(|v| v.iter()
-        .map(|v| TGInlineKeyboardButton::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL))
+        .map(|v| TGInlineKeyboardButton::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..]))
         .collect::<Vec<TGInlineKeyboardButton>>())
       .collect::<Vec<Vec<TGInlineKeyboardButton>>>(),
     )
@@ -55,9 +55,9 @@ impl TGReplyMarkupInlineKeyboard {
 }
 
 impl TGInlineKeyboardButton {
-  pub fn text(&self) -> String { self.td_origin().text().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn text(&self) -> String { self.td_origin().text().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn type_(&self) -> TGInlineKeyboardButtonType { self.td_origin().type_().map(|v| TGInlineKeyboardButtonType::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn type_(&self) -> TGInlineKeyboardButtonType { self.td_origin().type_().map(|v| TGInlineKeyboardButtonType::of(v)).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
 
   pub fn is_buy(&self) -> bool { self.type_().is_buy() }
@@ -96,30 +96,30 @@ impl TGInlineKeyboardButtonType {
   pub fn is_switch_inline(&self) -> bool { tuple_enum_is!(TGInlineKeyboardButtonType, SwitchInline  )(self) }
   pub fn is_url          (&self) -> bool { tuple_enum_is!(TGInlineKeyboardButtonType, Url           )(self) }
 
-  pub fn on_buy          <F: FnOnce(&TGInlineKeyboardButtonTypeBuy)>         (&self, fnc: F) -> &Self { tuple_enum_on!(TGInlineKeyboardButtonType, Buy            , |t| fnc(t))(self);self }
-  pub fn on_callback     <F: FnOnce(&TGInlineKeyboardButtonTypeCallback)>    (&self, fnc: F) -> &Self { tuple_enum_on!(TGInlineKeyboardButtonType, Callback       , |t| fnc(t))(self);self }
-  pub fn on_callback_game<F: FnOnce(&TGInlineKeyboardButtonTypeCallbackGame)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGInlineKeyboardButtonType, CallbackGame   , |t| fnc(t))(self);self }
-  pub fn on_switch_inline<F: FnOnce(&TGInlineKeyboardButtonTypeSwitchInline)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGInlineKeyboardButtonType, SwitchInline   , |t| fnc(t))(self);self }
-  pub fn on_url          <F: FnOnce(&TGInlineKeyboardButtonTypeUrl)>         (&self, fnc: F) -> &Self { tuple_enum_on!(TGInlineKeyboardButtonType, Url            , |t| fnc(t))(self);self }
+  pub fn on_buy          <F: FnOnce(&TGInlineKeyboardButtonTypeBuy)>         (&self, fnc: F) -> &Self { tuple_enum_on!(TGInlineKeyboardButtonType, Buy            , |t| fnc(t))(self); self }
+  pub fn on_callback     <F: FnOnce(&TGInlineKeyboardButtonTypeCallback)>    (&self, fnc: F) -> &Self { tuple_enum_on!(TGInlineKeyboardButtonType, Callback       , |t| fnc(t))(self); self }
+  pub fn on_callback_game<F: FnOnce(&TGInlineKeyboardButtonTypeCallbackGame)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGInlineKeyboardButtonType, CallbackGame   , |t| fnc(t))(self); self }
+  pub fn on_switch_inline<F: FnOnce(&TGInlineKeyboardButtonTypeSwitchInline)>(&self, fnc: F) -> &Self { tuple_enum_on!(TGInlineKeyboardButtonType, SwitchInline   , |t| fnc(t))(self); self }
+  pub fn on_url          <F: FnOnce(&TGInlineKeyboardButtonTypeUrl)>         (&self, fnc: F) -> &Self { tuple_enum_on!(TGInlineKeyboardButtonType, Url            , |t| fnc(t))(self); self }
 }
 
 
 impl TGInlineKeyboardButtonTypeBuy {}
 
 impl TGInlineKeyboardButtonTypeCallback {
-  pub fn data(&self) -> String { self.td_origin().data().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn data(&self) -> String { self.td_origin().data().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGInlineKeyboardButtonTypeCallbackGame {}
 
 impl TGInlineKeyboardButtonTypeSwitchInline {
-  pub fn query(&self) -> String { self.td_origin().query().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn query(&self) -> String { self.td_origin().query().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn in_current_chat(&self) -> bool { self.td_origin().in_current_chat().map_or(false, |v| v) }
 }
 
 impl TGInlineKeyboardButtonTypeUrl {
-  pub fn url(&self) -> String { self.td_origin().url().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn url(&self) -> String { self.td_origin().url().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 impl TGReplyMarkupRemoveKeyboard {
@@ -130,7 +130,7 @@ impl TGReplyMarkupShowKeyboard {
   pub fn rows(&self) -> Vec<Vec<TGKeyboardButton>> {
     self.td_origin().rows().map_or(vec![], |v| v.iter()
       .map(|v| v.iter()
-        .map(|v| TGKeyboardButton::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL))
+        .map(|v| TGKeyboardButton::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..]))
         .collect::<Vec<TGKeyboardButton>>())
       .collect::<Vec<Vec<TGKeyboardButton>>>(),
     )
@@ -145,9 +145,9 @@ impl TGReplyMarkupShowKeyboard {
 
 
 impl TGKeyboardButton {
-  pub fn text(&self) -> String { self.td_origin().text().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn text(&self) -> String { self.td_origin().text().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn type_(&self) -> TGKeyboardButtonType { self.td_origin().type_().map(|v| TGKeyboardButtonType::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn type_(&self) -> TGKeyboardButtonType { self.td_origin().type_().map(|v| TGKeyboardButtonType::of(v)).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn is_request_location(&self) -> bool { self.type_().is_request_location() }
   pub fn is_request_phone_number(&self) -> bool { self.type_().is_request_phone_number() }

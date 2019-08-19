@@ -12,17 +12,17 @@ use crate::types::TGReplyMarkup;
 use crate::types::TGUpdateNewMessage;
 
 impl TGUpdateNewMessage {
-  pub fn message(&self) -> TGMessage { TGMessage::from_json(self.td_origin().message().expect(errors::TELEGRAM_DATA_FAIL).to_json()).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn message(&self) -> TGMessage { TGMessage::from_json(self.td_origin().message().expect(&errors::data_fail_with_rtd(self.td_origin())[..]).to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 
 impl TGMessage {
 
-  pub fn id(&self) -> i64 { self.td_origin().id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn id(&self) -> i64 { self.td_origin().id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn sender_user_id(&self) -> i32 { self.td_origin().sender_user_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn sender_user_id(&self) -> i32 { self.td_origin().sender_user_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn sending_state(&self) -> Option<TGMessageSendingState> { self.td_origin().sending_state().map(|v| TGMessageSendingState::of(v)) }
 
@@ -40,11 +40,11 @@ impl TGMessage {
 
   pub fn contains_unread_mention(&self) -> bool { self.td_origin().contains_unread_mention().map_or(false, |v| v) }
 
-  pub fn date(&self) -> i32 { self.td_origin().date().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn date(&self) -> i32 { self.td_origin().date().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn edit_date(&self) -> Option<i32> { self.td_origin().edit_date() }
 
-  pub fn forward_info(&self) -> Option<TGMessageForwardInfo> { self.td_origin().forward_info().map(|v| TGMessageForwardInfo::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn forward_info(&self) -> Option<TGMessageForwardInfo> { self.td_origin().forward_info().map(|v| TGMessageForwardInfo::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
   pub fn reply_to_message_id(&self) -> Option<i64> { self.td_origin().reply_to_message_id() }
 
@@ -60,10 +60,10 @@ impl TGMessage {
 
   pub fn media_album_id(&self) -> Option<i64> {
     // https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1message.html
-    self.td_origin().media_album_id().map(|v| toolkit::number::as_i64(v).expect(errors::TELEGRAM_DATA_FAIL))
+    self.td_origin().media_album_id().map(|v| toolkit::number::as_i64(v).expect(&errors::data_fail_with_rtd(self.td_origin())[..]))
   }
 
-  pub fn content(&self) -> TGMessageContent { self.td_origin().content().map(|v| TGMessageContent::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn content(&self) -> TGMessageContent { self.td_origin().content().map(|v| TGMessageContent::of(v)).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn reply_markup(&self) -> Option<TGReplyMarkup> { self.td_origin().reply_markup().map(|v| TGReplyMarkup::of(v)) }
 }
@@ -96,11 +96,11 @@ impl TGMessageSendingState {
 
 impl TGUpdateMessageEdited {
 
-  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn message_id(&self) -> i64 { self.td_origin().message_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn message_id(&self) -> i64 { self.td_origin().message_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn edit_date(&self) -> i32 { self.td_origin().edit_date().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn edit_date(&self) -> i32 { self.td_origin().edit_date().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn reply_markup(&self) -> Option<TGReplyMarkup> { self.td_origin().reply_markup().map(|v| TGReplyMarkup::of(v)) }
 
@@ -111,7 +111,7 @@ impl TGUpdateDeleteMessages {
 
   // {"@type":"updateDeleteMessages","chat_id":690763082,"message_ids":[145752064],"is_permanent":true,"from_cache":false}
 
-  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
   pub fn message_ids(&self) -> Vec<i64> { self.td_origin().message_ids().map_or(vec![], |v| v) }
 

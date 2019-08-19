@@ -79,7 +79,7 @@ impl TGTextEntityType {
 }
 
 impl TGTextEntityTypeMentionName {
-  pub fn user_id(&self) -> i32 { self.td_origin().user_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn user_id(&self) -> i32 { self.td_origin().user_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 
@@ -88,23 +88,23 @@ impl TGTextEntityTypePreCode {
 }
 
 impl TGTextEntityTypeTextUrl {
-  pub fn url(&self) -> String { self.td_origin().url().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn url(&self) -> String { self.td_origin().url().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 
 
 
 impl TGMessageText {
-  pub fn text(&self) -> TGFormattedText { self.td_origin().text().map(|v| TGFormattedText::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn text(&self) -> TGFormattedText { self.td_origin().text().map(|v| TGFormattedText::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn web_page(&self) -> Option<TGWebPage> { self.td_origin().web_page().map(|v| TGWebPage::from_json(v.to_json()).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn web_page(&self) -> Option<TGWebPage> { self.td_origin().web_page().map(|v| TGWebPage::from_json(v.to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 }
 
 
 impl TGTextEntity {
-  pub fn offset(&self) -> i32 { self.td_origin().offset().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn offset(&self) -> i32 { self.td_origin().offset().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn length(&self) -> i32 { self.td_origin().length().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn length(&self) -> i32 { self.td_origin().length().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn type_(&self) -> TGTextEntityType { self.td_origin().type_().map(|v| TGTextEntityType::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn type_(&self) -> TGTextEntityType { self.td_origin().type_().map(|v| TGTextEntityType::of(v)).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }

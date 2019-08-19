@@ -139,3 +139,8 @@ comment = "Some data from"
 td_type = "updateUserChatAction"
 tt = { namespace = "tg_types", object = "TGUpdateUserChatAction" }
 comment = "User activity in the chat has changed."
+
+[lin.terms_of_service]
+td_type = "updateTermsOfService"
+tt = { namespace = "tg_types", object = "TGUpdateTermsOfService" }
+comment = "New terms of service must be accepted by the user. If the terms of service are declined, then the"

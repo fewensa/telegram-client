@@ -57,9 +57,9 @@ macro_rules! tuple_rtd_type_mapping {
     |td: Box<$rtd_trait>| {
       match td_types::$rtd_type::of(td.td_name()) {
       $(
-        Some(td_types::$rtd_type::$td_type_field) => $tg_type::$tg_type_field($tg_clz::from_json(td.to_json()).expect(errors::TELEGRAM_DATA_FAIL)),
+        Some(td_types::$rtd_type::$td_type_field) => $tg_type::$tg_type_field($tg_clz::from_json(td.to_json()).expect(&errors::data_fail_with_json(td.to_json())[..])),
       )*
-        None => panic!(errors::TELEGRAM_DATA_FAIL)
+        None => panic!(errors::data_fail_with_json(td.to_json()))
       }
     }
   );
@@ -72,7 +72,7 @@ macro_rules! rtd_type_mapping {
       $(
         Some(td_types::$rtd_type::$td_type_field) => $tg_type::$tg_type_field,
       )*
-        None => panic!(errors::TELEGRAM_DATA_FAIL)
+        None => panic!(errors::data_fail_with_json(td.to_json()))
       }
     }
   );

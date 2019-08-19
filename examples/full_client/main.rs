@@ -268,7 +268,7 @@ fn main() {
   listener.on_user_full_info(|(api, update)| {
     debug!(exmlog::examples(), "Receive user full info, user_id: {}, full_info: {}",
            update.user_id().map_or(0, |v| v),
-           update.user_full_info().expect(errors::TELEGRAM_DATA_FAIL).to_json()
+           update.user_full_info().expect(&errors::data_fail_with_rtd(update)[..]).to_json()
     );
   });
 
@@ -310,6 +310,10 @@ fn main() {
 
   listener.on_user_chat_action(|(api, update)| {
     debug!(exmlog::examples(), "User chat action => {}", update.to_json());
+  });
+
+  listener.on_terms_of_service(|(api, update)| {
+    debug!(exmlog::examples(), "Terms of serivce => {}", update.to_json());
   });
 
   client.daemon("telegram-rs");

@@ -27,8 +27,8 @@ impl TGInvoice {
 }
 
 impl TGLabeledPricePart {
-  pub fn label(&self) -> String { self.td_origin().label().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn label(&self) -> String { self.td_origin().label().map(|v| v).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
-  pub fn amount(&self) -> i64 { self.td_origin().amount().map(|v| v).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn amount(&self) -> i64 { self.td_origin().amount().map(|v| v).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 

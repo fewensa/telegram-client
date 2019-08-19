@@ -6,7 +6,7 @@ use crate::errors;
 use crate::types::TGUpdateConnectionState;
 
 impl TGUpdateConnectionState {
-  pub fn state(&self) -> TGConnectionState { self.td_origin().state().map(|v| TGConnectionState::of(v)).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn state(&self) -> TGConnectionState { self.td_origin().state().map(|v| TGConnectionState::of(v)).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
 
   pub fn is_waiting_for_network(&self) -> bool { self.state().is_waiting_for_network() }
@@ -31,11 +31,11 @@ impl TGUpdateConnectionState {
 
 #[derive(Debug, Clone)]
 pub enum TGConnectionState {
-  WaitingForNetwork,
-  ConnectingToProxy,
   Connecting,
-  Updating,
+  ConnectingToProxy,
   Ready,
+  Updating,
+  WaitingForNetwork,
 }
 
 impl TGConnectionState {
@@ -44,11 +44,11 @@ impl TGConnectionState {
       ConnectionState,
       TGConnectionState,
       RTDConnectionStateType,
-      (ConnectionStateConnecting           , WaitingForNetwork );
+      (ConnectionStateConnecting           , Connecting        );
       (ConnectionStateConnectingToProxy    , ConnectingToProxy );
-      (ConnectionStateReady                , Connecting        );
+      (ConnectionStateReady                , Ready             );
       (ConnectionStateUpdating             , Updating          );
-      (ConnectionStateWaitingForNetwork    , Ready             );
+      (ConnectionStateWaitingForNetwork    , WaitingForNetwork );
     )(td)
   }
 
@@ -58,10 +58,10 @@ impl TGConnectionState {
   pub fn is_updating           (&self) -> bool { enum_is!(TGConnectionState, Updating         )(self) }
   pub fn is_ready              (&self) -> bool { enum_is!(TGConnectionState, Ready            )(self) }
 
-  pub fn on_waiting_for_network<F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGConnectionState, WaitingForNetwork, || fnc()); self }
-  pub fn on_connecting_to_proxy<F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGConnectionState, ConnectingToProxy, || fnc()); self }
-  pub fn on_connecting         <F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGConnectionState, Connecting       , || fnc()); self }
-  pub fn on_updating           <F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGConnectionState, Updating         , || fnc()); self }
-  pub fn on_ready              <F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGConnectionState, Ready            , || fnc()); self }
+  pub fn on_waiting_for_network<F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGConnectionState, WaitingForNetwork, || fnc())(self); self }
+  pub fn on_connecting_to_proxy<F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGConnectionState, ConnectingToProxy, || fnc())(self); self }
+  pub fn on_connecting         <F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGConnectionState, Connecting       , || fnc())(self); self }
+  pub fn on_updating           <F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGConnectionState, Updating         , || fnc())(self); self }
+  pub fn on_ready              <F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGConnectionState, Ready            , || fnc())(self); self }
 }
 

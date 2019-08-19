@@ -2,13 +2,13 @@ use rtdlib::types as td_types;
 use rtdlib::types::RObject;
 
 use crate::errors;
-use crate::types::t_group::*;
+use crate::types::t_group::{TGSupergroupFullInfo, TGUpdateSupergroupFullInfo};
 
 impl TGUpdateSupergroupFullInfo {
-  pub fn supergroup_id(&self) -> i32 { self.td_origin().supergroup_id().expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn supergroup_id(&self) -> i32 { self.td_origin().supergroup_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 
 
-  pub fn supergroup_full_info(&self) -> TGSupergroupFullInfo { TGSupergroupFullInfo::from_json(self.td_origin().supergroup_full_info().expect(errors::TELEGRAM_DATA_FAIL).to_json()).expect(errors::TELEGRAM_DATA_FAIL) }
+  pub fn supergroup_full_info(&self) -> TGSupergroupFullInfo { TGSupergroupFullInfo::from_json(self.td_origin().supergroup_full_info().expect(&errors::data_fail_with_rtd(self.td_origin())[..]).to_json()).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
 }
 
 
@@ -33,7 +33,7 @@ impl TGSupergroupFullInfo {
 
   pub fn is_all_history_available(&self) -> bool { self.td_origin().is_all_history_available().map_or(false, |v| v) }
 
-  pub fn sticker_set_id(&self) -> i64 { self.td_origin().sticker_set_id().map_or(0, |v| toolkit::number::as_i64(v).expect(errors::TELEGRAM_DATA_FAIL)) }
+  pub fn sticker_set_id(&self) -> i64 { self.td_origin().sticker_set_id().map_or(0, |v| toolkit::number::as_i64(v).expect(&errors::data_fail_with_rtd(self.td_origin())[..])) }
 
   pub fn invite_link(&self) -> Option<String> { self.td_origin().invite_link() }
 
