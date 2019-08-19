@@ -36,6 +36,32 @@ fn main() {
 
 more [examples](./examples)
 
+# Panic
+
+If you see the code, in [types](src/types), let see [TGMessageForwardInfo](https://github.com/fewensa/telegram-client/blob/master/src/types/f_forward.rs#L7)
+
+```rust
+impl TGMessageForwardInfo {
+  pub fn from_message_id(&self) -> i64 { self.td_origin().from_message_id().map(|v| v).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
+}
+```
+
+When json can not parse to `TGFile`, will panic progress.
+
+Why it's? instead of returning a `Result` to you?
+
+Yes, maybe returning `Result` is best, won't let program exit. But this will be complicated by the code.
+
+First of all to know what causes this error.
+
+1. [td](https://travis-ci.org/fewensa/rtdlib/) returned fail json.
+2. `telegram-client` crate covert fail.
+
+The first you need create issue to [td](https://travis-ci.org/fewensa/rtdlib/)
+
+The second, only `from_message_id` field is Option field, check the documentation to see if some are optional field, and update it.
+When `telegram-client` is stable, In principle, no errors will occur unless [td](https://travis-ci.org/fewensa/rtdlib/) is changed
+
 # Advanced
 
 Because telegram client has a lot of events, this crate may not contain all the event handling code. If found will print a WARN level logger. Guide you to submit an issue.
@@ -408,7 +434,7 @@ use crate::errors;
 impl TGUpdateOption {
 
   pub fn name(&self) -> String {
-    self.td_origin().name().clone().expect(errors::TELEGRAM_DATA_FAIL)
+    self.td_origin().name().expect(&errors::data_fail_with_rtd(self.td_origin())[..])
   }
 
   pub fn value(&self) -> TGOptionValue {
