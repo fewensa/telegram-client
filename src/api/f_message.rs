@@ -38,22 +38,22 @@ impl TGInputMessageContent {
     }
   }
 
-  pub fn animation<T: AsRef<TGInputMessageAnimation>>(animation: T) -> Self { TGInputMessageContent::Animation(animation.as_ref().clone()) }
-  pub fn audio<T: AsRef<TGInputMessageAudio>>(audio: T) -> Self { TGInputMessageContent::Audio(audio.as_ref().clone()) }
-  pub fn contact<T: AsRef<TGInputMessageContact>>(contact: T) -> Self { TGInputMessageContent::Contact(contact.as_ref().clone()) }
-  pub fn document<T: AsRef<TGInputMessageDocument>>(document: T) -> Self { TGInputMessageContent::Document(document.as_ref().clone()) }
-  pub fn forwarded<T: AsRef<TGInputMessageForwarded>>(forwarded: T) -> Self { TGInputMessageContent::Forwarded(forwarded.as_ref().clone()) }
-  pub fn game<T: AsRef<TGInputMessageGame>>(game: T) -> Self { TGInputMessageContent::Game(game.as_ref().clone()) }
-  pub fn invoice<T: AsRef<TGInputMessageInvoice>>(invoice: T) -> Self { TGInputMessageContent::Invoice(invoice.as_ref().clone()) }
-  pub fn location<T: AsRef<TGInputMessageLocation>>(location: T) -> Self { TGInputMessageContent::Location(location.as_ref().clone()) }
-  pub fn photo<T: AsRef<TGInputMessagePhoto>>(photo: T) -> Self { TGInputMessageContent::Photo(photo.as_ref().clone()) }
-  pub fn poll<T: AsRef<TGInputMessagePoll>>(poll: T) -> Self { TGInputMessageContent::Poll(poll.as_ref().clone()) }
-  pub fn sticker<T: AsRef<TGInputMessageSticker>>(sticker: T) -> Self { TGInputMessageContent::Sticker(sticker.as_ref().clone()) }
-  pub fn text<T: AsRef<TGInputMessageText>>(text: T) -> Self { TGInputMessageContent::Text(text.as_ref().clone()) }
-  pub fn venue<T: AsRef<TGInputMessageVenue>>(venue: T) -> Self { TGInputMessageContent::Venue(venue.as_ref().clone()) }
-  pub fn video<T: AsRef<TGInputMessageVideo>>(video: T) -> Self { TGInputMessageContent::Video(video.as_ref().clone()) }
-  pub fn video_note<T: AsRef<TGInputMessageVideoNote>>(video_note: T) -> Self { TGInputMessageContent::VideoNote(video_note.as_ref().clone()) }
-  pub fn voice_note<T: AsRef<TGInputMessageVoiceNote>>(voice_note: T) -> Self { TGInputMessageContent::VoiceNote(voice_note.as_ref().clone()) }
+  pub fn animation  <T: AsRef<TGInputMessageAnimation>>(animation: T)  ->  Self { TGInputMessageContent::Animation(animation.as_ref().clone())  }
+  pub fn audio      <T: AsRef<TGInputMessageAudio>>(audio: T)          ->  Self { TGInputMessageContent::Audio(audio.as_ref().clone())          }
+  pub fn contact    <T: AsRef<TGInputMessageContact>>(contact: T)      ->  Self { TGInputMessageContent::Contact(contact.as_ref().clone())      }
+  pub fn document   <T: AsRef<TGInputMessageDocument>>(document: T)    ->  Self { TGInputMessageContent::Document(document.as_ref().clone())    }
+  pub fn forwarded  <T: AsRef<TGInputMessageForwarded>>(forwarded: T)  ->  Self { TGInputMessageContent::Forwarded(forwarded.as_ref().clone())  }
+  pub fn game       <T: AsRef<TGInputMessageGame>>(game: T)            ->  Self { TGInputMessageContent::Game(game.as_ref().clone())            }
+  pub fn invoice    <T: AsRef<TGInputMessageInvoice>>(invoice: T)      ->  Self { TGInputMessageContent::Invoice(invoice.as_ref().clone())      }
+  pub fn location   <T: AsRef<TGInputMessageLocation>>(location: T)    ->  Self { TGInputMessageContent::Location(location.as_ref().clone())    }
+  pub fn photo      <T: AsRef<TGInputMessagePhoto>>(photo: T)          ->  Self { TGInputMessageContent::Photo(photo.as_ref().clone())          }
+  pub fn poll       <T: AsRef<TGInputMessagePoll>>(poll: T)            ->  Self { TGInputMessageContent::Poll(poll.as_ref().clone())            }
+  pub fn sticker    <T: AsRef<TGInputMessageSticker>>(sticker: T)      ->  Self { TGInputMessageContent::Sticker(sticker.as_ref().clone())      }
+  pub fn text       <T: AsRef<TGInputMessageText>>(text: T)            ->  Self { TGInputMessageContent::Text(text.as_ref().clone())            }
+  pub fn venue      <T: AsRef<TGInputMessageVenue>>(venue: T)          ->  Self { TGInputMessageContent::Venue(venue.as_ref().clone())          }
+  pub fn video      <T: AsRef<TGInputMessageVideo>>(video: T)          ->  Self { TGInputMessageContent::Video(video.as_ref().clone())          }
+  pub fn video_note <T: AsRef<TGInputMessageVideoNote>>(video_note: T) ->  Self { TGInputMessageContent::VideoNote(video_note.as_ref().clone()) }
+  pub fn voice_note <T: AsRef<TGInputMessageVoiceNote>>(voice_note: T) ->  Self { TGInputMessageContent::VoiceNote(voice_note.as_ref().clone()) }
 }
 
 impl AsRef<TGInputMessageContent> for TGInputMessageContent {
@@ -353,10 +353,10 @@ impl TGReplyMarkup {
   }
 
 
-  pub fn force_reply<T: AsRef<TGReplyMarkupForceReply>>(force_reply: T) -> Self { TGReplyMarkup::ForceReply(force_reply.as_ref().clone()) }
-  pub fn inline_keyboard<T: AsRef<TGReplyMarkupInlineKeyboard>>(inline_keyboard: T) -> Self { TGReplyMarkup::InlineKeyboard(inline_keyboard.as_ref().clone()) }
-  pub fn remove_keyboard<T: AsRef<TGReplyMarkupRemoveKeyboard>>(remove_keyboard: T) -> Self { TGReplyMarkup::RemoveKeyboard(remove_keyboard.as_ref().clone()) }
-  pub fn show_keyboard<T: AsRef<TGReplyMarkupShowKeyboard>>(show_keyboard: T) -> Self { TGReplyMarkup::ShowKeyboard(show_keyboard.as_ref().clone()) }
+  pub fn force_reply    <T: AsRef<TGReplyMarkupForceReply>>    (force_reply: T    )  -> Self { TGReplyMarkup::ForceReply(force_reply.as_ref().clone())         }
+  pub fn inline_keyboard<T: AsRef<TGReplyMarkupInlineKeyboard>>(inline_keyboard: T)  -> Self { TGReplyMarkup::InlineKeyboard(inline_keyboard.as_ref().clone()) }
+  pub fn remove_keyboard<T: AsRef<TGReplyMarkupRemoveKeyboard>>(remove_keyboard: T)  -> Self { TGReplyMarkup::RemoveKeyboard(remove_keyboard.as_ref().clone()) }
+  pub fn show_keyboard  <T: AsRef<TGReplyMarkupShowKeyboard>>  (show_keyboard: T  )  -> Self { TGReplyMarkup::ShowKeyboard(show_keyboard.as_ref().clone())     }
 }
 
 impl AsRef<TGReplyMarkup> for TGReplyMarkup {

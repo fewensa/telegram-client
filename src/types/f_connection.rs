@@ -39,7 +39,7 @@ pub enum TGConnectionState {
 }
 
 impl TGConnectionState {
-  fn of(td: Box<td_type::ConnectionState>) -> Self {
+  pub(crate) fn of(td: Box<td_type::ConnectionState>) -> Self {
     rtd_type_mapping!(
       ConnectionState,
       TGConnectionState,

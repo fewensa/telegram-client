@@ -17,6 +17,7 @@ uses = [
   "self::f_message_content::*",
   "self::f_forward::*",
   "self::f_reply_markup::*",
+  "self::f_notification::*"
 ]
 
 [[tmod.mods]]
@@ -154,14 +155,6 @@ comment = "A regular user."
 inner = "UserTypeUnknown"
 comment = "A regular user."
 
-
-[[tgypes.notification]]
-inner = "UpdateScopeNotificationSettings"
-comment = "Notification settings for some type of chats were updated."
-
-[[tgypes.notification]]
-inner = "ScopeNotificationSettings"
-comment = "Contains information about notification settings for several chats."
 
 [[tgypes.profile_photo]]
 inner = "ProfilePhoto"
@@ -744,6 +737,43 @@ comment = "Contains Telegram terms of service."
 inner = "UpdateTermsOfService"
 comment = "New terms of service must be accepted by the user. If the terms of service are declined, then the"
 
+
+[[tgypes.notification]]
+inner = "UpdateScopeNotificationSettings"
+comment = "Notification settings for some type of chats were updated."
+
+[[tgypes.notification]]
+inner = "ScopeNotificationSettings"
+comment = "Contains information about notification settings for several chats."
+
+
+[[tgypes.notification]]
+inner = "UpdateActiveNotifications"
+comment = "Contains active notifications that was shown on previous application launches. This update is sent only if a message database is used. In that case it comes once before any"
+
+[[tgypes.notification]]
+inner = "NotificationGroup"
+comment = "Describes a group of notifications."
+
+[[tgypes.notification]]
+inner = "Notification"
+comment = "Contains information about a notification."
+
+[[tgypes.notification]]
+inner = "NotificationTypeNewCall"
+comment = "New call was received."
+
+[[tgypes.notification]]
+inner = "NotificationTypeNewMessage"
+comment = "New message was received."
+
+[[tgypes.notification]]
+inner = "NotificationTypeNewPushMessage"
+comment = "New message was received through a push notification."
+
+[[tgypes.notification]]
+inner = "NotificationTypeNewSecretChat"
+comment = "New secret chat was created."
 
 
 #[[tgypes.name]]

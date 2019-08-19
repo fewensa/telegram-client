@@ -1,4 +1,8 @@
-use rtdlib::types::RObject;
+use rtdlib::types as td_types;
+use rtdlib::types::{
+  RObject,
+  NotificationGroupType
+};
 
 use crate::errors;
 use crate::types::*;
@@ -34,5 +38,68 @@ impl TGUpdateScopeNotificationSettings {
       .expect(&errors::data_fail_with_rtd(self.td_origin())[..])
   }
 }
+
+
+// todo unrelease
+impl TGUpdateActiveNotifications {}
+
+impl TGNotificationGroup {
+
+  /// Unique persistent auto-incremented from 1 identifier of the notification group.
+  pub fn id(&self) -> i32 { self.td_origin().id().map_or(1, |v| v) }
+
+  pub fn type_(&self) -> TGNotificationGroupType { self.td_origin().type_().map(|v| TGNotificationGroupType::of(v)).expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
+
+  pub fn chat_id(&self) -> i64 { self.td_origin().chat_id().expect(&errors::data_fail_with_rtd(self.td_origin())[..]) }
+
+  pub fn total_count(&self) -> i32 { self.td_origin().total_count().map_or(0, |v| v) }
+
+//  pub fn notifications(&self) -> Option<Vec<Notification>> { self.notifications.clone() }
+
+}
+
+#[derive(Debug, Clone)]
+pub enum TGNotificationGroupType {
+  Calls,
+  Mentions,
+  Messages,
+  SecretChat,
+}
+
+impl TGNotificationGroupType {
+
+  pub(crate) fn of(td: Box<td_types::NotificationGroupType>) -> Self {
+    rtd_type_mapping!(
+      NotificationGroupType,
+      TGNotificationGroupType,
+      RTDNotificationGroupTypeType,
+      (NotificationGroupTypeCalls      , Calls      );
+      (NotificationGroupTypeMentions   , Mentions   );
+      (NotificationGroupTypeMessages   , Messages   );
+      (NotificationGroupTypeSecretChat , SecretChat );
+    )(td)
+  }
+
+  pub fn is_calls        (&self) -> bool { enum_is!(TGNotificationGroupType, Calls     )(self) }
+  pub fn is_mentions     (&self) -> bool { enum_is!(TGNotificationGroupType, Mentions  )(self) }
+  pub fn is_messages     (&self) -> bool { enum_is!(TGNotificationGroupType, Messages  )(self) }
+  pub fn is_secret_chat  (&self) -> bool { enum_is!(TGNotificationGroupType, SecretChat)(self) }
+
+  pub fn on_calls       <F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGNotificationGroupType, Calls     , || fnc())(self); self }
+  pub fn on_mentions    <F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGNotificationGroupType, Mentions  , || fnc())(self); self }
+  pub fn on_messages    <F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGNotificationGroupType, Messages  , || fnc())(self); self }
+  pub fn on_secret_chat <F: FnOnce()>(&self, fnc: F) -> &Self { enum_on!(TGNotificationGroupType, SecretChat, || fnc())(self); self }
+}
+
+
+impl TGNotification {}
+
+impl TGNotificationTypeNewCall {}
+
+impl TGNotificationTypeNewMessage {}
+
+impl TGNotificationTypeNewPushMessage {}
+
+impl TGNotificationTypeNewSecretChat {}
 
 
