@@ -1,6 +1,0 @@
-use rtdlib::types::*;
-
-pub trait TDFB {}
-
-impl <'a, T: TDFB> TDFB for &'a T {}
-impl <'a, T: TDFB> TDFB for &'a mut T {}

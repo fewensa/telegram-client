@@ -3,7 +3,7 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 
 use crate::api::Api;
-use crate::handler::handler::Handler;
+use crate::handler::Handler;
 use crate::listener::Lout;
 
 pub struct TdRecv {}
@@ -17,14 +17,9 @@ impl TdRecv {
     thread::spawn(move || {
       let is_stop = stop_flag.lock().unwrap();
       while !*is_stop {
-        let recv = api.receive(2.0);
-        // recv.map(|text| tdkit::fill_json_struct(text))
-        if recv.is_none() {
-          continue;
+        if let Some(json) = api.receive(2.0) {
+          Handler::new(api.borrow(), lout.borrow()).handle(&json);
         }
-        let json = recv.unwrap();
-        Handler::new(api.borrow(), lout.borrow())
-          .handle(&json);
       }
     });
   }

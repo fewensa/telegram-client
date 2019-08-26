@@ -1,43 +1,73 @@
-use error_chain_mini::ChainedError;
-use error_chain_mini::ErrorKind;
-use rtdlib::types::RObject;
+use std::any::Any;
 
-const PLZ_POST_ISSUES: &'static str = "PLEASE POST AN ISSUE TO https://github.com/fewensa/telegram-client/issues";
+use std::{io, fmt, error};
+use std::fmt::Debug;
 
-const TELEGRAM_DATA_FAIL: &'static str = "TELEGRAM DATA FAIL. IF YOU SEE THIS MESSAGE,";
-
-#[derive(ErrorKind)]
-pub enum TGErrorKind {
-  #[msg(short = "Json error", detailed = "inner: {:?}", _0)]
-  JsonError(::serde_json::Error),
-  RTDLibFromError,
-  Other,
+pub trait TGDatable: Debug {
+  fn as_any(&self) -> &dyn Any;
 }
 
-pub type TGError = ChainedError<TGErrorKind>;
+#[derive(Debug)]
+pub struct TGError {
+  key: &'static str,
+  message: Option<String>,
+  data: Option<Box<TGDatable>>,
+  context: Option<Box<std::error::Error>>
+}
+
 pub type TGResult<T> = Result<T, TGError>;
 
-//// todox: only development
-//impl ErrorKind for TGErrorKind {
-//  fn short(&self) -> &str {
-//    match self {
-//      _ => ""
-//    }
-//  }
-//}
 
-pub fn please_post_issues() -> &'static str {
-  PLZ_POST_ISSUES
+impl TGError {
+  pub fn new(key: &'static str) -> Self {
+    Self {
+      key,
+      message: None,
+      data: None,
+      context: None
+    }
+  }
+
+  pub fn set_key(&mut self, key: &'static str) -> &mut Self {
+    self.key = key;
+    self
+  }
+
+  pub fn set_message<S: AsRef<str>>(&mut self, message: S) -> &mut Self {
+    self.message = Some(message.as_ref().to_string());
+    self
+  }
+
+  pub fn set_data(&mut self, data: Box<TGDatable>) -> &mut Self {
+    self.data = Some(data);
+    self
+  }
+
+  pub fn set_context(&mut self, context: Box<std::error::Error>) -> &mut Self {
+    self.context = Some(context);
+    self
+  }
+
+  pub fn key(&self) -> &'static str { self.key }
+  pub fn message(&self) -> &Option<String> { &self.message }
+  pub fn data(&self) -> &Option<Box<TGDatable>> { &self.data }
+  pub fn context(&self) -> &Option<Box<std::error::Error>> { &self.context }
 }
 
-pub fn not_have_listener<S: AsRef<str>>(td_name: S) -> String {
-  format!("NOT HAVE [{}] LISTENER, {} , OR YOU CAN USE `on_receive` TO HANDLE THIS EVENT.", td_name.as_ref(), PLZ_POST_ISSUES)
+
+impl fmt::Display for TGError {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    write!(f, "[{}]: {}", self.key, self.message.clone().map_or("".to_string(), |v| v))
+  }
 }
 
-pub fn data_fail_with_json<S: AsRef<str>>(json: S) -> String {
-  format!("{} {} \n INCLUDE THIS JSON => {} \n AND PANIC TRACE", TELEGRAM_DATA_FAIL, PLZ_POST_ISSUES, json.as_ref())
+impl error::Error for TGError {
+  fn description(&self) -> &str {
+    self.key
+  }
+
+  fn cause(&self) -> Option<&error::Error> {
+    None
+  }
 }
 
-pub fn data_fail_with_rtd<ROBJ: RObject>(robj: ROBJ) -> String {
-  data_fail_with_json(robj.to_json())
-}

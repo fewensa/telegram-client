@@ -1,11 +1,6 @@
-#[macro_use]
-extern crate serde_derive;
 
 
 use std::path::Path;
-
-mod boml;
-mod gen;
 
 fn lib_path() -> &'static Path {
   let path: &'static str = match std::env::var("LIB_PATH") {
@@ -32,16 +27,9 @@ fn canonicalize_lib_path() -> &'static str {
 
 
 fn main() {
-
   println!("cargo:rustc-link-search=native={}", canonicalize_lib_path());
 //  println!("cargo:rustc-link-search=native=/usr/lib");
   println!("cargo:rustc-link-lib=dylib=tdjson");
-
-
-
-  gen::gen_listener();
-  gen::gen_types();
-  gen::gen_api();
 
 }
 

@@ -1,8 +1,5 @@
 #[macro_use]
-extern crate lazy_static;
-#[macro_use]
-extern crate slog;
-extern crate slog_term;
+extern crate log;
 
 use std::fs::File;
 use std::path::Path;
@@ -12,22 +9,22 @@ use std::sync::mpsc::TryRecvError;
 use std::thread;
 use std::time::Duration;
 
-use rtdlib::types::RObject;
+use rtdlib::types::*;
 
 use telegram_client::api::*;
 use telegram_client::client::Client;
-use telegram_client::errors;
-use telegram_client::types::*;
 
 use crate::config::{Config, LogType};
 
-#[path = "../../examples_shared/exmlog.rs"]
-mod exmlog;
 mod thelp;
 mod tgfn;
 mod config;
 
 fn main() {
+  simple_logger::init().unwrap();
+  log::set_max_level(log::LevelFilter::Debug);
+
+
   let api_id = env!("API_ID");
   let api_hash = env!("API_HASH");
 
@@ -64,24 +61,27 @@ fn main() {
 
   listener.on_option(|(api, option)| {
     let value = option.value();
-    if value.is_empty() { debug!(exmlog::examples(), "Receive an option {} but it's empty", option.name()) }
-    if value.is_string() { debug!(exmlog::examples(), "Receive an option {}: String => {}", option.name(), value.as_string().map_or("None".to_string(), |v| v)) }
-    if value.is_integer() { debug!(exmlog::examples(), "Receive an option {}: i32 => {}", option.name(), value.as_integer().map_or(-1, |v| v)) }
-    if value.is_bool() { debug!(exmlog::examples(), "Receive an option {}: bool => {}", option.name(), value.as_bool().map_or(false, |v| v)) }
+    if value.is_empty() { debug!("Receive an option {} but it's empty", option.name()) }
+    if value.is_string() { debug!("Receive an option {}: String => {}", option.name(), value.as_string().map_or("None".to_string(), |v| v.value().clone())) }
+    if value.is_integer() { debug!("Receive an option {}: i32 => {}", option.name(), value.as_integer().map_or(-1, |v| v.value())) }
+    if value.is_boolean() { debug!("Receive an option {}: bool => {}", option.name(), value.as_boolean().map_or(false, |v| v.value())) }
 
-    option.on_name("version", |value| {
-      value.as_string().map(|v| { debug!(exmlog::examples(), "VERSION IS {}", v); });
-    });
+    match &option.name()[..] {
+      "version" => { value.as_string().map(|v| debug!("VERSION IS {}", v.value())); }
+      _ => {}
+    };
+    Ok(())
   });
 
-  listener.on_authorization_state(move |(api, state)| {
+  listener.on_authorization_state(move |(api, update)| {
+    let state = update.authorization_state();
     state.on_wait_tdlib_parameters(|_| {
-      api.set_tdlib_parameters(TGSetTdlibParameters::builder().parameters(
-        TGTdlibParameters::builder()
+      api.set_tdlib_parameters(SetTdlibParameters::builder().parameters(
+        TdlibParameters::builder()
           .database_directory("tdlib")
           .use_message_database(true)
           .use_secret_chats(true)
-          .api_id(toolkit::number::as_i32(api_id).unwrap())
+          .api_id(toolkit::number::as_i64(api_id).unwrap())
           .api_hash(api_hash)
           .system_language_code("en")
           .device_model("Desktop")
@@ -90,21 +90,21 @@ fn main() {
           .enable_storage_optimizer(true)
           .build()
       ).build());
-      debug!(exmlog::examples(), "Set tdlib parameters");
+      debug!("Set tdlib parameters");
     });
     state.on_wait_encryption_key(|_| {
-      api.check_database_encryption_key(TGCheckDatabaseEncryptionKey::builder().build());
-      debug!(exmlog::examples(), "Set encryption key");
+      api.check_database_encryption_key(CheckDatabaseEncryptionKey::builder().build());
+      debug!("Set encryption key");
     });
     state.on_wait_phone_number(|_| {
       thelp::tip("Please type your telegram phone number:");
       tgfn::type_phone_number(api);
     });
     state.on_wait_password(|_| {
-      api.check_authentication_password(TGCheckAuthenticationPassword::builder()
+      api.check_authentication_password(CheckAuthenticationPassword::builder()
         .password(thelp::typed_with_message("Please type your telegram password:"))
         .build());
-      debug!(exmlog::examples(), "Set password *****");
+      debug!("Set password *****");
     });
     state.on_wait_code(|astat| {
       if astat.is_registered() {
@@ -120,35 +120,38 @@ fn main() {
     state.on_ready(|_| {
       let mut have_authorization = have_authorization.lock().unwrap();
       *have_authorization = true;
-      debug!(exmlog::examples(), "Authorization ready");
+      debug!("Authorization ready");
     });
     state.on_logging_out(|_| {
       let mut have_authorization = have_authorization.lock().unwrap();
       *have_authorization = false;
-      debug!(exmlog::examples(), "Logging out");
+      debug!("Logging out");
     });
     state.on_closing(|_| {
       let mut have_authorization = have_authorization.lock().unwrap();
       *have_authorization = false;
-      debug!(exmlog::examples(), "Closing");
+      debug!("Closing");
     });
     state.on_closed(|_| {
-      debug!(exmlog::examples(), "Closed");
+      debug!("Closed");
     });
+    Ok(())
   });
 
   listener.on_connection_state(|(api, update)| {
-    update.on_waiting_for_network(|| { debug!(exmlog::examples(), "waiting for network"); });
-    update.on_connecting_to_proxy(|| { debug!(exmlog::examples(), "connecting to proxy"); });
-    update.on_connecting(|| { debug!(exmlog::examples(), "connecting"); });
-    update.on_updating(|| { debug!(exmlog::examples(), "updating..."); });
-    update.on_ready(|| { debug!(exmlog::examples(), "connection ready") });
+    let state = update.state();
+    state.on_waiting_for_network(|_| { debug!("waiting for network"); });
+    state.on_connecting_to_proxy(|_| { debug!("connecting to proxy"); });
+    state.on_connecting(|_| { debug!("connecting"); });
+    state.on_updating(|_| { debug!("updating..."); });
+    state.on_ready(|_| { debug!("connection ready") });
+    Ok(())
   });
 
   listener.on_error(|(api, update)| {
-    let code = update.code().clone().map_or(-1, |v| v);
-    let message = update.message().clone().map_or("None".to_string(), |v| v);
-    error!(exmlog::examples(), "ERROR [{}] {}", code, message);
+    let code = update.code();
+    let message = update.message();
+    error!("ERROR [{}] {}", code, message);
     match code {
       8 => {
         thelp::tip(&message);
@@ -170,150 +173,168 @@ fn main() {
       }
       429 => thelp::wait_too_many_requests(api, &message),
       _ => thelp::unknown(code, &message)
-    }
+    };
+    Ok(())
   });
 
   listener.on_ok(|api| {
-    debug!(exmlog::examples(), "OK");
+    debug!("OK");
+    Ok(())
   });
 
   listener.on_proxy(|(api, update)| {
-    debug!(exmlog::examples(), "Proxy info => {:?}", update);
+    debug!("Proxy info => {:?}", update);
+    Ok(())
   });
 
   listener.on_user(|(api, update)| {
-    debug!(exmlog::examples(), "Update user => {:?}", update);
+    debug!("Update user => {:?}", update);
+    Ok(())
   });
 
   listener.on_have_pending_notifications(|(api, update)| {
-    debug!(exmlog::examples(), "have pending notifications {:?}", update);
+    debug!("have pending notifications {:?}", update);
+    Ok(())
   });
 
   listener.on_scope_notification_settings(|(api, update)| {
-    debug!(exmlog::examples(), "scope notification settings {:?}", update);
+    debug!("scope notification settings {:?}", update);
+    Ok(())
   });
 
   listener.on_user_status(|(api, update)| {
-    debug!(exmlog::examples(), "User [{}] status is {:?}", update.user_id(), update.status());
+    debug!("User [{}] status is {:?}", update.user_id(), update.status());
+    Ok(())
   });
 
   listener.on_new_chat(|(api, update)| {
     let chat = update.chat();
-    debug!(exmlog::examples(), "Receive new chat, title: '{}', data: {}", chat.title(), chat.to_json());
+    debug!("Receive new chat, title: '{}', data: {}", chat.title(), chat.to_json().expect("Can't serialize json"));
+    Ok(())
   });
 
   listener.on_new_message(|(api, update)| {
     let message = update.message();
     if message.is_outgoing() {
-      return;
+      return Ok(());
     }
     let content = message.content();
-    content.on_text(|m| {
+    content.on_message_text(|m| {
       if message.chat_id() != 102993 {
         return;
       }
       // Send origin message
-      api.send_message(TGSendMessage::builder()
+      api.send_message(SendMessage::builder()
         .chat_id(message.chat_id())
-        .input_message_content(TGInputMessageContent::text(TGInputMessageText::builder()
-          .text(TGFormattedText::builder().text(m.text().text()).build())
+        .input_message_content(InputMessageContent::input_message_text(InputMessageText::builder()
+          .text(FormattedText::builder().text(m.text().text()).build())
           .clear_draft(true)
           .build()))
         .build());
-      debug!(exmlog::examples(), "Receive text message => {} <= entities => {:?}", m.text().text(), m.text().entities());
+      debug!("Receive text message => {} <= entities => {:?}", m.text().text(), m.text().entities());
     });
-    content.on_video(|m| {
-      debug!(exmlog::examples(), "Receive video message");
+    content.on_message_video(|m| {
+      debug!("Receive video message");
       let v = m.video();
       let f = v.video();
-      f.remote().map(|f| {
+      let remote_file = f.remote();
 
-        let size = f.uploaded_size();
-//        api.download_file(TGDownloadFile::new()
-//          .file_id(f.id()))
-        f.id().map(|v| {
-          api.get_remote_file(TGGetRemoteFile::builder()
-            .remote_file_id(v)
-            .file_type(TGFileType::Video)
-            .build())
-        });
-        debug!(exmlog::examples(), "video remote id => {:?}", f.id());
-      });
-      f.local().map(|f| {
-        debug!(exmlog::examples(), "video local path => {:?}", f.path());
-      });
+      let size = remote_file.uploaded_size();
+
+      api.get_remote_file(GetRemoteFile::builder()
+        .remote_file_id(remote_file.id())
+        .file_type(FileType::video(FileTypeVideo::builder()))
+        .build());
+      debug!("video remote id => {:?}", remote_file.id());
+
+      debug!("video local path => {:?}", f.local().path());
     });
-    debug!(exmlog::examples(), "Receive new message, from: '{}', data: {}", message.sender_user_id(), message.to_json());
+    debug!("Receive new message, from: '{}', data: {}", message.sender_user_id(), message.to_json().expect("Can't serialize json"));
+    Ok(())
   });
 
   listener.on_chat_read_inbox(|(api, update)| {
-    debug!(exmlog::examples(), "Read inbox unread_count: {}, chat_id: {}, last_read_inbox_message_id: {}",
-           update.unread_count().map_or(0, |v| v),
-           update.chat_id().map_or(0, |v| v),
-           update.last_read_inbox_message_id().map_or(0, |v| v),
+    debug!("Read inbox unread_count: {}, chat_id: {}, last_read_inbox_message_id: {}",
+           update.unread_count(),
+           update.chat_id(),
+           update.last_read_inbox_message_id(),
     );
+    Ok(())
   });
 
   listener.on_chat_last_message(|(api, update)| {
-    debug!(exmlog::examples(), "Chat last message: {}, data: {}", update.chat_id(), update.last_message().map_or("None".to_string(), |v| v.to_json()))
+    debug!("Chat last message: {}, data: {}",
+           update.chat_id(),
+           update.last_message().clone().map_or("None".to_string(), |v| v.to_json().expect("Can't serialize json"))
+    );
+    Ok(())
   });
 
   listener.on_chat_read_outbox(|(api, update)| {
-    debug!(exmlog::examples(), "Read outbox chat_id: {}, last_read_outbox_message_id: {}",
-           update.chat_id().map_or(0, |v| v),
-           update.last_read_outbox_message_id().map_or(0, |v| v),
+    debug!("Read outbox chat_id: {}, last_read_outbox_message_id: {}",
+           update.chat_id(),
+           update.last_read_outbox_message_id(),
     );
+    Ok(())
   });
 
   listener.on_user_full_info(|(api, update)| {
-    debug!(exmlog::examples(), "Receive user full info, user_id: {}, full_info: {}",
-           update.user_id().map_or(0, |v| v),
-           update.user_full_info().expect(&errors::data_fail_with_rtd(update)[..]).to_json()
+    debug!("Receive user full info, user_id: {}, full_info: {}",
+           update.user_id(),
+           update.user_full_info().to_json().expect("Can't serialize json")
     );
+    Ok(())
   });
 
   listener.on_delete_messages(|(api, update)| {
-    debug!(exmlog::examples(), "Receive delete messages, chat_id: {}, message_ids: {:?}, data: {}",
+    debug!("Receive delete messages, chat_id: {}, message_ids: {:?}, data: {}",
            update.chat_id(),
            update.message_ids(),
-           update.to_json()
+           update.to_json().expect("Can't serialize json")
     );
+    Ok(())
   });
 
   listener.on_file(|(api, update)| {
-    debug!(exmlog::examples(), "Receive a file => {}", update.to_json());
-    let size = update.size();
-    if update.local().map_or(false, |v| v.is_downloading_completed()) {
-      debug!(exmlog::examples(), "File {} download complete => {:?}", update.id(), update.local().map(|v| v.path()).expect("Can not get download path"));
-      return;
+    debug!("Receive a file => {}", update.to_json().expect("Can't serialize json"));
+    let file = update.file();
+    let size = file.size();
+    let local_file = file.local();
+    if local_file.is_downloading_completed() {
+      debug!("File {} download complete => {:?}", file.id(), local_file.path());
+      return Ok(());
     }
-    api.download_file(TGDownloadFile::builder()
-      .file_id(update.id())
+    api.download_file(DownloadFile::builder()
+      .file_id(file.id())
       .offset(0)
       .limit(0)
       .priority(1)
       .synchronous(false)
       .build());
+    Ok(())
   });
 
-  listener.on_update_file(|(api, update)| {
-//    debug!(exmlog::examples(), "Update file => {}", update.file().to_json());
-  });
+//  listener.on_update_file(|(api, update)| {
+////    debug!("Update file => {}", update.file().to_json());
+//  });
 
-  listener.on_message(|(api, update)| {
-    debug!(exmlog::examples(), "Message => {}", update.to_json());
-  });
+//  listener.on_message(|(api, update)| {
+//    debug!("Message => {}", update.to_json());
+//  });
 
   listener.on_supergroup_full_info(|(api, update)| {
-    debug!(exmlog::examples(), "Supergroup full info => {}", update.to_json());
+    debug!("Supergroup full info => {}", update.to_json().expect("Can't serialize json"));
+    Ok(())
   });
 
   listener.on_user_chat_action(|(api, update)| {
-    debug!(exmlog::examples(), "User chat action => {}", update.to_json());
+    debug!("User chat action => {}", update.to_json().expect("Can't serialize json"));
+    Ok(())
   });
 
   listener.on_terms_of_service(|(api, update)| {
-    debug!(exmlog::examples(), "Terms of serivce => {}", update.to_json());
+    debug!("Terms of serivce => {}", update.to_json().expect("Can't serialize json"));
+    Ok(())
   });
 
   client.daemon("telegram-rs");
