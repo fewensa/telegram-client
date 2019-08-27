@@ -1,6 +1,5 @@
 use std::path::Path;
 
-use telegram_client::api::*;
 use rtdlib::types::*;
 
 #[derive(Debug, Clone)]
@@ -14,7 +13,7 @@ impl Default for Config {
       Some(name) => format!("telegram-client.{}.toml", name),
       None => "telegram-client.toml".to_string()
     };
-    let mut toml_file = toolkit::path::root_dir().join("conf").join(&toml_file[..]);
+    let mut toml_file = Path::new("conf").join(&toml_file[..]);
     if !toml_file.exists() {
       toml_file = toolkit::path::root_dir().join("conf").join("telegram-client.toml");
     }

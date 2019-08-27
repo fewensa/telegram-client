@@ -1,13 +1,7 @@
 #[macro_use]
 extern crate log;
 
-use std::fs::File;
-use std::path::Path;
-use std::rc::Rc;
-use std::sync::{Arc, mpsc, Mutex};
-use std::sync::mpsc::TryRecvError;
-use std::thread;
-use std::time::Duration;
+use std::sync::{Arc, Mutex};
 
 use rtdlib::types::*;
 
@@ -27,13 +21,6 @@ fn main() {
 
   let api_id = env!("API_ID");
   let api_hash = env!("API_HASH");
-
-
-  let log_file = toolkit::path::root_dir().join("tdlib.log");
-  if log_file.exists() {
-    std::fs::remove_file(&log_file);
-  }
-  File::create(&log_file).unwrap();
 
   let config = Config::default();
   let api = Api::default();

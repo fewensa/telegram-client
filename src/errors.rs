@@ -1,6 +1,6 @@
 use std::any::Any;
 
-use std::{io, fmt, error};
+use std::{fmt, error};
 use std::fmt::Debug;
 
 pub trait TGDatable: Debug {

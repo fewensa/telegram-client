@@ -1,8 +1,7 @@
 use rtdlib::types as rtd_types;
-use rtdlib::types::{RObject, Update, Error};
 
 use crate::api::Api;
-use crate::listener::{Listener, Lout};
+use crate::listener::Lout;
 use crate::errors::TGError;
 use crate::tip;
 
@@ -17,7 +16,7 @@ macro_rules! event_handler {
       if let Some(ev) = lout.$event_name() {
         match rtd_types::from_json::<rtd_types::$td_type>(json) {
           Ok(t) => {
-            if let Err(e) = ev((api, &t)) {
+            if let Err(_e) = ev((api, &t)) {
               if let Some(ev) = lout.exception() { ev((api, &TGError::new("EVENT_HANDLER_ERROR"))); }
             }
           }
