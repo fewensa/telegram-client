@@ -46,7 +46,7 @@ Version mapping
 
 ## Note
 
-Note that you need [libtdjson.so.1.4.0](https://github.com/tdlib/td) in your path for building and running your application. See also [rtdlib](https://github.com/fewensa/rtdlib) for more details.
+Note that you need [libtdjson.so](https://github.com/tdlib/td) in your path for building and running your application. See also [rtdlib](https://github.com/fewensa/rtdlib) for more details.
 
 # Examples
 
