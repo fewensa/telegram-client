@@ -20,7 +20,7 @@ edition = "2018"
 build = "build.rs"
 
 [dependencies]
-rtdlib = { git = "https://github.com/fewensa/rtdlib.git", branch = "fantasy" }
+rtdlib = "100.100.*"
 
 daemon = "0.0.8"
 
