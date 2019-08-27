@@ -1,6 +1,5 @@
 use std::sync::{Arc, Mutex};
 use std::sync::mpsc::Receiver;
-use std::thread;
 
 use daemon::Daemon;
 use daemon::DaemonRunner;
@@ -9,8 +8,7 @@ use rtdlib::tdjson;
 
 use crate::api::Api;
 use crate::listener::Listener;
-use crate::rtd::tdrecv::TdRecv;
-use crate::tglog;
+use crate::rtd::TdRecv;
 
 pub struct Client {
   stop_flag: Arc<Mutex<bool>>,
@@ -135,22 +133,22 @@ impl Client {
   /// ```
   pub fn daemon<S: AsRef<str>>(self, name: S) {
     self.start();
-    debug!(tglog::telegram(), "Telegram client started.");
+    debug!("Telegram client started.");
     let daemon = Daemon {
       name: name.as_ref().to_string(),
     };
     daemon.run(move |rx: Receiver<State>| {
-      debug!(tglog::telegram(), "Worker started.");
+      debug!("Worker started.");
       for signal in rx.iter() {
         match signal {
-          State::Start => debug!(tglog::telegram(), "Worker: Start"),
-          State::Reload => debug!(tglog::telegram(), "Worker: Reload"),
-          State::Stop => debug!(tglog::telegram(), "Worker: Stop"),
+          State::Start => debug!("Worker: Start"),
+          State::Reload => debug!("Worker: Reload"),
+          State::Stop => debug!("Worker: Stop"),
         };
       }
-      debug!(tglog::telegram(), "Worker finished.");
+      debug!("Worker finished.");
     }).expect("Can not start daemon");
-    debug!(tglog::telegram(), "{} finished.", name.as_ref());
+    debug!("{} finished.", name.as_ref());
   }
 
   pub fn listener(&mut self) -> &mut Listener {

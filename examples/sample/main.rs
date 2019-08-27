@@ -1,28 +1,19 @@
 #[macro_use]
-extern crate lazy_static;
-#[macro_use]
-extern crate slog;
-extern crate slog_term;
+extern crate log;
 
 use std::fs::File;
 use std::path::Path;
-use std::rc::Rc;
 use std::sync::{Arc, Mutex};
 
 use rtdlib::types::*;
-
 use telegram_client::api::Api;
 use telegram_client::client::Client;
-use telegram_client::types::*;
 
 use crate::proxy::TProxy;
 
-#[path = "../../examples_shared/exmlog.rs"]
-mod exmlog;
 mod proxy;
 
 fn main() {
-
   let api_id = env!("API_ID");
   let api_hash = env!("API_HASH");
 
@@ -52,24 +43,28 @@ fn main() {
 
   listener.on_option(|(api, option)| {
     let value = option.value();
-    if value.is_empty() { debug!(exmlog::examples(), "Receive an option {} but it's empty", option.name()) }
-    if value.is_string() { debug!(exmlog::examples(), "Receive an option {}: String => {}", option.name(), value.as_string().map_or("None".to_string(), |v| v)) }
-    if value.is_integer() { debug!(exmlog::examples(), "Receive an option {}: i32 => {}", option.name(), value.as_integer().map_or(-1, |v| v)) }
-    if value.is_bool() { debug!(exmlog::examples(), "Receive an option {}: bool => {}", option.name(), value.as_bool().map_or(false, |v| v)) }
+    if value.is_empty() { debug!("Receive an option {} but it's empty", option.name()) }
+    if value.is_string() { debug!("Receive an option {}: String => {}", option.name(), value.as_string().map_or("None".to_string(), |v| v.value().clone())) }
+    if value.is_integer() { debug!("Receive an option {}: i32 => {}", option.name(), value.as_integer().map_or(-1, |v| v.value())) }
+    if value.is_boolean() { debug!("Receive an option {}: bool => {}", option.name(), value.as_boolean().map_or(false, |v| v.value())) }
 
-    option.on_name("version", |value| {
-      value.as_string().map(|v| { debug!(exmlog::examples(), "VERSION IS {}", v); });
-    });
+
+    match &option.name()[..] {
+      "version" => { value.as_string().map(|v| debug!("VERSION IS {}", v.value())); }
+      _ => {}
+    };
+    Ok(())
   });
 
-  listener.on_authorization_state(move |(api, state)| {
-    state.on_wait_tdlibparameters(|| {
+  listener.on_authorization_state(move |(api, update)| {
+    let state = update.authorization_state();
+    state.on_wait_tdlib_parameters(|_| {
       let paras = SetTdlibParameters::builder()
         .parameters(TdlibParameters::builder()
           .database_directory("tdlib")
           .use_message_database(true)
           .use_secret_chats(true)
-          .api_id(toolkit::number::as_i32(api_id).unwrap())
+          .api_id(toolkit::number::as_i64(api_id).unwrap())
           .api_hash(api_hash)
           .system_language_code("en")
           .device_model("Desktop")
@@ -79,75 +74,68 @@ fn main() {
           .build())
         .build();
       api.send(&paras);
-      debug!(exmlog::examples(), "Set tdlib parameters");
+      debug!("Set tdlib parameters");
     });
-    state.on_wait_encryption_key(|enck| {
+    state.on_wait_encryption_key(|_| {
       api.send(CheckDatabaseEncryptionKey::builder().build());
-      debug!(exmlog::examples(), "Set encryption key");
+      debug!("Set encryption key");
     });
-    state.on_wait_phone_number(|| {
+    state.on_wait_phone_number(|_| {
       api.send(SetAuthenticationPhoneNumber::builder().phone_number(env!("TG_PHONE")).build());
-      debug!(exmlog::examples(), "Set phone number");
+      debug!("Set phone number");
     });
-    state.on_wait_password(|a| {
+    state.on_wait_password(|_| {
       api.send(CheckAuthenticationPassword::builder().password(env!("TG_PASSWORD")).build());
-      debug!(exmlog::examples(), "Set password");
+      debug!("Set password");
     });
 
-    state.on_ready(|| {
+    state.on_ready(|_| {
       let mut have_authorization = have_authorization.lock().unwrap();
       *have_authorization = true;
-      debug!(exmlog::examples(), "Authorization ready");
+      debug!("Authorization ready");
     });
-    state.on_logging_out(|| {
+    state.on_logging_out(|_| {
       let mut have_authorization = have_authorization.lock().unwrap();
       *have_authorization = false;
-      debug!(exmlog::examples(), "Logging out");
+      debug!("Logging out");
     });
-    state.on_closing(|| {
+    state.on_closing(|_| {
       let mut have_authorization = have_authorization.lock().unwrap();
       *have_authorization = false;
-      debug!(exmlog::examples(), "Closing");
+      debug!("Closing");
     });
-    state.on_closed(|| {
-      debug!(exmlog::examples(), "Closed");
+    state.on_closed(|_| {
+      debug!("Closed");
     });
+    Ok(())
   });
 
   listener.on_connection_state(|(api, update)| {
-    update.on_state(|state| {
-      match state {
-        TGConnectionState::WaitingForNetwork => {
-          debug!(exmlog::examples(), "waiting for network")
-        },
-        TGConnectionState::ConnectingToProxy => {
-          debug!(exmlog::examples(), "connection to proxy")
-        },
-        TGConnectionState::Connecting => {
-          debug!(exmlog::examples(), "connecting")
-        },
-        TGConnectionState::Updating => {
-          debug!(exmlog::examples(), "updating...")
-        },
-        TGConnectionState::Ready => {
-          debug!(exmlog::examples(), "connection ready")
-        },
-      }
-    });
+    let state = update.state();
+    state
+      .on_waiting_for_network(|_| { debug!("waiting for network"); })
+      .on_connecting_to_proxy(|_| { debug!("connecting to proxy"); })
+      .on_connecting(|_| { debug!("connecting"); })
+      .on_updating(|_| { debug!("updating..."); })
+      .on_ready(|_| { debug!("connection ready") });
+    Ok(())
   });
 
   listener.on_error(|(api, error)| {
-    let code = error.code().clone().map_or(-1, |v| v);
-    let message = error.message().clone().map_or("None".to_string(), |v| v);
-    error!(exmlog::examples(), "ERROR [{}] {}", code, message);
+    let code = error.code();
+    let message = error.message();
+    error!("ERROR [{}] {}", code, message);
+    Ok(())
   });
 
   listener.on_ok(|api| {
-    debug!(exmlog::examples(), "OK");
+    debug!("OK");
+    Ok(())
   });
 
   listener.on_proxy(|(api, pxy)| {
-    debug!(exmlog::examples(), "Proxy info => {:?}", pxy);
+    debug!("Proxy info => {:?}", pxy);
+    Ok(())
   });
 
 

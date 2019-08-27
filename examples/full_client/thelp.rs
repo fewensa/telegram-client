@@ -1,6 +1,6 @@
 use std::{io, thread};
 
-use crate::{exmlog, thelp, tgfn};
+use crate::{thelp, tgfn};
 use colored::Colorize;
 use std::sync::mpsc;
 use std::time::Duration;
@@ -68,7 +68,7 @@ pub fn error<S: AsRef<str>>(message: S) {
   println!("{} {}", ">>".red().bold(), message.as_ref().red().bold())
 }
 
-pub fn unknown<S: AsRef<str>>(code: i32, message: S) {
+pub fn unknown<S: AsRef<str>>(code: i64, message: S) {
   println!("{} [{}] {}  << {}",
            ">>".red().bold(),
            &code.to_string()[..].cyan().bold(),
