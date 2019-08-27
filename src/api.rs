@@ -108,15 +108,6 @@ impl Api {
     self.send(destroy.as_ref()) 
   }
 
-  pub fn get_current_state<C: AsRef<GetCurrentState>>(&self, get_current_state: C) -> RTDResult<Updates> {
-  
-    match self.execute(get_current_state.as_ref())? {
-      Some(json) => Ok(Updates::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
   pub fn set_database_encryption_key<C: AsRef<SetDatabaseEncryptionKey>>(&self, set_database_encryption_key: C) -> RTDResult<()> {
     self.send(set_database_encryption_key.as_ref()) 
   }
@@ -157,24 +148,6 @@ impl Api {
   
   }
 
-  pub fn check_recovery_email_address_code<C: AsRef<CheckRecoveryEmailAddressCode>>(&self, check_recovery_email_address_code: C) -> RTDResult<PasswordState> {
-  
-    match self.execute(check_recovery_email_address_code.as_ref())? {
-      Some(json) => Ok(PasswordState::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
-  pub fn resend_recovery_email_address_code<C: AsRef<ResendRecoveryEmailAddressCode>>(&self, resend_recovery_email_address_code: C) -> RTDResult<PasswordState> {
-  
-    match self.execute(resend_recovery_email_address_code.as_ref())? {
-      Some(json) => Ok(PasswordState::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
   pub fn request_password_recovery<C: AsRef<RequestPasswordRecovery>>(&self, request_password_recovery: C) -> RTDResult<EmailAddressAuthenticationCodeInfo> {
   
     match self.execute(request_password_recovery.as_ref())? {
@@ -209,6 +182,10 @@ impl Api {
       None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
     }
   
+  }
+
+  pub fn process_dc_update<C: AsRef<ProcessDcUpdate>>(&self, process_dc_update: C) -> RTDResult<()> {
+    self.send(process_dc_update.as_ref()) 
   }
 
   pub fn get_me<C: AsRef<GetMe>>(&self, get_me: C) -> RTDResult<User> {
@@ -295,15 +272,6 @@ impl Api {
   pub fn get_message<C: AsRef<GetMessage>>(&self, get_message: C) -> RTDResult<Message> {
   
     match self.execute(get_message.as_ref())? {
-      Some(json) => Ok(Message::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
-  pub fn get_message_locally<C: AsRef<GetMessageLocally>>(&self, get_message_locally: C) -> RTDResult<Message> {
-  
-    match self.execute(get_message_locally.as_ref())? {
       Some(json) => Ok(Message::from_json(json)?),
       None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
     }
@@ -537,27 +505,10 @@ impl Api {
   
   }
 
-  pub fn remove_notification<C: AsRef<RemoveNotification>>(&self, remove_notification: C) -> RTDResult<()> {
-    self.send(remove_notification.as_ref()) 
-  }
-
-  pub fn remove_notification_group<C: AsRef<RemoveNotificationGroup>>(&self, remove_notification_group: C) -> RTDResult<()> {
-    self.send(remove_notification_group.as_ref()) 
-  }
-
   pub fn get_public_message_link<C: AsRef<GetPublicMessageLink>>(&self, get_public_message_link: C) -> RTDResult<PublicMessageLink> {
   
     match self.execute(get_public_message_link.as_ref())? {
       Some(json) => Ok(PublicMessageLink::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
-  pub fn get_message_link<C: AsRef<GetMessageLink>>(&self, get_message_link: C) -> RTDResult<HttpUrl> {
-  
-    match self.execute(get_message_link.as_ref())? {
-      Some(json) => Ok(HttpUrl::from_json(json)?),
       None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
     }
   
@@ -757,32 +708,6 @@ impl Api {
   
   }
 
-  pub fn get_json_value<C: AsRef<GetJsonValue>>(&self, get_json_value: C) -> RTDResult<JsonValue> {
-  
-    match self.execute(get_json_value.as_ref())? {
-      Some(json) => Ok(JsonValue::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
-  pub fn get_json_string<C: AsRef<GetJsonString>>(&self, get_json_string: C) -> RTDResult<Text> {
-  
-    match self.execute(get_json_string.as_ref())? {
-      Some(json) => Ok(Text::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
-  pub fn set_poll_answer<C: AsRef<SetPollAnswer>>(&self, set_poll_answer: C) -> RTDResult<()> {
-    self.send(set_poll_answer.as_ref()) 
-  }
-
-  pub fn stop_poll<C: AsRef<StopPoll>>(&self, stop_poll: C) -> RTDResult<()> {
-    self.send(stop_poll.as_ref()) 
-  }
-
   pub fn get_inline_query_results<C: AsRef<GetInlineQueryResults>>(&self, get_inline_query_results: C) -> RTDResult<InlineQueryResults> {
   
     match self.execute(get_inline_query_results.as_ref())? {
@@ -980,14 +905,6 @@ impl Api {
     self.send(set_chat_client_data.as_ref()) 
   }
 
-  pub fn pin_chat_message<C: AsRef<PinChatMessage>>(&self, pin_chat_message: C) -> RTDResult<()> {
-    self.send(pin_chat_message.as_ref()) 
-  }
-
-  pub fn unpin_chat_message<C: AsRef<UnpinChatMessage>>(&self, unpin_chat_message: C) -> RTDResult<()> {
-    self.send(unpin_chat_message.as_ref()) 
-  }
-
   pub fn join_chat<C: AsRef<JoinChat>>(&self, join_chat: C) -> RTDResult<()> {
     self.send(join_chat.as_ref()) 
   }
@@ -1039,15 +956,6 @@ impl Api {
     self.send(clear_all_draft_messages.as_ref()) 
   }
 
-  pub fn get_chat_notification_settings_exceptions<C: AsRef<GetChatNotificationSettingsExceptions>>(&self, get_chat_notification_settings_exceptions: C) -> RTDResult<Chats> {
-  
-    match self.execute(get_chat_notification_settings_exceptions.as_ref())? {
-      Some(json) => Ok(Chats::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
   pub fn get_scope_notification_settings<C: AsRef<GetScopeNotificationSettings>>(&self, get_scope_notification_settings: C) -> RTDResult<ScopeNotificationSettings> {
   
     match self.execute(get_scope_notification_settings.as_ref())? {
@@ -1078,15 +986,6 @@ impl Api {
   
   }
 
-  pub fn get_file_downloaded_prefix_size<C: AsRef<GetFileDownloadedPrefixSize>>(&self, get_file_downloaded_prefix_size: C) -> RTDResult<Count> {
-  
-    match self.execute(get_file_downloaded_prefix_size.as_ref())? {
-      Some(json) => Ok(Count::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
   pub fn cancel_download_file<C: AsRef<CancelDownloadFile>>(&self, cancel_download_file: C) -> RTDResult<()> {
     self.send(cancel_download_file.as_ref()) 
   }
@@ -1104,25 +1003,12 @@ impl Api {
     self.send(cancel_upload_file.as_ref()) 
   }
 
-  pub fn write_generated_file_part<C: AsRef<WriteGeneratedFilePart>>(&self, write_generated_file_part: C) -> RTDResult<()> {
-    self.send(write_generated_file_part.as_ref()) 
-  }
-
   pub fn set_file_generation_progress<C: AsRef<SetFileGenerationProgress>>(&self, set_file_generation_progress: C) -> RTDResult<()> {
     self.send(set_file_generation_progress.as_ref()) 
   }
 
   pub fn finish_file_generation<C: AsRef<FinishFileGeneration>>(&self, finish_file_generation: C) -> RTDResult<()> {
     self.send(finish_file_generation.as_ref()) 
-  }
-
-  pub fn read_file_part<C: AsRef<ReadFilePart>>(&self, read_file_part: C) -> RTDResult<FilePart> {
-  
-    match self.execute(read_file_part.as_ref())? {
-      Some(json) => Ok(FilePart::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
   }
 
   pub fn delete_file<C: AsRef<DeleteFile>>(&self, delete_file: C) -> RTDResult<()> {
@@ -1575,6 +1461,14 @@ impl Api {
     self.send(set_supergroup_description.as_ref()) 
   }
 
+  pub fn pin_supergroup_message<C: AsRef<PinSupergroupMessage>>(&self, pin_supergroup_message: C) -> RTDResult<()> {
+    self.send(pin_supergroup_message.as_ref()) 
+  }
+
+  pub fn unpin_supergroup_message<C: AsRef<UnpinSupergroupMessage>>(&self, unpin_supergroup_message: C) -> RTDResult<()> {
+    self.send(unpin_supergroup_message.as_ref()) 
+  }
+
   pub fn report_supergroup_spam<C: AsRef<ReportSupergroupSpam>>(&self, report_supergroup_spam: C) -> RTDResult<()> {
     self.send(report_supergroup_spam.as_ref()) 
   }
@@ -1685,15 +1579,6 @@ impl Api {
   
   }
 
-  pub fn get_language_pack_info<C: AsRef<GetLanguagePackInfo>>(&self, get_language_pack_info: C) -> RTDResult<LanguagePackInfo> {
-  
-    match self.execute(get_language_pack_info.as_ref())? {
-      Some(json) => Ok(LanguagePackInfo::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
   pub fn get_language_pack_strings<C: AsRef<GetLanguagePackStrings>>(&self, get_language_pack_strings: C) -> RTDResult<LanguagePackStrings> {
   
     match self.execute(get_language_pack_strings.as_ref())? {
@@ -1701,14 +1586,6 @@ impl Api {
       None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
     }
   
-  }
-
-  pub fn synchronize_language_pack<C: AsRef<SynchronizeLanguagePack>>(&self, synchronize_language_pack: C) -> RTDResult<()> {
-    self.send(synchronize_language_pack.as_ref()) 
-  }
-
-  pub fn add_custom_server_language_pack<C: AsRef<AddCustomServerLanguagePack>>(&self, add_custom_server_language_pack: C) -> RTDResult<()> {
-    self.send(add_custom_server_language_pack.as_ref()) 
   }
 
   pub fn set_custom_language_pack<C: AsRef<SetCustomLanguagePack>>(&self, set_custom_language_pack: C) -> RTDResult<()> {
@@ -1727,26 +1604,8 @@ impl Api {
     self.send(delete_language_pack.as_ref()) 
   }
 
-  pub fn register_device<C: AsRef<RegisterDevice>>(&self, register_device: C) -> RTDResult<PushReceiverId> {
-  
-    match self.execute(register_device.as_ref())? {
-      Some(json) => Ok(PushReceiverId::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
-  pub fn process_push_notification<C: AsRef<ProcessPushNotification>>(&self, process_push_notification: C) -> RTDResult<()> {
-    self.send(process_push_notification.as_ref()) 
-  }
-
-  pub fn get_push_receiver_id<C: AsRef<GetPushReceiverId>>(&self, get_push_receiver_id: C) -> RTDResult<PushReceiverId> {
-  
-    match self.execute(get_push_receiver_id.as_ref())? {
-      Some(json) => Ok(PushReceiverId::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
+  pub fn register_device<C: AsRef<RegisterDevice>>(&self, register_device: C) -> RTDResult<()> {
+    self.send(register_device.as_ref()) 
   }
 
   pub fn get_recently_visited_t_me_urls<C: AsRef<GetRecentlyVisitedTMeUrls>>(&self, get_recently_visited_t_me_urls: C) -> RTDResult<TMeUrls> {
@@ -1818,15 +1677,6 @@ impl Api {
     self.send(report_chat.as_ref()) 
   }
 
-  pub fn get_chat_statistics_url<C: AsRef<GetChatStatisticsUrl>>(&self, get_chat_statistics_url: C) -> RTDResult<HttpUrl> {
-  
-    match self.execute(get_chat_statistics_url.as_ref())? {
-      Some(json) => Ok(HttpUrl::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
   pub fn get_storage_statistics<C: AsRef<GetStorageStatistics>>(&self, get_storage_statistics: C) -> RTDResult<StorageStatistics> {
   
     match self.execute(get_storage_statistics.as_ref())? {
@@ -1840,15 +1690,6 @@ impl Api {
   
     match self.execute(get_storage_statistics_fast.as_ref())? {
       Some(json) => Ok(StorageStatisticsFast::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
-  pub fn get_database_statistics<C: AsRef<GetDatabaseStatistics>>(&self, get_database_statistics: C) -> RTDResult<DatabaseStatistics> {
-  
-    match self.execute(get_database_statistics.as_ref())? {
-      Some(json) => Ok(DatabaseStatistics::from_json(json)?),
       None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
     }
   
@@ -1981,15 +1822,6 @@ impl Api {
   
   }
 
-  pub fn get_passport_authorization_form_available_elements<C: AsRef<GetPassportAuthorizationFormAvailableElements>>(&self, get_passport_authorization_form_available_elements: C) -> RTDResult<PassportElementsWithErrors> {
-  
-    match self.execute(get_passport_authorization_form_available_elements.as_ref())? {
-      Some(json) => Ok(PassportElementsWithErrors::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
   pub fn send_passport_authorization_form<C: AsRef<SendPassportAuthorizationForm>>(&self, send_passport_authorization_form: C) -> RTDResult<()> {
     self.send(send_passport_authorization_form.as_ref()) 
   }
@@ -2112,19 +1944,6 @@ impl Api {
   
   }
 
-  pub fn get_application_config<C: AsRef<GetApplicationConfig>>(&self, get_application_config: C) -> RTDResult<JsonValue> {
-  
-    match self.execute(get_application_config.as_ref())? {
-      Some(json) => Ok(JsonValue::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
-  pub fn save_application_log_event<C: AsRef<SaveApplicationLogEvent>>(&self, save_application_log_event: C) -> RTDResult<()> {
-    self.send(save_application_log_event.as_ref()) 
-  }
-
   pub fn add_proxy<C: AsRef<AddProxy>>(&self, add_proxy: C) -> RTDResult<Proxy> {
   
     match self.execute(add_proxy.as_ref())? {
@@ -2180,58 +1999,6 @@ impl Api {
       None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
     }
   
-  }
-
-  pub fn set_log_stream<C: AsRef<SetLogStream>>(&self, set_log_stream: C) -> RTDResult<()> {
-    self.send(set_log_stream.as_ref()) 
-  }
-
-  pub fn get_log_stream<C: AsRef<GetLogStream>>(&self, get_log_stream: C) -> RTDResult<LogStream> {
-  
-    match self.execute(get_log_stream.as_ref())? {
-      Some(json) => Ok(LogStream::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
-  pub fn set_log_verbosity_level<C: AsRef<SetLogVerbosityLevel>>(&self, set_log_verbosity_level: C) -> RTDResult<()> {
-    self.send(set_log_verbosity_level.as_ref()) 
-  }
-
-  pub fn get_log_verbosity_level<C: AsRef<GetLogVerbosityLevel>>(&self, get_log_verbosity_level: C) -> RTDResult<LogVerbosityLevel> {
-  
-    match self.execute(get_log_verbosity_level.as_ref())? {
-      Some(json) => Ok(LogVerbosityLevel::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
-  pub fn get_log_tags<C: AsRef<GetLogTags>>(&self, get_log_tags: C) -> RTDResult<LogTags> {
-  
-    match self.execute(get_log_tags.as_ref())? {
-      Some(json) => Ok(LogTags::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
-  pub fn set_log_tag_verbosity_level<C: AsRef<SetLogTagVerbosityLevel>>(&self, set_log_tag_verbosity_level: C) -> RTDResult<()> {
-    self.send(set_log_tag_verbosity_level.as_ref()) 
-  }
-
-  pub fn get_log_tag_verbosity_level<C: AsRef<GetLogTagVerbosityLevel>>(&self, get_log_tag_verbosity_level: C) -> RTDResult<LogVerbosityLevel> {
-  
-    match self.execute(get_log_tag_verbosity_level.as_ref())? {
-      Some(json) => Ok(LogVerbosityLevel::from_json(json)?),
-      None => Err(rtdlib::errors::RTDError::custom(tip::no_data_returned_from_tdlib())),
-    }
-  
-  }
-
-  pub fn add_log_message<C: AsRef<AddLogMessage>>(&self, add_log_message: C) -> RTDResult<()> {
-    self.send(add_log_message.as_ref()) 
   }
 
   pub fn test_call_empty<C: AsRef<TestCallEmpty>>(&self, test_call_empty: C) -> RTDResult<()> {

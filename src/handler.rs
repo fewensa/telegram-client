@@ -110,21 +110,9 @@ impl<'a> Handler<'a> {
       
       "updateScopeNotificationSettings" => event_handler!(scope_notification_settings, UpdateScopeNotificationSettings)(self.api, self.lout, json),
       
-      "updateChatPinnedMessage" => event_handler!(chat_pinned_message, UpdateChatPinnedMessage)(self.api, self.lout, json),
-      
       "updateChatReplyMarkup" => event_handler!(chat_reply_markup, UpdateChatReplyMarkup)(self.api, self.lout, json),
       
       "updateChatDraftMessage" => event_handler!(chat_draft_message, UpdateChatDraftMessage)(self.api, self.lout, json),
-      
-      "updateChatOnlineMemberCount" => event_handler!(chat_online_member_count, UpdateChatOnlineMemberCount)(self.api, self.lout, json),
-      
-      "updateNotification" => event_handler!(notification, UpdateNotification)(self.api, self.lout, json),
-      
-      "updateNotificationGroup" => event_handler!(notification_group, UpdateNotificationGroup)(self.api, self.lout, json),
-      
-      "updateActiveNotifications" => event_handler!(active_notifications, UpdateActiveNotifications)(self.api, self.lout, json),
-      
-      "updateHavePendingNotifications" => event_handler!(have_pending_notifications, UpdateHavePendingNotifications)(self.api, self.lout, json),
       
       "updateDeleteMessages" => event_handler!(delete_messages, UpdateDeleteMessages)(self.api, self.lout, json),
       
@@ -195,8 +183,6 @@ impl<'a> Handler<'a> {
       "updateNewCustomEvent" => event_handler!(new_custom_event, UpdateNewCustomEvent)(self.api, self.lout, json),
       
       "updateNewCustomQuery" => event_handler!(new_custom_query, UpdateNewCustomQuery)(self.api, self.lout, json),
-      
-      "updatePoll" => event_handler!(poll, UpdatePoll)(self.api, self.lout, json),
       
       "testUseUpdate" => event_handler!(test_use_update, TestUseUpdate)(self.api, self.lout, json),
       

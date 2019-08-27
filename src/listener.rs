@@ -40,14 +40,8 @@ pub struct Listener {
   chat_unread_mention_count: Option<Arc<Fn((&Api, &UpdateChatUnreadMentionCount)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_notification_settings: Option<Arc<Fn((&Api, &UpdateChatNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>>,
   scope_notification_settings: Option<Arc<Fn((&Api, &UpdateScopeNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_pinned_message: Option<Arc<Fn((&Api, &UpdateChatPinnedMessage)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_reply_markup: Option<Arc<Fn((&Api, &UpdateChatReplyMarkup)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_draft_message: Option<Arc<Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_online_member_count: Option<Arc<Fn((&Api, &UpdateChatOnlineMemberCount)) -> TGResult<()> + Send + Sync + 'static>>,
-  notification: Option<Arc<Fn((&Api, &UpdateNotification)) -> TGResult<()> + Send + Sync + 'static>>,
-  notification_group: Option<Arc<Fn((&Api, &UpdateNotificationGroup)) -> TGResult<()> + Send + Sync + 'static>>,
-  active_notifications: Option<Arc<Fn((&Api, &UpdateActiveNotifications)) -> TGResult<()> + Send + Sync + 'static>>,
-  have_pending_notifications: Option<Arc<Fn((&Api, &UpdateHavePendingNotifications)) -> TGResult<()> + Send + Sync + 'static>>,
   delete_messages: Option<Arc<Fn((&Api, &UpdateDeleteMessages)) -> TGResult<()> + Send + Sync + 'static>>,
   user_chat_action: Option<Arc<Fn((&Api, &UpdateUserChatAction)) -> TGResult<()> + Send + Sync + 'static>>,
   user_status: Option<Arc<Fn((&Api, &UpdateUserStatus)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -83,7 +77,6 @@ pub struct Listener {
   new_pre_checkout_query: Option<Arc<Fn((&Api, &UpdateNewPreCheckoutQuery)) -> TGResult<()> + Send + Sync + 'static>>,
   new_custom_event: Option<Arc<Fn((&Api, &UpdateNewCustomEvent)) -> TGResult<()> + Send + Sync + 'static>>,
   new_custom_query: Option<Arc<Fn((&Api, &UpdateNewCustomQuery)) -> TGResult<()> + Send + Sync + 'static>>,
-  poll: Option<Arc<Fn((&Api, &UpdatePoll)) -> TGResult<()> + Send + Sync + 'static>>,
   test_use_update: Option<Arc<Fn((&Api, &TestUseUpdate)) -> TGResult<()> + Send + Sync + 'static>>,
 
 
@@ -231,7 +224,7 @@ impl Listener {
     self
   }
 
-  /// The order of the chat in the chat list has changed. Instead of this update updateChatLastMessage, updateChatIsPinned or updateChatDraftMessage might be sent
+  /// The order of the chat in the chats list has changed. Instead of this update updateChatLastMessage, updateChatIsPinned or updateChatDraftMessage might be sent
   pub fn on_chat_order<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateChatOrder)) -> TGResult<()> + Send + Sync + 'static {
     self.chat_order = Some(Arc::new(fnc));
@@ -301,13 +294,6 @@ impl Listener {
     self
   }
 
-  /// The chat pinned message was changed
-  pub fn on_chat_pinned_message<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&Api, &UpdateChatPinnedMessage)) -> TGResult<()> + Send + Sync + 'static {
-    self.chat_pinned_message = Some(Arc::new(fnc));
-    self
-  }
-
   /// The default chat reply markup was changed. Can occur because new messages with reply markup were received or because an old reply markup was hidden by the user
   pub fn on_chat_reply_markup<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateChatReplyMarkup)) -> TGResult<()> + Send + Sync + 'static {
@@ -319,41 +305,6 @@ impl Listener {
   pub fn on_chat_draft_message<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static {
     self.chat_draft_message = Some(Arc::new(fnc));
-    self
-  }
-
-  /// The number of online group members has changed. This update with non-zero count is sent only for currently opened chats. There is no guarantee that it will be sent just after the count has changed
-  pub fn on_chat_online_member_count<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&Api, &UpdateChatOnlineMemberCount)) -> TGResult<()> + Send + Sync + 'static {
-    self.chat_online_member_count = Some(Arc::new(fnc));
-    self
-  }
-
-  /// A notification was changed
-  pub fn on_notification<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&Api, &UpdateNotification)) -> TGResult<()> + Send + Sync + 'static {
-    self.notification = Some(Arc::new(fnc));
-    self
-  }
-
-  /// A list of active notifications in a notification group has changed
-  pub fn on_notification_group<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&Api, &UpdateNotificationGroup)) -> TGResult<()> + Send + Sync + 'static {
-    self.notification_group = Some(Arc::new(fnc));
-    self
-  }
-
-  /// Contains active notifications that was shown on previous application launches. This update is sent only if a message database is used. In that case it comes once before any updateNotification and updateNotificationGroup update
-  pub fn on_active_notifications<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&Api, &UpdateActiveNotifications)) -> TGResult<()> + Send + Sync + 'static {
-    self.active_notifications = Some(Arc::new(fnc));
-    self
-  }
-
-  /// Describes, whether there are some pending notification updates. Can be used to prevent application from killing, while there are some pending notifications
-  pub fn on_have_pending_notifications<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&Api, &UpdateHavePendingNotifications)) -> TGResult<()> + Send + Sync + 'static {
-    self.have_pending_notifications = Some(Arc::new(fnc));
     self
   }
 
@@ -602,14 +553,7 @@ impl Listener {
     self
   }
 
-  /// Information about a poll was updated; for bots only
-  pub fn on_poll<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&Api, &UpdatePoll)) -> TGResult<()> + Send + Sync + 'static {
-    self.poll = Some(Arc::new(fnc));
-    self
-  }
-
-  /// Does nothing and ensures that the Update object is used; for testing only. This is an offline method. Can be called before authorization
+  /// Does nothing and ensures that the Update object is used; for testing only
   pub fn on_test_use_update<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &TestUseUpdate)) -> TGResult<()> + Send + Sync + 'static {
     self.test_use_update = Some(Arc::new(fnc));
@@ -657,14 +601,8 @@ impl Lout {
       "updateChatUnreadMentionCount",
       "updateChatNotificationSettings",
       "updateScopeNotificationSettings",
-      "updateChatPinnedMessage",
       "updateChatReplyMarkup",
       "updateChatDraftMessage",
-      "updateChatOnlineMemberCount",
-      "updateNotification",
-      "updateNotificationGroup",
-      "updateActiveNotifications",
-      "updateHavePendingNotifications",
       "updateDeleteMessages",
       "updateUserChatAction",
       "updateUserStatus",
@@ -700,7 +638,6 @@ impl Lout {
       "updateNewPreCheckoutQuery",
       "updateNewCustomEvent",
       "updateNewCustomQuery",
-      "updatePoll",
       "testUseUpdate",
 
     ];
@@ -812,7 +749,7 @@ impl Lout {
     &self.listener.chat_last_message
   }
 
-  /// The order of the chat in the chat list has changed. Instead of this update updateChatLastMessage, updateChatIsPinned or updateChatDraftMessage might be sent
+  /// The order of the chat in the chats list has changed. Instead of this update updateChatLastMessage, updateChatIsPinned or updateChatDraftMessage might be sent
   pub fn chat_order(&self) -> &Option<Arc<Fn((&Api, &UpdateChatOrder)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_order
   }
@@ -862,11 +799,6 @@ impl Lout {
     &self.listener.scope_notification_settings
   }
 
-  /// The chat pinned message was changed
-  pub fn chat_pinned_message(&self) -> &Option<Arc<Fn((&Api, &UpdateChatPinnedMessage)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.chat_pinned_message
-  }
-
   /// The default chat reply markup was changed. Can occur because new messages with reply markup were received or because an old reply markup was hidden by the user
   pub fn chat_reply_markup(&self) -> &Option<Arc<Fn((&Api, &UpdateChatReplyMarkup)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_reply_markup
@@ -875,31 +807,6 @@ impl Lout {
   /// A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update shouldn't be applied
   pub fn chat_draft_message(&self) -> &Option<Arc<Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_draft_message
-  }
-
-  /// The number of online group members has changed. This update with non-zero count is sent only for currently opened chats. There is no guarantee that it will be sent just after the count has changed
-  pub fn chat_online_member_count(&self) -> &Option<Arc<Fn((&Api, &UpdateChatOnlineMemberCount)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.chat_online_member_count
-  }
-
-  /// A notification was changed
-  pub fn notification(&self) -> &Option<Arc<Fn((&Api, &UpdateNotification)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.notification
-  }
-
-  /// A list of active notifications in a notification group has changed
-  pub fn notification_group(&self) -> &Option<Arc<Fn((&Api, &UpdateNotificationGroup)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.notification_group
-  }
-
-  /// Contains active notifications that was shown on previous application launches. This update is sent only if a message database is used. In that case it comes once before any updateNotification and updateNotificationGroup update
-  pub fn active_notifications(&self) -> &Option<Arc<Fn((&Api, &UpdateActiveNotifications)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.active_notifications
-  }
-
-  /// Describes, whether there are some pending notification updates. Can be used to prevent application from killing, while there are some pending notifications
-  pub fn have_pending_notifications(&self) -> &Option<Arc<Fn((&Api, &UpdateHavePendingNotifications)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.have_pending_notifications
   }
 
   /// Some messages were deleted
@@ -1077,12 +984,7 @@ impl Lout {
     &self.listener.new_custom_query
   }
 
-  /// Information about a poll was updated; for bots only
-  pub fn poll(&self) -> &Option<Arc<Fn((&Api, &UpdatePoll)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.poll
-  }
-
-  /// Does nothing and ensures that the Update object is used; for testing only. This is an offline method. Can be called before authorization
+  /// Does nothing and ensures that the Update object is used; for testing only
   pub fn test_use_update(&self) -> &Option<Arc<Fn((&Api, &TestUseUpdate)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.test_use_update
   }
