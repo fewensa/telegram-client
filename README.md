@@ -56,8 +56,9 @@ fn main() {
   let mut client = Client::new(api.clone());
   let listener = client.listener();
 
-  listener.on_receive(|(api, object)| {
-    println!("receive {:?} => {}", object.td_type(), object.to_json());
+  listener.on_receive(|(api, json)| {
+    debug!("receive {}", json);
+    Ok(())
   });
 
   client.daemon("telegram-rs");
@@ -68,3 +69,23 @@ more [examples](./examples)
 
 
 
+# Event
+
+Most of the events are from td, two events of particular concern.
+
+## on_receive
+
+This event is receive everything from td, returned data type is a json string.
+
+## on_exception
+
+When td returned json can not deserialize, or your event handler returned error. will be call is event.
+
+a sample of event handler returned error
+
+```rust
+listener.on_proxy(|(api, pxy)| {
+  debug!("Proxy info => {:?}", pxy);
+  Err(TGError::new("some error"))
+});
+```
