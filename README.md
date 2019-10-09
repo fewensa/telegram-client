@@ -27,7 +27,7 @@ telegram-client = "1.4.*"
 
 ## version
 
-Since the rtdlib version follows [td](https://github.com/tdlib/td), a version number less than 100 is reserved for td release.
+Since the rtdlib version follows [td](https://github.com/tdlib/td).
 
 Version mapping
 
