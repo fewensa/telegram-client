@@ -1,5 +1,6 @@
 use std::sync::{Arc, Mutex};
 use std::sync::mpsc::Receiver;
+use std::thread::JoinHandle;
 
 use daemon::Daemon;
 use daemon::DaemonRunner;
@@ -116,10 +117,10 @@ impl Client {
   /// let client = Client::default();
   /// client.start();
   /// ```
-  pub fn start(self) {
+  pub fn start(self) -> JoinHandle<()> {
     let lout = self.listener.lout();
     let tdrecv = TdRecv::new();
-    tdrecv.start(Arc::new(self.api), self.stop_flag.clone(), Arc::new(lout));
+    tdrecv.start(Arc::new(self.api), self.stop_flag.clone(), Arc::new(lout))
   }
 
   /// Start a daemon Client.
@@ -131,24 +132,24 @@ impl Client {
   /// let client = Client::default();
   /// client.daemon("tgclient");
   /// ```
-  pub fn daemon<S: AsRef<str>>(self, name: S) {
-    self.start();
-    debug!("Telegram client started.");
-    let daemon = Daemon {
-      name: name.as_ref().to_string(),
-    };
-    daemon.run(move |rx: Receiver<State>| {
-      debug!("Worker started.");
-      for signal in rx.iter() {
-        match signal {
-          State::Start => debug!("Worker: Start"),
-          State::Reload => debug!("Worker: Reload"),
-          State::Stop => debug!("Worker: Stop"),
-        };
-      }
-      debug!("Worker finished.");
-    }).expect("Can not start daemon");
-    debug!("{} finished.", name.as_ref());
+  pub fn daemon<S: AsRef<str>>(self, name: S) -> std::thread::Result<()> {
+    self.start().join()
+//    debug!("Telegram client started.");
+//    let daemon = Daemon {
+//      name: name.as_ref().to_string(),
+//    };
+//    daemon.run(move |rx: Receiver<State>| {
+//      debug!("Worker started.");
+//      for signal in rx.iter() {
+//        match signal {
+//          State::Start => debug!("Worker: Start"),
+//          State::Reload => debug!("Worker: Reload"),
+//          State::Stop => debug!("Worker: Stop"),
+//        };
+//      }
+//      debug!("Worker finished.");
+//    }).expect("Can not start daemon");
+//    debug!("{} finished.", name.as_ref());
   }
 
   pub fn listener(&mut self) -> &mut Listener {

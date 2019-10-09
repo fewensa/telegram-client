@@ -148,12 +148,12 @@ fn main() {
       400 => {
         match &message[..] {
           "PHONE_NUMBER_INVALID" => {
-            thelp::tip("Phone number invalid, please type a right phone number for telegram");
-            tgfn::type_phone_number(api);
+       thelp::tip("Phone number invalid, please type a right phone number for telegram");
+       tgfn::type_phone_number(api);
           }
           "PHONE_CODE_INVALID" | "PHONE_CODE_EMPTY" => {
-            thelp::tip("Phone code invalid, please type an authentication code");
-            tgfn::type_authentication_code(api);
+       thelp::tip("Phone code invalid, please type an authentication code");
+       tgfn::type_authentication_code(api);
           }
           _ => {}
         }
@@ -242,42 +242,42 @@ fn main() {
 
   listener.on_chat_read_inbox(|(api, update)| {
     debug!("Read inbox unread_count: {}, chat_id: {}, last_read_inbox_message_id: {}",
-           update.unread_count(),
-           update.chat_id(),
-           update.last_read_inbox_message_id(),
+      update.unread_count(),
+      update.chat_id(),
+      update.last_read_inbox_message_id(),
     );
     Ok(())
   });
 
   listener.on_chat_last_message(|(api, update)| {
     debug!("Chat last message: {}, data: {}",
-           update.chat_id(),
-           update.last_message().clone().map_or("None".to_string(), |v| v.to_json().expect("Can't serialize json"))
+      update.chat_id(),
+      update.last_message().clone().map_or("None".to_string(), |v| v.to_json().expect("Can't serialize json"))
     );
     Ok(())
   });
 
   listener.on_chat_read_outbox(|(api, update)| {
     debug!("Read outbox chat_id: {}, last_read_outbox_message_id: {}",
-           update.chat_id(),
-           update.last_read_outbox_message_id(),
+      update.chat_id(),
+      update.last_read_outbox_message_id(),
     );
     Ok(())
   });
 
   listener.on_user_full_info(|(api, update)| {
     debug!("Receive user full info, user_id: {}, full_info: {}",
-           update.user_id(),
-           update.user_full_info().to_json().expect("Can't serialize json")
+      update.user_id(),
+      update.user_full_info().to_json().expect("Can't serialize json")
     );
     Ok(())
   });
 
   listener.on_delete_messages(|(api, update)| {
     debug!("Receive delete messages, chat_id: {}, message_ids: {:?}, data: {}",
-           update.chat_id(),
-           update.message_ids(),
-           update.to_json().expect("Can't serialize json")
+      update.chat_id(),
+      update.message_ids(),
+      update.to_json().expect("Can't serialize json")
     );
     Ok(())
   });
