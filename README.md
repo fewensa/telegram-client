@@ -10,25 +10,18 @@ This crate use [td](https://github.com/tdlib/td) to call telegram client api, td
 
 # Usage
 
-## latest
-
-```toml
-[dependencies]
-telegram-client = "100.100"
-```
-
 ## 1.3.*
 
 ```toml
 [dependencies]
-telegram-client = "1.3"
+telegram-client = "1.3.*"
 ```
 
 ## 1.4.*
 
 ```toml
 [dependencies]
-telegram-client = "1.4"
+telegram-client = "1.4.*"
 ```
 
 
@@ -40,7 +33,6 @@ Version mapping
 
 | telegram-client    | td      |
 |--------------------|---------|
-| 100.100.*          | master  |
 | 1.3.*              | 1.3.*   |
 | 1.4.*              | 1.4.*   |
 
