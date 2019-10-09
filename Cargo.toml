@@ -1,6 +1,6 @@
 [package]
 name = "telegram-client"
-version = "100.100.100"
+version = "1.4.1"
 authors = ["fewensa <fewensa@protonmail.com>"]
 description = "Telegram client"
 homepage = "https://github.com/fewensa/telegram-client"
