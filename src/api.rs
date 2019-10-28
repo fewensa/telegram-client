@@ -77,11 +77,15 @@ impl Api {
     if self.unsafe_log {
       return text.clone();
     }
-    let regex_api_id = Regex::new(r#"api_id":\d*"#).expect("Regex fail");
-    let hide_api_id = regex_api_id.replace_all(text, r#"api_id":"****""#);
-    let regex_api_hash = Regex::new(r#"api_hash":"[0-9|a-f]*""#).expect("Regex fail");
-    let hide_api_hash = regex_api_hash.replace_all(&hide_api_id, r#"api_hash":"**********""#);
-    hide_api_hash.into_owned()
+    if text.contains("api_id") || text.contains("api_hash") {
+      let regex_api_id = Regex::new(r#"api_id":\d*"#).expect("Regex fail");
+      let hide_api_id = regex_api_id.replace_all(text, r#"api_id":"****""#);
+      let regex_api_hash = Regex::new(r#"api_hash":"[0-9|a-f]*""#).expect("Regex fail");
+      let hide_api_hash = regex_api_hash.replace_all(&hide_api_id, r#"api_hash":"**********""#);
+      hide_api_hash.into_owned()
+    } else {
+      text.clone()
+    }
   }
 
   pub fn send<Fnc: RFunction>(&self, fnc: Fnc) -> RTDResult<()> {
@@ -111,7 +115,7 @@ impl Api {
     Ok(self.tdlib.execute(&json[..]))
   }
 
-  
+
 
 
   pub fn get_authorization_state<C: AsRef<GetAuthorizationState>>(&self, get_authorization_state: C) -> RTDResult<()> {
