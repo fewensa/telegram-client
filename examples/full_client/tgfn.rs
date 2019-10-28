@@ -1,12 +1,14 @@
-use telegram_client::api::Api;
+use colored::Colorize;
 use rtdlib::types::*;
 
-use crate::{thelp};
+use telegram_client::api::Api;
+
+use crate::thelp;
 
 pub fn type_phone_number(api: &Api) {
   let input = thelp::typed();
   api.set_authentication_phone_number(SetAuthenticationPhoneNumber::builder().phone_number(&input).build());
-  debug!("Set phone number {}", input);
+  debug!("Set phone number [{}] {}", input.green(), "(If you copy log to anywhere, don't forget hide your phone number)".red());
 }
 
 pub fn type_authentication_code(api: &Api) {

@@ -23,6 +23,7 @@ build = "build.rs"
 rtdlib = "1.4.*"
 
 log = "0.4"
+regex = "1"
 
 [dev-dependencies]
 colored = "1"
