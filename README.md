@@ -24,7 +24,7 @@ telegram-client = "1.3.*"
 telegram-client = "1.4.*"
 ```
 
-## 1.4.*
+## 1.5.*
 
 ```toml
 [dependencies]
