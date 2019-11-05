@@ -1362,6 +1362,14 @@ impl Api {
     self.send(answer_custom_query.as_ref())
   }
 
+  pub fn send_ton_lite_server_request<C: AsRef<SendTonLiteServerRequest>>(&self, send_ton_lite_server_request: C) -> RTDResult<()> {
+    self.send(send_ton_lite_server_request.as_ref())
+  }
+
+  pub fn get_ton_wallet_password_salt<C: AsRef<GetTonWalletPasswordSalt>>(&self, get_ton_wallet_password_salt: C) -> RTDResult<()> {
+    self.send(get_ton_wallet_password_salt.as_ref())
+  }
+
   pub fn set_alarm<C: AsRef<SetAlarm>>(&self, set_alarm: C) -> RTDResult<()> {
     self.send(set_alarm.as_ref())
   }

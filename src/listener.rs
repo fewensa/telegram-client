@@ -233,7 +233,7 @@ impl Listener {
     self
   }
 
-  /// The last message of a chat was changed. If last_message is null then the last message in the chat became unknown. Some new unknown messages might be added to the chat in this case
+  /// The last message of a chat was changed. If last_message is null, then the last message in the chat became unknown. Some new unknown messages might be added to the chat in this case
   pub fn on_chat_last_message<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateChatLastMessage)) -> TGResult<()> + Send + Sync + 'static {
     self.chat_last_message = Some(Arc::new(fnc));
@@ -830,7 +830,7 @@ impl Lout {
     &self.listener.chat_permissions
   }
 
-  /// The last message of a chat was changed. If last_message is null then the last message in the chat became unknown. Some new unknown messages might be added to the chat in this case
+  /// The last message of a chat was changed. If last_message is null, then the last message in the chat became unknown. Some new unknown messages might be added to the chat in this case
   pub fn chat_last_message(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatLastMessage)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_last_message
   }
