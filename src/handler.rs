@@ -88,6 +88,8 @@ impl<'a> Handler<'a> {
       
       "updateChatPhoto" => event_handler!(chat_photo, UpdateChatPhoto)(self.api, self.lout, json),
       
+      "updateChatPermissions" => event_handler!(chat_permissions, UpdateChatPermissions)(self.api, self.lout, json),
+      
       "updateChatLastMessage" => event_handler!(chat_last_message, UpdateChatLastMessage)(self.api, self.lout, json),
       
       "updateChatOrder" => event_handler!(chat_order, UpdateChatOrder)(self.api, self.lout, json),
@@ -173,6 +175,8 @@ impl<'a> Handler<'a> {
       "updateFavoriteStickers" => event_handler!(favorite_stickers, UpdateFavoriteStickers)(self.api, self.lout, json),
       
       "updateSavedAnimations" => event_handler!(saved_animations, UpdateSavedAnimations)(self.api, self.lout, json),
+      
+      "updateSelectedBackground" => event_handler!(selected_background, UpdateSelectedBackground)(self.api, self.lout, json),
       
       "updateLanguagePackStrings" => event_handler!(language_pack_strings, UpdateLanguagePackStrings)(self.api, self.lout, json),
       

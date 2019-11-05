@@ -94,15 +94,14 @@ fn main() {
         .build());
       debug!("Set password *****");
     });
+    state.on_wait_registration(|_| {
+      thelp::tip("Welcome to use telegram");
+      thelp::tip("Your phone number is not registered to telegram, please type your name. and register.");
+      tgfn::type_and_register(api);
+    });
     state.on_wait_code(|astat| {
-      if astat.is_registered() {
-        thelp::tip("Please type authentication code:");
-        tgfn::type_authentication_code(api);
-      } else {
-        thelp::tip("Welcome to use telegram");
-        thelp::tip("Your phone number is not registered to telegram, please type your name. and authentication code.");
-        tgfn::type_authentication_code_register(api);
-      }
+      thelp::tip("Please type authentication code:");
+      tgfn::type_authentication_code(api);
     });
 
     state.on_ready(|_| {

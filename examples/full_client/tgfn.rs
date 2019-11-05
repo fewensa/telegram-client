@@ -17,15 +17,12 @@ pub fn type_authentication_code(api: &Api) {
   debug!("Set authentication code: {}", code);
 }
 
-pub fn type_authentication_code_register(api: &Api) {
+pub fn type_and_register(api: &Api) {
   let first_name = thelp::typed_with_message("Please input first name:");
   let last_name = thelp::typed_with_message("Please input last name:");
-  let code = thelp::typed_with_message("Please type authentication code:");
-  api.check_authentication_code(CheckAuthenticationCode::builder()
-    .first_name(&first_name)
-    .last_name(&last_name)
-    .code(&code)
+  debug!("You name is {} {}", first_name, last_name);
+  api.register_user(RegisterUser::builder()
+    .first_name(first_name)
+    .last_name(last_name)
     .build());
-  debug!("You name is {} {}, authentication: {}", first_name, last_name, code);
 }
-

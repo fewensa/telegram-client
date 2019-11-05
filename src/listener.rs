@@ -8,83 +8,85 @@ use crate::api::Api;
 /// Telegram client event listener
 #[derive(Clone, Default)]
 pub struct Listener {
-  exception: Option<Arc<Fn((&Api, &TGError)) + Send + Sync + 'static>>,
-  receive: Option<Arc<Fn((&Api, &String)) -> TGResult<()> + Send + Sync + 'static>>,
+  exception: Option<Arc<dyn Fn((&Api, &TGError)) + Send + Sync + 'static>>,
+  receive: Option<Arc<dyn Fn((&Api, &String)) -> TGResult<()> + Send + Sync + 'static>>,
 
-  error: Option<Arc<Fn((&Api, &Error)) -> TGResult<()> + Send + Sync + 'static>>,
-  ok: Option<Arc<Fn((&Api, &Ok)) -> TGResult<()> + Send + Sync + 'static>>,
-  proxy: Option<Arc<Fn((&Api, &Proxy)) -> TGResult<()> + Send + Sync + 'static>>,
+  error: Option<Arc<dyn Fn((&Api, &Error)) -> TGResult<()> + Send + Sync + 'static>>,
+  ok: Option<Arc<dyn Fn((&Api, &Ok)) -> TGResult<()> + Send + Sync + 'static>>,
+  proxy: Option<Arc<dyn Fn((&Api, &Proxy)) -> TGResult<()> + Send + Sync + 'static>>,
 
 
-  authorization_state: Option<Arc<Fn((&Api, &UpdateAuthorizationState)) -> TGResult<()> + Send + Sync + 'static>>,
-  new_message: Option<Arc<Fn((&Api, &UpdateNewMessage)) -> TGResult<()> + Send + Sync + 'static>>,
-  message_send_acknowledged: Option<Arc<Fn((&Api, &UpdateMessageSendAcknowledged)) -> TGResult<()> + Send + Sync + 'static>>,
-  message_send_succeeded: Option<Arc<Fn((&Api, &UpdateMessageSendSucceeded)) -> TGResult<()> + Send + Sync + 'static>>,
-  message_send_failed: Option<Arc<Fn((&Api, &UpdateMessageSendFailed)) -> TGResult<()> + Send + Sync + 'static>>,
-  message_content: Option<Arc<Fn((&Api, &UpdateMessageContent)) -> TGResult<()> + Send + Sync + 'static>>,
-  message_edited: Option<Arc<Fn((&Api, &UpdateMessageEdited)) -> TGResult<()> + Send + Sync + 'static>>,
-  message_views: Option<Arc<Fn((&Api, &UpdateMessageViews)) -> TGResult<()> + Send + Sync + 'static>>,
-  message_content_opened: Option<Arc<Fn((&Api, &UpdateMessageContentOpened)) -> TGResult<()> + Send + Sync + 'static>>,
-  message_mention_read: Option<Arc<Fn((&Api, &UpdateMessageMentionRead)) -> TGResult<()> + Send + Sync + 'static>>,
-  new_chat: Option<Arc<Fn((&Api, &UpdateNewChat)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_title: Option<Arc<Fn((&Api, &UpdateChatTitle)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_photo: Option<Arc<Fn((&Api, &UpdateChatPhoto)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_last_message: Option<Arc<Fn((&Api, &UpdateChatLastMessage)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_order: Option<Arc<Fn((&Api, &UpdateChatOrder)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_is_pinned: Option<Arc<Fn((&Api, &UpdateChatIsPinned)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_is_marked_as_unread: Option<Arc<Fn((&Api, &UpdateChatIsMarkedAsUnread)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_is_sponsored: Option<Arc<Fn((&Api, &UpdateChatIsSponsored)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_default_disable_notification: Option<Arc<Fn((&Api, &UpdateChatDefaultDisableNotification)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_read_inbox: Option<Arc<Fn((&Api, &UpdateChatReadInbox)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_read_outbox: Option<Arc<Fn((&Api, &UpdateChatReadOutbox)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_unread_mention_count: Option<Arc<Fn((&Api, &UpdateChatUnreadMentionCount)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_notification_settings: Option<Arc<Fn((&Api, &UpdateChatNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>>,
-  scope_notification_settings: Option<Arc<Fn((&Api, &UpdateScopeNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_pinned_message: Option<Arc<Fn((&Api, &UpdateChatPinnedMessage)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_reply_markup: Option<Arc<Fn((&Api, &UpdateChatReplyMarkup)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_draft_message: Option<Arc<Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static>>,
-  chat_online_member_count: Option<Arc<Fn((&Api, &UpdateChatOnlineMemberCount)) -> TGResult<()> + Send + Sync + 'static>>,
-  notification: Option<Arc<Fn((&Api, &UpdateNotification)) -> TGResult<()> + Send + Sync + 'static>>,
-  notification_group: Option<Arc<Fn((&Api, &UpdateNotificationGroup)) -> TGResult<()> + Send + Sync + 'static>>,
-  active_notifications: Option<Arc<Fn((&Api, &UpdateActiveNotifications)) -> TGResult<()> + Send + Sync + 'static>>,
-  have_pending_notifications: Option<Arc<Fn((&Api, &UpdateHavePendingNotifications)) -> TGResult<()> + Send + Sync + 'static>>,
-  delete_messages: Option<Arc<Fn((&Api, &UpdateDeleteMessages)) -> TGResult<()> + Send + Sync + 'static>>,
-  user_chat_action: Option<Arc<Fn((&Api, &UpdateUserChatAction)) -> TGResult<()> + Send + Sync + 'static>>,
-  user_status: Option<Arc<Fn((&Api, &UpdateUserStatus)) -> TGResult<()> + Send + Sync + 'static>>,
-  user: Option<Arc<Fn((&Api, &UpdateUser)) -> TGResult<()> + Send + Sync + 'static>>,
-  basic_group: Option<Arc<Fn((&Api, &UpdateBasicGroup)) -> TGResult<()> + Send + Sync + 'static>>,
-  supergroup: Option<Arc<Fn((&Api, &UpdateSupergroup)) -> TGResult<()> + Send + Sync + 'static>>,
-  secret_chat: Option<Arc<Fn((&Api, &UpdateSecretChat)) -> TGResult<()> + Send + Sync + 'static>>,
-  user_full_info: Option<Arc<Fn((&Api, &UpdateUserFullInfo)) -> TGResult<()> + Send + Sync + 'static>>,
-  basic_group_full_info: Option<Arc<Fn((&Api, &UpdateBasicGroupFullInfo)) -> TGResult<()> + Send + Sync + 'static>>,
-  supergroup_full_info: Option<Arc<Fn((&Api, &UpdateSupergroupFullInfo)) -> TGResult<()> + Send + Sync + 'static>>,
-  service_notification: Option<Arc<Fn((&Api, &UpdateServiceNotification)) -> TGResult<()> + Send + Sync + 'static>>,
-  file: Option<Arc<Fn((&Api, &UpdateFile)) -> TGResult<()> + Send + Sync + 'static>>,
-  file_generation_start: Option<Arc<Fn((&Api, &UpdateFileGenerationStart)) -> TGResult<()> + Send + Sync + 'static>>,
-  file_generation_stop: Option<Arc<Fn((&Api, &UpdateFileGenerationStop)) -> TGResult<()> + Send + Sync + 'static>>,
-  call: Option<Arc<Fn((&Api, &UpdateCall)) -> TGResult<()> + Send + Sync + 'static>>,
-  user_privacy_setting_rules: Option<Arc<Fn((&Api, &UpdateUserPrivacySettingRules)) -> TGResult<()> + Send + Sync + 'static>>,
-  unread_message_count: Option<Arc<Fn((&Api, &UpdateUnreadMessageCount)) -> TGResult<()> + Send + Sync + 'static>>,
-  unread_chat_count: Option<Arc<Fn((&Api, &UpdateUnreadChatCount)) -> TGResult<()> + Send + Sync + 'static>>,
-  option: Option<Arc<Fn((&Api, &UpdateOption)) -> TGResult<()> + Send + Sync + 'static>>,
-  installed_sticker_sets: Option<Arc<Fn((&Api, &UpdateInstalledStickerSets)) -> TGResult<()> + Send + Sync + 'static>>,
-  trending_sticker_sets: Option<Arc<Fn((&Api, &UpdateTrendingStickerSets)) -> TGResult<()> + Send + Sync + 'static>>,
-  recent_stickers: Option<Arc<Fn((&Api, &UpdateRecentStickers)) -> TGResult<()> + Send + Sync + 'static>>,
-  favorite_stickers: Option<Arc<Fn((&Api, &UpdateFavoriteStickers)) -> TGResult<()> + Send + Sync + 'static>>,
-  saved_animations: Option<Arc<Fn((&Api, &UpdateSavedAnimations)) -> TGResult<()> + Send + Sync + 'static>>,
-  language_pack_strings: Option<Arc<Fn((&Api, &UpdateLanguagePackStrings)) -> TGResult<()> + Send + Sync + 'static>>,
-  connection_state: Option<Arc<Fn((&Api, &UpdateConnectionState)) -> TGResult<()> + Send + Sync + 'static>>,
-  terms_of_service: Option<Arc<Fn((&Api, &UpdateTermsOfService)) -> TGResult<()> + Send + Sync + 'static>>,
-  new_inline_query: Option<Arc<Fn((&Api, &UpdateNewInlineQuery)) -> TGResult<()> + Send + Sync + 'static>>,
-  new_chosen_inline_result: Option<Arc<Fn((&Api, &UpdateNewChosenInlineResult)) -> TGResult<()> + Send + Sync + 'static>>,
-  new_callback_query: Option<Arc<Fn((&Api, &UpdateNewCallbackQuery)) -> TGResult<()> + Send + Sync + 'static>>,
-  new_inline_callback_query: Option<Arc<Fn((&Api, &UpdateNewInlineCallbackQuery)) -> TGResult<()> + Send + Sync + 'static>>,
-  new_shipping_query: Option<Arc<Fn((&Api, &UpdateNewShippingQuery)) -> TGResult<()> + Send + Sync + 'static>>,
-  new_pre_checkout_query: Option<Arc<Fn((&Api, &UpdateNewPreCheckoutQuery)) -> TGResult<()> + Send + Sync + 'static>>,
-  new_custom_event: Option<Arc<Fn((&Api, &UpdateNewCustomEvent)) -> TGResult<()> + Send + Sync + 'static>>,
-  new_custom_query: Option<Arc<Fn((&Api, &UpdateNewCustomQuery)) -> TGResult<()> + Send + Sync + 'static>>,
-  poll: Option<Arc<Fn((&Api, &UpdatePoll)) -> TGResult<()> + Send + Sync + 'static>>,
-  test_use_update: Option<Arc<Fn((&Api, &TestUseUpdate)) -> TGResult<()> + Send + Sync + 'static>>,
+  authorization_state: Option<Arc<dyn Fn((&Api, &UpdateAuthorizationState)) -> TGResult<()> + Send + Sync + 'static>>,
+  new_message: Option<Arc<dyn Fn((&Api, &UpdateNewMessage)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_send_acknowledged: Option<Arc<dyn Fn((&Api, &UpdateMessageSendAcknowledged)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_send_succeeded: Option<Arc<dyn Fn((&Api, &UpdateMessageSendSucceeded)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_send_failed: Option<Arc<dyn Fn((&Api, &UpdateMessageSendFailed)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_content: Option<Arc<dyn Fn((&Api, &UpdateMessageContent)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_edited: Option<Arc<dyn Fn((&Api, &UpdateMessageEdited)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_views: Option<Arc<dyn Fn((&Api, &UpdateMessageViews)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_content_opened: Option<Arc<dyn Fn((&Api, &UpdateMessageContentOpened)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_mention_read: Option<Arc<dyn Fn((&Api, &UpdateMessageMentionRead)) -> TGResult<()> + Send + Sync + 'static>>,
+  new_chat: Option<Arc<dyn Fn((&Api, &UpdateNewChat)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_title: Option<Arc<dyn Fn((&Api, &UpdateChatTitle)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_photo: Option<Arc<dyn Fn((&Api, &UpdateChatPhoto)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_permissions: Option<Arc<dyn Fn((&Api, &UpdateChatPermissions)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_last_message: Option<Arc<dyn Fn((&Api, &UpdateChatLastMessage)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_order: Option<Arc<dyn Fn((&Api, &UpdateChatOrder)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_is_pinned: Option<Arc<dyn Fn((&Api, &UpdateChatIsPinned)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_is_marked_as_unread: Option<Arc<dyn Fn((&Api, &UpdateChatIsMarkedAsUnread)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_is_sponsored: Option<Arc<dyn Fn((&Api, &UpdateChatIsSponsored)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_default_disable_notification: Option<Arc<dyn Fn((&Api, &UpdateChatDefaultDisableNotification)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_read_inbox: Option<Arc<dyn Fn((&Api, &UpdateChatReadInbox)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_read_outbox: Option<Arc<dyn Fn((&Api, &UpdateChatReadOutbox)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_unread_mention_count: Option<Arc<dyn Fn((&Api, &UpdateChatUnreadMentionCount)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_notification_settings: Option<Arc<dyn Fn((&Api, &UpdateChatNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>>,
+  scope_notification_settings: Option<Arc<dyn Fn((&Api, &UpdateScopeNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_pinned_message: Option<Arc<dyn Fn((&Api, &UpdateChatPinnedMessage)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_reply_markup: Option<Arc<dyn Fn((&Api, &UpdateChatReplyMarkup)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_draft_message: Option<Arc<dyn Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_online_member_count: Option<Arc<dyn Fn((&Api, &UpdateChatOnlineMemberCount)) -> TGResult<()> + Send + Sync + 'static>>,
+  notification: Option<Arc<dyn Fn((&Api, &UpdateNotification)) -> TGResult<()> + Send + Sync + 'static>>,
+  notification_group: Option<Arc<dyn Fn((&Api, &UpdateNotificationGroup)) -> TGResult<()> + Send + Sync + 'static>>,
+  active_notifications: Option<Arc<dyn Fn((&Api, &UpdateActiveNotifications)) -> TGResult<()> + Send + Sync + 'static>>,
+  have_pending_notifications: Option<Arc<dyn Fn((&Api, &UpdateHavePendingNotifications)) -> TGResult<()> + Send + Sync + 'static>>,
+  delete_messages: Option<Arc<dyn Fn((&Api, &UpdateDeleteMessages)) -> TGResult<()> + Send + Sync + 'static>>,
+  user_chat_action: Option<Arc<dyn Fn((&Api, &UpdateUserChatAction)) -> TGResult<()> + Send + Sync + 'static>>,
+  user_status: Option<Arc<dyn Fn((&Api, &UpdateUserStatus)) -> TGResult<()> + Send + Sync + 'static>>,
+  user: Option<Arc<dyn Fn((&Api, &UpdateUser)) -> TGResult<()> + Send + Sync + 'static>>,
+  basic_group: Option<Arc<dyn Fn((&Api, &UpdateBasicGroup)) -> TGResult<()> + Send + Sync + 'static>>,
+  supergroup: Option<Arc<dyn Fn((&Api, &UpdateSupergroup)) -> TGResult<()> + Send + Sync + 'static>>,
+  secret_chat: Option<Arc<dyn Fn((&Api, &UpdateSecretChat)) -> TGResult<()> + Send + Sync + 'static>>,
+  user_full_info: Option<Arc<dyn Fn((&Api, &UpdateUserFullInfo)) -> TGResult<()> + Send + Sync + 'static>>,
+  basic_group_full_info: Option<Arc<dyn Fn((&Api, &UpdateBasicGroupFullInfo)) -> TGResult<()> + Send + Sync + 'static>>,
+  supergroup_full_info: Option<Arc<dyn Fn((&Api, &UpdateSupergroupFullInfo)) -> TGResult<()> + Send + Sync + 'static>>,
+  service_notification: Option<Arc<dyn Fn((&Api, &UpdateServiceNotification)) -> TGResult<()> + Send + Sync + 'static>>,
+  file: Option<Arc<dyn Fn((&Api, &UpdateFile)) -> TGResult<()> + Send + Sync + 'static>>,
+  file_generation_start: Option<Arc<dyn Fn((&Api, &UpdateFileGenerationStart)) -> TGResult<()> + Send + Sync + 'static>>,
+  file_generation_stop: Option<Arc<dyn Fn((&Api, &UpdateFileGenerationStop)) -> TGResult<()> + Send + Sync + 'static>>,
+  call: Option<Arc<dyn Fn((&Api, &UpdateCall)) -> TGResult<()> + Send + Sync + 'static>>,
+  user_privacy_setting_rules: Option<Arc<dyn Fn((&Api, &UpdateUserPrivacySettingRules)) -> TGResult<()> + Send + Sync + 'static>>,
+  unread_message_count: Option<Arc<dyn Fn((&Api, &UpdateUnreadMessageCount)) -> TGResult<()> + Send + Sync + 'static>>,
+  unread_chat_count: Option<Arc<dyn Fn((&Api, &UpdateUnreadChatCount)) -> TGResult<()> + Send + Sync + 'static>>,
+  option: Option<Arc<dyn Fn((&Api, &UpdateOption)) -> TGResult<()> + Send + Sync + 'static>>,
+  installed_sticker_sets: Option<Arc<dyn Fn((&Api, &UpdateInstalledStickerSets)) -> TGResult<()> + Send + Sync + 'static>>,
+  trending_sticker_sets: Option<Arc<dyn Fn((&Api, &UpdateTrendingStickerSets)) -> TGResult<()> + Send + Sync + 'static>>,
+  recent_stickers: Option<Arc<dyn Fn((&Api, &UpdateRecentStickers)) -> TGResult<()> + Send + Sync + 'static>>,
+  favorite_stickers: Option<Arc<dyn Fn((&Api, &UpdateFavoriteStickers)) -> TGResult<()> + Send + Sync + 'static>>,
+  saved_animations: Option<Arc<dyn Fn((&Api, &UpdateSavedAnimations)) -> TGResult<()> + Send + Sync + 'static>>,
+  selected_background: Option<Arc<dyn Fn((&Api, &UpdateSelectedBackground)) -> TGResult<()> + Send + Sync + 'static>>,
+  language_pack_strings: Option<Arc<dyn Fn((&Api, &UpdateLanguagePackStrings)) -> TGResult<()> + Send + Sync + 'static>>,
+  connection_state: Option<Arc<dyn Fn((&Api, &UpdateConnectionState)) -> TGResult<()> + Send + Sync + 'static>>,
+  terms_of_service: Option<Arc<dyn Fn((&Api, &UpdateTermsOfService)) -> TGResult<()> + Send + Sync + 'static>>,
+  new_inline_query: Option<Arc<dyn Fn((&Api, &UpdateNewInlineQuery)) -> TGResult<()> + Send + Sync + 'static>>,
+  new_chosen_inline_result: Option<Arc<dyn Fn((&Api, &UpdateNewChosenInlineResult)) -> TGResult<()> + Send + Sync + 'static>>,
+  new_callback_query: Option<Arc<dyn Fn((&Api, &UpdateNewCallbackQuery)) -> TGResult<()> + Send + Sync + 'static>>,
+  new_inline_callback_query: Option<Arc<dyn Fn((&Api, &UpdateNewInlineCallbackQuery)) -> TGResult<()> + Send + Sync + 'static>>,
+  new_shipping_query: Option<Arc<dyn Fn((&Api, &UpdateNewShippingQuery)) -> TGResult<()> + Send + Sync + 'static>>,
+  new_pre_checkout_query: Option<Arc<dyn Fn((&Api, &UpdateNewPreCheckoutQuery)) -> TGResult<()> + Send + Sync + 'static>>,
+  new_custom_event: Option<Arc<dyn Fn((&Api, &UpdateNewCustomEvent)) -> TGResult<()> + Send + Sync + 'static>>,
+  new_custom_query: Option<Arc<dyn Fn((&Api, &UpdateNewCustomQuery)) -> TGResult<()> + Send + Sync + 'static>>,
+  poll: Option<Arc<dyn Fn((&Api, &UpdatePoll)) -> TGResult<()> + Send + Sync + 'static>>,
+  test_use_update: Option<Arc<dyn Fn((&Api, &TestUseUpdate)) -> TGResult<()> + Send + Sync + 'static>>,
 
 
 }
@@ -221,6 +223,13 @@ impl Listener {
   pub fn on_chat_photo<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateChatPhoto)) -> TGResult<()> + Send + Sync + 'static {
     self.chat_photo = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Chat permissions was changed
+  pub fn on_chat_permissions<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateChatPermissions)) -> TGResult<()> + Send + Sync + 'static {
+    self.chat_permissions = Some(Arc::new(fnc));
     self
   }
 
@@ -525,6 +534,13 @@ impl Listener {
     self
   }
 
+  /// The selected background has changed
+  pub fn on_selected_background<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateSelectedBackground)) -> TGResult<()> + Send + Sync + 'static {
+    self.selected_background = Some(Arc::new(fnc));
+    self
+  }
+
   /// Some language pack strings have been updated
   pub fn on_language_pack_strings<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateLanguagePackStrings)) -> TGResult<()> + Send + Sync + 'static {
@@ -646,6 +662,7 @@ impl Lout {
       "updateNewChat",
       "updateChatTitle",
       "updateChatPhoto",
+      "updateChatPermissions",
       "updateChatLastMessage",
       "updateChatOrder",
       "updateChatIsPinned",
@@ -689,6 +706,7 @@ impl Lout {
       "updateRecentStickers",
       "updateFavoriteStickers",
       "updateSavedAnimations",
+      "updateSelectedBackground",
       "updateLanguagePackStrings",
       "updateConnectionState",
       "updateTermsOfService",
@@ -714,28 +732,28 @@ impl Lout {
   }
 
   /// when telegram client throw exception
-  pub fn exception(&self) -> &Option<Arc<Fn((&Api, &TGError)) + Send + Sync + 'static>> {
+  pub fn exception(&self) -> &Option<Arc<dyn Fn((&Api, &TGError)) + Send + Sync + 'static>> {
     &self.listener.exception
   }
 
   /// when receive data from tdlib
-  pub fn receive(&self) -> &Option<Arc<Fn((&Api, &String)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn receive(&self) -> &Option<Arc<dyn Fn((&Api, &String)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.receive
   }
 
 
   /// An object of this type can be returned on every function call, in case of an error
-  pub fn error(&self) -> &Option<Arc<Fn((&Api, &Error)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn error(&self) -> &Option<Arc<dyn Fn((&Api, &Error)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.error
   }
 
   /// An object of this type is returned on a successful function call for certain functions
-  pub fn ok(&self) -> &Option<Arc<Fn((&Api, &Ok)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn ok(&self) -> &Option<Arc<dyn Fn((&Api, &Ok)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.ok
   }
 
   /// Contains information about a proxy server
-  pub fn proxy(&self) -> &Option<Arc<Fn((&Api, &Proxy)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn proxy(&self) -> &Option<Arc<dyn Fn((&Api, &Proxy)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.proxy
   }
 
@@ -743,347 +761,357 @@ impl Lout {
 
 
   /// The user authorization state has changed
-  pub fn authorization_state(&self) -> &Option<Arc<Fn((&Api, &UpdateAuthorizationState)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn authorization_state(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateAuthorizationState)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.authorization_state
   }
 
   /// A new message was received; can also be an outgoing message
-  pub fn new_message(&self) -> &Option<Arc<Fn((&Api, &UpdateNewMessage)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn new_message(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateNewMessage)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.new_message
   }
 
   /// A request to send a message has reached the Telegram server. This doesn't mean that the message will be sent successfully or even that the send message request will be processed. This update will be sent only if the option "use_quick_ack" is set to true. This update may be sent multiple times for the same message
-  pub fn message_send_acknowledged(&self) -> &Option<Arc<Fn((&Api, &UpdateMessageSendAcknowledged)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn message_send_acknowledged(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateMessageSendAcknowledged)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.message_send_acknowledged
   }
 
   /// A message has been successfully sent
-  pub fn message_send_succeeded(&self) -> &Option<Arc<Fn((&Api, &UpdateMessageSendSucceeded)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn message_send_succeeded(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateMessageSendSucceeded)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.message_send_succeeded
   }
 
   /// A message failed to send. Be aware that some messages being sent can be irrecoverably deleted, in which case updateDeleteMessages will be received instead of this update
-  pub fn message_send_failed(&self) -> &Option<Arc<Fn((&Api, &UpdateMessageSendFailed)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn message_send_failed(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateMessageSendFailed)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.message_send_failed
   }
 
   /// The message content has changed
-  pub fn message_content(&self) -> &Option<Arc<Fn((&Api, &UpdateMessageContent)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn message_content(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateMessageContent)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.message_content
   }
 
   /// A message was edited. Changes in the message content will come in a separate updateMessageContent
-  pub fn message_edited(&self) -> &Option<Arc<Fn((&Api, &UpdateMessageEdited)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn message_edited(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateMessageEdited)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.message_edited
   }
 
   /// The view count of the message has changed
-  pub fn message_views(&self) -> &Option<Arc<Fn((&Api, &UpdateMessageViews)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn message_views(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateMessageViews)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.message_views
   }
 
   /// The message content was opened. Updates voice note messages to "listened", video note messages to "viewed" and starts the TTL timer for self-destructing messages
-  pub fn message_content_opened(&self) -> &Option<Arc<Fn((&Api, &UpdateMessageContentOpened)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn message_content_opened(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateMessageContentOpened)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.message_content_opened
   }
 
   /// A message with an unread mention was read
-  pub fn message_mention_read(&self) -> &Option<Arc<Fn((&Api, &UpdateMessageMentionRead)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn message_mention_read(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateMessageMentionRead)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.message_mention_read
   }
 
   /// A new chat has been loaded/created. This update is guaranteed to come before the chat identifier is returned to the client. The chat field changes will be reported through separate updates
-  pub fn new_chat(&self) -> &Option<Arc<Fn((&Api, &UpdateNewChat)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn new_chat(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateNewChat)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.new_chat
   }
 
   /// The title of a chat was changed
-  pub fn chat_title(&self) -> &Option<Arc<Fn((&Api, &UpdateChatTitle)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn chat_title(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatTitle)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_title
   }
 
   /// A chat photo was changed
-  pub fn chat_photo(&self) -> &Option<Arc<Fn((&Api, &UpdateChatPhoto)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn chat_photo(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatPhoto)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_photo
   }
 
+  /// Chat permissions was changed
+  pub fn chat_permissions(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatPermissions)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.chat_permissions
+  }
+
   /// The last message of a chat was changed. If last_message is null then the last message in the chat became unknown. Some new unknown messages might be added to the chat in this case
-  pub fn chat_last_message(&self) -> &Option<Arc<Fn((&Api, &UpdateChatLastMessage)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn chat_last_message(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatLastMessage)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_last_message
   }
 
   /// The order of the chat in the chat list has changed. Instead of this update updateChatLastMessage, updateChatIsPinned or updateChatDraftMessage might be sent
-  pub fn chat_order(&self) -> &Option<Arc<Fn((&Api, &UpdateChatOrder)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn chat_order(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatOrder)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_order
   }
 
   /// A chat was pinned or unpinned
-  pub fn chat_is_pinned(&self) -> &Option<Arc<Fn((&Api, &UpdateChatIsPinned)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn chat_is_pinned(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatIsPinned)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_is_pinned
   }
 
   /// A chat was marked as unread or was read
-  pub fn chat_is_marked_as_unread(&self) -> &Option<Arc<Fn((&Api, &UpdateChatIsMarkedAsUnread)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn chat_is_marked_as_unread(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatIsMarkedAsUnread)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_is_marked_as_unread
   }
 
   /// A chat's is_sponsored field has changed
-  pub fn chat_is_sponsored(&self) -> &Option<Arc<Fn((&Api, &UpdateChatIsSponsored)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn chat_is_sponsored(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatIsSponsored)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_is_sponsored
   }
 
   /// The value of the default disable_notification parameter, used when a message is sent to the chat, was changed
-  pub fn chat_default_disable_notification(&self) -> &Option<Arc<Fn((&Api, &UpdateChatDefaultDisableNotification)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn chat_default_disable_notification(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatDefaultDisableNotification)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_default_disable_notification
   }
 
   /// Incoming messages were read or number of unread messages has been changed
-  pub fn chat_read_inbox(&self) -> &Option<Arc<Fn((&Api, &UpdateChatReadInbox)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn chat_read_inbox(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatReadInbox)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_read_inbox
   }
 
   /// Outgoing messages were read
-  pub fn chat_read_outbox(&self) -> &Option<Arc<Fn((&Api, &UpdateChatReadOutbox)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn chat_read_outbox(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatReadOutbox)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_read_outbox
   }
 
   /// The chat unread_mention_count has changed
-  pub fn chat_unread_mention_count(&self) -> &Option<Arc<Fn((&Api, &UpdateChatUnreadMentionCount)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn chat_unread_mention_count(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatUnreadMentionCount)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_unread_mention_count
   }
 
   /// Notification settings for a chat were changed
-  pub fn chat_notification_settings(&self) -> &Option<Arc<Fn((&Api, &UpdateChatNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn chat_notification_settings(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_notification_settings
   }
 
   /// Notification settings for some type of chats were updated
-  pub fn scope_notification_settings(&self) -> &Option<Arc<Fn((&Api, &UpdateScopeNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn scope_notification_settings(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateScopeNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.scope_notification_settings
   }
 
   /// The chat pinned message was changed
-  pub fn chat_pinned_message(&self) -> &Option<Arc<Fn((&Api, &UpdateChatPinnedMessage)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn chat_pinned_message(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatPinnedMessage)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_pinned_message
   }
 
   /// The default chat reply markup was changed. Can occur because new messages with reply markup were received or because an old reply markup was hidden by the user
-  pub fn chat_reply_markup(&self) -> &Option<Arc<Fn((&Api, &UpdateChatReplyMarkup)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn chat_reply_markup(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatReplyMarkup)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_reply_markup
   }
 
   /// A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update shouldn't be applied
-  pub fn chat_draft_message(&self) -> &Option<Arc<Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn chat_draft_message(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_draft_message
   }
 
   /// The number of online group members has changed. This update with non-zero count is sent only for currently opened chats. There is no guarantee that it will be sent just after the count has changed
-  pub fn chat_online_member_count(&self) -> &Option<Arc<Fn((&Api, &UpdateChatOnlineMemberCount)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn chat_online_member_count(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatOnlineMemberCount)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_online_member_count
   }
 
   /// A notification was changed
-  pub fn notification(&self) -> &Option<Arc<Fn((&Api, &UpdateNotification)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn notification(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateNotification)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.notification
   }
 
   /// A list of active notifications in a notification group has changed
-  pub fn notification_group(&self) -> &Option<Arc<Fn((&Api, &UpdateNotificationGroup)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn notification_group(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateNotificationGroup)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.notification_group
   }
 
   /// Contains active notifications that was shown on previous application launches. This update is sent only if a message database is used. In that case it comes once before any updateNotification and updateNotificationGroup update
-  pub fn active_notifications(&self) -> &Option<Arc<Fn((&Api, &UpdateActiveNotifications)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn active_notifications(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateActiveNotifications)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.active_notifications
   }
 
   /// Describes, whether there are some pending notification updates. Can be used to prevent application from killing, while there are some pending notifications
-  pub fn have_pending_notifications(&self) -> &Option<Arc<Fn((&Api, &UpdateHavePendingNotifications)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn have_pending_notifications(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateHavePendingNotifications)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.have_pending_notifications
   }
 
   /// Some messages were deleted
-  pub fn delete_messages(&self) -> &Option<Arc<Fn((&Api, &UpdateDeleteMessages)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn delete_messages(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateDeleteMessages)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.delete_messages
   }
 
   /// User activity in the chat has changed
-  pub fn user_chat_action(&self) -> &Option<Arc<Fn((&Api, &UpdateUserChatAction)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn user_chat_action(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateUserChatAction)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.user_chat_action
   }
 
   /// The user went online or offline
-  pub fn user_status(&self) -> &Option<Arc<Fn((&Api, &UpdateUserStatus)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn user_status(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateUserStatus)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.user_status
   }
 
   /// Some data of a user has changed. This update is guaranteed to come before the user identifier is returned to the client
-  pub fn user(&self) -> &Option<Arc<Fn((&Api, &UpdateUser)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn user(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateUser)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.user
   }
 
   /// Some data of a basic group has changed. This update is guaranteed to come before the basic group identifier is returned to the client
-  pub fn basic_group(&self) -> &Option<Arc<Fn((&Api, &UpdateBasicGroup)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn basic_group(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateBasicGroup)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.basic_group
   }
 
   /// Some data of a supergroup or a channel has changed. This update is guaranteed to come before the supergroup identifier is returned to the client
-  pub fn supergroup(&self) -> &Option<Arc<Fn((&Api, &UpdateSupergroup)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn supergroup(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateSupergroup)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.supergroup
   }
 
   /// Some data of a secret chat has changed. This update is guaranteed to come before the secret chat identifier is returned to the client
-  pub fn secret_chat(&self) -> &Option<Arc<Fn((&Api, &UpdateSecretChat)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn secret_chat(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateSecretChat)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.secret_chat
   }
 
   /// Some data from userFullInfo has been changed
-  pub fn user_full_info(&self) -> &Option<Arc<Fn((&Api, &UpdateUserFullInfo)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn user_full_info(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateUserFullInfo)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.user_full_info
   }
 
   /// Some data from basicGroupFullInfo has been changed
-  pub fn basic_group_full_info(&self) -> &Option<Arc<Fn((&Api, &UpdateBasicGroupFullInfo)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn basic_group_full_info(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateBasicGroupFullInfo)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.basic_group_full_info
   }
 
   /// Some data from supergroupFullInfo has been changed
-  pub fn supergroup_full_info(&self) -> &Option<Arc<Fn((&Api, &UpdateSupergroupFullInfo)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn supergroup_full_info(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateSupergroupFullInfo)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.supergroup_full_info
   }
 
   /// Service notification from the server. Upon receiving this the client must show a popup with the content of the notification
-  pub fn service_notification(&self) -> &Option<Arc<Fn((&Api, &UpdateServiceNotification)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn service_notification(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateServiceNotification)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.service_notification
   }
 
   /// Information about a file was updated
-  pub fn file(&self) -> &Option<Arc<Fn((&Api, &UpdateFile)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn file(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateFile)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.file
   }
 
   /// The file generation process needs to be started by the client
-  pub fn file_generation_start(&self) -> &Option<Arc<Fn((&Api, &UpdateFileGenerationStart)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn file_generation_start(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateFileGenerationStart)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.file_generation_start
   }
 
   /// File generation is no longer needed
-  pub fn file_generation_stop(&self) -> &Option<Arc<Fn((&Api, &UpdateFileGenerationStop)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn file_generation_stop(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateFileGenerationStop)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.file_generation_stop
   }
 
   /// New call was created or information about a call was updated
-  pub fn call(&self) -> &Option<Arc<Fn((&Api, &UpdateCall)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn call(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateCall)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.call
   }
 
   /// Some privacy setting rules have been changed
-  pub fn user_privacy_setting_rules(&self) -> &Option<Arc<Fn((&Api, &UpdateUserPrivacySettingRules)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn user_privacy_setting_rules(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateUserPrivacySettingRules)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.user_privacy_setting_rules
   }
 
   /// Number of unread messages has changed. This update is sent only if a message database is used
-  pub fn unread_message_count(&self) -> &Option<Arc<Fn((&Api, &UpdateUnreadMessageCount)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn unread_message_count(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateUnreadMessageCount)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.unread_message_count
   }
 
   /// Number of unread chats, i.e. with unread messages or marked as unread, has changed. This update is sent only if a message database is used
-  pub fn unread_chat_count(&self) -> &Option<Arc<Fn((&Api, &UpdateUnreadChatCount)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn unread_chat_count(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateUnreadChatCount)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.unread_chat_count
   }
 
   /// An option changed its value
-  pub fn option(&self) -> &Option<Arc<Fn((&Api, &UpdateOption)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn option(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateOption)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.option
   }
 
   /// The list of installed sticker sets was updated
-  pub fn installed_sticker_sets(&self) -> &Option<Arc<Fn((&Api, &UpdateInstalledStickerSets)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn installed_sticker_sets(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateInstalledStickerSets)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.installed_sticker_sets
   }
 
   /// The list of trending sticker sets was updated or some of them were viewed
-  pub fn trending_sticker_sets(&self) -> &Option<Arc<Fn((&Api, &UpdateTrendingStickerSets)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn trending_sticker_sets(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateTrendingStickerSets)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.trending_sticker_sets
   }
 
   /// The list of recently used stickers was updated
-  pub fn recent_stickers(&self) -> &Option<Arc<Fn((&Api, &UpdateRecentStickers)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn recent_stickers(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateRecentStickers)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.recent_stickers
   }
 
   /// The list of favorite stickers was updated
-  pub fn favorite_stickers(&self) -> &Option<Arc<Fn((&Api, &UpdateFavoriteStickers)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn favorite_stickers(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateFavoriteStickers)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.favorite_stickers
   }
 
   /// The list of saved animations was updated
-  pub fn saved_animations(&self) -> &Option<Arc<Fn((&Api, &UpdateSavedAnimations)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn saved_animations(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateSavedAnimations)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.saved_animations
   }
 
+  /// The selected background has changed
+  pub fn selected_background(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateSelectedBackground)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.selected_background
+  }
+
   /// Some language pack strings have been updated
-  pub fn language_pack_strings(&self) -> &Option<Arc<Fn((&Api, &UpdateLanguagePackStrings)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn language_pack_strings(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateLanguagePackStrings)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.language_pack_strings
   }
 
   /// The connection state has changed
-  pub fn connection_state(&self) -> &Option<Arc<Fn((&Api, &UpdateConnectionState)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn connection_state(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateConnectionState)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.connection_state
   }
 
   /// New terms of service must be accepted by the user. If the terms of service are declined, then the deleteAccount method should be called with the reason "Decline ToS update"
-  pub fn terms_of_service(&self) -> &Option<Arc<Fn((&Api, &UpdateTermsOfService)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn terms_of_service(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateTermsOfService)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.terms_of_service
   }
 
   /// A new incoming inline query; for bots only
-  pub fn new_inline_query(&self) -> &Option<Arc<Fn((&Api, &UpdateNewInlineQuery)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn new_inline_query(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateNewInlineQuery)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.new_inline_query
   }
 
   /// The user has chosen a result of an inline query; for bots only
-  pub fn new_chosen_inline_result(&self) -> &Option<Arc<Fn((&Api, &UpdateNewChosenInlineResult)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn new_chosen_inline_result(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateNewChosenInlineResult)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.new_chosen_inline_result
   }
 
   /// A new incoming callback query; for bots only
-  pub fn new_callback_query(&self) -> &Option<Arc<Fn((&Api, &UpdateNewCallbackQuery)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn new_callback_query(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateNewCallbackQuery)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.new_callback_query
   }
 
   /// A new incoming callback query from a message sent via a bot; for bots only
-  pub fn new_inline_callback_query(&self) -> &Option<Arc<Fn((&Api, &UpdateNewInlineCallbackQuery)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn new_inline_callback_query(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateNewInlineCallbackQuery)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.new_inline_callback_query
   }
 
   /// A new incoming shipping query; for bots only. Only for invoices with flexible price
-  pub fn new_shipping_query(&self) -> &Option<Arc<Fn((&Api, &UpdateNewShippingQuery)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn new_shipping_query(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateNewShippingQuery)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.new_shipping_query
   }
 
   /// A new incoming pre-checkout query; for bots only. Contains full information about a checkout
-  pub fn new_pre_checkout_query(&self) -> &Option<Arc<Fn((&Api, &UpdateNewPreCheckoutQuery)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn new_pre_checkout_query(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateNewPreCheckoutQuery)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.new_pre_checkout_query
   }
 
   /// A new incoming event; for bots only
-  pub fn new_custom_event(&self) -> &Option<Arc<Fn((&Api, &UpdateNewCustomEvent)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn new_custom_event(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateNewCustomEvent)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.new_custom_event
   }
 
   /// A new incoming query; for bots only
-  pub fn new_custom_query(&self) -> &Option<Arc<Fn((&Api, &UpdateNewCustomQuery)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn new_custom_query(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateNewCustomQuery)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.new_custom_query
   }
 
   /// Information about a poll was updated; for bots only
-  pub fn poll(&self) -> &Option<Arc<Fn((&Api, &UpdatePoll)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn poll(&self) -> &Option<Arc<dyn Fn((&Api, &UpdatePoll)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.poll
   }
 
   /// Does nothing and ensures that the Update object is used; for testing only. This is an offline method. Can be called before authorization
-  pub fn test_use_update(&self) -> &Option<Arc<Fn((&Api, &TestUseUpdate)) -> TGResult<()> + Send + Sync + 'static>> {
+  pub fn test_use_update(&self) -> &Option<Arc<dyn Fn((&Api, &TestUseUpdate)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.test_use_update
   }
 

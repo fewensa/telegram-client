@@ -142,6 +142,10 @@ impl Api {
     self.send(check_authentication_code.as_ref())
   }
 
+  pub fn register_user<C: AsRef<RegisterUser>>(&self, register_user: C) -> RTDResult<()> {
+    self.send(register_user.as_ref())
+  }
+
   pub fn check_authentication_password<C: AsRef<CheckAuthenticationPassword>>(&self, check_authentication_password: C) -> RTDResult<()> {
     self.send(check_authentication_password.as_ref())
   }
@@ -390,6 +394,10 @@ impl Api {
     self.send(get_message_link.as_ref())
   }
 
+  pub fn get_message_link_info<C: AsRef<GetMessageLinkInfo>>(&self, get_message_link_info: C) -> RTDResult<()> {
+    self.send(get_message_link_info.as_ref())
+  }
+
   pub fn send_message<C: AsRef<SendMessage>>(&self, send_message: C) -> RTDResult<()> {
     self.send(send_message.as_ref())
   }
@@ -408,6 +416,10 @@ impl Api {
 
   pub fn forward_messages<C: AsRef<ForwardMessages>>(&self, forward_messages: C) -> RTDResult<()> {
     self.send(forward_messages.as_ref())
+  }
+
+  pub fn resend_messages<C: AsRef<ResendMessages>>(&self, resend_messages: C) -> RTDResult<()> {
+    self.send(resend_messages.as_ref())
   }
 
   pub fn send_chat_set_ttl_message<C: AsRef<SendChatSetTtlMessage>>(&self, send_chat_set_ttl_message: C) -> RTDResult<()> {
@@ -618,6 +630,10 @@ impl Api {
     self.send(set_chat_photo.as_ref())
   }
 
+  pub fn set_chat_permissions<C: AsRef<SetChatPermissions>>(&self, set_chat_permissions: C) -> RTDResult<()> {
+    self.send(set_chat_permissions.as_ref())
+  }
+
   pub fn set_chat_draft_message<C: AsRef<SetChatDraftMessage>>(&self, set_chat_draft_message: C) -> RTDResult<()> {
     self.send(set_chat_draft_message.as_ref())
   }
@@ -640,6 +656,10 @@ impl Api {
 
   pub fn set_chat_client_data<C: AsRef<SetChatClientData>>(&self, set_chat_client_data: C) -> RTDResult<()> {
     self.send(set_chat_client_data.as_ref())
+  }
+
+  pub fn set_chat_description<C: AsRef<SetChatDescription>>(&self, set_chat_description: C) -> RTDResult<()> {
+    self.send(set_chat_description.as_ref())
   }
 
   pub fn pin_chat_message<C: AsRef<PinChatMessage>>(&self, pin_chat_message: C) -> RTDResult<()> {
@@ -906,6 +926,14 @@ impl Api {
     self.send(get_sticker_emojis.as_ref())
   }
 
+  pub fn search_emojis<C: AsRef<SearchEmojis>>(&self, search_emojis: C) -> RTDResult<()> {
+    self.send(search_emojis.as_ref())
+  }
+
+  pub fn get_emoji_suggestions_url<C: AsRef<GetEmojiSuggestionsUrl>>(&self, get_emoji_suggestions_url: C) -> RTDResult<()> {
+    self.send(get_emoji_suggestions_url.as_ref())
+  }
+
   pub fn get_saved_animations<C: AsRef<GetSavedAnimations>>(&self, get_saved_animations: C) -> RTDResult<()> {
     self.send(get_saved_animations.as_ref())
   }
@@ -994,10 +1022,6 @@ impl Api {
     self.send(disconnect_all_websites.as_ref())
   }
 
-  pub fn toggle_basic_group_administrators<C: AsRef<ToggleBasicGroupAdministrators>>(&self, toggle_basic_group_administrators: C) -> RTDResult<()> {
-    self.send(toggle_basic_group_administrators.as_ref())
-  }
-
   pub fn set_supergroup_username<C: AsRef<SetSupergroupUsername>>(&self, set_supergroup_username: C) -> RTDResult<()> {
     self.send(set_supergroup_username.as_ref())
   }
@@ -1006,20 +1030,12 @@ impl Api {
     self.send(set_supergroup_sticker_set.as_ref())
   }
 
-  pub fn toggle_supergroup_invites<C: AsRef<ToggleSupergroupInvites>>(&self, toggle_supergroup_invites: C) -> RTDResult<()> {
-    self.send(toggle_supergroup_invites.as_ref())
-  }
-
   pub fn toggle_supergroup_sign_messages<C: AsRef<ToggleSupergroupSignMessages>>(&self, toggle_supergroup_sign_messages: C) -> RTDResult<()> {
     self.send(toggle_supergroup_sign_messages.as_ref())
   }
 
   pub fn toggle_supergroup_is_all_history_available<C: AsRef<ToggleSupergroupIsAllHistoryAvailable>>(&self, toggle_supergroup_is_all_history_available: C) -> RTDResult<()> {
     self.send(toggle_supergroup_is_all_history_available.as_ref())
-  }
-
-  pub fn set_supergroup_description<C: AsRef<SetSupergroupDescription>>(&self, set_supergroup_description: C) -> RTDResult<()> {
-    self.send(set_supergroup_description.as_ref())
   }
 
   pub fn report_supergroup_spam<C: AsRef<ReportSupergroupSpam>>(&self, report_supergroup_spam: C) -> RTDResult<()> {
@@ -1074,8 +1090,28 @@ impl Api {
     self.send(get_support_user.as_ref())
   }
 
-  pub fn get_wallpapers<C: AsRef<GetWallpapers>>(&self, get_wallpapers: C) -> RTDResult<()> {
-    self.send(get_wallpapers.as_ref())
+  pub fn get_backgrounds<C: AsRef<GetBackgrounds>>(&self, get_backgrounds: C) -> RTDResult<()> {
+    self.send(get_backgrounds.as_ref())
+  }
+
+  pub fn get_background_url<C: AsRef<GetBackgroundUrl>>(&self, get_background_url: C) -> RTDResult<()> {
+    self.send(get_background_url.as_ref())
+  }
+
+  pub fn search_background<C: AsRef<SearchBackground>>(&self, search_background: C) -> RTDResult<()> {
+    self.send(search_background.as_ref())
+  }
+
+  pub fn set_background<C: AsRef<SetBackground>>(&self, set_background: C) -> RTDResult<()> {
+    self.send(set_background.as_ref())
+  }
+
+  pub fn remove_background<C: AsRef<RemoveBackground>>(&self, remove_background: C) -> RTDResult<()> {
+    self.send(remove_background.as_ref())
+  }
+
+  pub fn reset_backgrounds<C: AsRef<ResetBackgrounds>>(&self, reset_backgrounds: C) -> RTDResult<()> {
+    self.send(reset_backgrounds.as_ref())
   }
 
   pub fn get_localization_target_info<C: AsRef<GetLocalizationTargetInfo>>(&self, get_localization_target_info: C) -> RTDResult<()> {
@@ -1204,6 +1240,14 @@ impl Api {
 
   pub fn reset_network_statistics<C: AsRef<ResetNetworkStatistics>>(&self, reset_network_statistics: C) -> RTDResult<()> {
     self.send(reset_network_statistics.as_ref())
+  }
+
+  pub fn get_auto_download_settings_presets<C: AsRef<GetAutoDownloadSettingsPresets>>(&self, get_auto_download_settings_presets: C) -> RTDResult<()> {
+    self.send(get_auto_download_settings_presets.as_ref())
+  }
+
+  pub fn set_auto_download_settings<C: AsRef<SetAutoDownloadSettings>>(&self, set_auto_download_settings: C) -> RTDResult<()> {
+    self.send(set_auto_download_settings.as_ref())
   }
 
   pub fn get_passport_element<C: AsRef<GetPassportElement>>(&self, get_passport_element: C) -> RTDResult<()> {
@@ -1442,6 +1486,10 @@ impl Api {
     self.send(test_network.as_ref())
   }
 
+  pub fn test_proxy<C: AsRef<TestProxy>>(&self, test_proxy: C) -> RTDResult<()> {
+    self.send(test_proxy.as_ref())
+  }
+
   pub fn test_get_difference<C: AsRef<TestGetDifference>>(&self, test_get_difference: C) -> RTDResult<()> {
     self.send(test_get_difference.as_ref())
   }
@@ -1450,8 +1498,8 @@ impl Api {
     self.send(test_use_update.as_ref())
   }
 
-  pub fn test_use_error<C: AsRef<TestUseError>>(&self, test_use_error: C) -> RTDResult<()> {
-    self.send(test_use_error.as_ref())
+  pub fn test_return_error<C: AsRef<TestReturnError>>(&self, test_return_error: C) -> RTDResult<()> {
+    self.send(test_return_error.as_ref())
   }
 
 
