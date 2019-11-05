@@ -9,6 +9,7 @@ use telegram_client::api::*;
 use telegram_client::client::Client;
 
 use crate::config::{Config, LogType};
+use colored::Colorize;
 
 mod thelp;
 mod tgfn;
@@ -84,12 +85,12 @@ fn main() {
       debug!("Set encryption key");
     });
     state.on_wait_phone_number(|_| {
-      thelp::tip("Please type your telegram phone number:");
+      thelp::tip(format!("{} {}", "Please type your telegram phone number:", "(If you copy log to anywhere, don't forget hide your phone number)".red()));
       tgfn::type_phone_number(api);
     });
     state.on_wait_password(|_| {
       api.check_authentication_password(CheckAuthenticationPassword::builder()
-        .password(thelp::typed_with_message("Please type your telegram password:"))
+        .password(thelp::typed_with_message(format!("{} {}", "Please type your telegram password:", "(If you copy log to anywhere, don't forget hide your password)".red())))
         .build());
       debug!("Set password *****");
     });
@@ -99,7 +100,7 @@ fn main() {
         tgfn::type_authentication_code(api);
       } else {
         thelp::tip("Welcome to use telegram");
-        thelp::tip("Your phone number is not registed to telegramm, please type your name. and authentication code.");
+        thelp::tip("Your phone number is not registered to telegram, please type your name. and authentication code.");
         tgfn::type_authentication_code_register(api);
       }
     });
@@ -148,12 +149,12 @@ fn main() {
       400 => {
         match &message[..] {
           "PHONE_NUMBER_INVALID" => {
-       thelp::tip("Phone number invalid, please type a right phone number for telegram");
-       tgfn::type_phone_number(api);
+             thelp::tip(format!("{} {}", "Phone number invalid, please type a right phone number for telegram", "(If you copy log to anywhere, don't forget hide your phone number)".red()));
+             tgfn::type_phone_number(api);
           }
           "PHONE_CODE_INVALID" | "PHONE_CODE_EMPTY" => {
-       thelp::tip("Phone code invalid, please type an authentication code");
-       tgfn::type_authentication_code(api);
+             thelp::tip("Phone code invalid, please type an authentication code");
+             tgfn::type_authentication_code(api);
           }
           _ => {}
         }
