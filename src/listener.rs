@@ -26,7 +26,9 @@ pub struct Listener {
   message_views: Option<Arc<dyn Fn((&Api, &UpdateMessageViews)) -> TGResult<()> + Send + Sync + 'static>>,
   message_content_opened: Option<Arc<dyn Fn((&Api, &UpdateMessageContentOpened)) -> TGResult<()> + Send + Sync + 'static>>,
   message_mention_read: Option<Arc<dyn Fn((&Api, &UpdateMessageMentionRead)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_live_location_viewed: Option<Arc<dyn Fn((&Api, &UpdateMessageLiveLocationViewed)) -> TGResult<()> + Send + Sync + 'static>>,
   new_chat: Option<Arc<dyn Fn((&Api, &UpdateNewChat)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_chat_list: Option<Arc<dyn Fn((&Api, &UpdateChatChatList)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_title: Option<Arc<dyn Fn((&Api, &UpdateChatTitle)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_photo: Option<Arc<dyn Fn((&Api, &UpdateChatPhoto)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_permissions: Option<Arc<dyn Fn((&Api, &UpdateChatPermissions)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -35,12 +37,14 @@ pub struct Listener {
   chat_is_pinned: Option<Arc<dyn Fn((&Api, &UpdateChatIsPinned)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_is_marked_as_unread: Option<Arc<dyn Fn((&Api, &UpdateChatIsMarkedAsUnread)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_is_sponsored: Option<Arc<dyn Fn((&Api, &UpdateChatIsSponsored)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_has_scheduled_messages: Option<Arc<dyn Fn((&Api, &UpdateChatHasScheduledMessages)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_default_disable_notification: Option<Arc<dyn Fn((&Api, &UpdateChatDefaultDisableNotification)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_read_inbox: Option<Arc<dyn Fn((&Api, &UpdateChatReadInbox)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_read_outbox: Option<Arc<dyn Fn((&Api, &UpdateChatReadOutbox)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_unread_mention_count: Option<Arc<dyn Fn((&Api, &UpdateChatUnreadMentionCount)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_notification_settings: Option<Arc<dyn Fn((&Api, &UpdateChatNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>>,
   scope_notification_settings: Option<Arc<dyn Fn((&Api, &UpdateScopeNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_action_bar: Option<Arc<dyn Fn((&Api, &UpdateChatActionBar)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_pinned_message: Option<Arc<dyn Fn((&Api, &UpdateChatPinnedMessage)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_reply_markup: Option<Arc<dyn Fn((&Api, &UpdateChatReplyMarkup)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_draft_message: Option<Arc<dyn Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -77,6 +81,7 @@ pub struct Listener {
   language_pack_strings: Option<Arc<dyn Fn((&Api, &UpdateLanguagePackStrings)) -> TGResult<()> + Send + Sync + 'static>>,
   connection_state: Option<Arc<dyn Fn((&Api, &UpdateConnectionState)) -> TGResult<()> + Send + Sync + 'static>>,
   terms_of_service: Option<Arc<dyn Fn((&Api, &UpdateTermsOfService)) -> TGResult<()> + Send + Sync + 'static>>,
+  users_nearby: Option<Arc<dyn Fn((&Api, &UpdateUsersNearby)) -> TGResult<()> + Send + Sync + 'static>>,
   new_inline_query: Option<Arc<dyn Fn((&Api, &UpdateNewInlineQuery)) -> TGResult<()> + Send + Sync + 'static>>,
   new_chosen_inline_result: Option<Arc<dyn Fn((&Api, &UpdateNewChosenInlineResult)) -> TGResult<()> + Send + Sync + 'static>>,
   new_callback_query: Option<Arc<dyn Fn((&Api, &UpdateNewCallbackQuery)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -205,10 +210,24 @@ impl Listener {
     self
   }
 
+  /// A message with a live location was viewed. When the update is received, the client is supposed to update the live location
+  pub fn on_message_live_location_viewed<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateMessageLiveLocationViewed)) -> TGResult<()> + Send + Sync + 'static {
+    self.message_live_location_viewed = Some(Arc::new(fnc));
+    self
+  }
+
   /// A new chat has been loaded/created. This update is guaranteed to come before the chat identifier is returned to the client. The chat field changes will be reported through separate updates
   pub fn on_new_chat<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateNewChat)) -> TGResult<()> + Send + Sync + 'static {
     self.new_chat = Some(Arc::new(fnc));
+    self
+  }
+
+  /// The list to which the chat belongs was changed. This update is guaranteed to be sent only when chat.order == 0 and the current or the new chat list is null
+  pub fn on_chat_chat_list<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateChatChatList)) -> TGResult<()> + Send + Sync + 'static {
+    self.chat_chat_list = Some(Arc::new(fnc));
     self
   }
 
@@ -240,7 +259,7 @@ impl Listener {
     self
   }
 
-  /// The order of the chat in the chat list has changed. Instead of this update updateChatLastMessage, updateChatIsPinned or updateChatDraftMessage might be sent
+  /// The order of the chat in the chat list has changed. Instead of this update updateChatLastMessage, updateChatIsPinned, updateChatDraftMessage, or updateChatIsSponsored might be sent
   pub fn on_chat_order<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateChatOrder)) -> TGResult<()> + Send + Sync + 'static {
     self.chat_order = Some(Arc::new(fnc));
@@ -265,6 +284,13 @@ impl Listener {
   pub fn on_chat_is_sponsored<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateChatIsSponsored)) -> TGResult<()> + Send + Sync + 'static {
     self.chat_is_sponsored = Some(Arc::new(fnc));
+    self
+  }
+
+  /// A chat's has_scheduled_messages field has changed
+  pub fn on_chat_has_scheduled_messages<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateChatHasScheduledMessages)) -> TGResult<()> + Send + Sync + 'static {
+    self.chat_has_scheduled_messages = Some(Arc::new(fnc));
     self
   }
 
@@ -307,6 +333,13 @@ impl Listener {
   pub fn on_scope_notification_settings<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateScopeNotificationSettings)) -> TGResult<()> + Send + Sync + 'static {
     self.scope_notification_settings = Some(Arc::new(fnc));
+    self
+  }
+
+  /// The chat action bar was changed
+  pub fn on_chat_action_bar<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateChatActionBar)) -> TGResult<()> + Send + Sync + 'static {
+    self.chat_action_bar = Some(Arc::new(fnc));
     self
   }
 
@@ -359,7 +392,7 @@ impl Listener {
     self
   }
 
-  /// Describes, whether there are some pending notification updates. Can be used to prevent application from killing, while there are some pending notifications
+  /// Describes whether there are some pending notification updates. Can be used to prevent application from killing, while there are some pending notifications
   pub fn on_have_pending_notifications<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateHavePendingNotifications)) -> TGResult<()> + Send + Sync + 'static {
     self.have_pending_notifications = Some(Arc::new(fnc));
@@ -478,7 +511,7 @@ impl Listener {
     self
   }
 
-  /// Number of unread messages has changed. This update is sent only if a message database is used
+  /// Number of unread messages in a chat list has changed. This update is sent only if a message database is used
   pub fn on_unread_message_count<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateUnreadMessageCount)) -> TGResult<()> + Send + Sync + 'static {
     self.unread_message_count = Some(Arc::new(fnc));
@@ -559,6 +592,13 @@ impl Listener {
   pub fn on_terms_of_service<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateTermsOfService)) -> TGResult<()> + Send + Sync + 'static {
     self.terms_of_service = Some(Arc::new(fnc));
+    self
+  }
+
+  /// List of users nearby has changed. The update is sent only 60 seconds after a successful searchChatsNearby request
+  pub fn on_users_nearby<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateUsersNearby)) -> TGResult<()> + Send + Sync + 'static {
+    self.users_nearby = Some(Arc::new(fnc));
     self
   }
 
@@ -659,7 +699,9 @@ impl Lout {
       "updateMessageViews",
       "updateMessageContentOpened",
       "updateMessageMentionRead",
+      "updateMessageLiveLocationViewed",
       "updateNewChat",
+      "updateChatChatList",
       "updateChatTitle",
       "updateChatPhoto",
       "updateChatPermissions",
@@ -668,12 +710,14 @@ impl Lout {
       "updateChatIsPinned",
       "updateChatIsMarkedAsUnread",
       "updateChatIsSponsored",
+      "updateChatHasScheduledMessages",
       "updateChatDefaultDisableNotification",
       "updateChatReadInbox",
       "updateChatReadOutbox",
       "updateChatUnreadMentionCount",
       "updateChatNotificationSettings",
       "updateScopeNotificationSettings",
+      "updateChatActionBar",
       "updateChatPinnedMessage",
       "updateChatReplyMarkup",
       "updateChatDraftMessage",
@@ -710,6 +754,7 @@ impl Lout {
       "updateLanguagePackStrings",
       "updateConnectionState",
       "updateTermsOfService",
+      "updateUsersNearby",
       "updateNewInlineQuery",
       "updateNewChosenInlineResult",
       "updateNewCallbackQuery",
@@ -810,9 +855,19 @@ impl Lout {
     &self.listener.message_mention_read
   }
 
+  /// A message with a live location was viewed. When the update is received, the client is supposed to update the live location
+  pub fn message_live_location_viewed(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateMessageLiveLocationViewed)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.message_live_location_viewed
+  }
+
   /// A new chat has been loaded/created. This update is guaranteed to come before the chat identifier is returned to the client. The chat field changes will be reported through separate updates
   pub fn new_chat(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateNewChat)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.new_chat
+  }
+
+  /// The list to which the chat belongs was changed. This update is guaranteed to be sent only when chat.order == 0 and the current or the new chat list is null
+  pub fn chat_chat_list(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatChatList)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.chat_chat_list
   }
 
   /// The title of a chat was changed
@@ -835,7 +890,7 @@ impl Lout {
     &self.listener.chat_last_message
   }
 
-  /// The order of the chat in the chat list has changed. Instead of this update updateChatLastMessage, updateChatIsPinned or updateChatDraftMessage might be sent
+  /// The order of the chat in the chat list has changed. Instead of this update updateChatLastMessage, updateChatIsPinned, updateChatDraftMessage, or updateChatIsSponsored might be sent
   pub fn chat_order(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatOrder)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_order
   }
@@ -853,6 +908,11 @@ impl Lout {
   /// A chat's is_sponsored field has changed
   pub fn chat_is_sponsored(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatIsSponsored)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_is_sponsored
+  }
+
+  /// A chat's has_scheduled_messages field has changed
+  pub fn chat_has_scheduled_messages(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatHasScheduledMessages)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.chat_has_scheduled_messages
   }
 
   /// The value of the default disable_notification parameter, used when a message is sent to the chat, was changed
@@ -883,6 +943,11 @@ impl Lout {
   /// Notification settings for some type of chats were updated
   pub fn scope_notification_settings(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateScopeNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.scope_notification_settings
+  }
+
+  /// The chat action bar was changed
+  pub fn chat_action_bar(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatActionBar)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.chat_action_bar
   }
 
   /// The chat pinned message was changed
@@ -920,7 +985,7 @@ impl Lout {
     &self.listener.active_notifications
   }
 
-  /// Describes, whether there are some pending notification updates. Can be used to prevent application from killing, while there are some pending notifications
+  /// Describes whether there are some pending notification updates. Can be used to prevent application from killing, while there are some pending notifications
   pub fn have_pending_notifications(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateHavePendingNotifications)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.have_pending_notifications
   }
@@ -1005,7 +1070,7 @@ impl Lout {
     &self.listener.user_privacy_setting_rules
   }
 
-  /// Number of unread messages has changed. This update is sent only if a message database is used
+  /// Number of unread messages in a chat list has changed. This update is sent only if a message database is used
   pub fn unread_message_count(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateUnreadMessageCount)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.unread_message_count
   }
@@ -1063,6 +1128,11 @@ impl Lout {
   /// New terms of service must be accepted by the user. If the terms of service are declined, then the deleteAccount method should be called with the reason "Decline ToS update"
   pub fn terms_of_service(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateTermsOfService)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.terms_of_service
+  }
+
+  /// List of users nearby has changed. The update is sent only 60 seconds after a successful searchChatsNearby request
+  pub fn users_nearby(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateUsersNearby)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.users_nearby
   }
 
   /// A new incoming inline query; for bots only

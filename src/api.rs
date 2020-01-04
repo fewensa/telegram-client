@@ -142,6 +142,10 @@ impl Api {
     self.send(check_authentication_code.as_ref())
   }
 
+  pub fn request_qr_code_authentication<C: AsRef<RequestQrCodeAuthentication>>(&self, request_qr_code_authentication: C) -> RTDResult<()> {
+    self.send(request_qr_code_authentication.as_ref())
+  }
+
   pub fn register_user<C: AsRef<RegisterUser>>(&self, register_user: C) -> RTDResult<()> {
     self.send(register_user.as_ref())
   }
@@ -172,6 +176,10 @@ impl Api {
 
   pub fn destroy<C: AsRef<Destroy>>(&self, destroy: C) -> RTDResult<()> {
     self.send(destroy.as_ref())
+  }
+
+  pub fn confirm_qr_code_authentication<C: AsRef<ConfirmQrCodeAuthentication>>(&self, confirm_qr_code_authentication: C) -> RTDResult<()> {
+    self.send(confirm_qr_code_authentication.as_ref())
   }
 
   pub fn get_current_state<C: AsRef<GetCurrentState>>(&self, get_current_state: C) -> RTDResult<()> {
@@ -306,6 +314,10 @@ impl Api {
     self.send(search_chats_on_server.as_ref())
   }
 
+  pub fn search_chats_nearby<C: AsRef<SearchChatsNearby>>(&self, search_chats_nearby: C) -> RTDResult<()> {
+    self.send(search_chats_nearby.as_ref())
+  }
+
   pub fn get_top_chats<C: AsRef<GetTopChats>>(&self, get_top_chats: C) -> RTDResult<()> {
     self.send(get_top_chats.as_ref())
   }
@@ -332,6 +344,18 @@ impl Api {
 
   pub fn get_created_public_chats<C: AsRef<GetCreatedPublicChats>>(&self, get_created_public_chats: C) -> RTDResult<()> {
     self.send(get_created_public_chats.as_ref())
+  }
+
+  pub fn check_created_public_chats_limit<C: AsRef<CheckCreatedPublicChatsLimit>>(&self, check_created_public_chats_limit: C) -> RTDResult<()> {
+    self.send(check_created_public_chats_limit.as_ref())
+  }
+
+  pub fn get_suitable_discussion_chats<C: AsRef<GetSuitableDiscussionChats>>(&self, get_suitable_discussion_chats: C) -> RTDResult<()> {
+    self.send(get_suitable_discussion_chats.as_ref())
+  }
+
+  pub fn get_inactive_supergroup_chats<C: AsRef<GetInactiveSupergroupChats>>(&self, get_inactive_supergroup_chats: C) -> RTDResult<()> {
+    self.send(get_inactive_supergroup_chats.as_ref())
   }
 
   pub fn get_groups_in_common<C: AsRef<GetGroupsInCommon>>(&self, get_groups_in_common: C) -> RTDResult<()> {
@@ -376,6 +400,10 @@ impl Api {
 
   pub fn get_chat_message_count<C: AsRef<GetChatMessageCount>>(&self, get_chat_message_count: C) -> RTDResult<()> {
     self.send(get_chat_message_count.as_ref())
+  }
+
+  pub fn get_chat_scheduled_messages<C: AsRef<GetChatScheduledMessages>>(&self, get_chat_scheduled_messages: C) -> RTDResult<()> {
+    self.send(get_chat_scheduled_messages.as_ref())
   }
 
   pub fn remove_notification<C: AsRef<RemoveNotification>>(&self, remove_notification: C) -> RTDResult<()> {
@@ -482,6 +510,10 @@ impl Api {
     self.send(edit_inline_message_reply_markup.as_ref())
   }
 
+  pub fn edit_message_scheduling_state<C: AsRef<EditMessageSchedulingState>>(&self, edit_message_scheduling_state: C) -> RTDResult<()> {
+    self.send(edit_message_scheduling_state.as_ref())
+  }
+
   pub fn get_text_entities<C: AsRef<GetTextEntities>>(&self, get_text_entities: C) -> RTDResult<()> {
     self.send(get_text_entities.as_ref())
   }
@@ -520,6 +552,14 @@ impl Api {
 
   pub fn stop_poll<C: AsRef<StopPoll>>(&self, stop_poll: C) -> RTDResult<()> {
     self.send(stop_poll.as_ref())
+  }
+
+  pub fn get_login_url_info<C: AsRef<GetLoginUrlInfo>>(&self, get_login_url_info: C) -> RTDResult<()> {
+    self.send(get_login_url_info.as_ref())
+  }
+
+  pub fn get_login_url<C: AsRef<GetLoginUrl>>(&self, get_login_url: C) -> RTDResult<()> {
+    self.send(get_login_url.as_ref())
   }
 
   pub fn get_inline_query_results<C: AsRef<GetInlineQueryResults>>(&self, get_inline_query_results: C) -> RTDResult<()> {
@@ -622,6 +662,10 @@ impl Api {
     self.send(upgrade_basic_group_chat_to_supergroup_chat.as_ref())
   }
 
+  pub fn set_chat_chat_list<C: AsRef<SetChatChatList>>(&self, set_chat_chat_list: C) -> RTDResult<()> {
+    self.send(set_chat_chat_list.as_ref())
+  }
+
   pub fn set_chat_title<C: AsRef<SetChatTitle>>(&self, set_chat_title: C) -> RTDResult<()> {
     self.send(set_chat_title.as_ref())
   }
@@ -662,6 +706,18 @@ impl Api {
     self.send(set_chat_description.as_ref())
   }
 
+  pub fn set_chat_discussion_group<C: AsRef<SetChatDiscussionGroup>>(&self, set_chat_discussion_group: C) -> RTDResult<()> {
+    self.send(set_chat_discussion_group.as_ref())
+  }
+
+  pub fn set_chat_location<C: AsRef<SetChatLocation>>(&self, set_chat_location: C) -> RTDResult<()> {
+    self.send(set_chat_location.as_ref())
+  }
+
+  pub fn set_chat_slow_mode_delay<C: AsRef<SetChatSlowModeDelay>>(&self, set_chat_slow_mode_delay: C) -> RTDResult<()> {
+    self.send(set_chat_slow_mode_delay.as_ref())
+  }
+
   pub fn pin_chat_message<C: AsRef<PinChatMessage>>(&self, pin_chat_message: C) -> RTDResult<()> {
     self.send(pin_chat_message.as_ref())
   }
@@ -688,6 +744,14 @@ impl Api {
 
   pub fn set_chat_member_status<C: AsRef<SetChatMemberStatus>>(&self, set_chat_member_status: C) -> RTDResult<()> {
     self.send(set_chat_member_status.as_ref())
+  }
+
+  pub fn can_transfer_ownership<C: AsRef<CanTransferOwnership>>(&self, can_transfer_ownership: C) -> RTDResult<()> {
+    self.send(can_transfer_ownership.as_ref())
+  }
+
+  pub fn transfer_chat_ownership<C: AsRef<TransferChatOwnership>>(&self, transfer_chat_ownership: C) -> RTDResult<()> {
+    self.send(transfer_chat_ownership.as_ref())
   }
 
   pub fn get_chat_member<C: AsRef<GetChatMember>>(&self, get_chat_member: C) -> RTDResult<()> {
@@ -810,6 +874,10 @@ impl Api {
     self.send(get_blocked_users.as_ref())
   }
 
+  pub fn add_contact<C: AsRef<AddContact>>(&self, add_contact: C) -> RTDResult<()> {
+    self.send(add_contact.as_ref())
+  }
+
   pub fn import_contacts<C: AsRef<ImportContacts>>(&self, import_contacts: C) -> RTDResult<()> {
     self.send(import_contacts.as_ref())
   }
@@ -836,6 +904,10 @@ impl Api {
 
   pub fn clear_imported_contacts<C: AsRef<ClearImportedContacts>>(&self, clear_imported_contacts: C) -> RTDResult<()> {
     self.send(clear_imported_contacts.as_ref())
+  }
+
+  pub fn share_phone_number<C: AsRef<SharePhoneNumber>>(&self, share_phone_number: C) -> RTDResult<()> {
+    self.send(share_phone_number.as_ref())
   }
 
   pub fn get_user_profile_photos<C: AsRef<GetUserProfilePhotos>>(&self, get_user_profile_photos: C) -> RTDResult<()> {
@@ -1194,12 +1266,8 @@ impl Api {
     self.send(delete_account.as_ref())
   }
 
-  pub fn get_chat_report_spam_state<C: AsRef<GetChatReportSpamState>>(&self, get_chat_report_spam_state: C) -> RTDResult<()> {
-    self.send(get_chat_report_spam_state.as_ref())
-  }
-
-  pub fn change_chat_report_spam_state<C: AsRef<ChangeChatReportSpamState>>(&self, change_chat_report_spam_state: C) -> RTDResult<()> {
-    self.send(change_chat_report_spam_state.as_ref())
+  pub fn remove_chat_action_bar<C: AsRef<RemoveChatActionBar>>(&self, remove_chat_action_bar: C) -> RTDResult<()> {
+    self.send(remove_chat_action_bar.as_ref())
   }
 
   pub fn report_chat<C: AsRef<ReportChat>>(&self, report_chat: C) -> RTDResult<()> {

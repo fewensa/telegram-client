@@ -21,8 +21,8 @@ build = "build.rs"
 
 [dependencies]
 #rtdlib = "1.5.*"
-#rtdlib = { path = "../rtdlib" }
-rtdlib = { git = "https://github.com/fewensa/rtdlib.git" }
+rtdlib = { path = "../rtdlib" }
+#rtdlib = { git = "https://github.com/fewensa/rtdlib.git" }
 
 log = "0.4"
 regex = "1"
