@@ -38,6 +38,13 @@ telegram-client = "1.4.*"
 telegram-client = "1.5.*"
 ```
 
+## 1.6.*
+
+```toml
+[dependencies]
+telegram-client = "1.6.*"
+```
+
 
 ## version
 
@@ -51,6 +58,7 @@ Version mapping
 | 1.3.*              | 1.3.*   |
 | 1.4.*              | 1.4.*   |
 | 1.5.*              | 1.5.*   |
+| 1.6.*              | 1.6.*   |
 
 ## Note
 
