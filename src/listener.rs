@@ -91,6 +91,7 @@ pub struct Listener {
   new_custom_event: Option<Arc<dyn Fn((&Api, &UpdateNewCustomEvent)) -> TGResult<()> + Send + Sync + 'static>>,
   new_custom_query: Option<Arc<dyn Fn((&Api, &UpdateNewCustomQuery)) -> TGResult<()> + Send + Sync + 'static>>,
   poll: Option<Arc<dyn Fn((&Api, &UpdatePoll)) -> TGResult<()> + Send + Sync + 'static>>,
+  poll_answer: Option<Arc<dyn Fn((&Api, &UpdatePollAnswer)) -> TGResult<()> + Send + Sync + 'static>>,
   test_use_update: Option<Arc<dyn Fn((&Api, &TestUseUpdate)) -> TGResult<()> + Send + Sync + 'static>>,
 
 
@@ -385,7 +386,7 @@ impl Listener {
     self
   }
 
-  /// Contains active notifications that was shown on previous application launches. This update is sent only if a message database is used. In that case it comes once before any updateNotification and updateNotificationGroup update
+  /// Contains active notifications that was shown on previous application launches. This update is sent only if the message database is used. In that case it comes once before any updateNotification and updateNotificationGroup update
   pub fn on_active_notifications<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateActiveNotifications)) -> TGResult<()> + Send + Sync + 'static {
     self.active_notifications = Some(Arc::new(fnc));
@@ -511,14 +512,14 @@ impl Listener {
     self
   }
 
-  /// Number of unread messages in a chat list has changed. This update is sent only if a message database is used
+  /// Number of unread messages in a chat list has changed. This update is sent only if the message database is used
   pub fn on_unread_message_count<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateUnreadMessageCount)) -> TGResult<()> + Send + Sync + 'static {
     self.unread_message_count = Some(Arc::new(fnc));
     self
   }
 
-  /// Number of unread chats, i.e. with unread messages or marked as unread, has changed. This update is sent only if a message database is used
+  /// Number of unread chats, i.e. with unread messages or marked as unread, has changed. This update is sent only if the message database is used
   pub fn on_unread_chat_count<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateUnreadChatCount)) -> TGResult<()> + Send + Sync + 'static {
     self.unread_chat_count = Some(Arc::new(fnc));
@@ -658,10 +659,17 @@ impl Listener {
     self
   }
 
-  /// Information about a poll was updated; for bots only
+  /// A poll was updated; for bots only
   pub fn on_poll<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdatePoll)) -> TGResult<()> + Send + Sync + 'static {
     self.poll = Some(Arc::new(fnc));
+    self
+  }
+
+  /// A user changed the answer to a poll; for bots only
+  pub fn on_poll_answer<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdatePollAnswer)) -> TGResult<()> + Send + Sync + 'static {
+    self.poll_answer = Some(Arc::new(fnc));
     self
   }
 
@@ -764,6 +772,7 @@ impl Lout {
       "updateNewCustomEvent",
       "updateNewCustomQuery",
       "updatePoll",
+      "updatePollAnswer",
       "testUseUpdate",
 
     ];
@@ -980,7 +989,7 @@ impl Lout {
     &self.listener.notification_group
   }
 
-  /// Contains active notifications that was shown on previous application launches. This update is sent only if a message database is used. In that case it comes once before any updateNotification and updateNotificationGroup update
+  /// Contains active notifications that was shown on previous application launches. This update is sent only if the message database is used. In that case it comes once before any updateNotification and updateNotificationGroup update
   pub fn active_notifications(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateActiveNotifications)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.active_notifications
   }
@@ -1070,12 +1079,12 @@ impl Lout {
     &self.listener.user_privacy_setting_rules
   }
 
-  /// Number of unread messages in a chat list has changed. This update is sent only if a message database is used
+  /// Number of unread messages in a chat list has changed. This update is sent only if the message database is used
   pub fn unread_message_count(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateUnreadMessageCount)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.unread_message_count
   }
 
-  /// Number of unread chats, i.e. with unread messages or marked as unread, has changed. This update is sent only if a message database is used
+  /// Number of unread chats, i.e. with unread messages or marked as unread, has changed. This update is sent only if the message database is used
   pub fn unread_chat_count(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateUnreadChatCount)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.unread_chat_count
   }
@@ -1175,9 +1184,14 @@ impl Lout {
     &self.listener.new_custom_query
   }
 
-  /// Information about a poll was updated; for bots only
+  /// A poll was updated; for bots only
   pub fn poll(&self) -> &Option<Arc<dyn Fn((&Api, &UpdatePoll)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.poll
+  }
+
+  /// A user changed the answer to a poll; for bots only
+  pub fn poll_answer(&self) -> &Option<Arc<dyn Fn((&Api, &UpdatePollAnswer)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.poll_answer
   }
 
   /// Does nothing and ensures that the Update object is used; for testing only. This is an offline method. Can be called before authorization

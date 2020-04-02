@@ -212,6 +212,8 @@ impl<'a> Handler<'a> {
 
       "updatePoll" => event_handler!(poll, UpdatePoll)(self.api, self.lout, json),
 
+      "updatePollAnswer" => event_handler!(poll_answer, UpdatePollAnswer)(self.api, self.lout, json),
+
       "testUseUpdate" => event_handler!(test_use_update, TestUseUpdate)(self.api, self.lout, json),
 
 

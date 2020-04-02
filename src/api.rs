@@ -550,6 +550,10 @@ impl Api {
     self.send(set_poll_answer.as_ref())
   }
 
+  pub fn get_poll_voters<C: AsRef<GetPollVoters>>(&self, get_poll_voters: C) -> RTDResult<()> {
+    self.send(get_poll_voters.as_ref())
+  }
+
   pub fn stop_poll<C: AsRef<StopPoll>>(&self, stop_poll: C) -> RTDResult<()> {
     self.send(stop_poll.as_ref())
   }
@@ -1428,14 +1432,6 @@ impl Api {
 
   pub fn answer_custom_query<C: AsRef<AnswerCustomQuery>>(&self, answer_custom_query: C) -> RTDResult<()> {
     self.send(answer_custom_query.as_ref())
-  }
-
-  pub fn send_ton_lite_server_request<C: AsRef<SendTonLiteServerRequest>>(&self, send_ton_lite_server_request: C) -> RTDResult<()> {
-    self.send(send_ton_lite_server_request.as_ref())
-  }
-
-  pub fn get_ton_wallet_password_salt<C: AsRef<GetTonWalletPasswordSalt>>(&self, get_ton_wallet_password_salt: C) -> RTDResult<()> {
-    self.send(get_ton_wallet_password_salt.as_ref())
   }
 
   pub fn set_alarm<C: AsRef<SetAlarm>>(&self, set_alarm: C) -> RTDResult<()> {
