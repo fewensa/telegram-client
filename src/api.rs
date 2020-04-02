@@ -522,6 +522,14 @@ impl Api {
     self.send(parse_text_entities.as_ref())
   }
 
+  pub fn parse_markdown<C: AsRef<ParseMarkdown>>(&self, parse_markdown: C) -> RTDResult<()> {
+    self.send(parse_markdown.as_ref())
+  }
+
+  pub fn get_markdown_text<C: AsRef<GetMarkdownText>>(&self, get_markdown_text: C) -> RTDResult<()> {
+    self.send(get_markdown_text.as_ref())
+  }
+
   pub fn get_file_mime_type<C: AsRef<GetFileMimeType>>(&self, get_file_mime_type: C) -> RTDResult<()> {
     self.send(get_file_mime_type.as_ref())
   }
@@ -1062,6 +1070,10 @@ impl Api {
     self.send(set_username.as_ref())
   }
 
+  pub fn set_location<C: AsRef<SetLocation>>(&self, set_location: C) -> RTDResult<()> {
+    self.send(set_location.as_ref())
+  }
+
   pub fn change_phone_number<C: AsRef<ChangePhoneNumber>>(&self, change_phone_number: C) -> RTDResult<()> {
     self.send(change_phone_number.as_ref())
   }
@@ -1072,6 +1084,10 @@ impl Api {
 
   pub fn check_change_phone_number_code<C: AsRef<CheckChangePhoneNumberCode>>(&self, check_change_phone_number_code: C) -> RTDResult<()> {
     self.send(check_change_phone_number_code.as_ref())
+  }
+
+  pub fn set_commands<C: AsRef<SetCommands>>(&self, set_commands: C) -> RTDResult<()> {
+    self.send(set_commands.as_ref())
   }
 
   pub fn get_active_sessions<C: AsRef<GetActiveSessions>>(&self, get_active_sessions: C) -> RTDResult<()> {
@@ -1282,6 +1298,14 @@ impl Api {
     self.send(get_chat_statistics_url.as_ref())
   }
 
+  pub fn get_chat_statistics<C: AsRef<GetChatStatistics>>(&self, get_chat_statistics: C) -> RTDResult<()> {
+    self.send(get_chat_statistics.as_ref())
+  }
+
+  pub fn get_chat_statistics_graph<C: AsRef<GetChatStatisticsGraph>>(&self, get_chat_statistics_graph: C) -> RTDResult<()> {
+    self.send(get_chat_statistics_graph.as_ref())
+  }
+
   pub fn get_storage_statistics<C: AsRef<GetStorageStatistics>>(&self, get_storage_statistics: C) -> RTDResult<()> {
     self.send(get_storage_statistics.as_ref())
   }
@@ -1320,6 +1344,10 @@ impl Api {
 
   pub fn set_auto_download_settings<C: AsRef<SetAutoDownloadSettings>>(&self, set_auto_download_settings: C) -> RTDResult<()> {
     self.send(set_auto_download_settings.as_ref())
+  }
+
+  pub fn get_bank_card_info<C: AsRef<GetBankCardInfo>>(&self, get_bank_card_info: C) -> RTDResult<()> {
+    self.send(get_bank_card_info.as_ref())
   }
 
   pub fn get_passport_element<C: AsRef<GetPassportElement>>(&self, get_passport_element: C) -> RTDResult<()> {
@@ -1408,6 +1436,10 @@ impl Api {
 
   pub fn add_sticker_to_set<C: AsRef<AddStickerToSet>>(&self, add_sticker_to_set: C) -> RTDResult<()> {
     self.send(add_sticker_to_set.as_ref())
+  }
+
+  pub fn set_sticker_set_thumbnail<C: AsRef<SetStickerSetThumbnail>>(&self, set_sticker_set_thumbnail: C) -> RTDResult<()> {
+    self.send(set_sticker_set_thumbnail.as_ref())
   }
 
   pub fn set_sticker_position_in_set<C: AsRef<SetStickerPositionInSet>>(&self, set_sticker_position_in_set: C) -> RTDResult<()> {
