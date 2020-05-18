@@ -5,7 +5,7 @@ telegram-client
 
 Telegram client for rust.
 
-This crate use [td](https://github.com/tdlib/td) to call telegram client api, td create is [rtdlib](https://crates.io/crates/rtdlib)
+This crate use [td](https://github.com/tdlib/td) to call telegram client api, td crate is [rtdlib](https://crates.io/crates/rtdlib)
 
 
 # Usage
