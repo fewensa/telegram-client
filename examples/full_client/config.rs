@@ -20,6 +20,7 @@ impl Default for Config {
     if !toml_file.exists() {
       panic!("Not found config file");
     }
+    debug!("Use {:?} config file", toml_file);
     let toml = std::fs::read_to_string(toml_file).unwrap();
     Config::new(toml)
   }

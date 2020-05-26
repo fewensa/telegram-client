@@ -16,6 +16,7 @@ Cargo.lock
 
 *.binlog
 
+lib/
 lib/**/*.so
 lib/**/*.so.**
 

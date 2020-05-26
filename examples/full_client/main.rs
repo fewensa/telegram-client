@@ -24,6 +24,7 @@ fn main() {
   let api_hash = env!("API_HASH");
 
   let config = Config::default();
+  debug!("{:#?}", config);
   let api = Api::default();
   let mut client = Client::new(api.clone());
 
@@ -47,7 +48,7 @@ fn main() {
 //    println!("{:?}", object);
 //  });
 
-  listener.on_option(|(api, option)| {
+  listener.on_update_option(|(api, option)| {
     let value = option.value();
     if value.is_empty() { debug!("Receive an option {} but it's empty", option.name()) }
     if value.is_string() { debug!("Receive an option {}: String => {}", option.name(), value.as_string().map_or("None".to_string(), |v| v.value().clone())) }
@@ -61,7 +62,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_authorization_state(move |(api, update)| {
+  listener.on_update_authorization_state(move |(api, update)| {
     let state = update.authorization_state();
     state.on_wait_tdlib_parameters(|_| {
       api.set_tdlib_parameters(SetTdlibParameters::builder().parameters(
@@ -125,7 +126,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_connection_state(|(api, update)| {
+  listener.on_update_connection_state(|(api, update)| {
     let state = update.state();
     state.on_waiting_for_network(|_| { debug!("waiting for network"); });
     state.on_connecting_to_proxy(|_| { debug!("connecting to proxy"); });
@@ -174,33 +175,33 @@ fn main() {
     Ok(())
   });
 
-  listener.on_user(|(api, update)| {
+  listener.on_update_user(|(api, update)| {
     debug!("Update user => {:?}", update);
     Ok(())
   });
 
-  listener.on_have_pending_notifications(|(api, update)| {
+  listener.on_update_have_pending_notifications(|(api, update)| {
     debug!("have pending notifications {:?}", update);
     Ok(())
   });
 
-  listener.on_scope_notification_settings(|(api, update)| {
+  listener.on_update_scope_notification_settings(|(api, update)| {
     debug!("scope notification settings {:?}", update);
     Ok(())
   });
 
-  listener.on_user_status(|(api, update)| {
+  listener.on_update_user_status(|(api, update)| {
     debug!("User [{}] status is {:?}", update.user_id(), update.status());
     Ok(())
   });
 
-  listener.on_new_chat(|(api, update)| {
+  listener.on_update_new_chat(|(api, update)| {
     let chat = update.chat();
     debug!("Receive new chat, title: '{}', data: {}", chat.title(), chat.to_json().expect("Can't serialize json"));
     Ok(())
   });
 
-  listener.on_new_message(|(api, update)| {
+  listener.on_update_new_message(|(api, update)| {
     let message = update.message();
     if message.is_outgoing() {
       return Ok(());
@@ -240,7 +241,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_chat_read_inbox(|(api, update)| {
+  listener.on_update_chat_read_inbox(|(api, update)| {
     debug!("Read inbox unread_count: {}, chat_id: {}, last_read_inbox_message_id: {}",
       update.unread_count(),
       update.chat_id(),
@@ -249,7 +250,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_chat_last_message(|(api, update)| {
+  listener.on_update_chat_last_message(|(api, update)| {
     debug!("Chat last message: {}, data: {}",
       update.chat_id(),
       update.last_message().clone().map_or("None".to_string(), |v| v.to_json().expect("Can't serialize json"))
@@ -257,7 +258,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_chat_read_outbox(|(api, update)| {
+  listener.on_update_chat_read_outbox(|(api, update)| {
     debug!("Read outbox chat_id: {}, last_read_outbox_message_id: {}",
       update.chat_id(),
       update.last_read_outbox_message_id(),
@@ -265,7 +266,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_user_full_info(|(api, update)| {
+  listener.on_update_user_full_info(|(api, update)| {
     debug!("Receive user full info, user_id: {}, full_info: {}",
       update.user_id(),
       update.user_full_info().to_json().expect("Can't serialize json")
@@ -273,7 +274,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_delete_messages(|(api, update)| {
+  listener.on_update_delete_messages(|(api, update)| {
     debug!("Receive delete messages, chat_id: {}, message_ids: {:?}, data: {}",
       update.chat_id(),
       update.message_ids(),
@@ -282,7 +283,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_file(|(api, update)| {
+  listener.on_update_file(|(api, update)| {
     debug!("Receive a file => {}", update.to_json().expect("Can't serialize json"));
     let file = update.file();
     let size = file.size();
@@ -301,25 +302,17 @@ fn main() {
     Ok(())
   });
 
-//  listener.on_update_file(|(api, update)| {
-////    debug!("Update file => {}", update.file().to_json());
-//  });
-
-//  listener.on_message(|(api, update)| {
-//    debug!("Message => {}", update.to_json());
-//  });
-
-  listener.on_supergroup_full_info(|(api, update)| {
+  listener.on_update_supergroup_full_info(|(api, update)| {
     debug!("Supergroup full info => {}", update.to_json().expect("Can't serialize json"));
     Ok(())
   });
 
-  listener.on_user_chat_action(|(api, update)| {
+  listener.on_update_user_chat_action(|(api, update)| {
     debug!("User chat action => {}", update.to_json().expect("Can't serialize json"));
     Ok(())
   });
 
-  listener.on_terms_of_service(|(api, update)| {
+  listener.on_update_terms_of_service(|(api, update)| {
     debug!("Terms of serivce => {}", update.to_json().expect("Can't serialize json"));
     Ok(())
   });

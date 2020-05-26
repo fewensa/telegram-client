@@ -29,6 +29,8 @@ fn main() {
   let api = Api::default();
   let mut client = Client::new(api.clone());
 
+  // IMPORTANT: THIS WILL USE THE PROXY 127.0.0.1:1080,
+  // IF YOU DON'T WANT THIS, PLEASE REMOVE THIS CODE.
   let tproxy = TProxy::new(&api);
   tproxy.add();
 
@@ -41,7 +43,7 @@ fn main() {
 //    println!("{:?}", object);
 //  });
 
-  listener.on_option(|(api, option)| {
+  listener.on_update_option(|(api, option)| {
     let value = option.value();
     if value.is_empty() { debug!("Receive an option {} but it's empty", option.name()) }
     if value.is_string() { debug!("Receive an option {}: String => {}", option.name(), value.as_string().map_or("None".to_string(), |v| v.value().clone())) }
@@ -56,7 +58,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_authorization_state(move |(api, update)| {
+  listener.on_update_authorization_state(move |(api, update)| {
     let state = update.authorization_state();
     state.on_wait_tdlib_parameters(|_| {
       let paras = SetTdlibParameters::builder()
@@ -110,7 +112,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_connection_state(|(api, update)| {
+  listener.on_update_connection_state(|(api, update)| {
     let state = update.state();
     state
       .on_waiting_for_network(|_| { debug!("waiting for network"); })

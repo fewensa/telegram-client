@@ -10,41 +10,10 @@ This crate use [td](https://github.com/tdlib/td) to call telegram client api, td
 
 # Usage
 
-## 0.*
-
-```toml
-[dependencies]
-telegram-client = "0.*"
-```
-
-## 1.3.*
-
-```toml
-[dependencies]
-telegram-client = "1.3.*"
-```
-
-## 1.4.*
-
-```toml
-[dependencies]
-telegram-client = "1.4.*"
-```
-
-## 1.5.*
-
-```toml
-[dependencies]
-telegram-client = "1.5.*"
-```
-
-## 1.6.*
-
 ```toml
 [dependencies]
 telegram-client = "1.6.*"
 ```
-
 
 ## version
 
@@ -62,7 +31,7 @@ Version mapping
 
 ## Note
 
-Note that you need [libtdjson.so](https://github.com/tdlib/td) in your path for building and running your application. See also [rtdlib](https://github.com/fewensa/rtdlib) for more details.
+Note that you need [tdjson](https://github.com/tdlib/td) dylib file in your path for building and running your application. See also [rtdlib](https://github.com/fewensa/rtdlib) for more details.
 
 # Examples
 
