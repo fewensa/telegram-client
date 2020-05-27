@@ -1,6 +1,6 @@
 [package]
 name = "telegram-client"
-version = "1.6.0"
+version = "1.6.1"
 authors = ["fewensa <fewensa@protonmail.com>"]
 description = "Telegram client"
 homepage = "https://github.com/fewensa/telegram-client"
@@ -20,9 +20,9 @@ edition = "2018"
 build = "build.rs"
 
 [dependencies]
-rtdlib = "1.6.*"
-#rtdlib = { path = "../rtdlib" }
-#rtdlib = { git = "https://github.com/fewensa/rtdlib.git" }
+#rtdlib = { version = "1.6.*", features = [ "sys" ] }
+rtdlib = { path = "../rtdlib", features = [ "sys" ] }
+#rtdlib = { git = "https://github.com/fewensa/rtdlib.git", features = [ "sys" ] }
 
 log = "0.4"
 regex = "1"
