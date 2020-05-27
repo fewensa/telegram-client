@@ -2,7 +2,7 @@ use std::sync::{Arc, Mutex};
 use std::sync::mpsc::Receiver;
 use std::thread::JoinHandle;
 
-use rtdlib::tdjson;
+use rtdlib::Tdlib;
 
 use crate::api::Api;
 use crate::listener::Listener;
@@ -48,7 +48,7 @@ impl Client {
   /// Client::set_log_verbosity_level(3);
   /// ```
   pub fn set_log_verbosity_level<'a>(level: i32) -> Result<(), &'a str> {
-    tdjson::Tdlib::set_log_verbosity_level(level)
+    Tdlib::set_log_verbosity_level(level)
   }
 
   /// Sets maximum size of the file to where the internal TDLib log is written before the file will be auto-rotated.
@@ -66,7 +66,7 @@ impl Client {
   /// Client::set_log_max_file_size(1024 * 1024);
   /// ```
   pub fn set_log_max_file_size(size: i64) {
-    tdjson::Tdlib::set_log_max_file_size(size)
+    Tdlib::set_log_max_file_size(size)
   }
 
   /// Sets the path to the file where the internal TDLib log will be written.
@@ -84,7 +84,7 @@ impl Client {
   /// Client::set_log_file_path(Some("/var/log/tdlib/tdlib.log"));
   /// ```
   pub fn set_log_file_path(path: Option<&str>) -> bool {
-    tdjson::Tdlib::set_log_file_path(path)
+    Tdlib::set_log_file_path(path)
   }
 
   /// Creates a new Client with api
