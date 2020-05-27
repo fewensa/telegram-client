@@ -3,7 +3,7 @@ use std::sync::Arc;
 
 use regex::Regex;
 use rtdlib::errors::*;
-use rtdlib::tdjson;
+use rtdlib::Tdlib;
 use rtdlib::types::*;
 
 use crate::tip;
@@ -17,7 +17,7 @@ impl ApiBuilder {
   pub fn new() -> Self {
     Self {
       inner: Api {
-        tdlib: Arc::new(tdjson::Tdlib::new()),
+        tdlib: Arc::new(Tdlib::new()),
         log: true,
         unsafe_log: false
       }
@@ -28,7 +28,7 @@ impl ApiBuilder {
     self.inner.clone()
   }
 
-  fn tdlib(&mut self, tdlib: tdjson::Tdlib) -> &mut Self{
+  fn tdlib(&mut self, tdlib: Tdlib) -> &mut Self{
     self.inner.tdlib = Arc::new(tdlib);
     self
   }
@@ -47,7 +47,7 @@ impl ApiBuilder {
 
 #[derive(Debug, Clone)]
 pub struct Api {
-  tdlib: Arc<tdjson::Tdlib>,
+  tdlib: Arc<Tdlib>,
   log: bool,
   unsafe_log: bool,
 }
@@ -64,12 +64,12 @@ impl Api {
     ApiBuilder::new()
   }
 
-  pub fn new(tdlib: tdjson::Tdlib) -> Self {
+  pub fn new(tdlib: Tdlib) -> Self {
     ApiBuilder::new().tdlib(tdlib).build()
   }
 
   #[doc(hidden)]
-  pub fn tdlib(&self) -> &tdjson::Tdlib {
+  pub fn tdlib(&self) -> &Tdlib {
     self.tdlib.borrow()
   }
 

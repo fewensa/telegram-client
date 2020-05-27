@@ -20,9 +20,9 @@ edition = "2018"
 build = "build.rs"
 
 [dependencies]
-#rtdlib = "0.6.*"
-#rtdlib = { path = "../rtdlib" }
-rtdlib = { git = "https://github.com/fewensa/rtdlib.git" }
+#rtdlib = { version = "0.6.*", features = [ "sys" ] }
+#rtdlib = { path = "../rtdlib", features = [ "sys" ] }
+rtdlib = { git = "https://github.com/fewensa/rtdlib.git", features = [ "sys" ] }
 
 log = "0.4"
 regex = "1"
