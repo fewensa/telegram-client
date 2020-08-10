@@ -134,6 +134,10 @@ impl Api {
     self.send(add_chat_members.as_ref())
   }
 
+  pub fn add_chat_to_list<C: AsRef<AddChatToList>>(&self, add_chat_to_list: C) -> RTDResult<()> {
+    self.send(add_chat_to_list.as_ref())
+  }
+
   pub fn add_contact<C: AsRef<AddContact>>(&self, add_contact: C) -> RTDResult<()> {
     self.send(add_contact.as_ref())
   }
@@ -318,6 +322,10 @@ impl Api {
     self.send(create_call.as_ref())
   }
 
+  pub fn create_chat_filter<C: AsRef<CreateChatFilter>>(&self, create_chat_filter: C) -> RTDResult<()> {
+    self.send(create_chat_filter.as_ref())
+  }
+
   pub fn create_new_basic_group_chat<C: AsRef<CreateNewBasicGroupChat>>(&self, create_new_basic_group_chat: C) -> RTDResult<()> {
     self.send(create_new_basic_group_chat.as_ref())
   }
@@ -352,6 +360,10 @@ impl Api {
 
   pub fn delete_account<C: AsRef<DeleteAccount>>(&self, delete_account: C) -> RTDResult<()> {
     self.send(delete_account.as_ref())
+  }
+
+  pub fn delete_chat_filter<C: AsRef<DeleteChatFilter>>(&self, delete_chat_filter: C) -> RTDResult<()> {
+    self.send(delete_chat_filter.as_ref())
   }
 
   pub fn delete_chat_history<C: AsRef<DeleteChatHistory>>(&self, delete_chat_history: C) -> RTDResult<()> {
@@ -420,6 +432,10 @@ impl Api {
 
   pub fn download_file<C: AsRef<DownloadFile>>(&self, download_file: C) -> RTDResult<()> {
     self.send(download_file.as_ref())
+  }
+
+  pub fn edit_chat_filter<C: AsRef<EditChatFilter>>(&self, edit_chat_filter: C) -> RTDResult<()> {
+    self.send(edit_chat_filter.as_ref())
   }
 
   pub fn edit_custom_language_pack_info<C: AsRef<EditCustomLanguagePackInfo>>(&self, edit_custom_language_pack_info: C) -> RTDResult<()> {
@@ -566,8 +582,20 @@ impl Api {
     self.send(get_chat_event_log.as_ref())
   }
 
+  pub fn get_chat_filter<C: AsRef<GetChatFilter>>(&self, get_chat_filter: C) -> RTDResult<()> {
+    self.send(get_chat_filter.as_ref())
+  }
+
+  pub fn get_chat_filter_default_icon_name<C: AsRef<GetChatFilterDefaultIconName>>(&self, get_chat_filter_default_icon_name: C) -> RTDResult<()> {
+    self.send(get_chat_filter_default_icon_name.as_ref())
+  }
+
   pub fn get_chat_history<C: AsRef<GetChatHistory>>(&self, get_chat_history: C) -> RTDResult<()> {
     self.send(get_chat_history.as_ref())
+  }
+
+  pub fn get_chat_lists_to_add_chat<C: AsRef<GetChatListsToAddChat>>(&self, get_chat_lists_to_add_chat: C) -> RTDResult<()> {
+    self.send(get_chat_lists_to_add_chat.as_ref())
   }
 
   pub fn get_chat_member<C: AsRef<GetChatMember>>(&self, get_chat_member: C) -> RTDResult<()> {
@@ -842,6 +870,10 @@ impl Api {
     self.send(get_recently_visited_t_me_urls.as_ref())
   }
 
+  pub fn get_recommended_chat_filters<C: AsRef<GetRecommendedChatFilters>>(&self, get_recommended_chat_filters: C) -> RTDResult<()> {
+    self.send(get_recommended_chat_filters.as_ref())
+  }
+
   pub fn get_recovery_email_address<C: AsRef<GetRecoveryEmailAddress>>(&self, get_recovery_email_address: C) -> RTDResult<()> {
     self.send(get_recovery_email_address.as_ref())
   }
@@ -948,6 +980,10 @@ impl Api {
 
   pub fn get_web_page_preview<C: AsRef<GetWebPagePreview>>(&self, get_web_page_preview: C) -> RTDResult<()> {
     self.send(get_web_page_preview.as_ref())
+  }
+
+  pub fn hide_suggested_action<C: AsRef<HideSuggestedAction>>(&self, hide_suggested_action: C) -> RTDResult<()> {
+    self.send(hide_suggested_action.as_ref())
   }
 
   pub fn import_contacts<C: AsRef<ImportContacts>>(&self, import_contacts: C) -> RTDResult<()> {
@@ -1076,6 +1112,10 @@ impl Api {
 
   pub fn remove_top_chat<C: AsRef<RemoveTopChat>>(&self, remove_top_chat: C) -> RTDResult<()> {
     self.send(remove_top_chat.as_ref())
+  }
+
+  pub fn reorder_chat_filters<C: AsRef<ReorderChatFilters>>(&self, reorder_chat_filters: C) -> RTDResult<()> {
+    self.send(reorder_chat_filters.as_ref())
   }
 
   pub fn reorder_installed_sticker_sets<C: AsRef<ReorderInstalledStickerSets>>(&self, reorder_installed_sticker_sets: C) -> RTDResult<()> {
@@ -1308,10 +1348,6 @@ impl Api {
 
   pub fn set_bot_updates_status<C: AsRef<SetBotUpdatesStatus>>(&self, set_bot_updates_status: C) -> RTDResult<()> {
     self.send(set_bot_updates_status.as_ref())
-  }
-
-  pub fn set_chat_chat_list<C: AsRef<SetChatChatList>>(&self, set_chat_chat_list: C) -> RTDResult<()> {
-    self.send(set_chat_chat_list.as_ref())
   }
 
   pub fn set_chat_client_data<C: AsRef<SetChatClientData>>(&self, set_chat_client_data: C) -> RTDResult<()> {
