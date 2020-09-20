@@ -11,8 +11,8 @@ pub trait TGDatable: Debug {
 pub struct TGError {
   key: &'static str,
   message: Option<String>,
-  data: Option<Box<TGDatable>>,
-  context: Option<Box<std::error::Error>>
+  data: Option<Box<dyn TGDatable>>,
+  context: Option<Box<dyn std::error::Error>>
 }
 
 pub type TGResult<T> = Result<T, TGError>;
@@ -38,20 +38,20 @@ impl TGError {
     self
   }
 
-  pub fn set_data(&mut self, data: Box<TGDatable>) -> &mut Self {
+  pub fn set_data(&mut self, data: Box<dyn TGDatable>) -> &mut Self {
     self.data = Some(data);
     self
   }
 
-  pub fn set_context(&mut self, context: Box<std::error::Error>) -> &mut Self {
+  pub fn set_context(&mut self, context: Box<dyn std::error::Error>) -> &mut Self {
     self.context = Some(context);
     self
   }
 
   pub fn key(&self) -> &'static str { self.key }
   pub fn message(&self) -> &Option<String> { &self.message }
-  pub fn data(&self) -> &Option<Box<TGDatable>> { &self.data }
-  pub fn context(&self) -> &Option<Box<std::error::Error>> { &self.context }
+  pub fn data(&self) -> &Option<Box<dyn TGDatable>> { &self.data }
+  pub fn context(&self) -> &Option<Box<dyn std::error::Error>> { &self.context }
 }
 
 
@@ -66,7 +66,7 @@ impl error::Error for TGError {
     self.key
   }
 
-  fn cause(&self) -> Option<&error::Error> {
+  fn cause(&self) -> Option<&dyn error::Error> {
     None
   }
 }
