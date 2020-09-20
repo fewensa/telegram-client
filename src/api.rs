@@ -1274,6 +1274,10 @@ impl Api {
     self.send(send_call_rating.as_ref())
   }
 
+  pub fn send_call_signaling_data<C: AsRef<SendCallSignalingData>>(&self, send_call_signaling_data: C) -> RTDResult<()> {
+    self.send(send_call_signaling_data.as_ref())
+  }
+
   pub fn send_chat_action<C: AsRef<SendChatAction>>(&self, send_chat_action: C) -> RTDResult<()> {
     self.send(send_chat_action.as_ref())
   }

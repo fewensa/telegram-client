@@ -105,6 +105,7 @@ impl<'a> Handler<'a> {
       "updateMessageSendFailed" => event_handler!(update_message_send_failed, UpdateMessageSendFailed)(self.api, self.lout, json),
       "updateMessageSendSucceeded" => event_handler!(update_message_send_succeeded, UpdateMessageSendSucceeded)(self.api, self.lout, json),
       "updateMessageViews" => event_handler!(update_message_views, UpdateMessageViews)(self.api, self.lout, json),
+      "updateNewCallSignalingData" => event_handler!(update_new_call_signaling_data, UpdateNewCallSignalingData)(self.api, self.lout, json),
       "updateNewCallbackQuery" => event_handler!(update_new_callback_query, UpdateNewCallbackQuery)(self.api, self.lout, json),
       "updateNewChat" => event_handler!(update_new_chat, UpdateNewChat)(self.api, self.lout, json),
       "updateNewChosenInlineResult" => event_handler!(update_new_chosen_inline_result, UpdateNewChosenInlineResult)(self.api, self.lout, json),

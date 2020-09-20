@@ -57,6 +57,7 @@ pub struct Listener {
   update_message_send_failed: Option<Arc<dyn Fn((&Api, &UpdateMessageSendFailed)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_send_succeeded: Option<Arc<dyn Fn((&Api, &UpdateMessageSendSucceeded)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_views: Option<Arc<dyn Fn((&Api, &UpdateMessageViews)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_new_call_signaling_data: Option<Arc<dyn Fn((&Api, &UpdateNewCallSignalingData)) -> TGResult<()> + Send + Sync + 'static>>,
   update_new_callback_query: Option<Arc<dyn Fn((&Api, &UpdateNewCallbackQuery)) -> TGResult<()> + Send + Sync + 'static>>,
   update_new_chat: Option<Arc<dyn Fn((&Api, &UpdateNewChat)) -> TGResult<()> + Send + Sync + 'static>>,
   update_new_chosen_inline_result: Option<Arc<dyn Fn((&Api, &UpdateNewChosenInlineResult)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -406,7 +407,7 @@ impl Listener {
     self
   }
 
-  /// The connection state has changed
+  /// The connection state has changed. This update must be used only to show the user a human-readable description of the connection state
   pub fn on_update_connection_state<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateConnectionState)) -> TGResult<()> + Send + Sync + 'static {
     self.update_connection_state = Some(Arc::new(fnc));
@@ -536,6 +537,13 @@ impl Listener {
   pub fn on_update_message_views<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateMessageViews)) -> TGResult<()> + Send + Sync + 'static {
     self.update_message_views = Some(Arc::new(fnc));
+    self
+  }
+
+  /// New call signaling data arrived
+  pub fn on_update_new_call_signaling_data<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateNewCallSignalingData)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_new_call_signaling_data = Some(Arc::new(fnc));
     self
   }
 
@@ -1600,6 +1608,7 @@ impl Lout {
       "updateMessageSendFailed",
       "updateMessageSendSucceeded",
       "updateMessageViews",
+      "updateNewCallSignalingData",
       "updateNewCallbackQuery",
       "updateNewChat",
       "updateNewChosenInlineResult",
@@ -1896,7 +1905,7 @@ impl Lout {
     &self.listener.update_chat_unread_mention_count
   }
 
-  /// The connection state has changed
+  /// The connection state has changed. This update must be used only to show the user a human-readable description of the connection state
   pub fn update_connection_state(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateConnectionState)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_connection_state
   }
@@ -1989,6 +1998,11 @@ impl Lout {
   /// The view count of the message has changed
   pub fn update_message_views(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateMessageViews)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_message_views
+  }
+
+  /// New call signaling data arrived
+  pub fn update_new_call_signaling_data(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateNewCallSignalingData)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_new_call_signaling_data
   }
 
   /// A new incoming callback query; for bots only
