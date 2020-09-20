@@ -6,8 +6,6 @@ use rtdlib::errors::*;
 use rtdlib::Tdlib;
 use rtdlib::types::*;
 
-use crate::tip;
-
 #[derive(Debug, Clone)]
 pub struct ApiBuilder {
   inner: Api
