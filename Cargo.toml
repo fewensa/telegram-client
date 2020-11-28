@@ -20,12 +20,14 @@ edition = "2018"
 build = "build.rs"
 
 [dependencies]
-rtdlib = { version = "0.6.*", features = [ "sys" ] }
-#rtdlib = { path = "../rtdlib", features = [ "sys" ] }
+#rtdlib = { version = "0.6.*", features = [ "sys" ] }
+rtdlib = { path = "../rtdlib", features = [ "sys" ] }
 #rtdlib = { git = "https://github.com/fewensa/rtdlib.git", features = [ "sys" ] }
 
 log = "0.4"
 regex = "1"
+futures = "0.3"
+lazy_static = "1.4"
 
 [dev-dependencies]
 colored = "1"
@@ -41,5 +43,6 @@ simple_logger = "1.3"
 
 toolkit = "0.1"
 
+tokio = {version = "0.3.0", features = ["full"]}
 
 
