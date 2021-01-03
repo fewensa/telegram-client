@@ -25,13 +25,13 @@ pub struct Listener {
   update_chat_draft_message: Option<Arc<dyn Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_filters: Option<Arc<dyn Fn((&Api, &UpdateChatFilters)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_has_scheduled_messages: Option<Arc<dyn Fn((&Api, &UpdateChatHasScheduledMessages)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_chat_is_blocked: Option<Arc<dyn Fn((&Api, &UpdateChatIsBlocked)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_is_marked_as_unread: Option<Arc<dyn Fn((&Api, &UpdateChatIsMarkedAsUnread)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_last_message: Option<Arc<dyn Fn((&Api, &UpdateChatLastMessage)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_notification_settings: Option<Arc<dyn Fn((&Api, &UpdateChatNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_online_member_count: Option<Arc<dyn Fn((&Api, &UpdateChatOnlineMemberCount)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_permissions: Option<Arc<dyn Fn((&Api, &UpdateChatPermissions)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_photo: Option<Arc<dyn Fn((&Api, &UpdateChatPhoto)) -> TGResult<()> + Send + Sync + 'static>>,
-  update_chat_pinned_message: Option<Arc<dyn Fn((&Api, &UpdateChatPinnedMessage)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_position: Option<Arc<dyn Fn((&Api, &UpdateChatPosition)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_read_inbox: Option<Arc<dyn Fn((&Api, &UpdateChatReadInbox)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_read_outbox: Option<Arc<dyn Fn((&Api, &UpdateChatReadOutbox)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -51,12 +51,13 @@ pub struct Listener {
   update_message_content: Option<Arc<dyn Fn((&Api, &UpdateMessageContent)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_content_opened: Option<Arc<dyn Fn((&Api, &UpdateMessageContentOpened)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_edited: Option<Arc<dyn Fn((&Api, &UpdateMessageEdited)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_message_interaction_info: Option<Arc<dyn Fn((&Api, &UpdateMessageInteractionInfo)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_message_is_pinned: Option<Arc<dyn Fn((&Api, &UpdateMessageIsPinned)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_live_location_viewed: Option<Arc<dyn Fn((&Api, &UpdateMessageLiveLocationViewed)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_mention_read: Option<Arc<dyn Fn((&Api, &UpdateMessageMentionRead)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_send_acknowledged: Option<Arc<dyn Fn((&Api, &UpdateMessageSendAcknowledged)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_send_failed: Option<Arc<dyn Fn((&Api, &UpdateMessageSendFailed)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_send_succeeded: Option<Arc<dyn Fn((&Api, &UpdateMessageSendSucceeded)) -> TGResult<()> + Send + Sync + 'static>>,
-  update_message_views: Option<Arc<dyn Fn((&Api, &UpdateMessageViews)) -> TGResult<()> + Send + Sync + 'static>>,
   update_new_call_signaling_data: Option<Arc<dyn Fn((&Api, &UpdateNewCallSignalingData)) -> TGResult<()> + Send + Sync + 'static>>,
   update_new_callback_query: Option<Arc<dyn Fn((&Api, &UpdateNewCallbackQuery)) -> TGResult<()> + Send + Sync + 'static>>,
   update_new_chat: Option<Arc<dyn Fn((&Api, &UpdateNewChat)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -105,7 +106,7 @@ pub struct Listener {
   login_url_info: Option<Arc<dyn Fn((&Api, &LoginUrlInfo)) -> TGResult<()> + Send + Sync + 'static>>,
   option_value: Option<Arc<dyn Fn((&Api, &OptionValue)) -> TGResult<()> + Send + Sync + 'static>>,
   passport_element: Option<Arc<dyn Fn((&Api, &PassportElement)) -> TGResult<()> + Send + Sync + 'static>>,
-  statistics_graph: Option<Arc<dyn Fn((&Api, &StatisticsGraph)) -> TGResult<()> + Send + Sync + 'static>>,
+  statistical_graph: Option<Arc<dyn Fn((&Api, &StatisticalGraph)) -> TGResult<()> + Send + Sync + 'static>>,
   update: Option<Arc<dyn Fn((&Api, &Update)) -> TGResult<()> + Send + Sync + 'static>>,
   account_ttl: Option<Arc<dyn Fn((&Api, &AccountTtl)) -> TGResult<()> + Send + Sync + 'static>>,
   animations: Option<Arc<dyn Fn((&Api, &Animations)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -133,6 +134,7 @@ pub struct Listener {
   chats_nearby: Option<Arc<dyn Fn((&Api, &ChatsNearby)) -> TGResult<()> + Send + Sync + 'static>>,
   connected_websites: Option<Arc<dyn Fn((&Api, &ConnectedWebsites)) -> TGResult<()> + Send + Sync + 'static>>,
   count: Option<Arc<dyn Fn((&Api, &Count)) -> TGResult<()> + Send + Sync + 'static>>,
+  countries: Option<Arc<dyn Fn((&Api, &Countries)) -> TGResult<()> + Send + Sync + 'static>>,
   custom_request_result: Option<Arc<dyn Fn((&Api, &CustomRequestResult)) -> TGResult<()> + Send + Sync + 'static>>,
   database_statistics: Option<Arc<dyn Fn((&Api, &DatabaseStatistics)) -> TGResult<()> + Send + Sync + 'static>>,
   deep_link_info: Option<Arc<dyn Fn((&Api, &DeepLinkInfo)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -154,7 +156,11 @@ pub struct Listener {
   log_tags: Option<Arc<dyn Fn((&Api, &LogTags)) -> TGResult<()> + Send + Sync + 'static>>,
   log_verbosity_level: Option<Arc<dyn Fn((&Api, &LogVerbosityLevel)) -> TGResult<()> + Send + Sync + 'static>>,
   message: Option<Arc<dyn Fn((&Api, &Message)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_link: Option<Arc<dyn Fn((&Api, &MessageLink)) -> TGResult<()> + Send + Sync + 'static>>,
   message_link_info: Option<Arc<dyn Fn((&Api, &MessageLinkInfo)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_senders: Option<Arc<dyn Fn((&Api, &MessageSenders)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_statistics: Option<Arc<dyn Fn((&Api, &MessageStatistics)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_thread_info: Option<Arc<dyn Fn((&Api, &MessageThreadInfo)) -> TGResult<()> + Send + Sync + 'static>>,
   messages: Option<Arc<dyn Fn((&Api, &Messages)) -> TGResult<()> + Send + Sync + 'static>>,
   network_statistics: Option<Arc<dyn Fn((&Api, &NetworkStatistics)) -> TGResult<()> + Send + Sync + 'static>>,
   ok: Option<Arc<dyn Fn((&Api, &Ok)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -166,9 +172,9 @@ pub struct Listener {
   payment_form: Option<Arc<dyn Fn((&Api, &PaymentForm)) -> TGResult<()> + Send + Sync + 'static>>,
   payment_receipt: Option<Arc<dyn Fn((&Api, &PaymentReceipt)) -> TGResult<()> + Send + Sync + 'static>>,
   payment_result: Option<Arc<dyn Fn((&Api, &PaymentResult)) -> TGResult<()> + Send + Sync + 'static>>,
+  phone_number_info: Option<Arc<dyn Fn((&Api, &PhoneNumberInfo)) -> TGResult<()> + Send + Sync + 'static>>,
   proxies: Option<Arc<dyn Fn((&Api, &Proxies)) -> TGResult<()> + Send + Sync + 'static>>,
   proxy: Option<Arc<dyn Fn((&Api, &Proxy)) -> TGResult<()> + Send + Sync + 'static>>,
-  public_message_link: Option<Arc<dyn Fn((&Api, &PublicMessageLink)) -> TGResult<()> + Send + Sync + 'static>>,
   push_receiver_id: Option<Arc<dyn Fn((&Api, &PushReceiverId)) -> TGResult<()> + Send + Sync + 'static>>,
   recommended_chat_filters: Option<Arc<dyn Fn((&Api, &RecommendedChatFilters)) -> TGResult<()> + Send + Sync + 'static>>,
   recovery_email_address: Option<Arc<dyn Fn((&Api, &RecoveryEmailAddress)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -316,6 +322,13 @@ impl Listener {
     self
   }
 
+  /// A chat was blocked or unblocked
+  pub fn on_update_chat_is_blocked<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateChatIsBlocked)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_chat_is_blocked = Some(Arc::new(fnc));
+    self
+  }
+
   /// A chat was marked as unread or was read
   pub fn on_update_chat_is_marked_as_unread<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateChatIsMarkedAsUnread)) -> TGResult<()> + Send + Sync + 'static {
@@ -355,13 +368,6 @@ impl Listener {
   pub fn on_update_chat_photo<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateChatPhoto)) -> TGResult<()> + Send + Sync + 'static {
     self.update_chat_photo = Some(Arc::new(fnc));
-    self
-  }
-
-  /// The chat pinned message was changed
-  pub fn on_update_chat_pinned_message<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&Api, &UpdateChatPinnedMessage)) -> TGResult<()> + Send + Sync + 'static {
-    self.update_chat_pinned_message = Some(Arc::new(fnc));
     self
   }
 
@@ -407,7 +413,7 @@ impl Listener {
     self
   }
 
-  /// The connection state has changed. This update must be used only to show the user a human-readable description of the connection state
+  /// The connection state has changed. This update must be used only to show a human-readable description of the connection state
   pub fn on_update_connection_state<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateConnectionState)) -> TGResult<()> + Send + Sync + 'static {
     self.update_connection_state = Some(Arc::new(fnc));
@@ -498,6 +504,20 @@ impl Listener {
     self
   }
 
+  /// The information about interactions with a message has changed
+  pub fn on_update_message_interaction_info<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateMessageInteractionInfo)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_message_interaction_info = Some(Arc::new(fnc));
+    self
+  }
+
+  /// The message pinned state was changed
+  pub fn on_update_message_is_pinned<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateMessageIsPinned)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_message_is_pinned = Some(Arc::new(fnc));
+    self
+  }
+
   /// A message with a live location was viewed. When the update is received, the application is supposed to update the live location
   pub fn on_update_message_live_location_viewed<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateMessageLiveLocationViewed)) -> TGResult<()> + Send + Sync + 'static {
@@ -530,13 +550,6 @@ impl Listener {
   pub fn on_update_message_send_succeeded<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateMessageSendSucceeded)) -> TGResult<()> + Send + Sync + 'static {
     self.update_message_send_succeeded = Some(Arc::new(fnc));
-    self
-  }
-
-  /// The view count of the message has changed
-  pub fn on_update_message_views<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&Api, &UpdateMessageViews)) -> TGResult<()> + Send + Sync + 'static {
-    self.update_message_views = Some(Arc::new(fnc));
     self
   }
 
@@ -864,10 +877,10 @@ impl Listener {
     self
   }
 
-  /// Describes a statistics graph
-  pub fn on_statistics_graph<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&Api, &StatisticsGraph)) -> TGResult<()> + Send + Sync + 'static {
-    self.statistics_graph = Some(Arc::new(fnc));
+  /// Describes a statistical graph
+  pub fn on_statistical_graph<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &StatisticalGraph)) -> TGResult<()> + Send + Sync + 'static {
+    self.statistical_graph = Some(Arc::new(fnc));
     self
   }
 
@@ -1060,6 +1073,13 @@ impl Listener {
     self
   }
 
+  /// Contains information about countries
+  pub fn on_countries<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &Countries)) -> TGResult<()> + Send + Sync + 'static {
+    self.countries = Some(Arc::new(fnc));
+    self
+  }
+
   /// Contains the result of a custom request
   pub fn on_custom_request_result<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &CustomRequestResult)) -> TGResult<()> + Send + Sync + 'static {
@@ -1207,10 +1227,38 @@ impl Listener {
     self
   }
 
+  /// Contains an HTTPS link to a message in a supergroup or channel
+  pub fn on_message_link<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &MessageLink)) -> TGResult<()> + Send + Sync + 'static {
+    self.message_link = Some(Arc::new(fnc));
+    self
+  }
+
   /// Contains information about a link to a message in a chat
   pub fn on_message_link_info<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &MessageLinkInfo)) -> TGResult<()> + Send + Sync + 'static {
     self.message_link_info = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Represents a list of message senders
+  pub fn on_message_senders<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &MessageSenders)) -> TGResult<()> + Send + Sync + 'static {
+    self.message_senders = Some(Arc::new(fnc));
+    self
+  }
+
+  /// A detailed statistics about a message
+  pub fn on_message_statistics<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &MessageStatistics)) -> TGResult<()> + Send + Sync + 'static {
+    self.message_statistics = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Contains information about a message thread
+  pub fn on_message_thread_info<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &MessageThreadInfo)) -> TGResult<()> + Send + Sync + 'static {
+    self.message_thread_info = Some(Arc::new(fnc));
     self
   }
 
@@ -1291,6 +1339,13 @@ impl Listener {
     self
   }
 
+  /// Contains information about a phone number
+  pub fn on_phone_number_info<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &PhoneNumberInfo)) -> TGResult<()> + Send + Sync + 'static {
+    self.phone_number_info = Some(Arc::new(fnc));
+    self
+  }
+
   /// Represents a list of proxy servers
   pub fn on_proxies<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &Proxies)) -> TGResult<()> + Send + Sync + 'static {
@@ -1302,13 +1357,6 @@ impl Listener {
   pub fn on_proxy<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &Proxy)) -> TGResult<()> + Send + Sync + 'static {
     self.proxy = Some(Arc::new(fnc));
-    self
-  }
-
-  /// Contains a public HTTPS link to a message in a supergroup or channel with a username
-  pub fn on_public_message_link<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&Api, &PublicMessageLink)) -> TGResult<()> + Send + Sync + 'static {
-    self.public_message_link = Some(Arc::new(fnc));
     self
   }
 
@@ -1576,13 +1624,13 @@ impl Lout {
       "updateChatDraftMessage",
       "updateChatFilters",
       "updateChatHasScheduledMessages",
+      "updateChatIsBlocked",
       "updateChatIsMarkedAsUnread",
       "updateChatLastMessage",
       "updateChatNotificationSettings",
       "updateChatOnlineMemberCount",
       "updateChatPermissions",
       "updateChatPhoto",
-      "updateChatPinnedMessage",
       "updateChatPosition",
       "updateChatReadInbox",
       "updateChatReadOutbox",
@@ -1602,12 +1650,13 @@ impl Lout {
       "updateMessageContent",
       "updateMessageContentOpened",
       "updateMessageEdited",
+      "updateMessageInteractionInfo",
+      "updateMessageIsPinned",
       "updateMessageLiveLocationViewed",
       "updateMessageMentionRead",
       "updateMessageSendAcknowledged",
       "updateMessageSendFailed",
       "updateMessageSendSucceeded",
-      "updateMessageViews",
       "updateNewCallSignalingData",
       "updateNewCallbackQuery",
       "updateNewChat",
@@ -1656,7 +1705,7 @@ impl Lout {
       "LoginUrlInfo",
       "OptionValue",
       "PassportElement",
-      "StatisticsGraph",
+      "StatisticalGraph",
       "Update",
       "accountTtl",
       "animations",
@@ -1684,6 +1733,7 @@ impl Lout {
       "chatsNearby",
       "connectedWebsites",
       "count",
+      "countries",
       "customRequestResult",
       "databaseStatistics",
       "deepLinkInfo",
@@ -1705,7 +1755,11 @@ impl Lout {
       "logTags",
       "logVerbosityLevel",
       "message",
+      "messageLink",
       "messageLinkInfo",
+      "messageSenders",
+      "messageStatistics",
+      "messageThreadInfo",
       "messages",
       "networkStatistics",
       "ok",
@@ -1717,9 +1771,9 @@ impl Lout {
       "paymentForm",
       "paymentReceipt",
       "paymentResult",
+      "phoneNumberInfo",
       "proxies",
       "proxy",
-      "publicMessageLink",
       "pushReceiverId",
       "recommendedChatFilters",
       "recoveryEmailAddress",
@@ -1840,6 +1894,11 @@ impl Lout {
     &self.listener.update_chat_has_scheduled_messages
   }
 
+  /// A chat was blocked or unblocked
+  pub fn update_chat_is_blocked(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatIsBlocked)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_chat_is_blocked
+  }
+
   /// A chat was marked as unread or was read
   pub fn update_chat_is_marked_as_unread(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatIsMarkedAsUnread)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_chat_is_marked_as_unread
@@ -1868,11 +1927,6 @@ impl Lout {
   /// A chat photo was changed
   pub fn update_chat_photo(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatPhoto)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_chat_photo
-  }
-
-  /// The chat pinned message was changed
-  pub fn update_chat_pinned_message(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatPinnedMessage)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.update_chat_pinned_message
   }
 
   /// The position of a chat in a chat list has changed. Instead of this update updateChatLastMessage or updateChatDraftMessage might be sent
@@ -1905,7 +1959,7 @@ impl Lout {
     &self.listener.update_chat_unread_mention_count
   }
 
-  /// The connection state has changed. This update must be used only to show the user a human-readable description of the connection state
+  /// The connection state has changed. This update must be used only to show a human-readable description of the connection state
   pub fn update_connection_state(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateConnectionState)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_connection_state
   }
@@ -1970,6 +2024,16 @@ impl Lout {
     &self.listener.update_message_edited
   }
 
+  /// The information about interactions with a message has changed
+  pub fn update_message_interaction_info(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateMessageInteractionInfo)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_message_interaction_info
+  }
+
+  /// The message pinned state was changed
+  pub fn update_message_is_pinned(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateMessageIsPinned)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_message_is_pinned
+  }
+
   /// A message with a live location was viewed. When the update is received, the application is supposed to update the live location
   pub fn update_message_live_location_viewed(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateMessageLiveLocationViewed)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_message_live_location_viewed
@@ -1993,11 +2057,6 @@ impl Lout {
   /// A message has been successfully sent
   pub fn update_message_send_succeeded(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateMessageSendSucceeded)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_message_send_succeeded
-  }
-
-  /// The view count of the message has changed
-  pub fn update_message_views(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateMessageViews)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.update_message_views
   }
 
   /// New call signaling data arrived
@@ -2232,9 +2291,9 @@ impl Lout {
     &self.listener.passport_element
   }
 
-  /// Describes a statistics graph
-  pub fn statistics_graph(&self) -> &Option<Arc<dyn Fn((&Api, &StatisticsGraph)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.statistics_graph
+  /// Describes a statistical graph
+  pub fn statistical_graph(&self) -> &Option<Arc<dyn Fn((&Api, &StatisticalGraph)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.statistical_graph
   }
 
   /// Contains notifications about data changes
@@ -2372,6 +2431,11 @@ impl Lout {
     &self.listener.count
   }
 
+  /// Contains information about countries
+  pub fn countries(&self) -> &Option<Arc<dyn Fn((&Api, &Countries)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.countries
+  }
+
   /// Contains the result of a custom request
   pub fn custom_request_result(&self) -> &Option<Arc<dyn Fn((&Api, &CustomRequestResult)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.custom_request_result
@@ -2477,9 +2541,29 @@ impl Lout {
     &self.listener.message
   }
 
+  /// Contains an HTTPS link to a message in a supergroup or channel
+  pub fn message_link(&self) -> &Option<Arc<dyn Fn((&Api, &MessageLink)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.message_link
+  }
+
   /// Contains information about a link to a message in a chat
   pub fn message_link_info(&self) -> &Option<Arc<dyn Fn((&Api, &MessageLinkInfo)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.message_link_info
+  }
+
+  /// Represents a list of message senders
+  pub fn message_senders(&self) -> &Option<Arc<dyn Fn((&Api, &MessageSenders)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.message_senders
+  }
+
+  /// A detailed statistics about a message
+  pub fn message_statistics(&self) -> &Option<Arc<dyn Fn((&Api, &MessageStatistics)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.message_statistics
+  }
+
+  /// Contains information about a message thread
+  pub fn message_thread_info(&self) -> &Option<Arc<dyn Fn((&Api, &MessageThreadInfo)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.message_thread_info
   }
 
   /// Contains a list of messages
@@ -2537,6 +2621,11 @@ impl Lout {
     &self.listener.payment_result
   }
 
+  /// Contains information about a phone number
+  pub fn phone_number_info(&self) -> &Option<Arc<dyn Fn((&Api, &PhoneNumberInfo)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.phone_number_info
+  }
+
   /// Represents a list of proxy servers
   pub fn proxies(&self) -> &Option<Arc<dyn Fn((&Api, &Proxies)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.proxies
@@ -2545,11 +2634,6 @@ impl Lout {
   /// Contains information about a proxy server
   pub fn proxy(&self) -> &Option<Arc<dyn Fn((&Api, &Proxy)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.proxy
-  }
-
-  /// Contains a public HTTPS link to a message in a supergroup or channel with a username
-  pub fn public_message_link(&self) -> &Option<Arc<dyn Fn((&Api, &PublicMessageLink)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.public_message_link
   }
 
   /// Contains a globally unique push receiver identifier, which can be used to identify which account has received a push notification

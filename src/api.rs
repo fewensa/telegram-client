@@ -200,8 +200,8 @@ impl Api {
     self.send(answer_shipping_query.as_ref())
   }
 
-  pub fn block_user<C: AsRef<BlockUser>>(&self, block_user: C) -> RTDResult<()> {
-    self.send(block_user.as_ref())
+  pub fn block_message_sender_from_replies<C: AsRef<BlockMessageSenderFromReplies>>(&self, block_message_sender_from_replies: C) -> RTDResult<()> {
+    self.send(block_message_sender_from_replies.as_ref())
   }
 
   pub fn can_transfer_ownership<C: AsRef<CanTransferOwnership>>(&self, can_transfer_ownership: C) -> RTDResult<()> {
@@ -560,12 +560,16 @@ impl Api {
     self.send(get_basic_group_full_info.as_ref())
   }
 
-  pub fn get_blocked_users<C: AsRef<GetBlockedUsers>>(&self, get_blocked_users: C) -> RTDResult<()> {
-    self.send(get_blocked_users.as_ref())
+  pub fn get_blocked_message_senders<C: AsRef<GetBlockedMessageSenders>>(&self, get_blocked_message_senders: C) -> RTDResult<()> {
+    self.send(get_blocked_message_senders.as_ref())
   }
 
   pub fn get_callback_query_answer<C: AsRef<GetCallbackQueryAnswer>>(&self, get_callback_query_answer: C) -> RTDResult<()> {
     self.send(get_callback_query_answer.as_ref())
+  }
+
+  pub fn get_callback_query_message<C: AsRef<GetCallbackQueryMessage>>(&self, get_callback_query_message: C) -> RTDResult<()> {
+    self.send(get_callback_query_message.as_ref())
   }
 
   pub fn get_chat<C: AsRef<GetChat>>(&self, get_chat: C) -> RTDResult<()> {
@@ -624,10 +628,6 @@ impl Api {
     self.send(get_chat_statistics.as_ref())
   }
 
-  pub fn get_chat_statistics_graph<C: AsRef<GetChatStatisticsGraph>>(&self, get_chat_statistics_graph: C) -> RTDResult<()> {
-    self.send(get_chat_statistics_graph.as_ref())
-  }
-
   pub fn get_chat_statistics_url<C: AsRef<GetChatStatisticsUrl>>(&self, get_chat_statistics_url: C) -> RTDResult<()> {
     self.send(get_chat_statistics_url.as_ref())
   }
@@ -642,6 +642,10 @@ impl Api {
 
   pub fn get_contacts<C: AsRef<GetContacts>>(&self, get_contacts: C) -> RTDResult<()> {
     self.send(get_contacts.as_ref())
+  }
+
+  pub fn get_countries<C: AsRef<GetCountries>>(&self, get_countries: C) -> RTDResult<()> {
+    self.send(get_countries.as_ref())
   }
 
   pub fn get_country_code<C: AsRef<GetCountryCode>>(&self, get_country_code: C) -> RTDResult<()> {
@@ -784,6 +788,10 @@ impl Api {
     self.send(get_message.as_ref())
   }
 
+  pub fn get_message_embedding_code<C: AsRef<GetMessageEmbeddingCode>>(&self, get_message_embedding_code: C) -> RTDResult<()> {
+    self.send(get_message_embedding_code.as_ref())
+  }
+
   pub fn get_message_link<C: AsRef<GetMessageLink>>(&self, get_message_link: C) -> RTDResult<()> {
     self.send(get_message_link.as_ref())
   }
@@ -794,6 +802,22 @@ impl Api {
 
   pub fn get_message_locally<C: AsRef<GetMessageLocally>>(&self, get_message_locally: C) -> RTDResult<()> {
     self.send(get_message_locally.as_ref())
+  }
+
+  pub fn get_message_public_forwards<C: AsRef<GetMessagePublicForwards>>(&self, get_message_public_forwards: C) -> RTDResult<()> {
+    self.send(get_message_public_forwards.as_ref())
+  }
+
+  pub fn get_message_statistics<C: AsRef<GetMessageStatistics>>(&self, get_message_statistics: C) -> RTDResult<()> {
+    self.send(get_message_statistics.as_ref())
+  }
+
+  pub fn get_message_thread<C: AsRef<GetMessageThread>>(&self, get_message_thread: C) -> RTDResult<()> {
+    self.send(get_message_thread.as_ref())
+  }
+
+  pub fn get_message_thread_history<C: AsRef<GetMessageThreadHistory>>(&self, get_message_thread_history: C) -> RTDResult<()> {
+    self.send(get_message_thread_history.as_ref())
   }
 
   pub fn get_messages<C: AsRef<GetMessages>>(&self, get_messages: C) -> RTDResult<()> {
@@ -832,6 +856,10 @@ impl Api {
     self.send(get_payment_receipt.as_ref())
   }
 
+  pub fn get_phone_number_info<C: AsRef<GetPhoneNumberInfo>>(&self, get_phone_number_info: C) -> RTDResult<()> {
+    self.send(get_phone_number_info.as_ref())
+  }
+
   pub fn get_poll_voters<C: AsRef<GetPollVoters>>(&self, get_poll_voters: C) -> RTDResult<()> {
     self.send(get_poll_voters.as_ref())
   }
@@ -846,10 +874,6 @@ impl Api {
 
   pub fn get_proxy_link<C: AsRef<GetProxyLink>>(&self, get_proxy_link: C) -> RTDResult<()> {
     self.send(get_proxy_link.as_ref())
-  }
-
-  pub fn get_public_message_link<C: AsRef<GetPublicMessageLink>>(&self, get_public_message_link: C) -> RTDResult<()> {
-    self.send(get_public_message_link.as_ref())
   }
 
   pub fn get_push_receiver_id<C: AsRef<GetPushReceiverId>>(&self, get_push_receiver_id: C) -> RTDResult<()> {
@@ -898,6 +922,10 @@ impl Api {
 
   pub fn get_secret_chat<C: AsRef<GetSecretChat>>(&self, get_secret_chat: C) -> RTDResult<()> {
     self.send(get_secret_chat.as_ref())
+  }
+
+  pub fn get_statistical_graph<C: AsRef<GetStatisticalGraph>>(&self, get_statistical_graph: C) -> RTDResult<()> {
+    self.send(get_statistical_graph.as_ref())
   }
 
   pub fn get_sticker_emojis<C: AsRef<GetStickerEmojis>>(&self, get_sticker_emojis: C) -> RTDResult<()> {
@@ -1596,6 +1624,10 @@ impl Api {
     self.send(toggle_chat_is_pinned.as_ref())
   }
 
+  pub fn toggle_message_sender_is_blocked<C: AsRef<ToggleMessageSenderIsBlocked>>(&self, toggle_message_sender_is_blocked: C) -> RTDResult<()> {
+    self.send(toggle_message_sender_is_blocked.as_ref())
+  }
+
   pub fn toggle_supergroup_is_all_history_available<C: AsRef<ToggleSupergroupIsAllHistoryAvailable>>(&self, toggle_supergroup_is_all_history_available: C) -> RTDResult<()> {
     self.send(toggle_supergroup_is_all_history_available.as_ref())
   }
@@ -1608,8 +1640,8 @@ impl Api {
     self.send(transfer_chat_ownership.as_ref())
   }
 
-  pub fn unblock_user<C: AsRef<UnblockUser>>(&self, unblock_user: C) -> RTDResult<()> {
-    self.send(unblock_user.as_ref())
+  pub fn unpin_all_chat_messages<C: AsRef<UnpinAllChatMessages>>(&self, unpin_all_chat_messages: C) -> RTDResult<()> {
+    self.send(unpin_all_chat_messages.as_ref())
   }
 
   pub fn unpin_chat_message<C: AsRef<UnpinChatMessage>>(&self, unpin_chat_message: C) -> RTDResult<()> {
