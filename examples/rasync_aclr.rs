@@ -80,17 +80,24 @@ async fn main() {
     Ok(())
   });
 
+
+  listener.on_update_user(|(api, update)| {
+    debug!("Update user => {:?}", update);
+    Ok(())
+  });
+
   client.start();
   let (lock, cvar) = &*wait_auth;
   let mut started = lock.lock().unwrap();
   while !*started {
     started = cvar.wait(started).unwrap();
   }
+
   let chats = api.search_public_chats(SearchPublicChats::builder().query("rust async").build()).await.unwrap();
   info!("found chats: {}", chats.chat_ids().len());
   for chat_id in chats.chat_ids() {
     let chat = api.get_chat(GetChat::builder().chat_id(*chat_id)).await.unwrap();
-    info!("{:?}", chat)
+    info!("the chat [{}] content is : {:?}", chat_id, chat)
 
   }
 }

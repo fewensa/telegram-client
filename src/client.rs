@@ -7,6 +7,7 @@ use crate::api::Api;
 use crate::listener::Listener;
 use crate::rtd::TdRecv;
 
+#[derive(Clone)]
 pub struct Client {
   stop_flag: Arc<Mutex<bool>>,
   listener: Listener,

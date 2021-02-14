@@ -37,10 +37,6 @@ impl EventApi {
     self.api.send(add_chat_members.as_ref())
   }
 
-  pub fn add_chat_to_list<C: AsRef<AddChatToList>>(&self, add_chat_to_list: C) -> RTDResult<()> {
-    self.api.send(add_chat_to_list.as_ref())
-  }
-
   pub fn add_contact<C: AsRef<AddContact>>(&self, add_contact: C) -> RTDResult<()> {
     self.api.send(add_contact.as_ref())
   }
@@ -225,10 +221,6 @@ impl EventApi {
     self.api.send(create_call.as_ref())
   }
 
-  pub fn create_chat_filter<C: AsRef<CreateChatFilter>>(&self, create_chat_filter: C) -> RTDResult<()> {
-    self.api.send(create_chat_filter.as_ref())
-  }
-
   pub fn create_new_basic_group_chat<C: AsRef<CreateNewBasicGroupChat>>(&self, create_new_basic_group_chat: C) -> RTDResult<()> {
     self.api.send(create_new_basic_group_chat.as_ref())
   }
@@ -263,10 +255,6 @@ impl EventApi {
 
   pub fn delete_account<C: AsRef<DeleteAccount>>(&self, delete_account: C) -> RTDResult<()> {
     self.api.send(delete_account.as_ref())
-  }
-
-  pub fn delete_chat_filter<C: AsRef<DeleteChatFilter>>(&self, delete_chat_filter: C) -> RTDResult<()> {
-    self.api.send(delete_chat_filter.as_ref())
   }
 
   pub fn delete_chat_history<C: AsRef<DeleteChatHistory>>(&self, delete_chat_history: C) -> RTDResult<()> {
@@ -335,10 +323,6 @@ impl EventApi {
 
   pub fn download_file<C: AsRef<DownloadFile>>(&self, download_file: C) -> RTDResult<()> {
     self.api.send(download_file.as_ref())
-  }
-
-  pub fn edit_chat_filter<C: AsRef<EditChatFilter>>(&self, edit_chat_filter: C) -> RTDResult<()> {
-    self.api.send(edit_chat_filter.as_ref())
   }
 
   pub fn edit_custom_language_pack_info<C: AsRef<EditCustomLanguagePackInfo>>(&self, edit_custom_language_pack_info: C) -> RTDResult<()> {
@@ -453,10 +437,6 @@ impl EventApi {
     self.api.send(get_backgrounds.as_ref())
   }
 
-  pub fn get_bank_card_info<C: AsRef<GetBankCardInfo>>(&self, get_bank_card_info: C) -> RTDResult<()> {
-    self.api.send(get_bank_card_info.as_ref())
-  }
-
   pub fn get_basic_group<C: AsRef<GetBasicGroup>>(&self, get_basic_group: C) -> RTDResult<()> {
     self.api.send(get_basic_group.as_ref())
   }
@@ -485,20 +465,8 @@ impl EventApi {
     self.api.send(get_chat_event_log.as_ref())
   }
 
-  pub fn get_chat_filter<C: AsRef<GetChatFilter>>(&self, get_chat_filter: C) -> RTDResult<()> {
-    self.api.send(get_chat_filter.as_ref())
-  }
-
-  pub fn get_chat_filter_default_icon_name<C: AsRef<GetChatFilterDefaultIconName>>(&self, get_chat_filter_default_icon_name: C) -> RTDResult<()> {
-    self.api.send(get_chat_filter_default_icon_name.as_ref())
-  }
-
   pub fn get_chat_history<C: AsRef<GetChatHistory>>(&self, get_chat_history: C) -> RTDResult<()> {
     self.api.send(get_chat_history.as_ref())
-  }
-
-  pub fn get_chat_lists_to_add_chat<C: AsRef<GetChatListsToAddChat>>(&self, get_chat_lists_to_add_chat: C) -> RTDResult<()> {
-    self.api.send(get_chat_lists_to_add_chat.as_ref())
   }
 
   pub fn get_chat_member<C: AsRef<GetChatMember>>(&self, get_chat_member: C) -> RTDResult<()> {
@@ -523,14 +491,6 @@ impl EventApi {
 
   pub fn get_chat_scheduled_messages<C: AsRef<GetChatScheduledMessages>>(&self, get_chat_scheduled_messages: C) -> RTDResult<()> {
     self.api.send(get_chat_scheduled_messages.as_ref())
-  }
-
-  pub fn get_chat_statistics<C: AsRef<GetChatStatistics>>(&self, get_chat_statistics: C) -> RTDResult<()> {
-    self.api.send(get_chat_statistics.as_ref())
-  }
-
-  pub fn get_chat_statistics_graph<C: AsRef<GetChatStatisticsGraph>>(&self, get_chat_statistics_graph: C) -> RTDResult<()> {
-    self.api.send(get_chat_statistics_graph.as_ref())
   }
 
   pub fn get_chat_statistics_url<C: AsRef<GetChatStatisticsUrl>>(&self, get_chat_statistics_url: C) -> RTDResult<()> {
@@ -677,10 +637,6 @@ impl EventApi {
     self.api.send(get_map_thumbnail_file.as_ref())
   }
 
-  pub fn get_markdown_text<C: AsRef<GetMarkdownText>>(&self, get_markdown_text: C) -> RTDResult<()> {
-    self.api.send(get_markdown_text.as_ref())
-  }
-
   pub fn get_me<C: AsRef<GetMe>>(&self, get_me: C) -> RTDResult<()> {
     self.api.send(get_me.as_ref())
   }
@@ -771,10 +727,6 @@ impl EventApi {
 
   pub fn get_recently_visited_t_me_urls<C: AsRef<GetRecentlyVisitedTMeUrls>>(&self, get_recently_visited_t_me_urls: C) -> RTDResult<()> {
     self.api.send(get_recently_visited_t_me_urls.as_ref())
-  }
-
-  pub fn get_recommended_chat_filters<C: AsRef<GetRecommendedChatFilters>>(&self, get_recommended_chat_filters: C) -> RTDResult<()> {
-    self.api.send(get_recommended_chat_filters.as_ref())
   }
 
   pub fn get_recovery_email_address<C: AsRef<GetRecoveryEmailAddress>>(&self, get_recovery_email_address: C) -> RTDResult<()> {
@@ -885,10 +837,6 @@ impl EventApi {
     self.api.send(get_web_page_preview.as_ref())
   }
 
-  pub fn hide_suggested_action<C: AsRef<HideSuggestedAction>>(&self, hide_suggested_action: C) -> RTDResult<()> {
-    self.api.send(hide_suggested_action.as_ref())
-  }
-
   pub fn import_contacts<C: AsRef<ImportContacts>>(&self, import_contacts: C) -> RTDResult<()> {
     self.api.send(import_contacts.as_ref())
   }
@@ -919,10 +867,6 @@ impl EventApi {
 
   pub fn optimize_storage<C: AsRef<OptimizeStorage>>(&self, optimize_storage: C) -> RTDResult<()> {
     self.api.send(optimize_storage.as_ref())
-  }
-
-  pub fn parse_markdown<C: AsRef<ParseMarkdown>>(&self, parse_markdown: C) -> RTDResult<()> {
-    self.api.send(parse_markdown.as_ref())
   }
 
   pub fn parse_text_entities<C: AsRef<ParseTextEntities>>(&self, parse_text_entities: C) -> RTDResult<()> {
@@ -1015,10 +959,6 @@ impl EventApi {
 
   pub fn remove_top_chat<C: AsRef<RemoveTopChat>>(&self, remove_top_chat: C) -> RTDResult<()> {
     self.api.send(remove_top_chat.as_ref())
-  }
-
-  pub fn reorder_chat_filters<C: AsRef<ReorderChatFilters>>(&self, reorder_chat_filters: C) -> RTDResult<()> {
-    self.api.send(reorder_chat_filters.as_ref())
   }
 
   pub fn reorder_installed_sticker_sets<C: AsRef<ReorderInstalledStickerSets>>(&self, reorder_installed_sticker_sets: C) -> RTDResult<()> {
@@ -1177,10 +1117,6 @@ impl EventApi {
     self.api.send(send_call_rating.as_ref())
   }
 
-  pub fn send_call_signaling_data<C: AsRef<SendCallSignalingData>>(&self, send_call_signaling_data: C) -> RTDResult<()> {
-    self.api.send(send_call_signaling_data.as_ref())
-  }
-
   pub fn send_chat_action<C: AsRef<SendChatAction>>(&self, send_chat_action: C) -> RTDResult<()> {
     self.api.send(send_chat_action.as_ref())
   }
@@ -1257,6 +1193,10 @@ impl EventApi {
     self.api.send(set_bot_updates_status.as_ref())
   }
 
+  pub fn set_chat_chat_list<C: AsRef<SetChatChatList>>(&self, set_chat_chat_list: C) -> RTDResult<()> {
+    self.api.send(set_chat_chat_list.as_ref())
+  }
+
   pub fn set_chat_client_data<C: AsRef<SetChatClientData>>(&self, set_chat_client_data: C) -> RTDResult<()> {
     self.api.send(set_chat_client_data.as_ref())
   }
@@ -1301,10 +1241,6 @@ impl EventApi {
     self.api.send(set_chat_title.as_ref())
   }
 
-  pub fn set_commands<C: AsRef<SetCommands>>(&self, set_commands: C) -> RTDResult<()> {
-    self.api.send(set_commands.as_ref())
-  }
-
   pub fn set_custom_language_pack<C: AsRef<SetCustomLanguagePack>>(&self, set_custom_language_pack: C) -> RTDResult<()> {
     self.api.send(set_custom_language_pack.as_ref())
   }
@@ -1327,10 +1263,6 @@ impl EventApi {
 
   pub fn set_inline_game_score<C: AsRef<SetInlineGameScore>>(&self, set_inline_game_score: C) -> RTDResult<()> {
     self.api.send(set_inline_game_score.as_ref())
-  }
-
-  pub fn set_location<C: AsRef<SetLocation>>(&self, set_location: C) -> RTDResult<()> {
-    self.api.send(set_location.as_ref())
   }
 
   pub fn set_log_stream<C: AsRef<SetLogStream>>(&self, set_log_stream: C) -> RTDResult<()> {
@@ -1391,10 +1323,6 @@ impl EventApi {
 
   pub fn set_sticker_position_in_set<C: AsRef<SetStickerPositionInSet>>(&self, set_sticker_position_in_set: C) -> RTDResult<()> {
     self.api.send(set_sticker_position_in_set.as_ref())
-  }
-
-  pub fn set_sticker_set_thumbnail<C: AsRef<SetStickerSetThumbnail>>(&self, set_sticker_set_thumbnail: C) -> RTDResult<()> {
-    self.api.send(set_sticker_set_thumbnail.as_ref())
   }
 
   pub fn set_supergroup_sticker_set<C: AsRef<SetSupergroupStickerSet>>(&self, set_supergroup_sticker_set: C) -> RTDResult<()> {
