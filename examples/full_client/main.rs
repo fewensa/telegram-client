@@ -25,8 +25,8 @@ fn main() {
 
   let config = Config::default();
   debug!("{:#?}", config);
-  let api = Api::default();
-  let mut client = Client::new(api.clone());
+  let api = Api::event();
+  let mut client = Client::new(api.api().clone());
 
   config.proxy().map(|v| { api.add_proxy(v) });
 
