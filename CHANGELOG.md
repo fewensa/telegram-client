@@ -1,6 +1,11 @@
 CHANGELOG
 ===
 
+## 2021/02
+
+### Async support
+
+issue [15](https://github.com/fewensa/telegram-client/issues/15), very thanks for [@aCLr](https://github.com/aCLr)
 
 ## 2020/05
 

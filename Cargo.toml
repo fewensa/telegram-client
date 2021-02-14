@@ -1,12 +1,12 @@
 [package]
 name = "telegram-client"
-version = "0.6.2"
+version = "0.7.0"
 authors = ["fewensa <fewensa@protonmail.com>"]
 description = "Telegram client"
 homepage = "https://github.com/fewensa/telegram-client"
 repository = "https://github.com/fewensa/telegram-client"
 license = "MIT"
-keywords = ["tdlib", "telegram", "telegram-client", "bindings"]
+keywords = ["tdlib", "telegram", "telegram-client", "bindings", "async"]
 categories = ["api-bindings"]
 include = [
   "Cargo.toml",
@@ -20,8 +20,8 @@ edition = "2018"
 build = "build.rs"
 
 [dependencies]
-#rtdlib = { version = "0.6.*", features = [ "sys" ] }
-rtdlib = { path = "../rtdlib", features = [ "sys" ] }
+rtdlib = { version = "=0.7.0", features = [ "sys" ] }
+#rtdlib = { path = "../rtdlib", features = [ "sys" ] }
 #rtdlib = { git = "https://github.com/fewensa/rtdlib.git", features = [ "sys" ] }
 
 log = "0.4"
