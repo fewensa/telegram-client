@@ -28,6 +28,8 @@ impl Observer {
 
       TdType::UpdateActiveNotifications(value) => value.extra(),
 
+      TdType::UpdateAnimationSearchParameters(value) => value.extra(),
+
       TdType::UpdateAuthorizationState(value) => value.extra(),
 
       TdType::UpdateBasicGroup(value) => value.extra(),
@@ -38,19 +40,17 @@ impl Observer {
 
       TdType::UpdateChatActionBar(value) => value.extra(),
 
-      TdType::UpdateChatChatList(value) => value.extra(),
-
       TdType::UpdateChatDefaultDisableNotification(value) => value.extra(),
 
       TdType::UpdateChatDraftMessage(value) => value.extra(),
 
+      TdType::UpdateChatFilters(value) => value.extra(),
+
       TdType::UpdateChatHasScheduledMessages(value) => value.extra(),
 
+      TdType::UpdateChatIsBlocked(value) => value.extra(),
+
       TdType::UpdateChatIsMarkedAsUnread(value) => value.extra(),
-
-      TdType::UpdateChatIsPinned(value) => value.extra(),
-
-      TdType::UpdateChatIsSponsored(value) => value.extra(),
 
       TdType::UpdateChatLastMessage(value) => value.extra(),
 
@@ -58,13 +58,11 @@ impl Observer {
 
       TdType::UpdateChatOnlineMemberCount(value) => value.extra(),
 
-      TdType::UpdateChatOrder(value) => value.extra(),
-
       TdType::UpdateChatPermissions(value) => value.extra(),
 
       TdType::UpdateChatPhoto(value) => value.extra(),
 
-      TdType::UpdateChatPinnedMessage(value) => value.extra(),
+      TdType::UpdateChatPosition(value) => value.extra(),
 
       TdType::UpdateChatReadInbox(value) => value.extra(),
 
@@ -76,9 +74,13 @@ impl Observer {
 
       TdType::UpdateChatUnreadMentionCount(value) => value.extra(),
 
+      TdType::UpdateChatVoiceChat(value) => value.extra(),
+
       TdType::UpdateConnectionState(value) => value.extra(),
 
       TdType::UpdateDeleteMessages(value) => value.extra(),
+
+      TdType::UpdateDiceEmojis(value) => value.extra(),
 
       TdType::UpdateFavoriteStickers(value) => value.extra(),
 
@@ -87,6 +89,10 @@ impl Observer {
       TdType::UpdateFileGenerationStart(value) => value.extra(),
 
       TdType::UpdateFileGenerationStop(value) => value.extra(),
+
+      TdType::UpdateGroupCall(value) => value.extra(),
+
+      TdType::UpdateGroupCallParticipant(value) => value.extra(),
 
       TdType::UpdateHavePendingNotifications(value) => value.extra(),
 
@@ -100,6 +106,10 @@ impl Observer {
 
       TdType::UpdateMessageEdited(value) => value.extra(),
 
+      TdType::UpdateMessageInteractionInfo(value) => value.extra(),
+
+      TdType::UpdateMessageIsPinned(value) => value.extra(),
+
       TdType::UpdateMessageLiveLocationViewed(value) => value.extra(),
 
       TdType::UpdateMessageMentionRead(value) => value.extra(),
@@ -110,7 +120,7 @@ impl Observer {
 
       TdType::UpdateMessageSendSucceeded(value) => value.extra(),
 
-      TdType::UpdateMessageViews(value) => value.extra(),
+      TdType::UpdateNewCallSignalingData(value) => value.extra(),
 
       TdType::UpdateNewCallbackQuery(value) => value.extra(),
 
@@ -154,6 +164,10 @@ impl Observer {
 
       TdType::UpdateServiceNotification(value) => value.extra(),
 
+      TdType::UpdateStickerSet(value) => value.extra(),
+
+      TdType::UpdateSuggestedActions(value) => value.extra(),
+
       TdType::UpdateSupergroup(value) => value.extra(),
 
       TdType::UpdateSupergroupFullInfo(value) => value.extra(),
@@ -183,6 +197,8 @@ impl Observer {
 
       TdType::CanTransferOwnershipResult(value) => value.extra(),
 
+      TdType::ChatStatistics(value) => value.extra(),
+
       TdType::CheckChatUsernameResult(value) => value.extra(),
 
       TdType::JsonValue(value) => value.extra(),
@@ -193,9 +209,13 @@ impl Observer {
 
       TdType::LoginUrlInfo(value) => value.extra(),
 
+      TdType::MessageFileType(value) => value.extra(),
+
       TdType::OptionValue(value) => value.extra(),
 
       TdType::PassportElement(value) => value.extra(),
+
+      TdType::StatisticalGraph(value) => value.extra(),
 
       TdType::Update(value) => value.extra(),
 
@@ -211,6 +231,8 @@ impl Observer {
 
       TdType::Backgrounds(value) => value.extra(),
 
+      TdType::BankCardInfo(value) => value.extra(),
+
       TdType::BasicGroup(value) => value.extra(),
 
       TdType::BasicGroupFullInfo(value) => value.extra(),
@@ -225,13 +247,21 @@ impl Observer {
 
       TdType::ChatEvents(value) => value.extra(),
 
+      TdType::ChatFilter(value) => value.extra(),
+
+      TdType::ChatFilterInfo(value) => value.extra(),
+
       TdType::ChatInviteLink(value) => value.extra(),
 
       TdType::ChatInviteLinkInfo(value) => value.extra(),
 
+      TdType::ChatLists(value) => value.extra(),
+
       TdType::ChatMember(value) => value.extra(),
 
       TdType::ChatMembers(value) => value.extra(),
+
+      TdType::ChatPhotos(value) => value.extra(),
 
       TdType::Chats(value) => value.extra(),
 
@@ -240,6 +270,8 @@ impl Observer {
       TdType::ConnectedWebsites(value) => value.extra(),
 
       TdType::Count(value) => value.extra(),
+
+      TdType::Countries(value) => value.extra(),
 
       TdType::CustomRequestResult(value) => value.extra(),
 
@@ -263,6 +295,12 @@ impl Observer {
 
       TdType::GameHighScores(value) => value.extra(),
 
+      TdType::GroupCall(value) => value.extra(),
+
+      TdType::GroupCallId(value) => value.extra(),
+
+      TdType::GroupCallJoinResponse(value) => value.extra(),
+
       TdType::Hashtags(value) => value.extra(),
 
       TdType::HttpUrl(value) => value.extra(),
@@ -283,7 +321,15 @@ impl Observer {
 
       TdType::Message(value) => value.extra(),
 
+      TdType::MessageLink(value) => value.extra(),
+
       TdType::MessageLinkInfo(value) => value.extra(),
+
+      TdType::MessageSenders(value) => value.extra(),
+
+      TdType::MessageStatistics(value) => value.extra(),
+
+      TdType::MessageThreadInfo(value) => value.extra(),
 
       TdType::Messages(value) => value.extra(),
 
@@ -307,13 +353,15 @@ impl Observer {
 
       TdType::PaymentResult(value) => value.extra(),
 
+      TdType::PhoneNumberInfo(value) => value.extra(),
+
       TdType::Proxies(value) => value.extra(),
 
       TdType::Proxy(value) => value.extra(),
 
-      TdType::PublicMessageLink(value) => value.extra(),
-
       TdType::PushReceiverId(value) => value.extra(),
+
+      TdType::RecommendedChatFilters(value) => value.extra(),
 
       TdType::RecoveryEmailAddress(value) => value.extra(),
 
@@ -370,8 +418,6 @@ impl Observer {
       TdType::UserFullInfo(value) => value.extra(),
 
       TdType::UserPrivacySettingRules(value) => value.extra(),
-
-      TdType::UserProfilePhotos(value) => value.extra(),
 
       TdType::Users(value) => value.extra(),
 

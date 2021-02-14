@@ -15,48 +15,53 @@ pub struct Listener {
 
   test_use_update: Option<Arc<dyn Fn((&EventApi, &TestUseUpdate)) -> TGResult<()> + Send + Sync + 'static>>,
   update_active_notifications: Option<Arc<dyn Fn((&EventApi, &UpdateActiveNotifications)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_animation_search_parameters: Option<Arc<dyn Fn((&EventApi, &UpdateAnimationSearchParameters)) -> TGResult<()> + Send + Sync + 'static>>,
   update_authorization_state: Option<Arc<dyn Fn((&EventApi, &UpdateAuthorizationState)) -> TGResult<()> + Send + Sync + 'static>>,
   update_basic_group: Option<Arc<dyn Fn((&EventApi, &UpdateBasicGroup)) -> TGResult<()> + Send + Sync + 'static>>,
   update_basic_group_full_info: Option<Arc<dyn Fn((&EventApi, &UpdateBasicGroupFullInfo)) -> TGResult<()> + Send + Sync + 'static>>,
   update_call: Option<Arc<dyn Fn((&EventApi, &UpdateCall)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_action_bar: Option<Arc<dyn Fn((&EventApi, &UpdateChatActionBar)) -> TGResult<()> + Send + Sync + 'static>>,
-  update_chat_chat_list: Option<Arc<dyn Fn((&EventApi, &UpdateChatChatList)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_default_disable_notification: Option<Arc<dyn Fn((&EventApi, &UpdateChatDefaultDisableNotification)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_draft_message: Option<Arc<dyn Fn((&EventApi, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_chat_filters: Option<Arc<dyn Fn((&EventApi, &UpdateChatFilters)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_has_scheduled_messages: Option<Arc<dyn Fn((&EventApi, &UpdateChatHasScheduledMessages)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_chat_is_blocked: Option<Arc<dyn Fn((&EventApi, &UpdateChatIsBlocked)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_is_marked_as_unread: Option<Arc<dyn Fn((&EventApi, &UpdateChatIsMarkedAsUnread)) -> TGResult<()> + Send + Sync + 'static>>,
-  update_chat_is_pinned: Option<Arc<dyn Fn((&EventApi, &UpdateChatIsPinned)) -> TGResult<()> + Send + Sync + 'static>>,
-  update_chat_is_sponsored: Option<Arc<dyn Fn((&EventApi, &UpdateChatIsSponsored)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_last_message: Option<Arc<dyn Fn((&EventApi, &UpdateChatLastMessage)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_notification_settings: Option<Arc<dyn Fn((&EventApi, &UpdateChatNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_online_member_count: Option<Arc<dyn Fn((&EventApi, &UpdateChatOnlineMemberCount)) -> TGResult<()> + Send + Sync + 'static>>,
-  update_chat_order: Option<Arc<dyn Fn((&EventApi, &UpdateChatOrder)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_permissions: Option<Arc<dyn Fn((&EventApi, &UpdateChatPermissions)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_photo: Option<Arc<dyn Fn((&EventApi, &UpdateChatPhoto)) -> TGResult<()> + Send + Sync + 'static>>,
-  update_chat_pinned_message: Option<Arc<dyn Fn((&EventApi, &UpdateChatPinnedMessage)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_chat_position: Option<Arc<dyn Fn((&EventApi, &UpdateChatPosition)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_read_inbox: Option<Arc<dyn Fn((&EventApi, &UpdateChatReadInbox)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_read_outbox: Option<Arc<dyn Fn((&EventApi, &UpdateChatReadOutbox)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_reply_markup: Option<Arc<dyn Fn((&EventApi, &UpdateChatReplyMarkup)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_title: Option<Arc<dyn Fn((&EventApi, &UpdateChatTitle)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_unread_mention_count: Option<Arc<dyn Fn((&EventApi, &UpdateChatUnreadMentionCount)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_chat_voice_chat: Option<Arc<dyn Fn((&EventApi, &UpdateChatVoiceChat)) -> TGResult<()> + Send + Sync + 'static>>,
   update_connection_state: Option<Arc<dyn Fn((&EventApi, &UpdateConnectionState)) -> TGResult<()> + Send + Sync + 'static>>,
   update_delete_messages: Option<Arc<dyn Fn((&EventApi, &UpdateDeleteMessages)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_dice_emojis: Option<Arc<dyn Fn((&EventApi, &UpdateDiceEmojis)) -> TGResult<()> + Send + Sync + 'static>>,
   update_favorite_stickers: Option<Arc<dyn Fn((&EventApi, &UpdateFavoriteStickers)) -> TGResult<()> + Send + Sync + 'static>>,
   update_file: Option<Arc<dyn Fn((&EventApi, &UpdateFile)) -> TGResult<()> + Send + Sync + 'static>>,
   update_file_generation_start: Option<Arc<dyn Fn((&EventApi, &UpdateFileGenerationStart)) -> TGResult<()> + Send + Sync + 'static>>,
   update_file_generation_stop: Option<Arc<dyn Fn((&EventApi, &UpdateFileGenerationStop)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_group_call: Option<Arc<dyn Fn((&EventApi, &UpdateGroupCall)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_group_call_participant: Option<Arc<dyn Fn((&EventApi, &UpdateGroupCallParticipant)) -> TGResult<()> + Send + Sync + 'static>>,
   update_have_pending_notifications: Option<Arc<dyn Fn((&EventApi, &UpdateHavePendingNotifications)) -> TGResult<()> + Send + Sync + 'static>>,
   update_installed_sticker_sets: Option<Arc<dyn Fn((&EventApi, &UpdateInstalledStickerSets)) -> TGResult<()> + Send + Sync + 'static>>,
   update_language_pack_strings: Option<Arc<dyn Fn((&EventApi, &UpdateLanguagePackStrings)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_content: Option<Arc<dyn Fn((&EventApi, &UpdateMessageContent)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_content_opened: Option<Arc<dyn Fn((&EventApi, &UpdateMessageContentOpened)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_edited: Option<Arc<dyn Fn((&EventApi, &UpdateMessageEdited)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_message_interaction_info: Option<Arc<dyn Fn((&EventApi, &UpdateMessageInteractionInfo)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_message_is_pinned: Option<Arc<dyn Fn((&EventApi, &UpdateMessageIsPinned)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_live_location_viewed: Option<Arc<dyn Fn((&EventApi, &UpdateMessageLiveLocationViewed)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_mention_read: Option<Arc<dyn Fn((&EventApi, &UpdateMessageMentionRead)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_send_acknowledged: Option<Arc<dyn Fn((&EventApi, &UpdateMessageSendAcknowledged)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_send_failed: Option<Arc<dyn Fn((&EventApi, &UpdateMessageSendFailed)) -> TGResult<()> + Send + Sync + 'static>>,
   update_message_send_succeeded: Option<Arc<dyn Fn((&EventApi, &UpdateMessageSendSucceeded)) -> TGResult<()> + Send + Sync + 'static>>,
-  update_message_views: Option<Arc<dyn Fn((&EventApi, &UpdateMessageViews)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_new_call_signaling_data: Option<Arc<dyn Fn((&EventApi, &UpdateNewCallSignalingData)) -> TGResult<()> + Send + Sync + 'static>>,
   update_new_callback_query: Option<Arc<dyn Fn((&EventApi, &UpdateNewCallbackQuery)) -> TGResult<()> + Send + Sync + 'static>>,
   update_new_chat: Option<Arc<dyn Fn((&EventApi, &UpdateNewChat)) -> TGResult<()> + Send + Sync + 'static>>,
   update_new_chosen_inline_result: Option<Arc<dyn Fn((&EventApi, &UpdateNewChosenInlineResult)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -78,6 +83,8 @@ pub struct Listener {
   update_secret_chat: Option<Arc<dyn Fn((&EventApi, &UpdateSecretChat)) -> TGResult<()> + Send + Sync + 'static>>,
   update_selected_background: Option<Arc<dyn Fn((&EventApi, &UpdateSelectedBackground)) -> TGResult<()> + Send + Sync + 'static>>,
   update_service_notification: Option<Arc<dyn Fn((&EventApi, &UpdateServiceNotification)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_sticker_set: Option<Arc<dyn Fn((&EventApi, &UpdateStickerSet)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_suggested_actions: Option<Arc<dyn Fn((&EventApi, &UpdateSuggestedActions)) -> TGResult<()> + Send + Sync + 'static>>,
   update_supergroup: Option<Arc<dyn Fn((&EventApi, &UpdateSupergroup)) -> TGResult<()> + Send + Sync + 'static>>,
   update_supergroup_full_info: Option<Arc<dyn Fn((&EventApi, &UpdateSupergroupFullInfo)) -> TGResult<()> + Send + Sync + 'static>>,
   update_terms_of_service: Option<Arc<dyn Fn((&EventApi, &UpdateTermsOfService)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -94,13 +101,16 @@ pub struct Listener {
 
   authorization_state: Option<Arc<dyn Fn((&EventApi, &AuthorizationState)) -> TGResult<()> + Send + Sync + 'static>>,
   can_transfer_ownership_result: Option<Arc<dyn Fn((&EventApi, &CanTransferOwnershipResult)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_statistics: Option<Arc<dyn Fn((&EventApi, &ChatStatistics)) -> TGResult<()> + Send + Sync + 'static>>,
   check_chat_username_result: Option<Arc<dyn Fn((&EventApi, &CheckChatUsernameResult)) -> TGResult<()> + Send + Sync + 'static>>,
   json_value: Option<Arc<dyn Fn((&EventApi, &JsonValue)) -> TGResult<()> + Send + Sync + 'static>>,
   language_pack_string_value: Option<Arc<dyn Fn((&EventApi, &LanguagePackStringValue)) -> TGResult<()> + Send + Sync + 'static>>,
   log_stream: Option<Arc<dyn Fn((&EventApi, &LogStream)) -> TGResult<()> + Send + Sync + 'static>>,
   login_url_info: Option<Arc<dyn Fn((&EventApi, &LoginUrlInfo)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_file_type: Option<Arc<dyn Fn((&EventApi, &MessageFileType)) -> TGResult<()> + Send + Sync + 'static>>,
   option_value: Option<Arc<dyn Fn((&EventApi, &OptionValue)) -> TGResult<()> + Send + Sync + 'static>>,
   passport_element: Option<Arc<dyn Fn((&EventApi, &PassportElement)) -> TGResult<()> + Send + Sync + 'static>>,
+  statistical_graph: Option<Arc<dyn Fn((&EventApi, &StatisticalGraph)) -> TGResult<()> + Send + Sync + 'static>>,
   update: Option<Arc<dyn Fn((&EventApi, &Update)) -> TGResult<()> + Send + Sync + 'static>>,
   account_ttl: Option<Arc<dyn Fn((&EventApi, &AccountTtl)) -> TGResult<()> + Send + Sync + 'static>>,
   animations: Option<Arc<dyn Fn((&EventApi, &Animations)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -108,6 +118,7 @@ pub struct Listener {
   auto_download_settings_presets: Option<Arc<dyn Fn((&EventApi, &AutoDownloadSettingsPresets)) -> TGResult<()> + Send + Sync + 'static>>,
   background: Option<Arc<dyn Fn((&EventApi, &Background)) -> TGResult<()> + Send + Sync + 'static>>,
   backgrounds: Option<Arc<dyn Fn((&EventApi, &Backgrounds)) -> TGResult<()> + Send + Sync + 'static>>,
+  bank_card_info: Option<Arc<dyn Fn((&EventApi, &BankCardInfo)) -> TGResult<()> + Send + Sync + 'static>>,
   basic_group: Option<Arc<dyn Fn((&EventApi, &BasicGroup)) -> TGResult<()> + Send + Sync + 'static>>,
   basic_group_full_info: Option<Arc<dyn Fn((&EventApi, &BasicGroupFullInfo)) -> TGResult<()> + Send + Sync + 'static>>,
   call_id: Option<Arc<dyn Fn((&EventApi, &CallId)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -115,14 +126,19 @@ pub struct Listener {
   chat: Option<Arc<dyn Fn((&EventApi, &Chat)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_administrators: Option<Arc<dyn Fn((&EventApi, &ChatAdministrators)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_events: Option<Arc<dyn Fn((&EventApi, &ChatEvents)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_filter: Option<Arc<dyn Fn((&EventApi, &ChatFilter)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_filter_info: Option<Arc<dyn Fn((&EventApi, &ChatFilterInfo)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_invite_link: Option<Arc<dyn Fn((&EventApi, &ChatInviteLink)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_invite_link_info: Option<Arc<dyn Fn((&EventApi, &ChatInviteLinkInfo)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_lists: Option<Arc<dyn Fn((&EventApi, &ChatLists)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_member: Option<Arc<dyn Fn((&EventApi, &ChatMember)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_members: Option<Arc<dyn Fn((&EventApi, &ChatMembers)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_photos: Option<Arc<dyn Fn((&EventApi, &ChatPhotos)) -> TGResult<()> + Send + Sync + 'static>>,
   chats: Option<Arc<dyn Fn((&EventApi, &Chats)) -> TGResult<()> + Send + Sync + 'static>>,
   chats_nearby: Option<Arc<dyn Fn((&EventApi, &ChatsNearby)) -> TGResult<()> + Send + Sync + 'static>>,
   connected_websites: Option<Arc<dyn Fn((&EventApi, &ConnectedWebsites)) -> TGResult<()> + Send + Sync + 'static>>,
   count: Option<Arc<dyn Fn((&EventApi, &Count)) -> TGResult<()> + Send + Sync + 'static>>,
+  countries: Option<Arc<dyn Fn((&EventApi, &Countries)) -> TGResult<()> + Send + Sync + 'static>>,
   custom_request_result: Option<Arc<dyn Fn((&EventApi, &CustomRequestResult)) -> TGResult<()> + Send + Sync + 'static>>,
   database_statistics: Option<Arc<dyn Fn((&EventApi, &DatabaseStatistics)) -> TGResult<()> + Send + Sync + 'static>>,
   deep_link_info: Option<Arc<dyn Fn((&EventApi, &DeepLinkInfo)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -134,6 +150,9 @@ pub struct Listener {
   formatted_text: Option<Arc<dyn Fn((&EventApi, &FormattedText)) -> TGResult<()> + Send + Sync + 'static>>,
   found_messages: Option<Arc<dyn Fn((&EventApi, &FoundMessages)) -> TGResult<()> + Send + Sync + 'static>>,
   game_high_scores: Option<Arc<dyn Fn((&EventApi, &GameHighScores)) -> TGResult<()> + Send + Sync + 'static>>,
+  group_call: Option<Arc<dyn Fn((&EventApi, &GroupCall)) -> TGResult<()> + Send + Sync + 'static>>,
+  group_call_id: Option<Arc<dyn Fn((&EventApi, &GroupCallId)) -> TGResult<()> + Send + Sync + 'static>>,
+  group_call_join_response: Option<Arc<dyn Fn((&EventApi, &GroupCallJoinResponse)) -> TGResult<()> + Send + Sync + 'static>>,
   hashtags: Option<Arc<dyn Fn((&EventApi, &Hashtags)) -> TGResult<()> + Send + Sync + 'static>>,
   http_url: Option<Arc<dyn Fn((&EventApi, &HttpUrl)) -> TGResult<()> + Send + Sync + 'static>>,
   imported_contacts: Option<Arc<dyn Fn((&EventApi, &ImportedContacts)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -144,7 +163,11 @@ pub struct Listener {
   log_tags: Option<Arc<dyn Fn((&EventApi, &LogTags)) -> TGResult<()> + Send + Sync + 'static>>,
   log_verbosity_level: Option<Arc<dyn Fn((&EventApi, &LogVerbosityLevel)) -> TGResult<()> + Send + Sync + 'static>>,
   message: Option<Arc<dyn Fn((&EventApi, &Message)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_link: Option<Arc<dyn Fn((&EventApi, &MessageLink)) -> TGResult<()> + Send + Sync + 'static>>,
   message_link_info: Option<Arc<dyn Fn((&EventApi, &MessageLinkInfo)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_senders: Option<Arc<dyn Fn((&EventApi, &MessageSenders)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_statistics: Option<Arc<dyn Fn((&EventApi, &MessageStatistics)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_thread_info: Option<Arc<dyn Fn((&EventApi, &MessageThreadInfo)) -> TGResult<()> + Send + Sync + 'static>>,
   messages: Option<Arc<dyn Fn((&EventApi, &Messages)) -> TGResult<()> + Send + Sync + 'static>>,
   network_statistics: Option<Arc<dyn Fn((&EventApi, &NetworkStatistics)) -> TGResult<()> + Send + Sync + 'static>>,
   ok: Option<Arc<dyn Fn((&EventApi, &Ok)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -156,10 +179,11 @@ pub struct Listener {
   payment_form: Option<Arc<dyn Fn((&EventApi, &PaymentForm)) -> TGResult<()> + Send + Sync + 'static>>,
   payment_receipt: Option<Arc<dyn Fn((&EventApi, &PaymentReceipt)) -> TGResult<()> + Send + Sync + 'static>>,
   payment_result: Option<Arc<dyn Fn((&EventApi, &PaymentResult)) -> TGResult<()> + Send + Sync + 'static>>,
+  phone_number_info: Option<Arc<dyn Fn((&EventApi, &PhoneNumberInfo)) -> TGResult<()> + Send + Sync + 'static>>,
   proxies: Option<Arc<dyn Fn((&EventApi, &Proxies)) -> TGResult<()> + Send + Sync + 'static>>,
   proxy: Option<Arc<dyn Fn((&EventApi, &Proxy)) -> TGResult<()> + Send + Sync + 'static>>,
-  public_message_link: Option<Arc<dyn Fn((&EventApi, &PublicMessageLink)) -> TGResult<()> + Send + Sync + 'static>>,
   push_receiver_id: Option<Arc<dyn Fn((&EventApi, &PushReceiverId)) -> TGResult<()> + Send + Sync + 'static>>,
+  recommended_chat_filters: Option<Arc<dyn Fn((&EventApi, &RecommendedChatFilters)) -> TGResult<()> + Send + Sync + 'static>>,
   recovery_email_address: Option<Arc<dyn Fn((&EventApi, &RecoveryEmailAddress)) -> TGResult<()> + Send + Sync + 'static>>,
   scope_notification_settings: Option<Arc<dyn Fn((&EventApi, &ScopeNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>>,
   seconds: Option<Arc<dyn Fn((&EventApi, &Seconds)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -188,7 +212,6 @@ pub struct Listener {
   user: Option<Arc<dyn Fn((&EventApi, &User)) -> TGResult<()> + Send + Sync + 'static>>,
   user_full_info: Option<Arc<dyn Fn((&EventApi, &UserFullInfo)) -> TGResult<()> + Send + Sync + 'static>>,
   user_privacy_setting_rules: Option<Arc<dyn Fn((&EventApi, &UserPrivacySettingRules)) -> TGResult<()> + Send + Sync + 'static>>,
-  user_profile_photos: Option<Arc<dyn Fn((&EventApi, &UserProfilePhotos)) -> TGResult<()> + Send + Sync + 'static>>,
   users: Option<Arc<dyn Fn((&EventApi, &Users)) -> TGResult<()> + Send + Sync + 'static>>,
   validated_order_info: Option<Arc<dyn Fn((&EventApi, &ValidatedOrderInfo)) -> TGResult<()> + Send + Sync + 'static>>,
   web_page: Option<Arc<dyn Fn((&EventApi, &WebPage)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -236,6 +259,13 @@ impl Listener {
     self
   }
 
+  /// The parameters of animation search through GetOption("animation_search_bot_username") bot has changed
+  pub fn on_update_animation_search_parameters<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &UpdateAnimationSearchParameters)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_animation_search_parameters = Some(Arc::new(fnc));
+    self
+  }
+
   /// The user authorization state has changed
   pub fn on_update_authorization_state<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateAuthorizationState)) -> TGResult<()> + Send + Sync + 'static {
@@ -243,7 +273,7 @@ impl Listener {
     self
   }
 
-  /// Some data of a basic group has changed. This update is guaranteed to come before the basic group identifier is returned to the client
+  /// Some data of a basic group has changed. This update is guaranteed to come before the basic group identifier is returned to the application
   pub fn on_update_basic_group<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateBasicGroup)) -> TGResult<()> + Send + Sync + 'static {
     self.update_basic_group = Some(Arc::new(fnc));
@@ -271,13 +301,6 @@ impl Listener {
     self
   }
 
-  /// The list to which the chat belongs was changed. This update is guaranteed to be sent only when chat.order == 0 and the current or the new chat list is null
-  pub fn on_update_chat_chat_list<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&EventApi, &UpdateChatChatList)) -> TGResult<()> + Send + Sync + 'static {
-    self.update_chat_chat_list = Some(Arc::new(fnc));
-    self
-  }
-
   /// The value of the default disable_notification parameter, used when a message is sent to the chat, was changed
   pub fn on_update_chat_default_disable_notification<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateChatDefaultDisableNotification)) -> TGResult<()> + Send + Sync + 'static {
@@ -292,6 +315,13 @@ impl Listener {
     self
   }
 
+  /// The list of chat filters or a chat filter has changed
+  pub fn on_update_chat_filters<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &UpdateChatFilters)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_chat_filters = Some(Arc::new(fnc));
+    self
+  }
+
   /// A chat's has_scheduled_messages field has changed
   pub fn on_update_chat_has_scheduled_messages<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateChatHasScheduledMessages)) -> TGResult<()> + Send + Sync + 'static {
@@ -299,24 +329,17 @@ impl Listener {
     self
   }
 
+  /// A chat was blocked or unblocked
+  pub fn on_update_chat_is_blocked<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &UpdateChatIsBlocked)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_chat_is_blocked = Some(Arc::new(fnc));
+    self
+  }
+
   /// A chat was marked as unread or was read
   pub fn on_update_chat_is_marked_as_unread<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateChatIsMarkedAsUnread)) -> TGResult<()> + Send + Sync + 'static {
     self.update_chat_is_marked_as_unread = Some(Arc::new(fnc));
-    self
-  }
-
-  /// A chat was pinned or unpinned
-  pub fn on_update_chat_is_pinned<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&EventApi, &UpdateChatIsPinned)) -> TGResult<()> + Send + Sync + 'static {
-    self.update_chat_is_pinned = Some(Arc::new(fnc));
-    self
-  }
-
-  /// A chat's is_sponsored field has changed
-  pub fn on_update_chat_is_sponsored<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&EventApi, &UpdateChatIsSponsored)) -> TGResult<()> + Send + Sync + 'static {
-    self.update_chat_is_sponsored = Some(Arc::new(fnc));
     self
   }
 
@@ -341,13 +364,6 @@ impl Listener {
     self
   }
 
-  /// The order of the chat in the chat list has changed. Instead of this update updateChatLastMessage, updateChatIsPinned, updateChatDraftMessage, or updateChatIsSponsored might be sent
-  pub fn on_update_chat_order<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&EventApi, &UpdateChatOrder)) -> TGResult<()> + Send + Sync + 'static {
-    self.update_chat_order = Some(Arc::new(fnc));
-    self
-  }
-
   /// Chat permissions was changed
   pub fn on_update_chat_permissions<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateChatPermissions)) -> TGResult<()> + Send + Sync + 'static {
@@ -362,10 +378,10 @@ impl Listener {
     self
   }
 
-  /// The chat pinned message was changed
-  pub fn on_update_chat_pinned_message<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&EventApi, &UpdateChatPinnedMessage)) -> TGResult<()> + Send + Sync + 'static {
-    self.update_chat_pinned_message = Some(Arc::new(fnc));
+  /// The position of a chat in a chat list has changed. Instead of this update updateChatLastMessage or updateChatDraftMessage might be sent
+  pub fn on_update_chat_position<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &UpdateChatPosition)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_chat_position = Some(Arc::new(fnc));
     self
   }
 
@@ -404,7 +420,14 @@ impl Listener {
     self
   }
 
-  /// The connection state has changed
+  /// A chat voice chat state has changed
+  pub fn on_update_chat_voice_chat<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &UpdateChatVoiceChat)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_chat_voice_chat = Some(Arc::new(fnc));
+    self
+  }
+
+  /// The connection state has changed. This update must be used only to show a human-readable description of the connection state
   pub fn on_update_connection_state<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateConnectionState)) -> TGResult<()> + Send + Sync + 'static {
     self.update_connection_state = Some(Arc::new(fnc));
@@ -415,6 +438,13 @@ impl Listener {
   pub fn on_update_delete_messages<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateDeleteMessages)) -> TGResult<()> + Send + Sync + 'static {
     self.update_delete_messages = Some(Arc::new(fnc));
+    self
+  }
+
+  /// The list of supported dice emojis has changed
+  pub fn on_update_dice_emojis<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &UpdateDiceEmojis)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_dice_emojis = Some(Arc::new(fnc));
     self
   }
 
@@ -432,7 +462,7 @@ impl Listener {
     self
   }
 
-  /// The file generation process needs to be started by the client
+  /// The file generation process needs to be started by the application
   pub fn on_update_file_generation_start<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateFileGenerationStart)) -> TGResult<()> + Send + Sync + 'static {
     self.update_file_generation_start = Some(Arc::new(fnc));
@@ -443,6 +473,20 @@ impl Listener {
   pub fn on_update_file_generation_stop<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateFileGenerationStop)) -> TGResult<()> + Send + Sync + 'static {
     self.update_file_generation_stop = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Information about a group call was updated
+  pub fn on_update_group_call<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &UpdateGroupCall)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_group_call = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Information about a group call participant was changed. The updates are sent only after the group call is received through getGroupCall and only if the call is joined or being joined
+  pub fn on_update_group_call_participant<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &UpdateGroupCallParticipant)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_group_call_participant = Some(Arc::new(fnc));
     self
   }
 
@@ -488,7 +532,21 @@ impl Listener {
     self
   }
 
-  /// A message with a live location was viewed. When the update is received, the client is supposed to update the live location
+  /// The information about interactions with a message has changed
+  pub fn on_update_message_interaction_info<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &UpdateMessageInteractionInfo)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_message_interaction_info = Some(Arc::new(fnc));
+    self
+  }
+
+  /// The message pinned state was changed
+  pub fn on_update_message_is_pinned<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &UpdateMessageIsPinned)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_message_is_pinned = Some(Arc::new(fnc));
+    self
+  }
+
+  /// A message with a live location was viewed. When the update is received, the application is supposed to update the live location
   pub fn on_update_message_live_location_viewed<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateMessageLiveLocationViewed)) -> TGResult<()> + Send + Sync + 'static {
     self.update_message_live_location_viewed = Some(Arc::new(fnc));
@@ -523,10 +581,10 @@ impl Listener {
     self
   }
 
-  /// The view count of the message has changed
-  pub fn on_update_message_views<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&EventApi, &UpdateMessageViews)) -> TGResult<()> + Send + Sync + 'static {
-    self.update_message_views = Some(Arc::new(fnc));
+  /// New call signaling data arrived
+  pub fn on_update_new_call_signaling_data<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &UpdateNewCallSignalingData)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_new_call_signaling_data = Some(Arc::new(fnc));
     self
   }
 
@@ -537,7 +595,7 @@ impl Listener {
     self
   }
 
-  /// A new chat has been loaded/created. This update is guaranteed to come before the chat identifier is returned to the client. The chat field changes will be reported through separate updates
+  /// A new chat has been loaded/created. This update is guaranteed to come before the chat identifier is returned to the application. The chat field changes will be reported through separate updates
   pub fn on_update_new_chat<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateNewChat)) -> TGResult<()> + Send + Sync + 'static {
     self.update_new_chat = Some(Arc::new(fnc));
@@ -656,7 +714,7 @@ impl Listener {
     self
   }
 
-  /// Some data of a secret chat has changed. This update is guaranteed to come before the secret chat identifier is returned to the client
+  /// Some data of a secret chat has changed. This update is guaranteed to come before the secret chat identifier is returned to the application
   pub fn on_update_secret_chat<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateSecretChat)) -> TGResult<()> + Send + Sync + 'static {
     self.update_secret_chat = Some(Arc::new(fnc));
@@ -670,14 +728,28 @@ impl Listener {
     self
   }
 
-  /// Service notification from the server. Upon receiving this the client must show a popup with the content of the notification
+  /// Service notification from the server. Upon receiving this the application must show a popup with the content of the notification
   pub fn on_update_service_notification<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateServiceNotification)) -> TGResult<()> + Send + Sync + 'static {
     self.update_service_notification = Some(Arc::new(fnc));
     self
   }
 
-  /// Some data of a supergroup or a channel has changed. This update is guaranteed to come before the supergroup identifier is returned to the client
+  /// A sticker set has changed
+  pub fn on_update_sticker_set<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &UpdateStickerSet)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_sticker_set = Some(Arc::new(fnc));
+    self
+  }
+
+  /// The list of suggested to the user actions has changed
+  pub fn on_update_suggested_actions<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &UpdateSuggestedActions)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_suggested_actions = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Some data of a supergroup or a channel has changed. This update is guaranteed to come before the supergroup identifier is returned to the application
   pub fn on_update_supergroup<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateSupergroup)) -> TGResult<()> + Send + Sync + 'static {
     self.update_supergroup = Some(Arc::new(fnc));
@@ -719,7 +791,7 @@ impl Listener {
     self
   }
 
-  /// Some data of a user has changed. This update is guaranteed to come before the user identifier is returned to the client
+  /// Some data of a user has changed. This update is guaranteed to come before the user identifier is returned to the application
   pub fn on_update_user<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateUser)) -> TGResult<()> + Send + Sync + 'static {
     self.update_user = Some(Arc::new(fnc));
@@ -754,7 +826,7 @@ impl Listener {
     self
   }
 
-  /// List of users nearby has changed. The update is sent only 60 seconds after a successful searchChatsNearby request
+  /// The list of users nearby has changed. The update is guaranteed to be sent only 60 seconds after a successful searchChatsNearby request
   pub fn on_update_users_nearby<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateUsersNearby)) -> TGResult<()> + Send + Sync + 'static {
     self.update_users_nearby = Some(Arc::new(fnc));
@@ -763,7 +835,7 @@ impl Listener {
 
 
 
-  /// Represents the current authorization state of the client
+  /// Represents the current authorization state of the TDLib client
   pub fn on_authorization_state<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &AuthorizationState)) -> TGResult<()> + Send + Sync + 'static {
     self.authorization_state = Some(Arc::new(fnc));
@@ -774,6 +846,13 @@ impl Listener {
   pub fn on_can_transfer_ownership_result<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &CanTransferOwnershipResult)) -> TGResult<()> + Send + Sync + 'static {
     self.can_transfer_ownership_result = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Contains a detailed statistics about a chat
+  pub fn on_chat_statistics<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &ChatStatistics)) -> TGResult<()> + Send + Sync + 'static {
+    self.chat_statistics = Some(Arc::new(fnc));
     self
   }
 
@@ -812,6 +891,13 @@ impl Listener {
     self
   }
 
+  /// Contains information about a file with messages exported from another app
+  pub fn on_message_file_type<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &MessageFileType)) -> TGResult<()> + Send + Sync + 'static {
+    self.message_file_type = Some(Arc::new(fnc));
+    self
+  }
+
   /// Represents the value of an option
   pub fn on_option_value<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &OptionValue)) -> TGResult<()> + Send + Sync + 'static {
@@ -823,6 +909,13 @@ impl Listener {
   pub fn on_passport_element<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &PassportElement)) -> TGResult<()> + Send + Sync + 'static {
     self.passport_element = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Describes a statistical graph
+  pub fn on_statistical_graph<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &StatisticalGraph)) -> TGResult<()> + Send + Sync + 'static {
+    self.statistical_graph = Some(Arc::new(fnc));
     self
   }
 
@@ -875,6 +968,13 @@ impl Listener {
     self
   }
 
+  /// Information about a bank card
+  pub fn on_bank_card_info<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &BankCardInfo)) -> TGResult<()> + Send + Sync + 'static {
+    self.bank_card_info = Some(Arc::new(fnc));
+    self
+  }
+
   /// Represents a basic group of 0-200 users (must be upgraded to a supergroup to accommodate more than 200 users)
   pub fn on_basic_group<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &BasicGroup)) -> TGResult<()> + Send + Sync + 'static {
@@ -924,6 +1024,20 @@ impl Listener {
     self
   }
 
+  /// Represents a filter of user chats
+  pub fn on_chat_filter<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &ChatFilter)) -> TGResult<()> + Send + Sync + 'static {
+    self.chat_filter = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Contains basic information about a chat filter
+  pub fn on_chat_filter_info<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &ChatFilterInfo)) -> TGResult<()> + Send + Sync + 'static {
+    self.chat_filter_info = Some(Arc::new(fnc));
+    self
+  }
+
   /// Contains a chat invite link
   pub fn on_chat_invite_link<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &ChatInviteLink)) -> TGResult<()> + Send + Sync + 'static {
@@ -938,6 +1052,13 @@ impl Listener {
     self
   }
 
+  /// Contains a list of chat lists
+  pub fn on_chat_lists<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &ChatLists)) -> TGResult<()> + Send + Sync + 'static {
+    self.chat_lists = Some(Arc::new(fnc));
+    self
+  }
+
   /// A user with information about joining/leaving a chat
   pub fn on_chat_member<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &ChatMember)) -> TGResult<()> + Send + Sync + 'static {
@@ -949,6 +1070,13 @@ impl Listener {
   pub fn on_chat_members<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &ChatMembers)) -> TGResult<()> + Send + Sync + 'static {
     self.chat_members = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Contains a list of chat or user profile photos
+  pub fn on_chat_photos<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &ChatPhotos)) -> TGResult<()> + Send + Sync + 'static {
+    self.chat_photos = Some(Arc::new(fnc));
     self
   }
 
@@ -977,6 +1105,13 @@ impl Listener {
   pub fn on_count<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &Count)) -> TGResult<()> + Send + Sync + 'static {
     self.count = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Contains information about countries
+  pub fn on_countries<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &Countries)) -> TGResult<()> + Send + Sync + 'static {
+    self.countries = Some(Arc::new(fnc));
     self
   }
 
@@ -1057,6 +1192,27 @@ impl Listener {
     self
   }
 
+  /// Describes a group call
+  pub fn on_group_call<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &GroupCall)) -> TGResult<()> + Send + Sync + 'static {
+    self.group_call = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Contains the group call identifier
+  pub fn on_group_call_id<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &GroupCallId)) -> TGResult<()> + Send + Sync + 'static {
+    self.group_call_id = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Describes a join response for interaction with tgcalls
+  pub fn on_group_call_join_response<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &GroupCallJoinResponse)) -> TGResult<()> + Send + Sync + 'static {
+    self.group_call_join_response = Some(Arc::new(fnc));
+    self
+  }
+
   /// Contains a list of hashtags
   pub fn on_hashtags<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &Hashtags)) -> TGResult<()> + Send + Sync + 'static {
@@ -1127,10 +1283,38 @@ impl Listener {
     self
   }
 
+  /// Contains an HTTPS link to a message in a supergroup or channel
+  pub fn on_message_link<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &MessageLink)) -> TGResult<()> + Send + Sync + 'static {
+    self.message_link = Some(Arc::new(fnc));
+    self
+  }
+
   /// Contains information about a link to a message in a chat
   pub fn on_message_link_info<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &MessageLinkInfo)) -> TGResult<()> + Send + Sync + 'static {
     self.message_link_info = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Represents a list of message senders
+  pub fn on_message_senders<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &MessageSenders)) -> TGResult<()> + Send + Sync + 'static {
+    self.message_senders = Some(Arc::new(fnc));
+    self
+  }
+
+  /// A detailed statistics about a message
+  pub fn on_message_statistics<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &MessageStatistics)) -> TGResult<()> + Send + Sync + 'static {
+    self.message_statistics = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Contains information about a message thread
+  pub fn on_message_thread_info<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &MessageThreadInfo)) -> TGResult<()> + Send + Sync + 'static {
+    self.message_thread_info = Some(Arc::new(fnc));
     self
   }
 
@@ -1211,6 +1395,13 @@ impl Listener {
     self
   }
 
+  /// Contains information about a phone number
+  pub fn on_phone_number_info<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &PhoneNumberInfo)) -> TGResult<()> + Send + Sync + 'static {
+    self.phone_number_info = Some(Arc::new(fnc));
+    self
+  }
+
   /// Represents a list of proxy servers
   pub fn on_proxies<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &Proxies)) -> TGResult<()> + Send + Sync + 'static {
@@ -1225,17 +1416,17 @@ impl Listener {
     self
   }
 
-  /// Contains a public HTTPS link to a message in a supergroup or channel with a username
-  pub fn on_public_message_link<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&EventApi, &PublicMessageLink)) -> TGResult<()> + Send + Sync + 'static {
-    self.public_message_link = Some(Arc::new(fnc));
-    self
-  }
-
   /// Contains a globally unique push receiver identifier, which can be used to identify which account has received a push notification
   pub fn on_push_receiver_id<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &PushReceiverId)) -> TGResult<()> + Send + Sync + 'static {
     self.push_receiver_id = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Contains a list of recommended chat filters
+  pub fn on_recommended_chat_filters<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&EventApi, &RecommendedChatFilters)) -> TGResult<()> + Send + Sync + 'static {
+    self.recommended_chat_filters = Some(Arc::new(fnc));
     self
   }
 
@@ -1421,7 +1612,7 @@ impl Listener {
     self
   }
 
-  /// Contains full information about a user (except the full list of profile photos)
+  /// Contains full information about a user
   pub fn on_user_full_info<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UserFullInfo)) -> TGResult<()> + Send + Sync + 'static {
     self.user_full_info = Some(Arc::new(fnc));
@@ -1432,13 +1623,6 @@ impl Listener {
   pub fn on_user_privacy_setting_rules<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UserPrivacySettingRules)) -> TGResult<()> + Send + Sync + 'static {
     self.user_privacy_setting_rules = Some(Arc::new(fnc));
-    self
-  }
-
-  /// Contains part of the list of user photos
-  pub fn on_user_profile_photos<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&EventApi, &UserProfilePhotos)) -> TGResult<()> + Send + Sync + 'static {
-    self.user_profile_photos = Some(Arc::new(fnc));
     self
   }
 
@@ -1486,48 +1670,53 @@ impl Lout {
 
       "testUseUpdate",
       "updateActiveNotifications",
+      "updateAnimationSearchParameters",
       "updateAuthorizationState",
       "updateBasicGroup",
       "updateBasicGroupFullInfo",
       "updateCall",
       "updateChatActionBar",
-      "updateChatChatList",
       "updateChatDefaultDisableNotification",
       "updateChatDraftMessage",
+      "updateChatFilters",
       "updateChatHasScheduledMessages",
+      "updateChatIsBlocked",
       "updateChatIsMarkedAsUnread",
-      "updateChatIsPinned",
-      "updateChatIsSponsored",
       "updateChatLastMessage",
       "updateChatNotificationSettings",
       "updateChatOnlineMemberCount",
-      "updateChatOrder",
       "updateChatPermissions",
       "updateChatPhoto",
-      "updateChatPinnedMessage",
+      "updateChatPosition",
       "updateChatReadInbox",
       "updateChatReadOutbox",
       "updateChatReplyMarkup",
       "updateChatTitle",
       "updateChatUnreadMentionCount",
+      "updateChatVoiceChat",
       "updateConnectionState",
       "updateDeleteMessages",
+      "updateDiceEmojis",
       "updateFavoriteStickers",
       "updateFile",
       "updateFileGenerationStart",
       "updateFileGenerationStop",
+      "updateGroupCall",
+      "updateGroupCallParticipant",
       "updateHavePendingNotifications",
       "updateInstalledStickerSets",
       "updateLanguagePackStrings",
       "updateMessageContent",
       "updateMessageContentOpened",
       "updateMessageEdited",
+      "updateMessageInteractionInfo",
+      "updateMessageIsPinned",
       "updateMessageLiveLocationViewed",
       "updateMessageMentionRead",
       "updateMessageSendAcknowledged",
       "updateMessageSendFailed",
       "updateMessageSendSucceeded",
-      "updateMessageViews",
+      "updateNewCallSignalingData",
       "updateNewCallbackQuery",
       "updateNewChat",
       "updateNewChosenInlineResult",
@@ -1549,6 +1738,8 @@ impl Lout {
       "updateSecretChat",
       "updateSelectedBackground",
       "updateServiceNotification",
+      "updateStickerSet",
+      "updateSuggestedActions",
       "updateSupergroup",
       "updateSupergroupFullInfo",
       "updateTermsOfService",
@@ -1565,13 +1756,16 @@ impl Lout {
 
       "AuthorizationState",
       "CanTransferOwnershipResult",
+      "ChatStatistics",
       "CheckChatUsernameResult",
       "JsonValue",
       "LanguagePackStringValue",
       "LogStream",
       "LoginUrlInfo",
+      "MessageFileType",
       "OptionValue",
       "PassportElement",
+      "StatisticalGraph",
       "Update",
       "accountTtl",
       "animations",
@@ -1579,6 +1773,7 @@ impl Lout {
       "autoDownloadSettingsPresets",
       "background",
       "backgrounds",
+      "bankCardInfo",
       "basicGroup",
       "basicGroupFullInfo",
       "callId",
@@ -1586,14 +1781,19 @@ impl Lout {
       "chat",
       "chatAdministrators",
       "chatEvents",
+      "chatFilter",
+      "chatFilterInfo",
       "chatInviteLink",
       "chatInviteLinkInfo",
+      "chatLists",
       "chatMember",
       "chatMembers",
+      "chatPhotos",
       "chats",
       "chatsNearby",
       "connectedWebsites",
       "count",
+      "countries",
       "customRequestResult",
       "databaseStatistics",
       "deepLinkInfo",
@@ -1605,6 +1805,9 @@ impl Lout {
       "formattedText",
       "foundMessages",
       "gameHighScores",
+      "groupCall",
+      "groupCallId",
+      "groupCallJoinResponse",
       "hashtags",
       "httpUrl",
       "importedContacts",
@@ -1615,7 +1818,11 @@ impl Lout {
       "logTags",
       "logVerbosityLevel",
       "message",
+      "messageLink",
       "messageLinkInfo",
+      "messageSenders",
+      "messageStatistics",
+      "messageThreadInfo",
       "messages",
       "networkStatistics",
       "ok",
@@ -1627,10 +1834,11 @@ impl Lout {
       "paymentForm",
       "paymentReceipt",
       "paymentResult",
+      "phoneNumberInfo",
       "proxies",
       "proxy",
-      "publicMessageLink",
       "pushReceiverId",
+      "recommendedChatFilters",
       "recoveryEmailAddress",
       "scopeNotificationSettings",
       "seconds",
@@ -1659,7 +1867,6 @@ impl Lout {
       "user",
       "userFullInfo",
       "userPrivacySettingRules",
-      "userProfilePhotos",
       "users",
       "validatedOrderInfo",
       "webPage",
@@ -1690,6 +1897,11 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::UpdateAnimationSearchParameters(value) => match &self.listener.update_animation_search_parameters {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::UpdateAuthorizationState(value) => match &self.listener.update_authorization_state {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -1715,11 +1927,6 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
-    TdType::UpdateChatChatList(value) => match &self.listener.update_chat_chat_list {
-      None => Ok(false),
-      Some(f) => f((api, value)).map(|_|true),
-    },
-
     TdType::UpdateChatDefaultDisableNotification(value) => match &self.listener.update_chat_default_disable_notification {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -1730,22 +1937,22 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::UpdateChatFilters(value) => match &self.listener.update_chat_filters {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::UpdateChatHasScheduledMessages(value) => match &self.listener.update_chat_has_scheduled_messages {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::UpdateChatIsBlocked(value) => match &self.listener.update_chat_is_blocked {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::UpdateChatIsMarkedAsUnread(value) => match &self.listener.update_chat_is_marked_as_unread {
-      None => Ok(false),
-      Some(f) => f((api, value)).map(|_|true),
-    },
-
-    TdType::UpdateChatIsPinned(value) => match &self.listener.update_chat_is_pinned {
-      None => Ok(false),
-      Some(f) => f((api, value)).map(|_|true),
-    },
-
-    TdType::UpdateChatIsSponsored(value) => match &self.listener.update_chat_is_sponsored {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -1765,11 +1972,6 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
-    TdType::UpdateChatOrder(value) => match &self.listener.update_chat_order {
-      None => Ok(false),
-      Some(f) => f((api, value)).map(|_|true),
-    },
-
     TdType::UpdateChatPermissions(value) => match &self.listener.update_chat_permissions {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -1780,7 +1982,7 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
-    TdType::UpdateChatPinnedMessage(value) => match &self.listener.update_chat_pinned_message {
+    TdType::UpdateChatPosition(value) => match &self.listener.update_chat_position {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -1810,12 +2012,22 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::UpdateChatVoiceChat(value) => match &self.listener.update_chat_voice_chat {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::UpdateConnectionState(value) => match &self.listener.update_connection_state {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
 
     TdType::UpdateDeleteMessages(value) => match &self.listener.update_delete_messages {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::UpdateDiceEmojis(value) => match &self.listener.update_dice_emojis {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -1836,6 +2048,16 @@ impl Lout {
     },
 
     TdType::UpdateFileGenerationStop(value) => match &self.listener.update_file_generation_stop {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::UpdateGroupCall(value) => match &self.listener.update_group_call {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::UpdateGroupCallParticipant(value) => match &self.listener.update_group_call_participant {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -1870,6 +2092,16 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::UpdateMessageInteractionInfo(value) => match &self.listener.update_message_interaction_info {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::UpdateMessageIsPinned(value) => match &self.listener.update_message_is_pinned {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::UpdateMessageLiveLocationViewed(value) => match &self.listener.update_message_live_location_viewed {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -1895,7 +2127,7 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
-    TdType::UpdateMessageViews(value) => match &self.listener.update_message_views {
+    TdType::UpdateNewCallSignalingData(value) => match &self.listener.update_new_call_signaling_data {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -2005,6 +2237,16 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::UpdateStickerSet(value) => match &self.listener.update_sticker_set {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::UpdateSuggestedActions(value) => match &self.listener.update_suggested_actions {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::UpdateSupergroup(value) => match &self.listener.update_supergroup {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -2076,6 +2318,11 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::ChatStatistics(value) => match &self.listener.chat_statistics {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::CheckChatUsernameResult(value) => match &self.listener.check_chat_username_result {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -2101,12 +2348,22 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::MessageFileType(value) => match &self.listener.message_file_type {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::OptionValue(value) => match &self.listener.option_value {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
 
     TdType::PassportElement(value) => match &self.listener.passport_element {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::StatisticalGraph(value) => match &self.listener.statistical_graph {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -2146,6 +2403,11 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::BankCardInfo(value) => match &self.listener.bank_card_info {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::BasicGroup(value) => match &self.listener.basic_group {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -2181,6 +2443,16 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::ChatFilter(value) => match &self.listener.chat_filter {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::ChatFilterInfo(value) => match &self.listener.chat_filter_info {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::ChatInviteLink(value) => match &self.listener.chat_invite_link {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -2191,12 +2463,22 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::ChatLists(value) => match &self.listener.chat_lists {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::ChatMember(value) => match &self.listener.chat_member {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
 
     TdType::ChatMembers(value) => match &self.listener.chat_members {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::ChatPhotos(value) => match &self.listener.chat_photos {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -2217,6 +2499,11 @@ impl Lout {
     },
 
     TdType::Count(value) => match &self.listener.count {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::Countries(value) => match &self.listener.countries {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -2276,6 +2563,21 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::GroupCall(value) => match &self.listener.group_call {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::GroupCallId(value) => match &self.listener.group_call_id {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::GroupCallJoinResponse(value) => match &self.listener.group_call_join_response {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::Hashtags(value) => match &self.listener.hashtags {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -2326,7 +2628,27 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::MessageLink(value) => match &self.listener.message_link {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::MessageLinkInfo(value) => match &self.listener.message_link_info {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::MessageSenders(value) => match &self.listener.message_senders {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::MessageStatistics(value) => match &self.listener.message_statistics {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::MessageThreadInfo(value) => match &self.listener.message_thread_info {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -2386,6 +2708,11 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::PhoneNumberInfo(value) => match &self.listener.phone_number_info {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::Proxies(value) => match &self.listener.proxies {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -2396,12 +2723,12 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
-    TdType::PublicMessageLink(value) => match &self.listener.public_message_link {
+    TdType::PushReceiverId(value) => match &self.listener.push_receiver_id {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
 
-    TdType::PushReceiverId(value) => match &self.listener.push_receiver_id {
+    TdType::RecommendedChatFilters(value) => match &self.listener.recommended_chat_filters {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -2546,11 +2873,6 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
-    TdType::UserProfilePhotos(value) => match &self.listener.user_profile_photos {
-      None => Ok(false),
-      Some(f) => f((api, value)).map(|_|true),
-    },
-
     TdType::Users(value) => match &self.listener.users {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -2599,12 +2921,17 @@ impl Lout {
     &self.listener.update_active_notifications
   }
 
+  /// The parameters of animation search through GetOption("animation_search_bot_username") bot has changed
+  pub fn update_animation_search_parameters(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateAnimationSearchParameters)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_animation_search_parameters
+  }
+
   /// The user authorization state has changed
   pub fn update_authorization_state(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateAuthorizationState)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_authorization_state
   }
 
-  /// Some data of a basic group has changed. This update is guaranteed to come before the basic group identifier is returned to the client
+  /// Some data of a basic group has changed. This update is guaranteed to come before the basic group identifier is returned to the application
   pub fn update_basic_group(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateBasicGroup)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_basic_group
   }
@@ -2624,11 +2951,6 @@ impl Lout {
     &self.listener.update_chat_action_bar
   }
 
-  /// The list to which the chat belongs was changed. This update is guaranteed to be sent only when chat.order == 0 and the current or the new chat list is null
-  pub fn update_chat_chat_list(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateChatChatList)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.update_chat_chat_list
-  }
-
   /// The value of the default disable_notification parameter, used when a message is sent to the chat, was changed
   pub fn update_chat_default_disable_notification(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateChatDefaultDisableNotification)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_chat_default_disable_notification
@@ -2639,24 +2961,24 @@ impl Lout {
     &self.listener.update_chat_draft_message
   }
 
+  /// The list of chat filters or a chat filter has changed
+  pub fn update_chat_filters(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateChatFilters)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_chat_filters
+  }
+
   /// A chat's has_scheduled_messages field has changed
   pub fn update_chat_has_scheduled_messages(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateChatHasScheduledMessages)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_chat_has_scheduled_messages
   }
 
+  /// A chat was blocked or unblocked
+  pub fn update_chat_is_blocked(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateChatIsBlocked)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_chat_is_blocked
+  }
+
   /// A chat was marked as unread or was read
   pub fn update_chat_is_marked_as_unread(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateChatIsMarkedAsUnread)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_chat_is_marked_as_unread
-  }
-
-  /// A chat was pinned or unpinned
-  pub fn update_chat_is_pinned(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateChatIsPinned)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.update_chat_is_pinned
-  }
-
-  /// A chat's is_sponsored field has changed
-  pub fn update_chat_is_sponsored(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateChatIsSponsored)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.update_chat_is_sponsored
   }
 
   /// The last message of a chat was changed. If last_message is null, then the last message in the chat became unknown. Some new unknown messages might be added to the chat in this case
@@ -2674,11 +2996,6 @@ impl Lout {
     &self.listener.update_chat_online_member_count
   }
 
-  /// The order of the chat in the chat list has changed. Instead of this update updateChatLastMessage, updateChatIsPinned, updateChatDraftMessage, or updateChatIsSponsored might be sent
-  pub fn update_chat_order(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateChatOrder)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.update_chat_order
-  }
-
   /// Chat permissions was changed
   pub fn update_chat_permissions(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateChatPermissions)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_chat_permissions
@@ -2689,9 +3006,9 @@ impl Lout {
     &self.listener.update_chat_photo
   }
 
-  /// The chat pinned message was changed
-  pub fn update_chat_pinned_message(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateChatPinnedMessage)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.update_chat_pinned_message
+  /// The position of a chat in a chat list has changed. Instead of this update updateChatLastMessage or updateChatDraftMessage might be sent
+  pub fn update_chat_position(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateChatPosition)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_chat_position
   }
 
   /// Incoming messages were read or number of unread messages has been changed
@@ -2719,7 +3036,12 @@ impl Lout {
     &self.listener.update_chat_unread_mention_count
   }
 
-  /// The connection state has changed
+  /// A chat voice chat state has changed
+  pub fn update_chat_voice_chat(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateChatVoiceChat)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_chat_voice_chat
+  }
+
+  /// The connection state has changed. This update must be used only to show a human-readable description of the connection state
   pub fn update_connection_state(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateConnectionState)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_connection_state
   }
@@ -2727,6 +3049,11 @@ impl Lout {
   /// Some messages were deleted
   pub fn update_delete_messages(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateDeleteMessages)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_delete_messages
+  }
+
+  /// The list of supported dice emojis has changed
+  pub fn update_dice_emojis(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateDiceEmojis)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_dice_emojis
   }
 
   /// The list of favorite stickers was updated
@@ -2739,7 +3066,7 @@ impl Lout {
     &self.listener.update_file
   }
 
-  /// The file generation process needs to be started by the client
+  /// The file generation process needs to be started by the application
   pub fn update_file_generation_start(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateFileGenerationStart)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_file_generation_start
   }
@@ -2747,6 +3074,16 @@ impl Lout {
   /// File generation is no longer needed
   pub fn update_file_generation_stop(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateFileGenerationStop)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_file_generation_stop
+  }
+
+  /// Information about a group call was updated
+  pub fn update_group_call(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateGroupCall)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_group_call
+  }
+
+  /// Information about a group call participant was changed. The updates are sent only after the group call is received through getGroupCall and only if the call is joined or being joined
+  pub fn update_group_call_participant(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateGroupCallParticipant)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_group_call_participant
   }
 
   /// Describes whether there are some pending notification updates. Can be used to prevent application from killing, while there are some pending notifications
@@ -2779,7 +3116,17 @@ impl Lout {
     &self.listener.update_message_edited
   }
 
-  /// A message with a live location was viewed. When the update is received, the client is supposed to update the live location
+  /// The information about interactions with a message has changed
+  pub fn update_message_interaction_info(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateMessageInteractionInfo)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_message_interaction_info
+  }
+
+  /// The message pinned state was changed
+  pub fn update_message_is_pinned(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateMessageIsPinned)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_message_is_pinned
+  }
+
+  /// A message with a live location was viewed. When the update is received, the application is supposed to update the live location
   pub fn update_message_live_location_viewed(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateMessageLiveLocationViewed)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_message_live_location_viewed
   }
@@ -2804,9 +3151,9 @@ impl Lout {
     &self.listener.update_message_send_succeeded
   }
 
-  /// The view count of the message has changed
-  pub fn update_message_views(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateMessageViews)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.update_message_views
+  /// New call signaling data arrived
+  pub fn update_new_call_signaling_data(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateNewCallSignalingData)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_new_call_signaling_data
   }
 
   /// A new incoming callback query; for bots only
@@ -2814,7 +3161,7 @@ impl Lout {
     &self.listener.update_new_callback_query
   }
 
-  /// A new chat has been loaded/created. This update is guaranteed to come before the chat identifier is returned to the client. The chat field changes will be reported through separate updates
+  /// A new chat has been loaded/created. This update is guaranteed to come before the chat identifier is returned to the application. The chat field changes will be reported through separate updates
   pub fn update_new_chat(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateNewChat)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_new_chat
   }
@@ -2899,7 +3246,7 @@ impl Lout {
     &self.listener.update_scope_notification_settings
   }
 
-  /// Some data of a secret chat has changed. This update is guaranteed to come before the secret chat identifier is returned to the client
+  /// Some data of a secret chat has changed. This update is guaranteed to come before the secret chat identifier is returned to the application
   pub fn update_secret_chat(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateSecretChat)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_secret_chat
   }
@@ -2909,12 +3256,22 @@ impl Lout {
     &self.listener.update_selected_background
   }
 
-  /// Service notification from the server. Upon receiving this the client must show a popup with the content of the notification
+  /// Service notification from the server. Upon receiving this the application must show a popup with the content of the notification
   pub fn update_service_notification(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateServiceNotification)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_service_notification
   }
 
-  /// Some data of a supergroup or a channel has changed. This update is guaranteed to come before the supergroup identifier is returned to the client
+  /// A sticker set has changed
+  pub fn update_sticker_set(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateStickerSet)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_sticker_set
+  }
+
+  /// The list of suggested to the user actions has changed
+  pub fn update_suggested_actions(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateSuggestedActions)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_suggested_actions
+  }
+
+  /// Some data of a supergroup or a channel has changed. This update is guaranteed to come before the supergroup identifier is returned to the application
   pub fn update_supergroup(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateSupergroup)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_supergroup
   }
@@ -2944,7 +3301,7 @@ impl Lout {
     &self.listener.update_unread_message_count
   }
 
-  /// Some data of a user has changed. This update is guaranteed to come before the user identifier is returned to the client
+  /// Some data of a user has changed. This update is guaranteed to come before the user identifier is returned to the application
   pub fn update_user(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateUser)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_user
   }
@@ -2969,14 +3326,14 @@ impl Lout {
     &self.listener.update_user_status
   }
 
-  /// List of users nearby has changed. The update is sent only 60 seconds after a successful searchChatsNearby request
+  /// The list of users nearby has changed. The update is guaranteed to be sent only 60 seconds after a successful searchChatsNearby request
   pub fn update_users_nearby(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateUsersNearby)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_users_nearby
   }
 
 
 
-  /// Represents the current authorization state of the client
+  /// Represents the current authorization state of the TDLib client
   pub fn authorization_state(&self) -> &Option<Arc<dyn Fn((&EventApi, &AuthorizationState)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.authorization_state
   }
@@ -2984,6 +3341,11 @@ impl Lout {
   /// Represents result of checking whether the current session can be used to transfer a chat ownership to another user
   pub fn can_transfer_ownership_result(&self) -> &Option<Arc<dyn Fn((&EventApi, &CanTransferOwnershipResult)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.can_transfer_ownership_result
+  }
+
+  /// Contains a detailed statistics about a chat
+  pub fn chat_statistics(&self) -> &Option<Arc<dyn Fn((&EventApi, &ChatStatistics)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.chat_statistics
   }
 
   /// Represents result of checking whether a username can be set for a chat
@@ -3011,6 +3373,11 @@ impl Lout {
     &self.listener.login_url_info
   }
 
+  /// Contains information about a file with messages exported from another app
+  pub fn message_file_type(&self) -> &Option<Arc<dyn Fn((&EventApi, &MessageFileType)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.message_file_type
+  }
+
   /// Represents the value of an option
   pub fn option_value(&self) -> &Option<Arc<dyn Fn((&EventApi, &OptionValue)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.option_value
@@ -3019,6 +3386,11 @@ impl Lout {
   /// Contains information about a Telegram Passport element
   pub fn passport_element(&self) -> &Option<Arc<dyn Fn((&EventApi, &PassportElement)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.passport_element
+  }
+
+  /// Describes a statistical graph
+  pub fn statistical_graph(&self) -> &Option<Arc<dyn Fn((&EventApi, &StatisticalGraph)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.statistical_graph
   }
 
   /// Contains notifications about data changes
@@ -3056,6 +3428,11 @@ impl Lout {
     &self.listener.backgrounds
   }
 
+  /// Information about a bank card
+  pub fn bank_card_info(&self) -> &Option<Arc<dyn Fn((&EventApi, &BankCardInfo)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.bank_card_info
+  }
+
   /// Represents a basic group of 0-200 users (must be upgraded to a supergroup to accommodate more than 200 users)
   pub fn basic_group(&self) -> &Option<Arc<dyn Fn((&EventApi, &BasicGroup)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.basic_group
@@ -3091,6 +3468,16 @@ impl Lout {
     &self.listener.chat_events
   }
 
+  /// Represents a filter of user chats
+  pub fn chat_filter(&self) -> &Option<Arc<dyn Fn((&EventApi, &ChatFilter)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.chat_filter
+  }
+
+  /// Contains basic information about a chat filter
+  pub fn chat_filter_info(&self) -> &Option<Arc<dyn Fn((&EventApi, &ChatFilterInfo)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.chat_filter_info
+  }
+
   /// Contains a chat invite link
   pub fn chat_invite_link(&self) -> &Option<Arc<dyn Fn((&EventApi, &ChatInviteLink)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_invite_link
@@ -3101,6 +3488,11 @@ impl Lout {
     &self.listener.chat_invite_link_info
   }
 
+  /// Contains a list of chat lists
+  pub fn chat_lists(&self) -> &Option<Arc<dyn Fn((&EventApi, &ChatLists)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.chat_lists
+  }
+
   /// A user with information about joining/leaving a chat
   pub fn chat_member(&self) -> &Option<Arc<dyn Fn((&EventApi, &ChatMember)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_member
@@ -3109,6 +3501,11 @@ impl Lout {
   /// Contains a list of chat members
   pub fn chat_members(&self) -> &Option<Arc<dyn Fn((&EventApi, &ChatMembers)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_members
+  }
+
+  /// Contains a list of chat or user profile photos
+  pub fn chat_photos(&self) -> &Option<Arc<dyn Fn((&EventApi, &ChatPhotos)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.chat_photos
   }
 
   /// Represents a list of chats
@@ -3129,6 +3526,11 @@ impl Lout {
   /// Contains a counter
   pub fn count(&self) -> &Option<Arc<dyn Fn((&EventApi, &Count)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.count
+  }
+
+  /// Contains information about countries
+  pub fn countries(&self) -> &Option<Arc<dyn Fn((&EventApi, &Countries)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.countries
   }
 
   /// Contains the result of a custom request
@@ -3186,6 +3588,21 @@ impl Lout {
     &self.listener.game_high_scores
   }
 
+  /// Describes a group call
+  pub fn group_call(&self) -> &Option<Arc<dyn Fn((&EventApi, &GroupCall)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.group_call
+  }
+
+  /// Contains the group call identifier
+  pub fn group_call_id(&self) -> &Option<Arc<dyn Fn((&EventApi, &GroupCallId)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.group_call_id
+  }
+
+  /// Describes a join response for interaction with tgcalls
+  pub fn group_call_join_response(&self) -> &Option<Arc<dyn Fn((&EventApi, &GroupCallJoinResponse)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.group_call_join_response
+  }
+
   /// Contains a list of hashtags
   pub fn hashtags(&self) -> &Option<Arc<dyn Fn((&EventApi, &Hashtags)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.hashtags
@@ -3236,9 +3653,29 @@ impl Lout {
     &self.listener.message
   }
 
+  /// Contains an HTTPS link to a message in a supergroup or channel
+  pub fn message_link(&self) -> &Option<Arc<dyn Fn((&EventApi, &MessageLink)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.message_link
+  }
+
   /// Contains information about a link to a message in a chat
   pub fn message_link_info(&self) -> &Option<Arc<dyn Fn((&EventApi, &MessageLinkInfo)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.message_link_info
+  }
+
+  /// Represents a list of message senders
+  pub fn message_senders(&self) -> &Option<Arc<dyn Fn((&EventApi, &MessageSenders)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.message_senders
+  }
+
+  /// A detailed statistics about a message
+  pub fn message_statistics(&self) -> &Option<Arc<dyn Fn((&EventApi, &MessageStatistics)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.message_statistics
+  }
+
+  /// Contains information about a message thread
+  pub fn message_thread_info(&self) -> &Option<Arc<dyn Fn((&EventApi, &MessageThreadInfo)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.message_thread_info
   }
 
   /// Contains a list of messages
@@ -3296,6 +3733,11 @@ impl Lout {
     &self.listener.payment_result
   }
 
+  /// Contains information about a phone number
+  pub fn phone_number_info(&self) -> &Option<Arc<dyn Fn((&EventApi, &PhoneNumberInfo)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.phone_number_info
+  }
+
   /// Represents a list of proxy servers
   pub fn proxies(&self) -> &Option<Arc<dyn Fn((&EventApi, &Proxies)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.proxies
@@ -3306,14 +3748,14 @@ impl Lout {
     &self.listener.proxy
   }
 
-  /// Contains a public HTTPS link to a message in a supergroup or channel with a username
-  pub fn public_message_link(&self) -> &Option<Arc<dyn Fn((&EventApi, &PublicMessageLink)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.public_message_link
-  }
-
   /// Contains a globally unique push receiver identifier, which can be used to identify which account has received a push notification
   pub fn push_receiver_id(&self) -> &Option<Arc<dyn Fn((&EventApi, &PushReceiverId)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.push_receiver_id
+  }
+
+  /// Contains a list of recommended chat filters
+  pub fn recommended_chat_filters(&self) -> &Option<Arc<dyn Fn((&EventApi, &RecommendedChatFilters)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.recommended_chat_filters
   }
 
   /// Contains information about the current recovery email address
@@ -3446,7 +3888,7 @@ impl Lout {
     &self.listener.user
   }
 
-  /// Contains full information about a user (except the full list of profile photos)
+  /// Contains full information about a user
   pub fn user_full_info(&self) -> &Option<Arc<dyn Fn((&EventApi, &UserFullInfo)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.user_full_info
   }
@@ -3454,11 +3896,6 @@ impl Lout {
   /// A list of privacy rules. Rules are matched in the specified order. The first matched rule defines the privacy setting for a given user. If no rule matches, the action is not allowed
   pub fn user_privacy_setting_rules(&self) -> &Option<Arc<dyn Fn((&EventApi, &UserPrivacySettingRules)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.user_privacy_setting_rules
-  }
-
-  /// Contains part of the list of user photos
-  pub fn user_profile_photos(&self) -> &Option<Arc<dyn Fn((&EventApi, &UserProfilePhotos)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.user_profile_photos
   }
 
   /// Represents a list of users
