@@ -29,6 +29,8 @@ fn main() {
   let api = Api::default();
   let mut client = Client::new(api.clone());
 
+  // IMPORTANT: THIS WILL USE THE PROXY 127.0.0.1:1080,
+  // IF YOU DON'T WANT THIS, PLEASE REMOVE THIS CODE.
   let tproxy = TProxy::new(&api);
   tproxy.add();
 

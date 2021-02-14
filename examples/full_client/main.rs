@@ -24,8 +24,9 @@ fn main() {
   let api_hash = env!("API_HASH");
 
   let config = Config::default();
-  let api = Api::default();
-  let mut client = Client::new(api.clone());
+  debug!("{:#?}", config);
+  let api = Api::event();
+  let mut client = Client::new(api.api().clone());
 
   config.proxy().map(|v| { api.add_proxy(v) });
 
@@ -180,6 +181,11 @@ fn main() {
     Ok(())
   });
 
+  listener.on_update_have_pending_notifications(|(api, update)| {
+    debug!("have pending notifications {:?}", update);
+    Ok(())
+  });
+
   listener.on_update_scope_notification_settings(|(api, update)| {
     debug!("scope notification settings {:?}", update);
     Ok(())
@@ -289,18 +295,13 @@ fn main() {
     }
     api.download_file(DownloadFile::builder()
       .file_id(file.id())
+      .offset(0)
+      .limit(0)
       .priority(1)
+      .synchronous(false)
       .build());
     Ok(())
   });
-
-//  listener.on_update_update_file(|(api, update)| {
-////    debug!("Update file => {}", update.file().to_json());
-//  });
-
-//  listener.on_update_message(|(api, update)| {
-//    debug!("Message => {}", update.to_json());
-//  });
 
   listener.on_update_supergroup_full_info(|(api, update)| {
     debug!("Supergroup full info => {}", update.to_json().expect("Can't serialize json"));
