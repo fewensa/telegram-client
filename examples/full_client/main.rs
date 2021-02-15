@@ -237,7 +237,7 @@ fn main() {
 
       debug!("video local path => {:?}", f.local().path());
     });
-    debug!("Receive new message, from: '{}', data: {}", message.sender_user_id(), message.to_json().expect("Can't serialize json"));
+    debug!("Receive new message, from: '{:?}', data: {}", message.sender(), message.to_json().expect("Can't serialize json"));
     Ok(())
   });
 

@@ -38,7 +38,6 @@ pub struct Listener {
   update_chat_reply_markup: Option<Arc<dyn Fn((&EventApi, &UpdateChatReplyMarkup)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_title: Option<Arc<dyn Fn((&EventApi, &UpdateChatTitle)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_unread_mention_count: Option<Arc<dyn Fn((&EventApi, &UpdateChatUnreadMentionCount)) -> TGResult<()> + Send + Sync + 'static>>,
-  update_chat_voice_chat: Option<Arc<dyn Fn((&EventApi, &UpdateChatVoiceChat)) -> TGResult<()> + Send + Sync + 'static>>,
   update_connection_state: Option<Arc<dyn Fn((&EventApi, &UpdateConnectionState)) -> TGResult<()> + Send + Sync + 'static>>,
   update_delete_messages: Option<Arc<dyn Fn((&EventApi, &UpdateDeleteMessages)) -> TGResult<()> + Send + Sync + 'static>>,
   update_dice_emojis: Option<Arc<dyn Fn((&EventApi, &UpdateDiceEmojis)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -46,8 +45,6 @@ pub struct Listener {
   update_file: Option<Arc<dyn Fn((&EventApi, &UpdateFile)) -> TGResult<()> + Send + Sync + 'static>>,
   update_file_generation_start: Option<Arc<dyn Fn((&EventApi, &UpdateFileGenerationStart)) -> TGResult<()> + Send + Sync + 'static>>,
   update_file_generation_stop: Option<Arc<dyn Fn((&EventApi, &UpdateFileGenerationStop)) -> TGResult<()> + Send + Sync + 'static>>,
-  update_group_call: Option<Arc<dyn Fn((&EventApi, &UpdateGroupCall)) -> TGResult<()> + Send + Sync + 'static>>,
-  update_group_call_participant: Option<Arc<dyn Fn((&EventApi, &UpdateGroupCallParticipant)) -> TGResult<()> + Send + Sync + 'static>>,
   update_have_pending_notifications: Option<Arc<dyn Fn((&EventApi, &UpdateHavePendingNotifications)) -> TGResult<()> + Send + Sync + 'static>>,
   update_installed_sticker_sets: Option<Arc<dyn Fn((&EventApi, &UpdateInstalledStickerSets)) -> TGResult<()> + Send + Sync + 'static>>,
   update_language_pack_strings: Option<Arc<dyn Fn((&EventApi, &UpdateLanguagePackStrings)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -107,7 +104,6 @@ pub struct Listener {
   language_pack_string_value: Option<Arc<dyn Fn((&EventApi, &LanguagePackStringValue)) -> TGResult<()> + Send + Sync + 'static>>,
   log_stream: Option<Arc<dyn Fn((&EventApi, &LogStream)) -> TGResult<()> + Send + Sync + 'static>>,
   login_url_info: Option<Arc<dyn Fn((&EventApi, &LoginUrlInfo)) -> TGResult<()> + Send + Sync + 'static>>,
-  message_file_type: Option<Arc<dyn Fn((&EventApi, &MessageFileType)) -> TGResult<()> + Send + Sync + 'static>>,
   option_value: Option<Arc<dyn Fn((&EventApi, &OptionValue)) -> TGResult<()> + Send + Sync + 'static>>,
   passport_element: Option<Arc<dyn Fn((&EventApi, &PassportElement)) -> TGResult<()> + Send + Sync + 'static>>,
   statistical_graph: Option<Arc<dyn Fn((&EventApi, &StatisticalGraph)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -150,9 +146,6 @@ pub struct Listener {
   formatted_text: Option<Arc<dyn Fn((&EventApi, &FormattedText)) -> TGResult<()> + Send + Sync + 'static>>,
   found_messages: Option<Arc<dyn Fn((&EventApi, &FoundMessages)) -> TGResult<()> + Send + Sync + 'static>>,
   game_high_scores: Option<Arc<dyn Fn((&EventApi, &GameHighScores)) -> TGResult<()> + Send + Sync + 'static>>,
-  group_call: Option<Arc<dyn Fn((&EventApi, &GroupCall)) -> TGResult<()> + Send + Sync + 'static>>,
-  group_call_id: Option<Arc<dyn Fn((&EventApi, &GroupCallId)) -> TGResult<()> + Send + Sync + 'static>>,
-  group_call_join_response: Option<Arc<dyn Fn((&EventApi, &GroupCallJoinResponse)) -> TGResult<()> + Send + Sync + 'static>>,
   hashtags: Option<Arc<dyn Fn((&EventApi, &Hashtags)) -> TGResult<()> + Send + Sync + 'static>>,
   http_url: Option<Arc<dyn Fn((&EventApi, &HttpUrl)) -> TGResult<()> + Send + Sync + 'static>>,
   imported_contacts: Option<Arc<dyn Fn((&EventApi, &ImportedContacts)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -420,13 +413,6 @@ impl Listener {
     self
   }
 
-  /// A chat voice chat state has changed
-  pub fn on_update_chat_voice_chat<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&EventApi, &UpdateChatVoiceChat)) -> TGResult<()> + Send + Sync + 'static {
-    self.update_chat_voice_chat = Some(Arc::new(fnc));
-    self
-  }
-
   /// The connection state has changed. This update must be used only to show a human-readable description of the connection state
   pub fn on_update_connection_state<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateConnectionState)) -> TGResult<()> + Send + Sync + 'static {
@@ -473,20 +459,6 @@ impl Listener {
   pub fn on_update_file_generation_stop<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &UpdateFileGenerationStop)) -> TGResult<()> + Send + Sync + 'static {
     self.update_file_generation_stop = Some(Arc::new(fnc));
-    self
-  }
-
-  /// Information about a group call was updated
-  pub fn on_update_group_call<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&EventApi, &UpdateGroupCall)) -> TGResult<()> + Send + Sync + 'static {
-    self.update_group_call = Some(Arc::new(fnc));
-    self
-  }
-
-  /// Information about a group call participant was changed. The updates are sent only after the group call is received through getGroupCall and only if the call is joined or being joined
-  pub fn on_update_group_call_participant<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&EventApi, &UpdateGroupCallParticipant)) -> TGResult<()> + Send + Sync + 'static {
-    self.update_group_call_participant = Some(Arc::new(fnc));
     self
   }
 
@@ -891,13 +863,6 @@ impl Listener {
     self
   }
 
-  /// Contains information about a file with messages exported from another app
-  pub fn on_message_file_type<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&EventApi, &MessageFileType)) -> TGResult<()> + Send + Sync + 'static {
-    self.message_file_type = Some(Arc::new(fnc));
-    self
-  }
-
   /// Represents the value of an option
   pub fn on_option_value<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &OptionValue)) -> TGResult<()> + Send + Sync + 'static {
@@ -1189,27 +1154,6 @@ impl Listener {
   pub fn on_game_high_scores<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&EventApi, &GameHighScores)) -> TGResult<()> + Send + Sync + 'static {
     self.game_high_scores = Some(Arc::new(fnc));
-    self
-  }
-
-  /// Describes a group call
-  pub fn on_group_call<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&EventApi, &GroupCall)) -> TGResult<()> + Send + Sync + 'static {
-    self.group_call = Some(Arc::new(fnc));
-    self
-  }
-
-  /// Contains the group call identifier
-  pub fn on_group_call_id<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&EventApi, &GroupCallId)) -> TGResult<()> + Send + Sync + 'static {
-    self.group_call_id = Some(Arc::new(fnc));
-    self
-  }
-
-  /// Describes a join response for interaction with tgcalls
-  pub fn on_group_call_join_response<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&EventApi, &GroupCallJoinResponse)) -> TGResult<()> + Send + Sync + 'static {
-    self.group_call_join_response = Some(Arc::new(fnc));
     self
   }
 
@@ -1693,7 +1637,6 @@ impl Lout {
       "updateChatReplyMarkup",
       "updateChatTitle",
       "updateChatUnreadMentionCount",
-      "updateChatVoiceChat",
       "updateConnectionState",
       "updateDeleteMessages",
       "updateDiceEmojis",
@@ -1701,8 +1644,6 @@ impl Lout {
       "updateFile",
       "updateFileGenerationStart",
       "updateFileGenerationStop",
-      "updateGroupCall",
-      "updateGroupCallParticipant",
       "updateHavePendingNotifications",
       "updateInstalledStickerSets",
       "updateLanguagePackStrings",
@@ -1762,7 +1703,6 @@ impl Lout {
       "LanguagePackStringValue",
       "LogStream",
       "LoginUrlInfo",
-      "MessageFileType",
       "OptionValue",
       "PassportElement",
       "StatisticalGraph",
@@ -1805,9 +1745,6 @@ impl Lout {
       "formattedText",
       "foundMessages",
       "gameHighScores",
-      "groupCall",
-      "groupCallId",
-      "groupCallJoinResponse",
       "hashtags",
       "httpUrl",
       "importedContacts",
@@ -2012,11 +1949,6 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
-    TdType::UpdateChatVoiceChat(value) => match &self.listener.update_chat_voice_chat {
-      None => Ok(false),
-      Some(f) => f((api, value)).map(|_|true),
-    },
-
     TdType::UpdateConnectionState(value) => match &self.listener.update_connection_state {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -2048,16 +1980,6 @@ impl Lout {
     },
 
     TdType::UpdateFileGenerationStop(value) => match &self.listener.update_file_generation_stop {
-      None => Ok(false),
-      Some(f) => f((api, value)).map(|_|true),
-    },
-
-    TdType::UpdateGroupCall(value) => match &self.listener.update_group_call {
-      None => Ok(false),
-      Some(f) => f((api, value)).map(|_|true),
-    },
-
-    TdType::UpdateGroupCallParticipant(value) => match &self.listener.update_group_call_participant {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -2348,11 +2270,6 @@ impl Lout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
-    TdType::MessageFileType(value) => match &self.listener.message_file_type {
-      None => Ok(false),
-      Some(f) => f((api, value)).map(|_|true),
-    },
-
     TdType::OptionValue(value) => match &self.listener.option_value {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -2559,21 +2476,6 @@ impl Lout {
     },
 
     TdType::GameHighScores(value) => match &self.listener.game_high_scores {
-      None => Ok(false),
-      Some(f) => f((api, value)).map(|_|true),
-    },
-
-    TdType::GroupCall(value) => match &self.listener.group_call {
-      None => Ok(false),
-      Some(f) => f((api, value)).map(|_|true),
-    },
-
-    TdType::GroupCallId(value) => match &self.listener.group_call_id {
-      None => Ok(false),
-      Some(f) => f((api, value)).map(|_|true),
-    },
-
-    TdType::GroupCallJoinResponse(value) => match &self.listener.group_call_join_response {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -3036,11 +2938,6 @@ impl Lout {
     &self.listener.update_chat_unread_mention_count
   }
 
-  /// A chat voice chat state has changed
-  pub fn update_chat_voice_chat(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateChatVoiceChat)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.update_chat_voice_chat
-  }
-
   /// The connection state has changed. This update must be used only to show a human-readable description of the connection state
   pub fn update_connection_state(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateConnectionState)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_connection_state
@@ -3074,16 +2971,6 @@ impl Lout {
   /// File generation is no longer needed
   pub fn update_file_generation_stop(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateFileGenerationStop)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_file_generation_stop
-  }
-
-  /// Information about a group call was updated
-  pub fn update_group_call(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateGroupCall)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.update_group_call
-  }
-
-  /// Information about a group call participant was changed. The updates are sent only after the group call is received through getGroupCall and only if the call is joined or being joined
-  pub fn update_group_call_participant(&self) -> &Option<Arc<dyn Fn((&EventApi, &UpdateGroupCallParticipant)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.update_group_call_participant
   }
 
   /// Describes whether there are some pending notification updates. Can be used to prevent application from killing, while there are some pending notifications
@@ -3373,11 +3260,6 @@ impl Lout {
     &self.listener.login_url_info
   }
 
-  /// Contains information about a file with messages exported from another app
-  pub fn message_file_type(&self) -> &Option<Arc<dyn Fn((&EventApi, &MessageFileType)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.message_file_type
-  }
-
   /// Represents the value of an option
   pub fn option_value(&self) -> &Option<Arc<dyn Fn((&EventApi, &OptionValue)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.option_value
@@ -3586,21 +3468,6 @@ impl Lout {
   /// Contains a list of game high scores
   pub fn game_high_scores(&self) -> &Option<Arc<dyn Fn((&EventApi, &GameHighScores)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.game_high_scores
-  }
-
-  /// Describes a group call
-  pub fn group_call(&self) -> &Option<Arc<dyn Fn((&EventApi, &GroupCall)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.group_call
-  }
-
-  /// Contains the group call identifier
-  pub fn group_call_id(&self) -> &Option<Arc<dyn Fn((&EventApi, &GroupCallId)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.group_call_id
-  }
-
-  /// Describes a join response for interaction with tgcalls
-  pub fn group_call_join_response(&self) -> &Option<Arc<dyn Fn((&EventApi, &GroupCallJoinResponse)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.group_call_join_response
   }
 
   /// Contains a list of hashtags

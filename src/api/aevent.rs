@@ -105,10 +105,6 @@ impl EventApi {
     self.api.send(answer_shipping_query.as_ref())
   }
 
-  pub fn ban_chat_member<C: AsRef<BanChatMember>>(&self, ban_chat_member: C) -> RTDResult<()> {
-    self.api.send(ban_chat_member.as_ref())
-  }
-
   pub fn block_message_sender_from_replies<C: AsRef<BlockMessageSenderFromReplies>>(&self, block_message_sender_from_replies: C) -> RTDResult<()> {
     self.api.send(block_message_sender_from_replies.as_ref())
   }
@@ -265,20 +261,8 @@ impl EventApi {
     self.api.send(create_temporary_password.as_ref())
   }
 
-  pub fn create_voice_chat<C: AsRef<CreateVoiceChat>>(&self, create_voice_chat: C) -> RTDResult<()> {
-    self.api.send(create_voice_chat.as_ref())
-  }
-
   pub fn delete_account<C: AsRef<DeleteAccount>>(&self, delete_account: C) -> RTDResult<()> {
     self.api.send(delete_account.as_ref())
-  }
-
-  pub fn delete_all_call_messages<C: AsRef<DeleteAllCallMessages>>(&self, delete_all_call_messages: C) -> RTDResult<()> {
-    self.api.send(delete_all_call_messages.as_ref())
-  }
-
-  pub fn delete_chat<C: AsRef<DeleteChat>>(&self, delete_chat: C) -> RTDResult<()> {
-    self.api.send(delete_chat.as_ref())
   }
 
   pub fn delete_chat_filter<C: AsRef<DeleteChatFilter>>(&self, delete_chat_filter: C) -> RTDResult<()> {
@@ -325,6 +309,10 @@ impl EventApi {
     self.api.send(delete_saved_order_info.as_ref())
   }
 
+  pub fn delete_supergroup<C: AsRef<DeleteSupergroup>>(&self, delete_supergroup: C) -> RTDResult<()> {
+    self.api.send(delete_supergroup.as_ref())
+  }
+
   pub fn destroy<C: AsRef<Destroy>>(&self, destroy: C) -> RTDResult<()> {
     self.api.send(destroy.as_ref())
   }
@@ -335,10 +323,6 @@ impl EventApi {
 
   pub fn discard_call<C: AsRef<DiscardCall>>(&self, discard_call: C) -> RTDResult<()> {
     self.api.send(discard_call.as_ref())
-  }
-
-  pub fn discard_group_call<C: AsRef<DiscardGroupCall>>(&self, discard_group_call: C) -> RTDResult<()> {
-    self.api.send(discard_group_call.as_ref())
   }
 
   pub fn disconnect_all_websites<C: AsRef<DisconnectAllWebsites>>(&self, disconnect_all_websites: C) -> RTDResult<()> {
@@ -419,6 +403,10 @@ impl EventApi {
 
   pub fn forward_messages<C: AsRef<ForwardMessages>>(&self, forward_messages: C) -> RTDResult<()> {
     self.api.send(forward_messages.as_ref())
+  }
+
+  pub fn generate_chat_invite_link<C: AsRef<GenerateChatInviteLink>>(&self, generate_chat_invite_link: C) -> RTDResult<()> {
+    self.api.send(generate_chat_invite_link.as_ref())
   }
 
   pub fn get_account_ttl<C: AsRef<GetAccountTtl>>(&self, get_account_ttl: C) -> RTDResult<()> {
@@ -613,10 +601,6 @@ impl EventApi {
     self.api.send(get_game_high_scores.as_ref())
   }
 
-  pub fn get_group_call<C: AsRef<GetGroupCall>>(&self, get_group_call: C) -> RTDResult<()> {
-    self.api.send(get_group_call.as_ref())
-  }
-
   pub fn get_groups_in_common<C: AsRef<GetGroupsInCommon>>(&self, get_groups_in_common: C) -> RTDResult<()> {
     self.api.send(get_groups_in_common.as_ref())
   }
@@ -711,10 +695,6 @@ impl EventApi {
 
   pub fn get_message_embedding_code<C: AsRef<GetMessageEmbeddingCode>>(&self, get_message_embedding_code: C) -> RTDResult<()> {
     self.api.send(get_message_embedding_code.as_ref())
-  }
-
-  pub fn get_message_file_type<C: AsRef<GetMessageFileType>>(&self, get_message_file_type: C) -> RTDResult<()> {
-    self.api.send(get_message_file_type.as_ref())
   }
 
   pub fn get_message_link<C: AsRef<GetMessageLink>>(&self, get_message_link: C) -> RTDResult<()> {
@@ -941,14 +921,6 @@ impl EventApi {
     self.api.send(import_contacts.as_ref())
   }
 
-  pub fn import_messages<C: AsRef<ImportMessages>>(&self, import_messages: C) -> RTDResult<()> {
-    self.api.send(import_messages.as_ref())
-  }
-
-  pub fn invite_group_call_participants<C: AsRef<InviteGroupCallParticipants>>(&self, invite_group_call_participants: C) -> RTDResult<()> {
-    self.api.send(invite_group_call_participants.as_ref())
-  }
-
   pub fn join_chat<C: AsRef<JoinChat>>(&self, join_chat: C) -> RTDResult<()> {
     self.api.send(join_chat.as_ref())
   }
@@ -957,20 +929,8 @@ impl EventApi {
     self.api.send(join_chat_by_invite_link.as_ref())
   }
 
-  pub fn join_group_call<C: AsRef<JoinGroupCall>>(&self, join_group_call: C) -> RTDResult<()> {
-    self.api.send(join_group_call.as_ref())
-  }
-
   pub fn leave_chat<C: AsRef<LeaveChat>>(&self, leave_chat: C) -> RTDResult<()> {
     self.api.send(leave_chat.as_ref())
-  }
-
-  pub fn leave_group_call<C: AsRef<LeaveGroupCall>>(&self, leave_group_call: C) -> RTDResult<()> {
-    self.api.send(leave_group_call.as_ref())
-  }
-
-  pub fn load_group_call_participants<C: AsRef<LoadGroupCallParticipants>>(&self, load_group_call_participants: C) -> RTDResult<()> {
-    self.api.send(load_group_call_participants.as_ref())
   }
 
   pub fn log_out<C: AsRef<LogOut>>(&self, log_out: C) -> RTDResult<()> {
@@ -1091,10 +1051,6 @@ impl EventApi {
 
   pub fn reorder_installed_sticker_sets<C: AsRef<ReorderInstalledStickerSets>>(&self, reorder_installed_sticker_sets: C) -> RTDResult<()> {
     self.api.send(reorder_installed_sticker_sets.as_ref())
-  }
-
-  pub fn replace_permanent_chat_invite_link<C: AsRef<ReplacePermanentChatInviteLink>>(&self, replace_permanent_chat_invite_link: C) -> RTDResult<()> {
-    self.api.send(replace_permanent_chat_invite_link.as_ref())
   }
 
   pub fn report_chat<C: AsRef<ReportChat>>(&self, report_chat: C) -> RTDResult<()> {
@@ -1397,14 +1353,6 @@ impl EventApi {
     self.api.send(set_game_score.as_ref())
   }
 
-  pub fn set_group_call_participant_is_speaking<C: AsRef<SetGroupCallParticipantIsSpeaking>>(&self, set_group_call_participant_is_speaking: C) -> RTDResult<()> {
-    self.api.send(set_group_call_participant_is_speaking.as_ref())
-  }
-
-  pub fn set_group_call_participant_volume_level<C: AsRef<SetGroupCallParticipantVolumeLevel>>(&self, set_group_call_participant_volume_level: C) -> RTDResult<()> {
-    self.api.send(set_group_call_participant_volume_level.as_ref())
-  }
-
   pub fn set_inline_game_score<C: AsRef<SetInlineGameScore>>(&self, set_inline_game_score: C) -> RTDResult<()> {
     self.api.send(set_inline_game_score.as_ref())
   }
@@ -1579,14 +1527,6 @@ impl EventApi {
 
   pub fn toggle_chat_is_pinned<C: AsRef<ToggleChatIsPinned>>(&self, toggle_chat_is_pinned: C) -> RTDResult<()> {
     self.api.send(toggle_chat_is_pinned.as_ref())
-  }
-
-  pub fn toggle_group_call_mute_new_participants<C: AsRef<ToggleGroupCallMuteNewParticipants>>(&self, toggle_group_call_mute_new_participants: C) -> RTDResult<()> {
-    self.api.send(toggle_group_call_mute_new_participants.as_ref())
-  }
-
-  pub fn toggle_group_call_participant_is_muted<C: AsRef<ToggleGroupCallParticipantIsMuted>>(&self, toggle_group_call_participant_is_muted: C) -> RTDResult<()> {
-    self.api.send(toggle_group_call_participant_is_muted.as_ref())
   }
 
   pub fn toggle_message_sender_is_blocked<C: AsRef<ToggleMessageSenderIsBlocked>>(&self, toggle_message_sender_is_blocked: C) -> RTDResult<()> {

@@ -74,8 +74,6 @@ impl Observer {
 
       TdType::UpdateChatUnreadMentionCount(value) => value.extra(),
 
-      TdType::UpdateChatVoiceChat(value) => value.extra(),
-
       TdType::UpdateConnectionState(value) => value.extra(),
 
       TdType::UpdateDeleteMessages(value) => value.extra(),
@@ -89,10 +87,6 @@ impl Observer {
       TdType::UpdateFileGenerationStart(value) => value.extra(),
 
       TdType::UpdateFileGenerationStop(value) => value.extra(),
-
-      TdType::UpdateGroupCall(value) => value.extra(),
-
-      TdType::UpdateGroupCallParticipant(value) => value.extra(),
 
       TdType::UpdateHavePendingNotifications(value) => value.extra(),
 
@@ -209,8 +203,6 @@ impl Observer {
 
       TdType::LoginUrlInfo(value) => value.extra(),
 
-      TdType::MessageFileType(value) => value.extra(),
-
       TdType::OptionValue(value) => value.extra(),
 
       TdType::PassportElement(value) => value.extra(),
@@ -294,12 +286,6 @@ impl Observer {
       TdType::FoundMessages(value) => value.extra(),
 
       TdType::GameHighScores(value) => value.extra(),
-
-      TdType::GroupCall(value) => value.extra(),
-
-      TdType::GroupCallId(value) => value.extra(),
-
-      TdType::GroupCallJoinResponse(value) => value.extra(),
 
       TdType::Hashtags(value) => value.extra(),
 
