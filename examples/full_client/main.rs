@@ -181,10 +181,10 @@ fn main() {
     Ok(())
   });
 
-  listener.on_update_have_pending_notifications(|(api, update)| {
-    debug!("have pending notifications {:?}", update);
-    Ok(())
-  });
+  // listener.on_update_have_pending_notifications(|(api, update)| {
+  //   debug!("have pending notifications {:?}", update);
+  //   Ok(())
+  // });
 
   listener.on_update_scope_notification_settings(|(api, update)| {
     debug!("scope notification settings {:?}", update);
@@ -295,10 +295,10 @@ fn main() {
     }
     api.download_file(DownloadFile::builder()
       .file_id(file.id())
-      .offset(0)
-      .limit(0)
+      // .offset(0)
+      // .limit(0)
       .priority(1)
-      .synchronous(false)
+      // .synchronous(false)
       .build());
     Ok(())
   });
