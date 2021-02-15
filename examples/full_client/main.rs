@@ -24,8 +24,9 @@ fn main() {
   let api_hash = env!("API_HASH");
 
   let config = Config::default();
-  let api = Api::default();
-  let mut client = Client::new(api.clone());
+  debug!("{:#?}", config);
+  let api = Api::event();
+  let mut client = Client::new(api.api().clone());
 
   config.proxy().map(|v| { api.add_proxy(v) });
 
