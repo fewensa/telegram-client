@@ -56,12 +56,12 @@ pub fn tip<S: AsRef<str>>(message: S) {
 
 pub fn append_out<S: AsRef<str>>(message: S) {
   print!("{}", message.as_ref().yellow());
-  std::io::stdout().flush();
+  std::io::stdout().flush().expect("failed to append output");
 }
 
 pub fn append_end() {
   print!("\n");
-  std::io::stdout().flush();
+  std::io::stdout().flush().expect("failed to append output");
 }
 
 pub fn error<S: AsRef<str>>(message: S) {

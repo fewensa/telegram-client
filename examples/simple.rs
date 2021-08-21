@@ -1,14 +1,17 @@
-
 #[macro_use]
 extern crate log;
 
+use simple_logger::SimpleLogger;
+
+use rtdlib::types::*;
 use telegram_client::api::Api;
 use telegram_client::client::Client;
-use rtdlib::types::*;
 
 fn main() {
-  simple_logger::init().unwrap();
-  log::set_max_level(log::LevelFilter::Debug);
+  SimpleLogger::new()
+    .with_level(log::LevelFilter::Debug)
+    .init()
+    .unwrap();
 
 
   let api = Api::default();

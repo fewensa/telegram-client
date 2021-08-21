@@ -5,7 +5,6 @@ use crate::listener::Lout;
 use crate::errors::TGError;
 use crate::observer;
 use crate::tip;
-use rtdlib::types::*;
 
 pub struct Handler<'a> {
   api: &'a EventApi,

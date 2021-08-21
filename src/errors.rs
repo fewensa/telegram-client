@@ -62,10 +62,6 @@ impl fmt::Display for TGError {
 }
 
 impl error::Error for TGError {
-  fn description(&self) -> &str {
-    self.key
-  }
-
   fn cause(&self) -> Option<&dyn error::Error> {
     None
   }

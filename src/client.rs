@@ -131,7 +131,7 @@ impl Client {
   /// let client = Client::default();
   /// client.daemon("tgclient");
   /// ```
-  pub fn daemon<S: AsRef<str>>(self, name: S) -> std::thread::Result<()> {
+  pub fn daemon<S: AsRef<str>>(self, _name: S) -> std::thread::Result<()> {
     self.start().join()
 //    debug!("Telegram client started.");
 //    let daemon = Daemon {

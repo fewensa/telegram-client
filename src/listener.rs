@@ -216,6 +216,7 @@ pub struct Listener {
 impl Listener {
   pub fn new() -> Self { Listener::default() }
 
+  #[allow(dead_code)]
   pub(crate) fn has_receive_listen(&self) -> bool { self.receive.is_some() }
 
   pub(crate) fn lout(&self) -> Lout { Lout::new(self.clone()) }

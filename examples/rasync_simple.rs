@@ -2,17 +2,23 @@
 extern crate log;
 
 use std::io::{self, BufRead};
-use rtdlib::types::*;
 use std::sync::{Arc, Mutex};
+
+use simple_logger::SimpleLogger;
+use tokio::prelude::*;
+
+use rtdlib::Tdlib;
+use rtdlib::types::*;
 use telegram_client::api::Api;
 use telegram_client::client::Client;
-use tokio::prelude::*;
-use rtdlib::Tdlib;
 
 #[tokio::main]
 async fn main() {
-  simple_logger::init().unwrap();
-  log::set_max_level(log::LevelFilter::Debug);
+  SimpleLogger::new()
+    .with_level(log::LevelFilter::Debug)
+    .init()
+    .unwrap();
+
   let api = Api::rasync();
 
   let mut client = Client::new(api.api().clone());

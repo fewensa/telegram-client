@@ -3,21 +3,24 @@ extern crate log;
 
 use std::sync::{Arc, Mutex};
 
-use rtdlib::types::*;
+use colored::Colorize;
+use simple_logger::SimpleLogger;
 
+use rtdlib::types::*;
 use telegram_client::api::*;
 use telegram_client::client::Client;
 
 use crate::config::{Config, LogType};
-use colored::Colorize;
 
 mod thelp;
 mod tgfn;
 mod config;
 
 fn main() {
-  simple_logger::init().unwrap();
-  log::set_max_level(log::LevelFilter::Debug);
+  SimpleLogger::new()
+    .with_level(log::LevelFilter::Debug)
+    .init()
+    .unwrap();
 
 
   let api_id = env!("API_ID");
@@ -48,7 +51,7 @@ fn main() {
 //    println!("{:?}", object);
 //  });
 
-  listener.on_update_option(|(api, option)| {
+  listener.on_update_option(|(_api, option)| {
     let value = option.value();
     if value.is_empty() { debug!("Receive an option {} but it's empty", option.name()) }
     if value.is_string() { debug!("Receive an option {}: String => {}", option.name(), value.as_string().map_or("None".to_string(), |v| v.value().clone())) }
@@ -78,11 +81,12 @@ fn main() {
           .application_version(env!("CARGO_PKG_VERSION"))
           .enable_storage_optimizer(true)
           .build()
-      ).build());
+      ).build())
+        .unwrap();
       debug!("Set tdlib parameters");
     });
     state.on_wait_encryption_key(|_| {
-      api.check_database_encryption_key(CheckDatabaseEncryptionKey::builder().build());
+      api.check_database_encryption_key(CheckDatabaseEncryptionKey::builder().build()).unwrap();
       debug!("Set encryption key");
     });
     state.on_wait_phone_number(|_| {
@@ -92,7 +96,8 @@ fn main() {
     state.on_wait_password(|_| {
       api.check_authentication_password(CheckAuthenticationPassword::builder()
         .password(thelp::typed_with_message(format!("{} {}", "Please type your telegram password:", "(If you copy log to anywhere, don't forget hide your password)".red())))
-        .build());
+        .build())
+        .unwrap();
       debug!("Set password *****");
     });
     state.on_wait_registration(|_| {
@@ -100,7 +105,7 @@ fn main() {
       thelp::tip("Your phone number is not registered to telegram, please type your name. and register.");
       tgfn::type_and_register(api);
     });
-    state.on_wait_code(|astat| {
+    state.on_wait_code(|_astat| {
       thelp::tip("Please type authentication code:");
       tgfn::type_authentication_code(api);
     });
@@ -126,7 +131,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_update_connection_state(|(api, update)| {
+  listener.on_update_connection_state(|(_api, update)| {
     let state = update.state();
     state.on_waiting_for_network(|_| { debug!("waiting for network"); });
     state.on_connecting_to_proxy(|_| { debug!("connecting to proxy"); });
@@ -165,37 +170,37 @@ fn main() {
     Ok(())
   });
 
-  listener.on_ok(|api| {
+  listener.on_ok(|_api| {
     debug!("OK");
     Ok(())
   });
 
-  listener.on_proxy(|(api, update)| {
+  listener.on_proxy(|(_api, update)| {
     debug!("Proxy info => {:?}", update);
     Ok(())
   });
 
-  listener.on_update_user(|(api, update)| {
+  listener.on_update_user(|(_api, update)| {
     debug!("Update user => {:?}", update);
     Ok(())
   });
 
-  listener.on_update_have_pending_notifications(|(api, update)| {
+  listener.on_update_have_pending_notifications(|(_api, update)| {
     debug!("have pending notifications {:?}", update);
     Ok(())
   });
 
-  listener.on_update_scope_notification_settings(|(api, update)| {
+  listener.on_update_scope_notification_settings(|(_api, update)| {
     debug!("scope notification settings {:?}", update);
     Ok(())
   });
 
-  listener.on_update_user_status(|(api, update)| {
+  listener.on_update_user_status(|(_api, update)| {
     debug!("User [{}] status is {:?}", update.user_id(), update.status());
     Ok(())
   });
 
-  listener.on_update_new_chat(|(api, update)| {
+  listener.on_update_new_chat(|(_api, update)| {
     let chat = update.chat();
     debug!("Receive new chat, title: '{}', data: {}", chat.title(), chat.to_json().expect("Can't serialize json"));
     Ok(())
@@ -218,7 +223,8 @@ fn main() {
           .text(FormattedText::builder().text(m.text().text()).build())
           .clear_draft(true)
           .build()))
-        .build());
+        .build())
+        .unwrap();
       debug!("Receive text message => {} <= entities => {:?}", m.text().text(), m.text().entities());
     });
     content.on_message_video(|m| {
@@ -227,12 +233,13 @@ fn main() {
       let f = v.video();
       let remote_file = f.remote();
 
-      let size = remote_file.uploaded_size();
+      let _size = remote_file.uploaded_size();
 
       api.get_remote_file(GetRemoteFile::builder()
         .remote_file_id(remote_file.id())
         .file_type(FileType::video(FileTypeVideo::builder()))
-        .build());
+        .build())
+        .unwrap();
       debug!("video remote id => {:?}", remote_file.id());
 
       debug!("video local path => {:?}", f.local().path());
@@ -241,7 +248,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_update_chat_read_inbox(|(api, update)| {
+  listener.on_update_chat_read_inbox(|(_api, update)| {
     debug!("Read inbox unread_count: {}, chat_id: {}, last_read_inbox_message_id: {}",
       update.unread_count(),
       update.chat_id(),
@@ -250,7 +257,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_update_chat_last_message(|(api, update)| {
+  listener.on_update_chat_last_message(|(_api, update)| {
     debug!("Chat last message: {}, data: {}",
       update.chat_id(),
       update.last_message().clone().map_or("None".to_string(), |v| v.to_json().expect("Can't serialize json"))
@@ -258,7 +265,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_update_chat_read_outbox(|(api, update)| {
+  listener.on_update_chat_read_outbox(|(_api, update)| {
     debug!("Read outbox chat_id: {}, last_read_outbox_message_id: {}",
       update.chat_id(),
       update.last_read_outbox_message_id(),
@@ -266,7 +273,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_update_user_full_info(|(api, update)| {
+  listener.on_update_user_full_info(|(_api, update)| {
     debug!("Receive user full info, user_id: {}, full_info: {}",
       update.user_id(),
       update.user_full_info().to_json().expect("Can't serialize json")
@@ -274,7 +281,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_update_delete_messages(|(api, update)| {
+  listener.on_update_delete_messages(|(_api, update)| {
     debug!("Receive delete messages, chat_id: {}, message_ids: {:?}, data: {}",
       update.chat_id(),
       update.message_ids(),
@@ -286,7 +293,7 @@ fn main() {
   listener.on_update_file(|(api, update)| {
     debug!("Receive a file => {}", update.to_json().expect("Can't serialize json"));
     let file = update.file();
-    let size = file.size();
+    let _size = file.size();
     let local_file = file.local();
     if local_file.is_downloading_completed() {
       debug!("File {} download complete => {:?}", file.id(), local_file.path());
@@ -298,25 +305,26 @@ fn main() {
       .limit(0)
       .priority(1)
       .synchronous(false)
-      .build());
+      .build())
+      .unwrap();
     Ok(())
   });
 
-  listener.on_update_supergroup_full_info(|(api, update)| {
-    debug!("Supergroup full info => {}", update.to_json().expect("Can't serialize json"));
+  listener.on_update_supergroup_full_info(|(_api, update)| {
+    debug!("Supergroup full info => {}", update.to_json().unwrap());
     Ok(())
   });
 
-  listener.on_update_user_chat_action(|(api, update)| {
-    debug!("User chat action => {}", update.to_json().expect("Can't serialize json"));
+  listener.on_update_user_chat_action(|(_api, update)| {
+    debug!("User chat action => {}", update.to_json().unwrap());
     Ok(())
   });
 
-  listener.on_update_terms_of_service(|(api, update)| {
-    debug!("Terms of serivce => {}", update.to_json().expect("Can't serialize json"));
+  listener.on_update_terms_of_service(|(_api, update)| {
+    debug!("Terms of serivce => {}", update.to_json().unwrap());
     Ok(())
   });
 
-  client.daemon("telegram-rs");
+  client.daemon("telegram-rs").expect("failed to create telegram daemon");
 }
 
