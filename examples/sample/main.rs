@@ -75,19 +75,23 @@ fn main() {
           .enable_storage_optimizer(true)
           .build())
         .build();
-      api.send(&paras);
+      api.set_tdlib_parameters(&paras).unwrap();
       debug!("Set tdlib parameters");
     });
     state.on_wait_encryption_key(|_| {
-      api.send(CheckDatabaseEncryptionKey::builder().build());
+      api.check_database_encryption_key(CheckDatabaseEncryptionKey::builder().build()).unwrap();
       debug!("Set encryption key");
     });
     state.on_wait_phone_number(|_| {
-      api.send(SetAuthenticationPhoneNumber::builder().phone_number(env!("TG_PHONE")).build());
+      api.set_authentication_phone_number(
+        SetAuthenticationPhoneNumber::builder().phone_number(env!("TG_PHONE")).build()
+      ).unwrap();
       debug!("Set phone number");
     });
     state.on_wait_password(|_| {
-      api.send(CheckAuthenticationPassword::builder().password(env!("TG_PASSWORD")).build());
+      api.check_authentication_password(
+        CheckAuthenticationPassword::builder().password(env!("TG_PASSWORD")).build()
+      ).unwrap();
       debug!("Set password");
     });
 
