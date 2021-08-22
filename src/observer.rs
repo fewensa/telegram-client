@@ -54,6 +54,10 @@ impl Observer {
 
       TdType::UpdateChatLastMessage(value) => value.extra(),
 
+      TdType::UpdateChatMember(value) => value.extra(),
+
+      TdType::UpdateChatMessageTtlSetting(value) => value.extra(),
+
       TdType::UpdateChatNotificationSettings(value) => value.extra(),
 
       TdType::UpdateChatOnlineMemberCount(value) => value.extra(),
@@ -201,6 +205,10 @@ impl Observer {
 
       TdType::CheckChatUsernameResult(value) => value.extra(),
 
+      TdType::CheckStickerSetNameResult(value) => value.extra(),
+
+      TdType::InternalLinkType(value) => value.extra(),
+
       TdType::JsonValue(value) => value.extra(),
 
       TdType::LanguagePackStringValue(value) => value.extra(),
@@ -214,6 +222,8 @@ impl Observer {
       TdType::OptionValue(value) => value.extra(),
 
       TdType::PassportElement(value) => value.extra(),
+
+      TdType::ResetPasswordResult(value) => value.extra(),
 
       TdType::StatisticalGraph(value) => value.extra(),
 
@@ -237,6 +247,8 @@ impl Observer {
 
       TdType::BasicGroupFullInfo(value) => value.extra(),
 
+      TdType::BotCommands(value) => value.extra(),
+
       TdType::CallId(value) => value.extra(),
 
       TdType::CallbackQueryAnswer(value) => value.extra(),
@@ -253,7 +265,13 @@ impl Observer {
 
       TdType::ChatInviteLink(value) => value.extra(),
 
+      TdType::ChatInviteLinkCounts(value) => value.extra(),
+
       TdType::ChatInviteLinkInfo(value) => value.extra(),
+
+      TdType::ChatInviteLinkMembers(value) => value.extra(),
+
+      TdType::ChatInviteLinks(value) => value.extra(),
 
       TdType::ChatLists(value) => value.extra(),
 
@@ -298,8 +316,6 @@ impl Observer {
       TdType::GroupCall(value) => value.extra(),
 
       TdType::GroupCallId(value) => value.extra(),
-
-      TdType::GroupCallJoinResponse(value) => value.extra(),
 
       TdType::Hashtags(value) => value.extra(),
 
