@@ -16,18 +16,7 @@ telegram-client = "1.7.*"
 
 ### version
 
-Since the `telegram-client` version follows [td](https://github.com/tdlib/td).
-
-Version mapping
-
-| telegram-client    | td      |
-|--------------------|---------|
-| 0.*                | master  |
-| 1.3.*              | 1.3.*   |
-| 1.4.*              | 1.4.*   |
-| 1.5.*              | 1.5.*   |
-| 1.6.*              | 1.6.*   |
-| 1.7.*              | 1.7.*   |
+The more informations you can read [Version mapping](https://github.com/fewensa/telegram-client/wiki/Version-mapping)
 
 ## Note
 
