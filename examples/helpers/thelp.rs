@@ -1,12 +1,14 @@
 use std::{io, thread};
-
-use crate::{thelp, tgfn};
-use colored::Colorize;
-use std::sync::mpsc;
-use std::time::Duration;
-use std::sync::mpsc::TryRecvError;
 use std::io::Write;
-use telegram_client::api::aevent::EventApi;
+use std::sync::mpsc;
+use std::sync::mpsc::TryRecvError;
+use std::time::Duration;
+
+use colored::Colorize;
+
+use telegram_client::api::Api;
+
+use crate::{tgfn, thelp};
 
 pub fn typed() -> String {
   self::typed_with_message("")
@@ -24,7 +26,8 @@ pub fn typed_with_message<S: AsRef<str>>(message: S) -> String {
   }
 }
 
-pub fn wait_too_many_requests(api: &EventApi, message: &String) {
+#[allow(dead_code)]
+pub fn wait_too_many_requests(api: &Api, message: &String) {
   thelp::error(&message);
   regex::Regex::new("(?P<time>\\d+)").map(|regex| {
     regex.captures(&message[..]).map(|caps| {
@@ -54,20 +57,24 @@ pub fn tip<S: AsRef<str>>(message: S) {
   println!("{} {}", ">>".red().bold(), message.as_ref().blue().bold())
 }
 
+#[allow(dead_code)]
 pub fn append_out<S: AsRef<str>>(message: S) {
   print!("{}", message.as_ref().yellow());
-  std::io::stdout().flush();
+  std::io::stdout().flush().expect("failed to append output");
 }
 
+#[allow(dead_code)]
 pub fn append_end() {
   print!("\n");
-  std::io::stdout().flush();
+  std::io::stdout().flush().expect("failed to append output");
 }
 
+#[allow(dead_code)]
 pub fn error<S: AsRef<str>>(message: S) {
   println!("{} {}", ">>".red().bold(), message.as_ref().red().bold())
 }
 
+#[allow(dead_code)]
 pub fn unknown<S: AsRef<str>>(code: i64, message: S) {
   println!("{} [{}] {}  << {}",
            ">>".red().bold(),
