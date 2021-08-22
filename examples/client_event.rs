@@ -10,11 +10,11 @@ use rtdlib::types::*;
 use telegram_client::api::*;
 use telegram_client::client::Client;
 
-use crate::config::{Config, LogType};
+use crate::helpers::{tgfn, thelp};
+use crate::helpers::config::{Config, LogType};
 
-mod thelp;
-mod tgfn;
-mod config;
+mod helpers;
+
 
 fn main() {
   SimpleLogger::new()
@@ -43,13 +43,14 @@ fn main() {
   });
 
 
-  let listener = client.listener();
+  let listener = client.listener().event_listener_mut();
 
   let have_authorization: Arc<Mutex<bool>> = Arc::new(Mutex::new(false));
 
-//  listener.on_receive(|(api, object)| {
-//    println!("{:?}", object);
-//  });
+  listener.on_receive(|(_api, object)| {
+    println!("{}", object);
+    Ok(())
+  });
 
   listener.on_update_option(|(_api, option)| {
     let value = option.value();
@@ -66,9 +67,10 @@ fn main() {
   });
 
   listener.on_update_authorization_state(move |(api, update)| {
+    let event_api = api.event_api();
     let state = update.authorization_state();
     state.on_wait_tdlib_parameters(|_| {
-      api.set_tdlib_parameters(SetTdlibParameters::builder().parameters(
+      event_api.set_tdlib_parameters(SetTdlibParameters::builder().parameters(
         TdlibParameters::builder()
           .database_directory("tdlib")
           .use_message_database(true)
@@ -86,15 +88,15 @@ fn main() {
       debug!("Set tdlib parameters");
     });
     state.on_wait_encryption_key(|_| {
-      api.check_database_encryption_key(CheckDatabaseEncryptionKey::builder().build()).unwrap();
+      event_api.check_database_encryption_key(CheckDatabaseEncryptionKey::builder().build()).unwrap();
       debug!("Set encryption key");
     });
     state.on_wait_phone_number(|_| {
       thelp::tip(format!("{} {}", "Please type your telegram phone number:", "(If you copy log to anywhere, don't forget hide your phone number)".red()));
-      tgfn::type_phone_number(api);
+      tgfn::type_phone_number(&api);
     });
     state.on_wait_password(|_| {
-      api.check_authentication_password(CheckAuthenticationPassword::builder()
+      event_api.check_authentication_password(CheckAuthenticationPassword::builder()
         .password(thelp::typed_with_message(format!("{} {}", "Please type your telegram password:", "(If you copy log to anywhere, don't forget hide your password)".red())))
         .build())
         .unwrap();
@@ -103,11 +105,11 @@ fn main() {
     state.on_wait_registration(|_| {
       thelp::tip("Welcome to use telegram");
       thelp::tip("Your phone number is not registered to telegram, please type your name. and register.");
-      tgfn::type_and_register(api);
+      tgfn::type_and_register(&api);
     });
     state.on_wait_code(|_astat| {
       thelp::tip("Please type authentication code:");
-      tgfn::type_authentication_code(api);
+      tgfn::type_authentication_code(&api);
     });
 
     state.on_ready(|_| {
@@ -154,12 +156,12 @@ fn main() {
       400 => {
         match &message[..] {
           "PHONE_NUMBER_INVALID" => {
-             thelp::tip(format!("{} {}", "Phone number invalid, please type a right phone number for telegram", "(If you copy log to anywhere, don't forget hide your phone number)".red()));
-             tgfn::type_phone_number(api);
+            thelp::tip(format!("{} {}", "Phone number invalid, please type a right phone number for telegram", "(If you copy log to anywhere, don't forget hide your phone number)".red()));
+            tgfn::type_phone_number(api);
           }
           "PHONE_CODE_INVALID" | "PHONE_CODE_EMPTY" => {
-             thelp::tip("Phone code invalid, please type an authentication code");
-             tgfn::type_authentication_code(api);
+            thelp::tip("Phone code invalid, please type an authentication code");
+            tgfn::type_authentication_code(api);
           }
           _ => {}
         }
@@ -211,65 +213,10 @@ fn main() {
     if message.is_outgoing() {
       return Ok(());
     }
-    let content = message.content();
-    content.on_message_text(|m| {
-      if message.chat_id() != 102993 {
-        return;
-      }
-      // Send origin message
-      api.send_message(SendMessage::builder()
-        .chat_id(message.chat_id())
-        .input_message_content(InputMessageContent::input_message_text(InputMessageText::builder()
-          .text(FormattedText::builder().text(m.text().text()).build())
-          .clear_draft(true)
-          .build()))
-        .build())
-        .unwrap();
-      debug!("Receive text message => {} <= entities => {:?}", m.text().text(), m.text().entities());
-    });
-    content.on_message_video(|m| {
-      debug!("Receive video message");
-      let v = m.video();
-      let f = v.video();
-      let remote_file = f.remote();
-
-      let _size = remote_file.uploaded_size();
-
-      api.get_remote_file(GetRemoteFile::builder()
-        .remote_file_id(remote_file.id())
-        .file_type(FileType::video(FileTypeVideo::builder()))
-        .build())
-        .unwrap();
-      debug!("video remote id => {:?}", remote_file.id());
-
-      debug!("video local path => {:?}", f.local().path());
-    });
+    let api = api.event_api();
+    let chat_id = message.chat_id();
+    api.get_chat(GetChat::builder().chat_id(chat_id).build())?;
     debug!("Receive new message, from: '{:?}', data: {}", message.sender(), message.to_json().expect("Can't serialize json"));
-    Ok(())
-  });
-
-  listener.on_update_chat_read_inbox(|(_api, update)| {
-    debug!("Read inbox unread_count: {}, chat_id: {}, last_read_inbox_message_id: {}",
-      update.unread_count(),
-      update.chat_id(),
-      update.last_read_inbox_message_id(),
-    );
-    Ok(())
-  });
-
-  listener.on_update_chat_last_message(|(_api, update)| {
-    debug!("Chat last message: {}, data: {}",
-      update.chat_id(),
-      update.last_message().clone().map_or("None".to_string(), |v| v.to_json().expect("Can't serialize json"))
-    );
-    Ok(())
-  });
-
-  listener.on_update_chat_read_outbox(|(_api, update)| {
-    debug!("Read outbox chat_id: {}, last_read_outbox_message_id: {}",
-      update.chat_id(),
-      update.last_read_outbox_message_id(),
-    );
     Ok(())
   });
 
@@ -291,6 +238,7 @@ fn main() {
   });
 
   listener.on_update_file(|(api, update)| {
+    let api = api.event_api();
     debug!("Receive a file => {}", update.to_json().expect("Can't serialize json"));
     let file = update.file();
     let _size = file.size();

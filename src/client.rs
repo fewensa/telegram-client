@@ -117,9 +117,13 @@ impl Client {
   /// client.start();
   /// ```
   pub fn start(&self) -> JoinHandle<()> {
-    let lout = self.listener.lout();
     let tdrecv = TdRecv::new();
-    tdrecv.start(Arc::new(self.api.clone()), self.stop_flag.clone(), Arc::new(lout), Arc::new(self.warn_unregister_listener))
+    tdrecv.start(
+      Arc::new(self.api.clone()),
+      self.stop_flag.clone(),
+      &self.listener,
+      Arc::new(self.warn_unregister_listener)
+    )
   }
 
   /// Start a daemon Client.

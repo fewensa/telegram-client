@@ -1,7 +1,8 @@
+use std::{error, fmt};
 use std::any::Any;
-
-use std::{fmt, error};
 use std::fmt::Debug;
+
+use rtdlib::errors::RTDError;
 
 pub trait TGDatable: Debug {
   fn as_any(&self) -> &dyn Any;
@@ -17,7 +18,6 @@ pub struct TGError {
 
 pub type TGResult<T> = Result<T, TGError>;
 
-
 impl TGError {
   pub fn new(key: &'static str) -> Self {
     Self {
@@ -27,13 +27,20 @@ impl TGError {
       context: None
     }
   }
+  pub fn custom(message: impl AsRef<str>) -> Self {
+    let mut error = Self::new("CUSTOM_ERROR");
+    error.set_message(message.as_ref());
+    error
+  }
+}
 
+impl TGError {
   pub fn set_key(&mut self, key: &'static str) -> &mut Self {
     self.key = key;
     self
   }
 
-  pub fn set_message<S: AsRef<str>>(&mut self, message: S) -> &mut Self {
+  pub fn set_message(&mut self, message: impl AsRef<str>) -> &mut Self {
     self.message = Some(message.as_ref().to_string());
     self
   }
@@ -64,6 +71,15 @@ impl fmt::Display for TGError {
 impl error::Error for TGError {
   fn cause(&self) -> Option<&dyn error::Error> {
     None
+  }
+}
+
+impl From<RTDError> for TGError {
+  fn from(err: RTDError) -> Self {
+    let mut tgerr = Self::new("RTDLIB_ERROR");
+    tgerr.set_message(err.to_string());
+    tgerr.set_context(Box::new(err));
+    tgerr
   }
 }
 
