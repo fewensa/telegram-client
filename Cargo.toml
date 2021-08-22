@@ -1,6 +1,6 @@
 [package]
 name = "telegram-client"
-version = "1.6.3"
+version = "1.6.6"
 authors = ["fewensa <fewensa@protonmail.com>"]
 description = "Telegram client"
 homepage = "https://github.com/fewensa/telegram-client"
@@ -20,7 +20,7 @@ edition = "2018"
 build = "build.rs"
 
 [dependencies]
-rtdlib = { version = "=1.6.5", features = [ "sys" ] }
+rtdlib = { version = "=1.6.6", features = [ "sys" ] }
 #rtdlib = { path = "../rtdlib", features = [ "sys" ] }
 #rtdlib = { git = "https://github.com/fewensa/rtdlib.git", features = [ "sys" ] }
 
