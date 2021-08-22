@@ -1,23 +1,25 @@
+use futures::StreamExt;
+use rtdlib::errors::{RTDError, RTDResult};
+use rtdlib::types::*;
+
 use crate::api::Api;
 use crate::observer;
-use rtdlib::types::*;
-use rtdlib::errors::{RTDResult, RTDError};
-use futures::StreamExt;
 
 macro_rules! async_caller {
   ($td_type:ident) => {
     async fn async_caller<Fnc: RFunction>(api: &Api, fnc: Fnc) -> RTDResult<$td_type> {
       let extra = fnc.extra()
-        .ok_or(RTDError::Custom("invalid libtd response type, not have `extra` field"))?;
+        .ok_or(RTDError::Custom("invalid tdjson response type, not have `extra` field".to_string()))?;
       let mut rec = observer::subscribe(&extra);
       api.send(&fnc)?;
       let val = rec.next().await;
       observer::unsubscribe(&extra);
+      if let Some(TdType::Error(v)) = val {
+        return Err(RTDError::custom(format!("[{}] {}", v.code(), v.message())));
+      }
       match val {
         Some(TdType::$td_type(v)) => { Ok(v) }
-        // Some(TdType::Error(v)) => { Err(RTDError::Custom(v.message())) }
-        Some(TdType::Error(v)) => { Err(RTDError::custom("todo: real error message")) }
-        _ => { Err(RTDError::custom("invalid libtd response type, unexpected `extra` field")) }
+        _ => { Err(RTDError::custom("invalid tdjson response type, unexpected `extra` field".to_string())) }
       }
     }
   }
