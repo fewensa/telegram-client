@@ -1,6 +1,14 @@
 CHANGELOG
 ===
 
+## 2022/08
+
+### fixes
+
+https://github.com/fewensa/telegram-client/issues/25
+https://github.com/fewensa/telegram-client/issues/24
+https://github.com/fewensa/telegram-client/issues/23
+
 ## 2021/02
 
 ### Async support

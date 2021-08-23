@@ -1,0 +1,26 @@
+name: Publish
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build and Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Package
+        run: cargo package
+
+      - name: Publish
+        run: |
+          cargo login $TOKEN_CRATES_IO
+          cargo publish
