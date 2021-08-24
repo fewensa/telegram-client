@@ -14,9 +14,38 @@ This crate use [td](https://github.com/tdlib/td) to call telegram client api. su
 telegram-client = "1.7.*"
 ```
 
-### version
+## version
 
-The more informations you can read [Version mapping](https://github.com/fewensa/telegram-client/wiki/Version-mapping)
+### td and rtdlib/telegram-client
+
+Version mapping
+
+| telegram-client    | td      |
+|--------------------|---------|
+| 0.*                | master  |
+| 1.3.*              | 1.3.*   |
+| 1.4.*              | 1.4.*   |
+| 1.5.*              | 1.5.*   |
+| 1.6.*              | 1.6.*   |
+| 1.7.*              | 1.7.*   |
+
+
+### telegram-client and rtdlib
+
+A fixed version is recommended, you can read [Comparison requirements](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#comparison-requirements) about the fixed version.
+Because of cargo's dependency mechanism, if you don't specify a specific version, it will be automatically upgraded, but there is usually a dependency between t and a, and the new version cannot be applied.
+The current dependencies are as follows:
+
+
+| telegram-client    | rtdlib  |
+|--------------------|---------|
+| =1.3.7             | =1.3.7  |
+| =1.4.6             | =1.4.6  |
+| =1.5.5             | =1.5.5  |
+| =1.6.6             | =1.6.6  |
+| =1.7.0             | =1.7.0  |
+| =1.7.1             | =1.7.1  |
+
 
 ## Note
 
