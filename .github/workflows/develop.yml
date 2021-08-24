@@ -1,0 +1,22 @@
+name: Develop
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Run build
+        run: cargo build
+
+# todo: test
+#      - name: Run tests
+#        run: cargo test
