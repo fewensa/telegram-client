@@ -22,5 +22,5 @@ jobs:
 
       - name: Publish
         run: |
-          cargo login $TOKEN_CRATES_IO
+          cargo login ${{ secrets.TOKEN_CRATES_IO }}
           cargo publish
