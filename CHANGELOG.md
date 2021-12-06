@@ -1,6 +1,20 @@
 CHANGELOG
 ===
 
+## 2022/12
+
+### fixes
+
+https://github.com/fewensa/telegram-client/issues/29
+
+### outdated
+
+v1.3.x
+v1.4.x
+v1.5.x
+v1.6.x
+v1.7.x
+
 ## 2022/08
 
 ### fixes
