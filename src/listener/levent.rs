@@ -14,6 +14,7 @@ pub struct EventListener {
 
   test_use_update: Option<Arc<dyn Fn((&Api, &TestUseUpdate)) -> TGResult<()> + Send + Sync + 'static>>,
   update_active_notifications: Option<Arc<dyn Fn((&Api, &UpdateActiveNotifications)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_animated_emoji_message_clicked: Option<Arc<dyn Fn((&Api, &UpdateAnimatedEmojiMessageClicked)) -> TGResult<()> + Send + Sync + 'static>>,
   update_animation_search_parameters: Option<Arc<dyn Fn((&Api, &UpdateAnimationSearchParameters)) -> TGResult<()> + Send + Sync + 'static>>,
   update_authorization_state: Option<Arc<dyn Fn((&Api, &UpdateAuthorizationState)) -> TGResult<()> + Send + Sync + 'static>>,
   update_basic_group: Option<Arc<dyn Fn((&Api, &UpdateBasicGroup)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -31,15 +32,18 @@ pub struct EventListener {
   update_chat_message_ttl_setting: Option<Arc<dyn Fn((&Api, &UpdateChatMessageTtlSetting)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_notification_settings: Option<Arc<dyn Fn((&Api, &UpdateChatNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_online_member_count: Option<Arc<dyn Fn((&Api, &UpdateChatOnlineMemberCount)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_chat_pending_join_requests: Option<Arc<dyn Fn((&Api, &UpdateChatPendingJoinRequests)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_permissions: Option<Arc<dyn Fn((&Api, &UpdateChatPermissions)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_photo: Option<Arc<dyn Fn((&Api, &UpdateChatPhoto)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_position: Option<Arc<dyn Fn((&Api, &UpdateChatPosition)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_read_inbox: Option<Arc<dyn Fn((&Api, &UpdateChatReadInbox)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_read_outbox: Option<Arc<dyn Fn((&Api, &UpdateChatReadOutbox)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_reply_markup: Option<Arc<dyn Fn((&Api, &UpdateChatReplyMarkup)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_chat_theme: Option<Arc<dyn Fn((&Api, &UpdateChatTheme)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_chat_themes: Option<Arc<dyn Fn((&Api, &UpdateChatThemes)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_title: Option<Arc<dyn Fn((&Api, &UpdateChatTitle)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_unread_mention_count: Option<Arc<dyn Fn((&Api, &UpdateChatUnreadMentionCount)) -> TGResult<()> + Send + Sync + 'static>>,
-  update_chat_voice_chat: Option<Arc<dyn Fn((&Api, &UpdateChatVoiceChat)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_chat_video_chat: Option<Arc<dyn Fn((&Api, &UpdateChatVideoChat)) -> TGResult<()> + Send + Sync + 'static>>,
   update_connection_state: Option<Arc<dyn Fn((&Api, &UpdateConnectionState)) -> TGResult<()> + Send + Sync + 'static>>,
   update_delete_messages: Option<Arc<dyn Fn((&Api, &UpdateDeleteMessages)) -> TGResult<()> + Send + Sync + 'static>>,
   update_dice_emojis: Option<Arc<dyn Fn((&Api, &UpdateDiceEmojis)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -65,6 +69,7 @@ pub struct EventListener {
   update_new_call_signaling_data: Option<Arc<dyn Fn((&Api, &UpdateNewCallSignalingData)) -> TGResult<()> + Send + Sync + 'static>>,
   update_new_callback_query: Option<Arc<dyn Fn((&Api, &UpdateNewCallbackQuery)) -> TGResult<()> + Send + Sync + 'static>>,
   update_new_chat: Option<Arc<dyn Fn((&Api, &UpdateNewChat)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_new_chat_join_request: Option<Arc<dyn Fn((&Api, &UpdateNewChatJoinRequest)) -> TGResult<()> + Send + Sync + 'static>>,
   update_new_chosen_inline_result: Option<Arc<dyn Fn((&Api, &UpdateNewChosenInlineResult)) -> TGResult<()> + Send + Sync + 'static>>,
   update_new_custom_event: Option<Arc<dyn Fn((&Api, &UpdateNewCustomEvent)) -> TGResult<()> + Send + Sync + 'static>>,
   update_new_custom_query: Option<Arc<dyn Fn((&Api, &UpdateNewCustomQuery)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -117,6 +122,7 @@ pub struct EventListener {
   statistical_graph: Option<Arc<dyn Fn((&Api, &StatisticalGraph)) -> TGResult<()> + Send + Sync + 'static>>,
   update: Option<Arc<dyn Fn((&Api, &Update)) -> TGResult<()> + Send + Sync + 'static>>,
   account_ttl: Option<Arc<dyn Fn((&Api, &AccountTtl)) -> TGResult<()> + Send + Sync + 'static>>,
+  animated_emoji: Option<Arc<dyn Fn((&Api, &AnimatedEmoji)) -> TGResult<()> + Send + Sync + 'static>>,
   animations: Option<Arc<dyn Fn((&Api, &Animations)) -> TGResult<()> + Send + Sync + 'static>>,
   authentication_code_info: Option<Arc<dyn Fn((&Api, &AuthenticationCodeInfo)) -> TGResult<()> + Send + Sync + 'static>>,
   auto_download_settings_presets: Option<Arc<dyn Fn((&Api, &AutoDownloadSettingsPresets)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -138,6 +144,7 @@ pub struct EventListener {
   chat_invite_link_info: Option<Arc<dyn Fn((&Api, &ChatInviteLinkInfo)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_invite_link_members: Option<Arc<dyn Fn((&Api, &ChatInviteLinkMembers)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_invite_links: Option<Arc<dyn Fn((&Api, &ChatInviteLinks)) -> TGResult<()> + Send + Sync + 'static>>,
+  chat_join_requests: Option<Arc<dyn Fn((&Api, &ChatJoinRequests)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_lists: Option<Arc<dyn Fn((&Api, &ChatLists)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_member: Option<Arc<dyn Fn((&Api, &ChatMember)) -> TGResult<()> + Send + Sync + 'static>>,
   chat_members: Option<Arc<dyn Fn((&Api, &ChatMembers)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -170,8 +177,10 @@ pub struct EventListener {
   log_tags: Option<Arc<dyn Fn((&Api, &LogTags)) -> TGResult<()> + Send + Sync + 'static>>,
   log_verbosity_level: Option<Arc<dyn Fn((&Api, &LogVerbosityLevel)) -> TGResult<()> + Send + Sync + 'static>>,
   message: Option<Arc<dyn Fn((&Api, &Message)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_calendar: Option<Arc<dyn Fn((&Api, &MessageCalendar)) -> TGResult<()> + Send + Sync + 'static>>,
   message_link: Option<Arc<dyn Fn((&Api, &MessageLink)) -> TGResult<()> + Send + Sync + 'static>>,
   message_link_info: Option<Arc<dyn Fn((&Api, &MessageLinkInfo)) -> TGResult<()> + Send + Sync + 'static>>,
+  message_positions: Option<Arc<dyn Fn((&Api, &MessagePositions)) -> TGResult<()> + Send + Sync + 'static>>,
   message_senders: Option<Arc<dyn Fn((&Api, &MessageSenders)) -> TGResult<()> + Send + Sync + 'static>>,
   message_statistics: Option<Arc<dyn Fn((&Api, &MessageStatistics)) -> TGResult<()> + Send + Sync + 'static>>,
   message_thread_info: Option<Arc<dyn Fn((&Api, &MessageThreadInfo)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -197,6 +206,8 @@ pub struct EventListener {
   secret_chat: Option<Arc<dyn Fn((&Api, &SecretChat)) -> TGResult<()> + Send + Sync + 'static>>,
   session: Option<Arc<dyn Fn((&Api, &Session)) -> TGResult<()> + Send + Sync + 'static>>,
   sessions: Option<Arc<dyn Fn((&Api, &Sessions)) -> TGResult<()> + Send + Sync + 'static>>,
+  sponsored_messages: Option<Arc<dyn Fn((&Api, &SponsoredMessages)) -> TGResult<()> + Send + Sync + 'static>>,
+  sticker: Option<Arc<dyn Fn((&Api, &Sticker)) -> TGResult<()> + Send + Sync + 'static>>,
   sticker_set: Option<Arc<dyn Fn((&Api, &StickerSet)) -> TGResult<()> + Send + Sync + 'static>>,
   sticker_sets: Option<Arc<dyn Fn((&Api, &StickerSets)) -> TGResult<()> + Send + Sync + 'static>>,
   stickers: Option<Arc<dyn Fn((&Api, &Stickers)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -267,6 +278,13 @@ impl EventListener {
     self
   }
 
+  /// Some animated emoji message was clicked and a big animated sticker must be played if the message is visible on the screen. chatActionWatchingAnimations with the text of the message needs to be sent if the sticker is played
+  pub fn on_update_animated_emoji_message_clicked<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateAnimatedEmojiMessageClicked)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_animated_emoji_message_clicked = Some(Arc::new(fnc));
+    self
+  }
+
   /// The parameters of animation search through GetOption("animation_search_bot_username") bot has changed
   pub fn on_update_animation_search_parameters<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateAnimationSearchParameters)) -> TGResult<()> + Send + Sync + 'static {
@@ -316,7 +334,7 @@ impl EventListener {
     self
   }
 
-  /// A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update shouldn't be applied
+  /// A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update mustn't be applied
   pub fn on_update_chat_draft_message<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static {
     self.update_chat_draft_message = Some(Arc::new(fnc));
@@ -386,6 +404,13 @@ impl EventListener {
     self
   }
 
+  /// The chat pending join requests were changed
+  pub fn on_update_chat_pending_join_requests<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateChatPendingJoinRequests)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_chat_pending_join_requests = Some(Arc::new(fnc));
+    self
+  }
+
   /// Chat permissions was changed
   pub fn on_update_chat_permissions<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateChatPermissions)) -> TGResult<()> + Send + Sync + 'static {
@@ -407,7 +432,7 @@ impl EventListener {
     self
   }
 
-  /// Incoming messages were read or number of unread messages has been changed
+  /// Incoming messages were read or the number of unread messages has been changed
   pub fn on_update_chat_read_inbox<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateChatReadInbox)) -> TGResult<()> + Send + Sync + 'static {
     self.update_chat_read_inbox = Some(Arc::new(fnc));
@@ -428,6 +453,20 @@ impl EventListener {
     self
   }
 
+  /// The chat theme was changed
+  pub fn on_update_chat_theme<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateChatTheme)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_chat_theme = Some(Arc::new(fnc));
+    self
+  }
+
+  /// The list of available chat themes has changed
+  pub fn on_update_chat_themes<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateChatThemes)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_chat_themes = Some(Arc::new(fnc));
+    self
+  }
+
   /// The title of a chat was changed
   pub fn on_update_chat_title<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateChatTitle)) -> TGResult<()> + Send + Sync + 'static {
@@ -442,10 +481,10 @@ impl EventListener {
     self
   }
 
-  /// A chat voice chat state has changed
-  pub fn on_update_chat_voice_chat<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&Api, &UpdateChatVoiceChat)) -> TGResult<()> + Send + Sync + 'static {
-    self.update_chat_voice_chat = Some(Arc::new(fnc));
+  /// A chat video chat state has changed
+  pub fn on_update_chat_video_chat<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateChatVideoChat)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_chat_video_chat = Some(Arc::new(fnc));
     self
   }
 
@@ -624,6 +663,13 @@ impl EventListener {
     self
   }
 
+  /// A user sent a join request to a chat; for bots only
+  pub fn on_update_new_chat_join_request<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateNewChatJoinRequest)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_new_chat_join_request = Some(Arc::new(fnc));
+    self
+  }
+
   /// The user has chosen a result of an inline query; for bots only
   pub fn on_update_new_chosen_inline_result<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateNewChosenInlineResult)) -> TGResult<()> + Send + Sync + 'static {
@@ -785,7 +831,7 @@ impl EventListener {
     self
   }
 
-  /// New terms of service must be accepted by the user. If the terms of service are declined, then the deleteAccount method should be called with the reason "Decline ToS update"
+  /// New terms of service must be accepted by the user. If the terms of service are declined, then the deleteAccount method must be called with the reason "Decline ToS update"
   pub fn on_update_terms_of_service<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateTermsOfService)) -> TGResult<()> + Send + Sync + 'static {
     self.update_terms_of_service = Some(Arc::new(fnc));
@@ -976,6 +1022,13 @@ impl EventListener {
     self
   }
 
+  /// Describes an animated representation of an emoji
+  pub fn on_animated_emoji<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &AnimatedEmoji)) -> TGResult<()> + Send + Sync + 'static {
+    self.animated_emoji = Some(Arc::new(fnc));
+    self
+  }
+
   /// Represents a list of animations
   pub fn on_animations<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &Animations)) -> TGResult<()> + Send + Sync + 'static {
@@ -990,7 +1043,7 @@ impl EventListener {
     self
   }
 
-  /// Contains auto-download settings presets for the user
+  /// Contains auto-download settings presets for the current user
   pub fn on_auto_download_settings_presets<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &AutoDownloadSettingsPresets)) -> TGResult<()> + Send + Sync + 'static {
     self.auto_download_settings_presets = Some(Arc::new(fnc));
@@ -1123,6 +1176,13 @@ impl EventListener {
     self
   }
 
+  /// Contains a list of chat join requests
+  pub fn on_chat_join_requests<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &ChatJoinRequests)) -> TGResult<()> + Send + Sync + 'static {
+    self.chat_join_requests = Some(Arc::new(fnc));
+    self
+  }
+
   /// Contains a list of chat lists
   pub fn on_chat_lists<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &ChatLists)) -> TGResult<()> + Send + Sync + 'static {
@@ -1130,7 +1190,7 @@ impl EventListener {
     self
   }
 
-  /// Information about a user or a chat as a member of another chat
+  /// Describes a user or a chat as a member of another chat
   pub fn on_chat_member<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &ChatMember)) -> TGResult<()> + Send + Sync + 'static {
     self.chat_member = Some(Arc::new(fnc));
@@ -1347,6 +1407,13 @@ impl EventListener {
     self
   }
 
+  /// Contains information about found messages, splitted by days according to the option "utc_time_offset"
+  pub fn on_message_calendar<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &MessageCalendar)) -> TGResult<()> + Send + Sync + 'static {
+    self.message_calendar = Some(Arc::new(fnc));
+    self
+  }
+
   /// Contains an HTTPS link to a message in a supergroup or channel
   pub fn on_message_link<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &MessageLink)) -> TGResult<()> + Send + Sync + 'static {
@@ -1358,6 +1425,13 @@ impl EventListener {
   pub fn on_message_link_info<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &MessageLinkInfo)) -> TGResult<()> + Send + Sync + 'static {
     self.message_link_info = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Contains a list of message positions
+  pub fn on_message_positions<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &MessagePositions)) -> TGResult<()> + Send + Sync + 'static {
+    self.message_positions = Some(Arc::new(fnc));
     self
   }
 
@@ -1522,7 +1596,7 @@ impl EventListener {
     self
   }
 
-  /// Contains information about one session in a Telegram application used by the current user. Sessions should be shown to the user in the returned order
+  /// Contains information about one session in a Telegram application used by the current user. Sessions must be shown to the user in the returned order
   pub fn on_session<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &Session)) -> TGResult<()> + Send + Sync + 'static {
     self.session = Some(Arc::new(fnc));
@@ -1533,6 +1607,20 @@ impl EventListener {
   pub fn on_sessions<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &Sessions)) -> TGResult<()> + Send + Sync + 'static {
     self.sessions = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Contains a list of sponsored messages
+  pub fn on_sponsored_messages<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &SponsoredMessages)) -> TGResult<()> + Send + Sync + 'static {
+    self.sponsored_messages = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Describes a sticker
+  pub fn on_sticker<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &Sticker)) -> TGResult<()> + Send + Sync + 'static {
+    self.sticker = Some(Arc::new(fnc));
     self
   }
 
@@ -1735,6 +1823,7 @@ impl EventLout {
 
       "testUseUpdate",
       "updateActiveNotifications",
+      "updateAnimatedEmojiMessageClicked",
       "updateAnimationSearchParameters",
       "updateAuthorizationState",
       "updateBasicGroup",
@@ -1752,15 +1841,18 @@ impl EventLout {
       "updateChatMessageTtlSetting",
       "updateChatNotificationSettings",
       "updateChatOnlineMemberCount",
+      "updateChatPendingJoinRequests",
       "updateChatPermissions",
       "updateChatPhoto",
       "updateChatPosition",
       "updateChatReadInbox",
       "updateChatReadOutbox",
       "updateChatReplyMarkup",
+      "updateChatTheme",
+      "updateChatThemes",
       "updateChatTitle",
       "updateChatUnreadMentionCount",
-      "updateChatVoiceChat",
+      "updateChatVideoChat",
       "updateConnectionState",
       "updateDeleteMessages",
       "updateDiceEmojis",
@@ -1786,6 +1878,7 @@ impl EventLout {
       "updateNewCallSignalingData",
       "updateNewCallbackQuery",
       "updateNewChat",
+      "updateNewChatJoinRequest",
       "updateNewChosenInlineResult",
       "updateNewCustomEvent",
       "updateNewCustomQuery",
@@ -1838,6 +1931,7 @@ impl EventLout {
       "StatisticalGraph",
       "Update",
       "accountTtl",
+      "animatedEmoji",
       "animations",
       "authenticationCodeInfo",
       "autoDownloadSettingsPresets",
@@ -1859,6 +1953,7 @@ impl EventLout {
       "chatInviteLinkInfo",
       "chatInviteLinkMembers",
       "chatInviteLinks",
+      "chatJoinRequests",
       "chatLists",
       "chatMember",
       "chatMembers",
@@ -1891,8 +1986,10 @@ impl EventLout {
       "logTags",
       "logVerbosityLevel",
       "message",
+      "messageCalendar",
       "messageLink",
       "messageLinkInfo",
+      "messagePositions",
       "messageSenders",
       "messageStatistics",
       "messageThreadInfo",
@@ -1918,6 +2015,8 @@ impl EventLout {
       "secretChat",
       "session",
       "sessions",
+      "sponsoredMessages",
+      "sticker",
       "stickerSet",
       "stickerSets",
       "stickers",
@@ -1966,6 +2065,11 @@ impl EventLout {
     },
 
     TdType::UpdateActiveNotifications(value) => match &self.listener.update_active_notifications {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::UpdateAnimatedEmojiMessageClicked(value) => match &self.listener.update_animated_emoji_message_clicked {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -2055,6 +2159,11 @@ impl EventLout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::UpdateChatPendingJoinRequests(value) => match &self.listener.update_chat_pending_join_requests {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::UpdateChatPermissions(value) => match &self.listener.update_chat_permissions {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -2085,6 +2194,16 @@ impl EventLout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::UpdateChatTheme(value) => match &self.listener.update_chat_theme {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::UpdateChatThemes(value) => match &self.listener.update_chat_themes {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::UpdateChatTitle(value) => match &self.listener.update_chat_title {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -2095,7 +2214,7 @@ impl EventLout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
-    TdType::UpdateChatVoiceChat(value) => match &self.listener.update_chat_voice_chat {
+    TdType::UpdateChatVideoChat(value) => match &self.listener.update_chat_video_chat {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -2221,6 +2340,11 @@ impl EventLout {
     },
 
     TdType::UpdateNewChat(value) => match &self.listener.update_new_chat {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::UpdateNewChatJoinRequest(value) => match &self.listener.update_new_chat_join_request {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -2476,6 +2600,11 @@ impl EventLout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::AnimatedEmoji(value) => match &self.listener.animated_emoji {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::Animations(value) => match &self.listener.animations {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -2577,6 +2706,11 @@ impl EventLout {
     },
 
     TdType::ChatInviteLinks(value) => match &self.listener.chat_invite_links {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::ChatJoinRequests(value) => match &self.listener.chat_join_requests {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -2741,12 +2875,22 @@ impl EventLout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::MessageCalendar(value) => match &self.listener.message_calendar {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::MessageLink(value) => match &self.listener.message_link {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
 
     TdType::MessageLinkInfo(value) => match &self.listener.message_link_info {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::MessagePositions(value) => match &self.listener.message_positions {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -2872,6 +3016,16 @@ impl EventLout {
     },
 
     TdType::Sessions(value) => match &self.listener.sessions {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::SponsoredMessages(value) => match &self.listener.sponsored_messages {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::Sticker(value) => match &self.listener.sticker {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -3034,6 +3188,11 @@ impl EventLout {
     &self.listener.update_active_notifications
   }
 
+  /// Some animated emoji message was clicked and a big animated sticker must be played if the message is visible on the screen. chatActionWatchingAnimations with the text of the message needs to be sent if the sticker is played
+  pub fn update_animated_emoji_message_clicked(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateAnimatedEmojiMessageClicked)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_animated_emoji_message_clicked
+  }
+
   /// The parameters of animation search through GetOption("animation_search_bot_username") bot has changed
   pub fn update_animation_search_parameters(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateAnimationSearchParameters)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_animation_search_parameters
@@ -3069,7 +3228,7 @@ impl EventLout {
     &self.listener.update_chat_default_disable_notification
   }
 
-  /// A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update shouldn't be applied
+  /// A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update mustn't be applied
   pub fn update_chat_draft_message(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_chat_draft_message
   }
@@ -3119,6 +3278,11 @@ impl EventLout {
     &self.listener.update_chat_online_member_count
   }
 
+  /// The chat pending join requests were changed
+  pub fn update_chat_pending_join_requests(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatPendingJoinRequests)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_chat_pending_join_requests
+  }
+
   /// Chat permissions was changed
   pub fn update_chat_permissions(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatPermissions)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_chat_permissions
@@ -3134,7 +3298,7 @@ impl EventLout {
     &self.listener.update_chat_position
   }
 
-  /// Incoming messages were read or number of unread messages has been changed
+  /// Incoming messages were read or the number of unread messages has been changed
   pub fn update_chat_read_inbox(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatReadInbox)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_chat_read_inbox
   }
@@ -3149,6 +3313,16 @@ impl EventLout {
     &self.listener.update_chat_reply_markup
   }
 
+  /// The chat theme was changed
+  pub fn update_chat_theme(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatTheme)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_chat_theme
+  }
+
+  /// The list of available chat themes has changed
+  pub fn update_chat_themes(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatThemes)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_chat_themes
+  }
+
   /// The title of a chat was changed
   pub fn update_chat_title(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatTitle)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_chat_title
@@ -3159,9 +3333,9 @@ impl EventLout {
     &self.listener.update_chat_unread_mention_count
   }
 
-  /// A chat voice chat state has changed
-  pub fn update_chat_voice_chat(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatVoiceChat)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.update_chat_voice_chat
+  /// A chat video chat state has changed
+  pub fn update_chat_video_chat(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatVideoChat)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_chat_video_chat
   }
 
   /// The connection state has changed. This update must be used only to show a human-readable description of the connection state
@@ -3289,6 +3463,11 @@ impl EventLout {
     &self.listener.update_new_chat
   }
 
+  /// A user sent a join request to a chat; for bots only
+  pub fn update_new_chat_join_request(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateNewChatJoinRequest)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_new_chat_join_request
+  }
+
   /// The user has chosen a result of an inline query; for bots only
   pub fn update_new_chosen_inline_result(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateNewChosenInlineResult)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_new_chosen_inline_result
@@ -3404,7 +3583,7 @@ impl EventLout {
     &self.listener.update_supergroup_full_info
   }
 
-  /// New terms of service must be accepted by the user. If the terms of service are declined, then the deleteAccount method should be called with the reason "Decline ToS update"
+  /// New terms of service must be accepted by the user. If the terms of service are declined, then the deleteAccount method must be called with the reason "Decline ToS update"
   pub fn update_terms_of_service(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateTermsOfService)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_terms_of_service
   }
@@ -3541,6 +3720,11 @@ impl EventLout {
     &self.listener.account_ttl
   }
 
+  /// Describes an animated representation of an emoji
+  pub fn animated_emoji(&self) -> &Option<Arc<dyn Fn((&Api, &AnimatedEmoji)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.animated_emoji
+  }
+
   /// Represents a list of animations
   pub fn animations(&self) -> &Option<Arc<dyn Fn((&Api, &Animations)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.animations
@@ -3551,7 +3735,7 @@ impl EventLout {
     &self.listener.authentication_code_info
   }
 
-  /// Contains auto-download settings presets for the user
+  /// Contains auto-download settings presets for the current user
   pub fn auto_download_settings_presets(&self) -> &Option<Arc<dyn Fn((&Api, &AutoDownloadSettingsPresets)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.auto_download_settings_presets
   }
@@ -3646,12 +3830,17 @@ impl EventLout {
     &self.listener.chat_invite_links
   }
 
+  /// Contains a list of chat join requests
+  pub fn chat_join_requests(&self) -> &Option<Arc<dyn Fn((&Api, &ChatJoinRequests)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.chat_join_requests
+  }
+
   /// Contains a list of chat lists
   pub fn chat_lists(&self) -> &Option<Arc<dyn Fn((&Api, &ChatLists)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_lists
   }
 
-  /// Information about a user or a chat as a member of another chat
+  /// Describes a user or a chat as a member of another chat
   pub fn chat_member(&self) -> &Option<Arc<dyn Fn((&Api, &ChatMember)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_member
   }
@@ -3806,6 +3995,11 @@ impl EventLout {
     &self.listener.message
   }
 
+  /// Contains information about found messages, splitted by days according to the option "utc_time_offset"
+  pub fn message_calendar(&self) -> &Option<Arc<dyn Fn((&Api, &MessageCalendar)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.message_calendar
+  }
+
   /// Contains an HTTPS link to a message in a supergroup or channel
   pub fn message_link(&self) -> &Option<Arc<dyn Fn((&Api, &MessageLink)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.message_link
@@ -3814,6 +4008,11 @@ impl EventLout {
   /// Contains information about a link to a message in a chat
   pub fn message_link_info(&self) -> &Option<Arc<dyn Fn((&Api, &MessageLinkInfo)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.message_link_info
+  }
+
+  /// Contains a list of message positions
+  pub fn message_positions(&self) -> &Option<Arc<dyn Fn((&Api, &MessagePositions)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.message_positions
   }
 
   /// Represents a list of message senders
@@ -3931,7 +4130,7 @@ impl EventLout {
     &self.listener.secret_chat
   }
 
-  /// Contains information about one session in a Telegram application used by the current user. Sessions should be shown to the user in the returned order
+  /// Contains information about one session in a Telegram application used by the current user. Sessions must be shown to the user in the returned order
   pub fn session(&self) -> &Option<Arc<dyn Fn((&Api, &Session)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.session
   }
@@ -3939,6 +4138,16 @@ impl EventLout {
   /// Contains a list of sessions
   pub fn sessions(&self) -> &Option<Arc<dyn Fn((&Api, &Sessions)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.sessions
+  }
+
+  /// Contains a list of sponsored messages
+  pub fn sponsored_messages(&self) -> &Option<Arc<dyn Fn((&Api, &SponsoredMessages)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.sponsored_messages
+  }
+
+  /// Describes a sticker
+  pub fn sticker(&self) -> &Option<Arc<dyn Fn((&Api, &Sticker)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.sticker
   }
 
   /// Represents a sticker set

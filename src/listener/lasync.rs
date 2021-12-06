@@ -15,6 +15,7 @@ pub struct RasyncListener {
 
   test_use_update: Option<Arc<dyn Send + Sync + Fn((Api, TestUseUpdate)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_active_notifications: Option<Arc<dyn Send + Sync + Fn((Api, UpdateActiveNotifications)) -> LocalBoxFuture<'static, TGResult<()>>>>,
+  update_animated_emoji_message_clicked: Option<Arc<dyn Send + Sync + Fn((Api, UpdateAnimatedEmojiMessageClicked)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_animation_search_parameters: Option<Arc<dyn Send + Sync + Fn((Api, UpdateAnimationSearchParameters)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_authorization_state: Option<Arc<dyn Send + Sync + Fn((Api, UpdateAuthorizationState)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_basic_group: Option<Arc<dyn Send + Sync + Fn((Api, UpdateBasicGroup)) -> LocalBoxFuture<'static, TGResult<()>>>>,
@@ -32,15 +33,18 @@ pub struct RasyncListener {
   update_chat_message_ttl_setting: Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatMessageTtlSetting)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_chat_notification_settings: Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatNotificationSettings)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_chat_online_member_count: Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatOnlineMemberCount)) -> LocalBoxFuture<'static, TGResult<()>>>>,
+  update_chat_pending_join_requests: Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatPendingJoinRequests)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_chat_permissions: Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatPermissions)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_chat_photo: Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatPhoto)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_chat_position: Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatPosition)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_chat_read_inbox: Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatReadInbox)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_chat_read_outbox: Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatReadOutbox)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_chat_reply_markup: Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatReplyMarkup)) -> LocalBoxFuture<'static, TGResult<()>>>>,
+  update_chat_theme: Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatTheme)) -> LocalBoxFuture<'static, TGResult<()>>>>,
+  update_chat_themes: Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatThemes)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_chat_title: Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatTitle)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_chat_unread_mention_count: Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatUnreadMentionCount)) -> LocalBoxFuture<'static, TGResult<()>>>>,
-  update_chat_voice_chat: Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatVoiceChat)) -> LocalBoxFuture<'static, TGResult<()>>>>,
+  update_chat_video_chat: Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatVideoChat)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_connection_state: Option<Arc<dyn Send + Sync + Fn((Api, UpdateConnectionState)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_delete_messages: Option<Arc<dyn Send + Sync + Fn((Api, UpdateDeleteMessages)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_dice_emojis: Option<Arc<dyn Send + Sync + Fn((Api, UpdateDiceEmojis)) -> LocalBoxFuture<'static, TGResult<()>>>>,
@@ -66,6 +70,7 @@ pub struct RasyncListener {
   update_new_call_signaling_data: Option<Arc<dyn Send + Sync + Fn((Api, UpdateNewCallSignalingData)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_new_callback_query: Option<Arc<dyn Send + Sync + Fn((Api, UpdateNewCallbackQuery)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_new_chat: Option<Arc<dyn Send + Sync + Fn((Api, UpdateNewChat)) -> LocalBoxFuture<'static, TGResult<()>>>>,
+  update_new_chat_join_request: Option<Arc<dyn Send + Sync + Fn((Api, UpdateNewChatJoinRequest)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_new_chosen_inline_result: Option<Arc<dyn Send + Sync + Fn((Api, UpdateNewChosenInlineResult)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_new_custom_event: Option<Arc<dyn Send + Sync + Fn((Api, UpdateNewCustomEvent)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update_new_custom_query: Option<Arc<dyn Send + Sync + Fn((Api, UpdateNewCustomQuery)) -> LocalBoxFuture<'static, TGResult<()>>>>,
@@ -118,6 +123,7 @@ pub struct RasyncListener {
   statistical_graph: Option<Arc<dyn Send + Sync + Fn((Api, StatisticalGraph)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   update: Option<Arc<dyn Send + Sync + Fn((Api, Update)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   account_ttl: Option<Arc<dyn Send + Sync + Fn((Api, AccountTtl)) -> LocalBoxFuture<'static, TGResult<()>>>>,
+  animated_emoji: Option<Arc<dyn Send + Sync + Fn((Api, AnimatedEmoji)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   animations: Option<Arc<dyn Send + Sync + Fn((Api, Animations)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   authentication_code_info: Option<Arc<dyn Send + Sync + Fn((Api, AuthenticationCodeInfo)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   auto_download_settings_presets: Option<Arc<dyn Send + Sync + Fn((Api, AutoDownloadSettingsPresets)) -> LocalBoxFuture<'static, TGResult<()>>>>,
@@ -139,6 +145,7 @@ pub struct RasyncListener {
   chat_invite_link_info: Option<Arc<dyn Send + Sync + Fn((Api, ChatInviteLinkInfo)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   chat_invite_link_members: Option<Arc<dyn Send + Sync + Fn((Api, ChatInviteLinkMembers)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   chat_invite_links: Option<Arc<dyn Send + Sync + Fn((Api, ChatInviteLinks)) -> LocalBoxFuture<'static, TGResult<()>>>>,
+  chat_join_requests: Option<Arc<dyn Send + Sync + Fn((Api, ChatJoinRequests)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   chat_lists: Option<Arc<dyn Send + Sync + Fn((Api, ChatLists)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   chat_member: Option<Arc<dyn Send + Sync + Fn((Api, ChatMember)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   chat_members: Option<Arc<dyn Send + Sync + Fn((Api, ChatMembers)) -> LocalBoxFuture<'static, TGResult<()>>>>,
@@ -171,8 +178,10 @@ pub struct RasyncListener {
   log_tags: Option<Arc<dyn Send + Sync + Fn((Api, LogTags)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   log_verbosity_level: Option<Arc<dyn Send + Sync + Fn((Api, LogVerbosityLevel)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   message: Option<Arc<dyn Send + Sync + Fn((Api, Message)) -> LocalBoxFuture<'static, TGResult<()>>>>,
+  message_calendar: Option<Arc<dyn Send + Sync + Fn((Api, MessageCalendar)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   message_link: Option<Arc<dyn Send + Sync + Fn((Api, MessageLink)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   message_link_info: Option<Arc<dyn Send + Sync + Fn((Api, MessageLinkInfo)) -> LocalBoxFuture<'static, TGResult<()>>>>,
+  message_positions: Option<Arc<dyn Send + Sync + Fn((Api, MessagePositions)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   message_senders: Option<Arc<dyn Send + Sync + Fn((Api, MessageSenders)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   message_statistics: Option<Arc<dyn Send + Sync + Fn((Api, MessageStatistics)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   message_thread_info: Option<Arc<dyn Send + Sync + Fn((Api, MessageThreadInfo)) -> LocalBoxFuture<'static, TGResult<()>>>>,
@@ -198,6 +207,8 @@ pub struct RasyncListener {
   secret_chat: Option<Arc<dyn Send + Sync + Fn((Api, SecretChat)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   session: Option<Arc<dyn Send + Sync + Fn((Api, Session)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   sessions: Option<Arc<dyn Send + Sync + Fn((Api, Sessions)) -> LocalBoxFuture<'static, TGResult<()>>>>,
+  sponsored_messages: Option<Arc<dyn Send + Sync + Fn((Api, SponsoredMessages)) -> LocalBoxFuture<'static, TGResult<()>>>>,
+  sticker: Option<Arc<dyn Send + Sync + Fn((Api, Sticker)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   sticker_set: Option<Arc<dyn Send + Sync + Fn((Api, StickerSet)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   sticker_sets: Option<Arc<dyn Send + Sync + Fn((Api, StickerSets)) -> LocalBoxFuture<'static, TGResult<()>>>>,
   stickers: Option<Arc<dyn Send + Sync + Fn((Api, Stickers)) -> LocalBoxFuture<'static, TGResult<()>>>>,
@@ -268,6 +279,13 @@ impl RasyncListener {
     self
   }
 
+  /// Some animated emoji message was clicked and a big animated sticker must be played if the message is visible on the screen. chatActionWatchingAnimations with the text of the message needs to be sent if the sticker is played
+  pub fn on_update_animated_emoji_message_clicked<F>(&mut self, fnc: F) -> &mut Self
+    where F: Send + Sync + Fn((Api, UpdateAnimatedEmojiMessageClicked)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
+    self.update_animated_emoji_message_clicked = Some(Arc::new(fnc));
+    self
+  }
+
   /// The parameters of animation search through GetOption("animation_search_bot_username") bot has changed
   pub fn on_update_animation_search_parameters<F>(&mut self, fnc: F) -> &mut Self
     where F: Send + Sync + Fn((Api, UpdateAnimationSearchParameters)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
@@ -317,7 +335,7 @@ impl RasyncListener {
     self
   }
 
-  /// A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update shouldn't be applied
+  /// A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update mustn't be applied
   pub fn on_update_chat_draft_message<F>(&mut self, fnc: F) -> &mut Self
     where F: Send + Sync + Fn((Api, UpdateChatDraftMessage)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
     self.update_chat_draft_message = Some(Arc::new(fnc));
@@ -387,6 +405,13 @@ impl RasyncListener {
     self
   }
 
+  /// The chat pending join requests were changed
+  pub fn on_update_chat_pending_join_requests<F>(&mut self, fnc: F) -> &mut Self
+    where F: Send + Sync + Fn((Api, UpdateChatPendingJoinRequests)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
+    self.update_chat_pending_join_requests = Some(Arc::new(fnc));
+    self
+  }
+
   /// Chat permissions was changed
   pub fn on_update_chat_permissions<F>(&mut self, fnc: F) -> &mut Self
     where F: Send + Sync + Fn((Api, UpdateChatPermissions)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
@@ -408,7 +433,7 @@ impl RasyncListener {
     self
   }
 
-  /// Incoming messages were read or number of unread messages has been changed
+  /// Incoming messages were read or the number of unread messages has been changed
   pub fn on_update_chat_read_inbox<F>(&mut self, fnc: F) -> &mut Self
     where F: Send + Sync + Fn((Api, UpdateChatReadInbox)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
     self.update_chat_read_inbox = Some(Arc::new(fnc));
@@ -429,6 +454,20 @@ impl RasyncListener {
     self
   }
 
+  /// The chat theme was changed
+  pub fn on_update_chat_theme<F>(&mut self, fnc: F) -> &mut Self
+    where F: Send + Sync + Fn((Api, UpdateChatTheme)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
+    self.update_chat_theme = Some(Arc::new(fnc));
+    self
+  }
+
+  /// The list of available chat themes has changed
+  pub fn on_update_chat_themes<F>(&mut self, fnc: F) -> &mut Self
+    where F: Send + Sync + Fn((Api, UpdateChatThemes)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
+    self.update_chat_themes = Some(Arc::new(fnc));
+    self
+  }
+
   /// The title of a chat was changed
   pub fn on_update_chat_title<F>(&mut self, fnc: F) -> &mut Self
     where F: Send + Sync + Fn((Api, UpdateChatTitle)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
@@ -443,10 +482,10 @@ impl RasyncListener {
     self
   }
 
-  /// A chat voice chat state has changed
-  pub fn on_update_chat_voice_chat<F>(&mut self, fnc: F) -> &mut Self
-    where F: Send + Sync + Fn((Api, UpdateChatVoiceChat)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
-    self.update_chat_voice_chat = Some(Arc::new(fnc));
+  /// A chat video chat state has changed
+  pub fn on_update_chat_video_chat<F>(&mut self, fnc: F) -> &mut Self
+    where F: Send + Sync + Fn((Api, UpdateChatVideoChat)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
+    self.update_chat_video_chat = Some(Arc::new(fnc));
     self
   }
 
@@ -625,6 +664,13 @@ impl RasyncListener {
     self
   }
 
+  /// A user sent a join request to a chat; for bots only
+  pub fn on_update_new_chat_join_request<F>(&mut self, fnc: F) -> &mut Self
+    where F: Send + Sync + Fn((Api, UpdateNewChatJoinRequest)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
+    self.update_new_chat_join_request = Some(Arc::new(fnc));
+    self
+  }
+
   /// The user has chosen a result of an inline query; for bots only
   pub fn on_update_new_chosen_inline_result<F>(&mut self, fnc: F) -> &mut Self
     where F: Send + Sync + Fn((Api, UpdateNewChosenInlineResult)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
@@ -786,7 +832,7 @@ impl RasyncListener {
     self
   }
 
-  /// New terms of service must be accepted by the user. If the terms of service are declined, then the deleteAccount method should be called with the reason "Decline ToS update"
+  /// New terms of service must be accepted by the user. If the terms of service are declined, then the deleteAccount method must be called with the reason "Decline ToS update"
   pub fn on_update_terms_of_service<F>(&mut self, fnc: F) -> &mut Self
     where F: Send + Sync + Fn((Api, UpdateTermsOfService)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
     self.update_terms_of_service = Some(Arc::new(fnc));
@@ -977,6 +1023,13 @@ impl RasyncListener {
     self
   }
 
+  /// Describes an animated representation of an emoji
+  pub fn on_animated_emoji<F>(&mut self, fnc: F) -> &mut Self
+    where F: Send + Sync + Fn((Api, AnimatedEmoji)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
+    self.animated_emoji = Some(Arc::new(fnc));
+    self
+  }
+
   /// Represents a list of animations
   pub fn on_animations<F>(&mut self, fnc: F) -> &mut Self
     where F: Send + Sync + Fn((Api, Animations)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
@@ -991,7 +1044,7 @@ impl RasyncListener {
     self
   }
 
-  /// Contains auto-download settings presets for the user
+  /// Contains auto-download settings presets for the current user
   pub fn on_auto_download_settings_presets<F>(&mut self, fnc: F) -> &mut Self
     where F: Send + Sync + Fn((Api, AutoDownloadSettingsPresets)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
     self.auto_download_settings_presets = Some(Arc::new(fnc));
@@ -1124,6 +1177,13 @@ impl RasyncListener {
     self
   }
 
+  /// Contains a list of chat join requests
+  pub fn on_chat_join_requests<F>(&mut self, fnc: F) -> &mut Self
+    where F: Send + Sync + Fn((Api, ChatJoinRequests)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
+    self.chat_join_requests = Some(Arc::new(fnc));
+    self
+  }
+
   /// Contains a list of chat lists
   pub fn on_chat_lists<F>(&mut self, fnc: F) -> &mut Self
     where F: Send + Sync + Fn((Api, ChatLists)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
@@ -1131,7 +1191,7 @@ impl RasyncListener {
     self
   }
 
-  /// Information about a user or a chat as a member of another chat
+  /// Describes a user or a chat as a member of another chat
   pub fn on_chat_member<F>(&mut self, fnc: F) -> &mut Self
     where F: Send + Sync + Fn((Api, ChatMember)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
     self.chat_member = Some(Arc::new(fnc));
@@ -1348,6 +1408,13 @@ impl RasyncListener {
     self
   }
 
+  /// Contains information about found messages, splitted by days according to the option "utc_time_offset"
+  pub fn on_message_calendar<F>(&mut self, fnc: F) -> &mut Self
+    where F: Send + Sync + Fn((Api, MessageCalendar)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
+    self.message_calendar = Some(Arc::new(fnc));
+    self
+  }
+
   /// Contains an HTTPS link to a message in a supergroup or channel
   pub fn on_message_link<F>(&mut self, fnc: F) -> &mut Self
     where F: Send + Sync + Fn((Api, MessageLink)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
@@ -1359,6 +1426,13 @@ impl RasyncListener {
   pub fn on_message_link_info<F>(&mut self, fnc: F) -> &mut Self
     where F: Send + Sync + Fn((Api, MessageLinkInfo)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
     self.message_link_info = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Contains a list of message positions
+  pub fn on_message_positions<F>(&mut self, fnc: F) -> &mut Self
+    where F: Send + Sync + Fn((Api, MessagePositions)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
+    self.message_positions = Some(Arc::new(fnc));
     self
   }
 
@@ -1523,7 +1597,7 @@ impl RasyncListener {
     self
   }
 
-  /// Contains information about one session in a Telegram application used by the current user. Sessions should be shown to the user in the returned order
+  /// Contains information about one session in a Telegram application used by the current user. Sessions must be shown to the user in the returned order
   pub fn on_session<F>(&mut self, fnc: F) -> &mut Self
     where F: Send + Sync + Fn((Api, Session)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
     self.session = Some(Arc::new(fnc));
@@ -1534,6 +1608,20 @@ impl RasyncListener {
   pub fn on_sessions<F>(&mut self, fnc: F) -> &mut Self
     where F: Send + Sync + Fn((Api, Sessions)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
     self.sessions = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Contains a list of sponsored messages
+  pub fn on_sponsored_messages<F>(&mut self, fnc: F) -> &mut Self
+    where F: Send + Sync + Fn((Api, SponsoredMessages)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
+    self.sponsored_messages = Some(Arc::new(fnc));
+    self
+  }
+
+  /// Describes a sticker
+  pub fn on_sticker<F>(&mut self, fnc: F) -> &mut Self
+    where F: Send + Sync + Fn((Api, Sticker)) -> LocalBoxFuture<'static, TGResult<()>> + 'static {
+    self.sticker = Some(Arc::new(fnc));
     self
   }
 
@@ -1736,6 +1824,7 @@ impl RasyncLout {
 
       "testUseUpdate",
       "updateActiveNotifications",
+      "updateAnimatedEmojiMessageClicked",
       "updateAnimationSearchParameters",
       "updateAuthorizationState",
       "updateBasicGroup",
@@ -1753,15 +1842,18 @@ impl RasyncLout {
       "updateChatMessageTtlSetting",
       "updateChatNotificationSettings",
       "updateChatOnlineMemberCount",
+      "updateChatPendingJoinRequests",
       "updateChatPermissions",
       "updateChatPhoto",
       "updateChatPosition",
       "updateChatReadInbox",
       "updateChatReadOutbox",
       "updateChatReplyMarkup",
+      "updateChatTheme",
+      "updateChatThemes",
       "updateChatTitle",
       "updateChatUnreadMentionCount",
-      "updateChatVoiceChat",
+      "updateChatVideoChat",
       "updateConnectionState",
       "updateDeleteMessages",
       "updateDiceEmojis",
@@ -1787,6 +1879,7 @@ impl RasyncLout {
       "updateNewCallSignalingData",
       "updateNewCallbackQuery",
       "updateNewChat",
+      "updateNewChatJoinRequest",
       "updateNewChosenInlineResult",
       "updateNewCustomEvent",
       "updateNewCustomQuery",
@@ -1839,6 +1932,7 @@ impl RasyncLout {
       "StatisticalGraph",
       "Update",
       "accountTtl",
+      "animatedEmoji",
       "animations",
       "authenticationCodeInfo",
       "autoDownloadSettingsPresets",
@@ -1860,6 +1954,7 @@ impl RasyncLout {
       "chatInviteLinkInfo",
       "chatInviteLinkMembers",
       "chatInviteLinks",
+      "chatJoinRequests",
       "chatLists",
       "chatMember",
       "chatMembers",
@@ -1892,8 +1987,10 @@ impl RasyncLout {
       "logTags",
       "logVerbosityLevel",
       "message",
+      "messageCalendar",
       "messageLink",
       "messageLinkInfo",
+      "messagePositions",
       "messageSenders",
       "messageStatistics",
       "messageThreadInfo",
@@ -1919,6 +2016,8 @@ impl RasyncLout {
       "secretChat",
       "session",
       "sessions",
+      "sponsoredMessages",
+      "sticker",
       "stickerSet",
       "stickerSets",
       "stickers",
@@ -1967,6 +2066,11 @@ impl RasyncLout {
       },
 
       TdType::UpdateActiveNotifications(value) => match &self.listener.update_active_notifications {
+        None => Ok(false),
+        Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
+      },
+
+      TdType::UpdateAnimatedEmojiMessageClicked(value) => match &self.listener.update_animated_emoji_message_clicked {
         None => Ok(false),
         Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
       },
@@ -2056,6 +2160,11 @@ impl RasyncLout {
         Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
       },
 
+      TdType::UpdateChatPendingJoinRequests(value) => match &self.listener.update_chat_pending_join_requests {
+        None => Ok(false),
+        Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
+      },
+
       TdType::UpdateChatPermissions(value) => match &self.listener.update_chat_permissions {
         None => Ok(false),
         Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
@@ -2086,6 +2195,16 @@ impl RasyncLout {
         Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
       },
 
+      TdType::UpdateChatTheme(value) => match &self.listener.update_chat_theme {
+        None => Ok(false),
+        Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
+      },
+
+      TdType::UpdateChatThemes(value) => match &self.listener.update_chat_themes {
+        None => Ok(false),
+        Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
+      },
+
       TdType::UpdateChatTitle(value) => match &self.listener.update_chat_title {
         None => Ok(false),
         Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
@@ -2096,7 +2215,7 @@ impl RasyncLout {
         Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
       },
 
-      TdType::UpdateChatVoiceChat(value) => match &self.listener.update_chat_voice_chat {
+      TdType::UpdateChatVideoChat(value) => match &self.listener.update_chat_video_chat {
         None => Ok(false),
         Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
       },
@@ -2222,6 +2341,11 @@ impl RasyncLout {
       },
 
       TdType::UpdateNewChat(value) => match &self.listener.update_new_chat {
+        None => Ok(false),
+        Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
+      },
+
+      TdType::UpdateNewChatJoinRequest(value) => match &self.listener.update_new_chat_join_request {
         None => Ok(false),
         Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
       },
@@ -2477,6 +2601,11 @@ impl RasyncLout {
         Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
       },
 
+      TdType::AnimatedEmoji(value) => match &self.listener.animated_emoji {
+        None => Ok(false),
+        Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
+      },
+
       TdType::Animations(value) => match &self.listener.animations {
         None => Ok(false),
         Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
@@ -2578,6 +2707,11 @@ impl RasyncLout {
       },
 
       TdType::ChatInviteLinks(value) => match &self.listener.chat_invite_links {
+        None => Ok(false),
+        Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
+      },
+
+      TdType::ChatJoinRequests(value) => match &self.listener.chat_join_requests {
         None => Ok(false),
         Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
       },
@@ -2742,12 +2876,22 @@ impl RasyncLout {
         Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
       },
 
+      TdType::MessageCalendar(value) => match &self.listener.message_calendar {
+        None => Ok(false),
+        Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
+      },
+
       TdType::MessageLink(value) => match &self.listener.message_link {
         None => Ok(false),
         Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
       },
 
       TdType::MessageLinkInfo(value) => match &self.listener.message_link_info {
+        None => Ok(false),
+        Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
+      },
+
+      TdType::MessagePositions(value) => match &self.listener.message_positions {
         None => Ok(false),
         Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
       },
@@ -2873,6 +3017,16 @@ impl RasyncLout {
       },
 
       TdType::Sessions(value) => match &self.listener.sessions {
+        None => Ok(false),
+        Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
+      },
+
+      TdType::SponsoredMessages(value) => match &self.listener.sponsored_messages {
+        None => Ok(false),
+        Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
+      },
+
+      TdType::Sticker(value) => match &self.listener.sticker {
         None => Ok(false),
         Some(f) => f((api.clone(), value.clone())).await.map(|_| true),
       },
@@ -3035,6 +3189,11 @@ impl RasyncLout {
     &self.listener.update_active_notifications
   }
 
+  /// Some animated emoji message was clicked and a big animated sticker must be played if the message is visible on the screen. chatActionWatchingAnimations with the text of the message needs to be sent if the sticker is played
+  pub fn update_animated_emoji_message_clicked(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, UpdateAnimatedEmojiMessageClicked)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
+    &self.listener.update_animated_emoji_message_clicked
+  }
+
   /// The parameters of animation search through GetOption("animation_search_bot_username") bot has changed
   pub fn update_animation_search_parameters(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, UpdateAnimationSearchParameters)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
     &self.listener.update_animation_search_parameters
@@ -3070,7 +3229,7 @@ impl RasyncLout {
     &self.listener.update_chat_default_disable_notification
   }
 
-  /// A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update shouldn't be applied
+  /// A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update mustn't be applied
   pub fn update_chat_draft_message(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatDraftMessage)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
     &self.listener.update_chat_draft_message
   }
@@ -3120,6 +3279,11 @@ impl RasyncLout {
     &self.listener.update_chat_online_member_count
   }
 
+  /// The chat pending join requests were changed
+  pub fn update_chat_pending_join_requests(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatPendingJoinRequests)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
+    &self.listener.update_chat_pending_join_requests
+  }
+
   /// Chat permissions was changed
   pub fn update_chat_permissions(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatPermissions)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
     &self.listener.update_chat_permissions
@@ -3135,7 +3299,7 @@ impl RasyncLout {
     &self.listener.update_chat_position
   }
 
-  /// Incoming messages were read or number of unread messages has been changed
+  /// Incoming messages were read or the number of unread messages has been changed
   pub fn update_chat_read_inbox(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatReadInbox)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
     &self.listener.update_chat_read_inbox
   }
@@ -3150,6 +3314,16 @@ impl RasyncLout {
     &self.listener.update_chat_reply_markup
   }
 
+  /// The chat theme was changed
+  pub fn update_chat_theme(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatTheme)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
+    &self.listener.update_chat_theme
+  }
+
+  /// The list of available chat themes has changed
+  pub fn update_chat_themes(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatThemes)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
+    &self.listener.update_chat_themes
+  }
+
   /// The title of a chat was changed
   pub fn update_chat_title(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatTitle)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
     &self.listener.update_chat_title
@@ -3160,9 +3334,9 @@ impl RasyncLout {
     &self.listener.update_chat_unread_mention_count
   }
 
-  /// A chat voice chat state has changed
-  pub fn update_chat_voice_chat(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatVoiceChat)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
-    &self.listener.update_chat_voice_chat
+  /// A chat video chat state has changed
+  pub fn update_chat_video_chat(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, UpdateChatVideoChat)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
+    &self.listener.update_chat_video_chat
   }
 
   /// The connection state has changed. This update must be used only to show a human-readable description of the connection state
@@ -3290,6 +3464,11 @@ impl RasyncLout {
     &self.listener.update_new_chat
   }
 
+  /// A user sent a join request to a chat; for bots only
+  pub fn update_new_chat_join_request(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, UpdateNewChatJoinRequest)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
+    &self.listener.update_new_chat_join_request
+  }
+
   /// The user has chosen a result of an inline query; for bots only
   pub fn update_new_chosen_inline_result(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, UpdateNewChosenInlineResult)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
     &self.listener.update_new_chosen_inline_result
@@ -3405,7 +3584,7 @@ impl RasyncLout {
     &self.listener.update_supergroup_full_info
   }
 
-  /// New terms of service must be accepted by the user. If the terms of service are declined, then the deleteAccount method should be called with the reason "Decline ToS update"
+  /// New terms of service must be accepted by the user. If the terms of service are declined, then the deleteAccount method must be called with the reason "Decline ToS update"
   pub fn update_terms_of_service(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, UpdateTermsOfService)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
     &self.listener.update_terms_of_service
   }
@@ -3542,6 +3721,11 @@ impl RasyncLout {
     &self.listener.account_ttl
   }
 
+  /// Describes an animated representation of an emoji
+  pub fn animated_emoji(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, AnimatedEmoji)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
+    &self.listener.animated_emoji
+  }
+
   /// Represents a list of animations
   pub fn animations(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, Animations)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
     &self.listener.animations
@@ -3552,7 +3736,7 @@ impl RasyncLout {
     &self.listener.authentication_code_info
   }
 
-  /// Contains auto-download settings presets for the user
+  /// Contains auto-download settings presets for the current user
   pub fn auto_download_settings_presets(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, AutoDownloadSettingsPresets)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
     &self.listener.auto_download_settings_presets
   }
@@ -3647,12 +3831,17 @@ impl RasyncLout {
     &self.listener.chat_invite_links
   }
 
+  /// Contains a list of chat join requests
+  pub fn chat_join_requests(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, ChatJoinRequests)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
+    &self.listener.chat_join_requests
+  }
+
   /// Contains a list of chat lists
   pub fn chat_lists(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, ChatLists)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
     &self.listener.chat_lists
   }
 
-  /// Information about a user or a chat as a member of another chat
+  /// Describes a user or a chat as a member of another chat
   pub fn chat_member(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, ChatMember)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
     &self.listener.chat_member
   }
@@ -3807,6 +3996,11 @@ impl RasyncLout {
     &self.listener.message
   }
 
+  /// Contains information about found messages, splitted by days according to the option "utc_time_offset"
+  pub fn message_calendar(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, MessageCalendar)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
+    &self.listener.message_calendar
+  }
+
   /// Contains an HTTPS link to a message in a supergroup or channel
   pub fn message_link(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, MessageLink)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
     &self.listener.message_link
@@ -3815,6 +4009,11 @@ impl RasyncLout {
   /// Contains information about a link to a message in a chat
   pub fn message_link_info(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, MessageLinkInfo)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
     &self.listener.message_link_info
+  }
+
+  /// Contains a list of message positions
+  pub fn message_positions(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, MessagePositions)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
+    &self.listener.message_positions
   }
 
   /// Represents a list of message senders
@@ -3932,7 +4131,7 @@ impl RasyncLout {
     &self.listener.secret_chat
   }
 
-  /// Contains information about one session in a Telegram application used by the current user. Sessions should be shown to the user in the returned order
+  /// Contains information about one session in a Telegram application used by the current user. Sessions must be shown to the user in the returned order
   pub fn session(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, Session)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
     &self.listener.session
   }
@@ -3940,6 +4139,16 @@ impl RasyncLout {
   /// Contains a list of sessions
   pub fn sessions(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, Sessions)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
     &self.listener.sessions
+  }
+
+  /// Contains a list of sponsored messages
+  pub fn sponsored_messages(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, SponsoredMessages)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
+    &self.listener.sponsored_messages
+  }
+
+  /// Describes a sticker
+  pub fn sticker(&self) -> &Option<Arc<dyn Send + Sync + Fn((Api, Sticker)) -> LocalBoxFuture<'static, TGResult<()>> + 'static>> {
+    &self.listener.sticker
   }
 
   /// Represents a sticker set

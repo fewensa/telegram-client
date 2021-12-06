@@ -28,6 +28,8 @@ impl Observer {
 
       TdType::UpdateActiveNotifications(value) => value.extra(),
 
+      TdType::UpdateAnimatedEmojiMessageClicked(value) => value.extra(),
+
       TdType::UpdateAnimationSearchParameters(value) => value.extra(),
 
       TdType::UpdateAuthorizationState(value) => value.extra(),
@@ -62,6 +64,8 @@ impl Observer {
 
       TdType::UpdateChatOnlineMemberCount(value) => value.extra(),
 
+      TdType::UpdateChatPendingJoinRequests(value) => value.extra(),
+
       TdType::UpdateChatPermissions(value) => value.extra(),
 
       TdType::UpdateChatPhoto(value) => value.extra(),
@@ -74,11 +78,15 @@ impl Observer {
 
       TdType::UpdateChatReplyMarkup(value) => value.extra(),
 
+      TdType::UpdateChatTheme(value) => value.extra(),
+
+      TdType::UpdateChatThemes(value) => value.extra(),
+
       TdType::UpdateChatTitle(value) => value.extra(),
 
       TdType::UpdateChatUnreadMentionCount(value) => value.extra(),
 
-      TdType::UpdateChatVoiceChat(value) => value.extra(),
+      TdType::UpdateChatVideoChat(value) => value.extra(),
 
       TdType::UpdateConnectionState(value) => value.extra(),
 
@@ -129,6 +137,8 @@ impl Observer {
       TdType::UpdateNewCallbackQuery(value) => value.extra(),
 
       TdType::UpdateNewChat(value) => value.extra(),
+
+      TdType::UpdateNewChatJoinRequest(value) => value.extra(),
 
       TdType::UpdateNewChosenInlineResult(value) => value.extra(),
 
@@ -231,6 +241,8 @@ impl Observer {
 
       TdType::AccountTtl(value) => value.extra(),
 
+      TdType::AnimatedEmoji(value) => value.extra(),
+
       TdType::Animations(value) => value.extra(),
 
       TdType::AuthenticationCodeInfo(value) => value.extra(),
@@ -272,6 +284,8 @@ impl Observer {
       TdType::ChatInviteLinkMembers(value) => value.extra(),
 
       TdType::ChatInviteLinks(value) => value.extra(),
+
+      TdType::ChatJoinRequests(value) => value.extra(),
 
       TdType::ChatLists(value) => value.extra(),
 
@@ -337,9 +351,13 @@ impl Observer {
 
       TdType::Message(value) => value.extra(),
 
+      TdType::MessageCalendar(value) => value.extra(),
+
       TdType::MessageLink(value) => value.extra(),
 
       TdType::MessageLinkInfo(value) => value.extra(),
+
+      TdType::MessagePositions(value) => value.extra(),
 
       TdType::MessageSenders(value) => value.extra(),
 
@@ -390,6 +408,10 @@ impl Observer {
       TdType::Session(value) => value.extra(),
 
       TdType::Sessions(value) => value.extra(),
+
+      TdType::SponsoredMessages(value) => value.extra(),
+
+      TdType::Sticker(value) => value.extra(),
 
       TdType::StickerSet(value) => value.extra(),
 

@@ -105,6 +105,10 @@ impl EventApi {
     self.api.send(answer_shipping_query.as_ref())
   }
 
+  pub fn approve_chat_join_request<C: AsRef<ApproveChatJoinRequest>>(&self, approve_chat_join_request: C) -> RTDResult<()> {
+    self.api.send(approve_chat_join_request.as_ref())
+  }
+
   pub fn ban_chat_member<C: AsRef<BanChatMember>>(&self, ban_chat_member: C) -> RTDResult<()> {
     self.api.send(ban_chat_member.as_ref())
   }
@@ -221,6 +225,10 @@ impl EventApi {
     self.api.send(clear_recently_found_chats.as_ref())
   }
 
+  pub fn click_animated_emoji_message<C: AsRef<ClickAnimatedEmojiMessage>>(&self, click_animated_emoji_message: C) -> RTDResult<()> {
+    self.api.send(click_animated_emoji_message.as_ref())
+  }
+
   pub fn close<C: AsRef<Close>>(&self, close: C) -> RTDResult<()> {
     self.api.send(close.as_ref())
   }
@@ -285,8 +293,12 @@ impl EventApi {
     self.api.send(create_temporary_password.as_ref())
   }
 
-  pub fn create_voice_chat<C: AsRef<CreateVoiceChat>>(&self, create_voice_chat: C) -> RTDResult<()> {
-    self.api.send(create_voice_chat.as_ref())
+  pub fn create_video_chat<C: AsRef<CreateVideoChat>>(&self, create_video_chat: C) -> RTDResult<()> {
+    self.api.send(create_video_chat.as_ref())
+  }
+
+  pub fn decline_chat_join_request<C: AsRef<DeclineChatJoinRequest>>(&self, decline_chat_join_request: C) -> RTDResult<()> {
+    self.api.send(decline_chat_join_request.as_ref())
   }
 
   pub fn delete_account<C: AsRef<DeleteAccount>>(&self, delete_account: C) -> RTDResult<()> {
@@ -311,6 +323,10 @@ impl EventApi {
 
   pub fn delete_chat_history<C: AsRef<DeleteChatHistory>>(&self, delete_chat_history: C) -> RTDResult<()> {
     self.api.send(delete_chat_history.as_ref())
+  }
+
+  pub fn delete_chat_messages_by_date<C: AsRef<DeleteChatMessagesByDate>>(&self, delete_chat_messages_by_date: C) -> RTDResult<()> {
+    self.api.send(delete_chat_messages_by_date.as_ref())
   }
 
   pub fn delete_chat_messages_from_user<C: AsRef<DeleteChatMessagesFromUser>>(&self, delete_chat_messages_from_user: C) -> RTDResult<()> {
@@ -481,6 +497,10 @@ impl EventApi {
     self.api.send(get_all_passport_elements.as_ref())
   }
 
+  pub fn get_animated_emoji<C: AsRef<GetAnimatedEmoji>>(&self, get_animated_emoji: C) -> RTDResult<()> {
+    self.api.send(get_animated_emoji.as_ref())
+  }
+
   pub fn get_application_config<C: AsRef<GetApplicationConfig>>(&self, get_application_config: C) -> RTDResult<()> {
     self.api.send(get_application_config.as_ref())
   }
@@ -577,6 +597,10 @@ impl EventApi {
     self.api.send(get_chat_invite_links.as_ref())
   }
 
+  pub fn get_chat_join_requests<C: AsRef<GetChatJoinRequests>>(&self, get_chat_join_requests: C) -> RTDResult<()> {
+    self.api.send(get_chat_join_requests.as_ref())
+  }
+
   pub fn get_chat_lists_to_add_chat<C: AsRef<GetChatListsToAddChat>>(&self, get_chat_lists_to_add_chat: C) -> RTDResult<()> {
     self.api.send(get_chat_lists_to_add_chat.as_ref())
   }
@@ -587,6 +611,10 @@ impl EventApi {
 
   pub fn get_chat_message_by_date<C: AsRef<GetChatMessageByDate>>(&self, get_chat_message_by_date: C) -> RTDResult<()> {
     self.api.send(get_chat_message_by_date.as_ref())
+  }
+
+  pub fn get_chat_message_calendar<C: AsRef<GetChatMessageCalendar>>(&self, get_chat_message_calendar: C) -> RTDResult<()> {
+    self.api.send(get_chat_message_calendar.as_ref())
   }
 
   pub fn get_chat_message_count<C: AsRef<GetChatMessageCount>>(&self, get_chat_message_count: C) -> RTDResult<()> {
@@ -605,12 +633,16 @@ impl EventApi {
     self.api.send(get_chat_scheduled_messages.as_ref())
   }
 
-  pub fn get_chat_statistics<C: AsRef<GetChatStatistics>>(&self, get_chat_statistics: C) -> RTDResult<()> {
-    self.api.send(get_chat_statistics.as_ref())
+  pub fn get_chat_sparse_message_positions<C: AsRef<GetChatSparseMessagePositions>>(&self, get_chat_sparse_message_positions: C) -> RTDResult<()> {
+    self.api.send(get_chat_sparse_message_positions.as_ref())
   }
 
-  pub fn get_chat_statistics_url<C: AsRef<GetChatStatisticsUrl>>(&self, get_chat_statistics_url: C) -> RTDResult<()> {
-    self.api.send(get_chat_statistics_url.as_ref())
+  pub fn get_chat_sponsored_messages<C: AsRef<GetChatSponsoredMessages>>(&self, get_chat_sponsored_messages: C) -> RTDResult<()> {
+    self.api.send(get_chat_sponsored_messages.as_ref())
+  }
+
+  pub fn get_chat_statistics<C: AsRef<GetChatStatistics>>(&self, get_chat_statistics: C) -> RTDResult<()> {
+    self.api.send(get_chat_statistics.as_ref())
   }
 
   pub fn get_chats<C: AsRef<GetChats>>(&self, get_chats: C) -> RTDResult<()> {
@@ -833,6 +865,10 @@ impl EventApi {
     self.api.send(get_message_thread_history.as_ref())
   }
 
+  pub fn get_message_viewers<C: AsRef<GetMessageViewers>>(&self, get_message_viewers: C) -> RTDResult<()> {
+    self.api.send(get_message_viewers.as_ref())
+  }
+
   pub fn get_messages<C: AsRef<GetMessages>>(&self, get_messages: C) -> RTDResult<()> {
     self.api.send(get_messages.as_ref())
   }
@@ -873,6 +909,10 @@ impl EventApi {
     self.api.send(get_phone_number_info.as_ref())
   }
 
+  pub fn get_phone_number_info_sync<C: AsRef<GetPhoneNumberInfoSync>>(&self, get_phone_number_info_sync: C) -> RTDResult<()> {
+    self.api.send(get_phone_number_info_sync.as_ref())
+  }
+
   pub fn get_poll_voters<C: AsRef<GetPollVoters>>(&self, get_poll_voters: C) -> RTDResult<()> {
     self.api.send(get_poll_voters.as_ref())
   }
@@ -899,6 +939,10 @@ impl EventApi {
 
   pub fn get_recent_stickers<C: AsRef<GetRecentStickers>>(&self, get_recent_stickers: C) -> RTDResult<()> {
     self.api.send(get_recent_stickers.as_ref())
+  }
+
+  pub fn get_recently_opened_chats<C: AsRef<GetRecentlyOpenedChats>>(&self, get_recently_opened_chats: C) -> RTDResult<()> {
+    self.api.send(get_recently_opened_chats.as_ref())
   }
 
   pub fn get_recently_visited_t_me_urls<C: AsRef<GetRecentlyVisitedTMeUrls>>(&self, get_recently_visited_t_me_urls: C) -> RTDResult<()> {
@@ -1021,8 +1065,8 @@ impl EventApi {
     self.api.send(get_user_profile_photos.as_ref())
   }
 
-  pub fn get_voice_chat_available_participants<C: AsRef<GetVoiceChatAvailableParticipants>>(&self, get_voice_chat_available_participants: C) -> RTDResult<()> {
-    self.api.send(get_voice_chat_available_participants.as_ref())
+  pub fn get_video_chat_available_participants<C: AsRef<GetVideoChatAvailableParticipants>>(&self, get_video_chat_available_participants: C) -> RTDResult<()> {
+    self.api.send(get_video_chat_available_participants.as_ref())
   }
 
   pub fn get_web_page_instant_view<C: AsRef<GetWebPageInstantView>>(&self, get_web_page_instant_view: C) -> RTDResult<()> {
@@ -1067,6 +1111,10 @@ impl EventApi {
 
   pub fn leave_group_call<C: AsRef<LeaveGroupCall>>(&self, leave_group_call: C) -> RTDResult<()> {
     self.api.send(leave_group_call.as_ref())
+  }
+
+  pub fn load_chats<C: AsRef<LoadChats>>(&self, load_chats: C) -> RTDResult<()> {
+    self.api.send(load_chats.as_ref())
   }
 
   pub fn load_group_call_participants<C: AsRef<LoadGroupCallParticipants>>(&self, load_group_call_participants: C) -> RTDResult<()> {
@@ -1485,6 +1533,10 @@ impl EventApi {
     self.api.send(set_chat_slow_mode_delay.as_ref())
   }
 
+  pub fn set_chat_theme<C: AsRef<SetChatTheme>>(&self, set_chat_theme: C) -> RTDResult<()> {
+    self.api.send(set_chat_theme.as_ref())
+  }
+
   pub fn set_chat_title<C: AsRef<SetChatTitle>>(&self, set_chat_title: C) -> RTDResult<()> {
     self.api.send(set_chat_title.as_ref())
   }
@@ -1617,8 +1669,8 @@ impl EventApi {
     self.api.send(set_username.as_ref())
   }
 
-  pub fn set_voice_chat_default_participant<C: AsRef<SetVoiceChatDefaultParticipant>>(&self, set_voice_chat_default_participant: C) -> RTDResult<()> {
-    self.api.send(set_voice_chat_default_participant.as_ref())
+  pub fn set_video_chat_default_participant<C: AsRef<SetVideoChatDefaultParticipant>>(&self, set_video_chat_default_participant: C) -> RTDResult<()> {
+    self.api.send(set_video_chat_default_participant.as_ref())
   }
 
   pub fn share_phone_number<C: AsRef<SharePhoneNumber>>(&self, share_phone_number: C) -> RTDResult<()> {
@@ -1791,6 +1843,10 @@ impl EventApi {
 
   pub fn view_messages<C: AsRef<ViewMessages>>(&self, view_messages: C) -> RTDResult<()> {
     self.api.send(view_messages.as_ref())
+  }
+
+  pub fn view_sponsored_message<C: AsRef<ViewSponsoredMessage>>(&self, view_sponsored_message: C) -> RTDResult<()> {
+    self.api.send(view_sponsored_message.as_ref())
   }
 
   pub fn view_trending_sticker_sets<C: AsRef<ViewTrendingStickerSets>>(&self, view_trending_sticker_sets: C) -> RTDResult<()> {
