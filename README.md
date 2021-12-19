@@ -20,14 +20,21 @@ telegram-client = "1.7.*"
 
 Version mapping
 
-| telegram-client    | td      |
-|--------------------|---------|
-| 0.*                | master  |
-| 1.3.*              | 1.3.*   |
-| 1.4.*              | 1.4.*   |
-| 1.5.*              | 1.5.*   |
-| 1.6.*              | 1.6.*   |
-| 1.7.*              | 1.7.*   |
+| telegram-client        | td          |
+|------------------------|-------------|
+| 0.*                    | [master@5587f10](https://github.com/tdlib/td/commit/5587f10eba5bc1ea44732970fbac5bd908680dc5)      |
+| ~~1.3.*~~              | ~~1.3.*~~   |
+| ~~1.4.*~~              | ~~1.4.*~~   |
+| ~~1.5.*~~              | ~~1.5.*~~   |
+| ~~1.6.*~~              | ~~1.6.*~~   |
+| ~~1.7.*~~              | ~~1.7.*~~   |
+
+The version `1.3`, `1.4`, `1.5`, `1.6`, `1.7` is outdated. the reason you can read
+
+- [A new telegram client update](https://github.com/fewensa/telegram-client/issues/29)
+- [UPDATE_APP_TO_LOGIN](https://github.com/tdlib/td/issues/1758)
+
+Therefore, if tdlib has not had a new release version, the telegram-client `1.x` version will no longer be maintained. Please use `0.x` and if you used `1.x` you can change your dependency to `0.x`.
 
 
 ### telegram-client and rtdlib
@@ -37,14 +44,15 @@ Because of cargo's dependency mechanism, if you don't specify a specific version
 The current dependencies are as follows:
 
 
-| telegram-client    | rtdlib  |
-|--------------------|---------|
-| =1.3.7             | =1.3.7  |
-| =1.4.6             | =1.4.6  |
-| =1.5.5             | =1.5.5  |
-| =1.6.6             | =1.6.6  |
-| =1.7.0             | =1.7.0  |
-| =1.7.1             | =1.7.1  |
+| telegram-client        | rtdlib      |
+|------------------------|-------------|
+| =0.7.2                 | =0.7.2      |
+| ~~=1.3.7~~             | ~~=1.3.7~~  |
+| ~~=1.4.6~~             | ~~=1.4.6~~  |
+| ~~=1.5.5~~             | ~~=1.5.5~~  |
+| ~~=1.6.6~~             | ~~=1.6.6~~  |
+| ~~=1.7.0~~             | ~~=1.7.0~~  |
+| ~~=1.7.1~~             | ~~=1.7.1~~  |
 
 
 ## Note
@@ -110,8 +118,8 @@ a sample of event handler returned error
 
 ```rust
 listener.on_proxy(|(api, pxy)| {
-  debug!("Proxy info => {:?}", pxy);
-  Err(TGError::new("some error"))
+debug!("Proxy info => {:?}", pxy);
+Err(TGError::new("some error"))
 });
 ```
 
