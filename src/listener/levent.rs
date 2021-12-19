@@ -20,10 +20,13 @@ pub struct EventListener {
   update_basic_group: Option<Arc<dyn Fn((&Api, &UpdateBasicGroup)) -> TGResult<()> + Send + Sync + 'static>>,
   update_basic_group_full_info: Option<Arc<dyn Fn((&Api, &UpdateBasicGroupFullInfo)) -> TGResult<()> + Send + Sync + 'static>>,
   update_call: Option<Arc<dyn Fn((&Api, &UpdateCall)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_chat_action: Option<Arc<dyn Fn((&Api, &UpdateChatAction)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_action_bar: Option<Arc<dyn Fn((&Api, &UpdateChatActionBar)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_default_disable_notification: Option<Arc<dyn Fn((&Api, &UpdateChatDefaultDisableNotification)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_chat_default_message_sender_id: Option<Arc<dyn Fn((&Api, &UpdateChatDefaultMessageSenderId)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_draft_message: Option<Arc<dyn Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_filters: Option<Arc<dyn Fn((&Api, &UpdateChatFilters)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_chat_has_protected_content: Option<Arc<dyn Fn((&Api, &UpdateChatHasProtectedContent)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_has_scheduled_messages: Option<Arc<dyn Fn((&Api, &UpdateChatHasScheduledMessages)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_is_blocked: Option<Arc<dyn Fn((&Api, &UpdateChatIsBlocked)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_is_marked_as_unread: Option<Arc<dyn Fn((&Api, &UpdateChatIsMarkedAsUnread)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -98,7 +101,6 @@ pub struct EventListener {
   update_unread_chat_count: Option<Arc<dyn Fn((&Api, &UpdateUnreadChatCount)) -> TGResult<()> + Send + Sync + 'static>>,
   update_unread_message_count: Option<Arc<dyn Fn((&Api, &UpdateUnreadMessageCount)) -> TGResult<()> + Send + Sync + 'static>>,
   update_user: Option<Arc<dyn Fn((&Api, &UpdateUser)) -> TGResult<()> + Send + Sync + 'static>>,
-  update_user_chat_action: Option<Arc<dyn Fn((&Api, &UpdateUserChatAction)) -> TGResult<()> + Send + Sync + 'static>>,
   update_user_full_info: Option<Arc<dyn Fn((&Api, &UpdateUserFullInfo)) -> TGResult<()> + Send + Sync + 'static>>,
   update_user_privacy_setting_rules: Option<Arc<dyn Fn((&Api, &UpdateUserPrivacySettingRules)) -> TGResult<()> + Send + Sync + 'static>>,
   update_user_status: Option<Arc<dyn Fn((&Api, &UpdateUserStatus)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -306,7 +308,7 @@ impl EventListener {
     self
   }
 
-  /// Some data from basicGroupFullInfo has been changed
+  /// Some data in basicGroupFullInfo has been changed
   pub fn on_update_basic_group_full_info<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateBasicGroupFullInfo)) -> TGResult<()> + Send + Sync + 'static {
     self.update_basic_group_full_info = Some(Arc::new(fnc));
@@ -317,6 +319,13 @@ impl EventListener {
   pub fn on_update_call<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateCall)) -> TGResult<()> + Send + Sync + 'static {
     self.update_call = Some(Arc::new(fnc));
+    self
+  }
+
+  /// A message sender activity in the chat has changed
+  pub fn on_update_chat_action<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateChatAction)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_chat_action = Some(Arc::new(fnc));
     self
   }
 
@@ -334,6 +343,13 @@ impl EventListener {
     self
   }
 
+  /// The default message sender that is chosen to send messages in a chat has changed
+  pub fn on_update_chat_default_message_sender_id<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateChatDefaultMessageSenderId)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_chat_default_message_sender_id = Some(Arc::new(fnc));
+    self
+  }
+
   /// A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update mustn't be applied
   pub fn on_update_chat_draft_message<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static {
@@ -345,6 +361,13 @@ impl EventListener {
   pub fn on_update_chat_filters<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateChatFilters)) -> TGResult<()> + Send + Sync + 'static {
     self.update_chat_filters = Some(Arc::new(fnc));
+    self
+  }
+
+  /// A chat content was allowed or restricted for saving
+  pub fn on_update_chat_has_protected_content<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateChatHasProtectedContent)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_chat_has_protected_content = Some(Arc::new(fnc));
     self
   }
 
@@ -796,7 +819,7 @@ impl EventListener {
     self
   }
 
-  /// Service notification from the server. Upon receiving this the application must show a popup with the content of the notification
+  /// A service notification from the server was received. Upon receiving this the application must show a popup with the content of the notification
   pub fn on_update_service_notification<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateServiceNotification)) -> TGResult<()> + Send + Sync + 'static {
     self.update_service_notification = Some(Arc::new(fnc));
@@ -824,7 +847,7 @@ impl EventListener {
     self
   }
 
-  /// Some data from supergroupFullInfo has been changed
+  /// Some data in supergroupFullInfo has been changed
   pub fn on_update_supergroup_full_info<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateSupergroupFullInfo)) -> TGResult<()> + Send + Sync + 'static {
     self.update_supergroup_full_info = Some(Arc::new(fnc));
@@ -866,14 +889,7 @@ impl EventListener {
     self
   }
 
-  /// User activity in the chat has changed
-  pub fn on_update_user_chat_action<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&Api, &UpdateUserChatAction)) -> TGResult<()> + Send + Sync + 'static {
-    self.update_user_chat_action = Some(Arc::new(fnc));
-    self
-  }
-
-  /// Some data from userFullInfo has been changed
+  /// Some data in userFullInfo has been changed
   pub fn on_update_user_full_info<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateUserFullInfo)) -> TGResult<()> + Send + Sync + 'static {
     self.update_user_full_info = Some(Arc::new(fnc));
@@ -1829,10 +1845,13 @@ impl EventLout {
       "updateBasicGroup",
       "updateBasicGroupFullInfo",
       "updateCall",
+      "updateChatAction",
       "updateChatActionBar",
       "updateChatDefaultDisableNotification",
+      "updateChatDefaultMessageSenderId",
       "updateChatDraftMessage",
       "updateChatFilters",
+      "updateChatHasProtectedContent",
       "updateChatHasScheduledMessages",
       "updateChatIsBlocked",
       "updateChatIsMarkedAsUnread",
@@ -1907,7 +1926,6 @@ impl EventLout {
       "updateUnreadChatCount",
       "updateUnreadMessageCount",
       "updateUser",
-      "updateUserChatAction",
       "updateUserFullInfo",
       "updateUserPrivacySettingRules",
       "updateUserStatus",
@@ -2099,6 +2117,11 @@ impl EventLout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::UpdateChatAction(value) => match &self.listener.update_chat_action {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::UpdateChatActionBar(value) => match &self.listener.update_chat_action_bar {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -2109,12 +2132,22 @@ impl EventLout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
+    TdType::UpdateChatDefaultMessageSenderId(value) => match &self.listener.update_chat_default_message_sender_id {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
     TdType::UpdateChatDraftMessage(value) => match &self.listener.update_chat_draft_message {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
 
     TdType::UpdateChatFilters(value) => match &self.listener.update_chat_filters {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::UpdateChatHasProtectedContent(value) => match &self.listener.update_chat_has_protected_content {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -2485,11 +2518,6 @@ impl EventLout {
     },
 
     TdType::UpdateUser(value) => match &self.listener.update_user {
-      None => Ok(false),
-      Some(f) => f((api, value)).map(|_|true),
-    },
-
-    TdType::UpdateUserChatAction(value) => match &self.listener.update_user_chat_action {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -3208,7 +3236,7 @@ impl EventLout {
     &self.listener.update_basic_group
   }
 
-  /// Some data from basicGroupFullInfo has been changed
+  /// Some data in basicGroupFullInfo has been changed
   pub fn update_basic_group_full_info(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateBasicGroupFullInfo)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_basic_group_full_info
   }
@@ -3216,6 +3244,11 @@ impl EventLout {
   /// New call was created or information about a call was updated
   pub fn update_call(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateCall)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_call
+  }
+
+  /// A message sender activity in the chat has changed
+  pub fn update_chat_action(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatAction)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_chat_action
   }
 
   /// The chat action bar was changed
@@ -3228,6 +3261,11 @@ impl EventLout {
     &self.listener.update_chat_default_disable_notification
   }
 
+  /// The default message sender that is chosen to send messages in a chat has changed
+  pub fn update_chat_default_message_sender_id(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatDefaultMessageSenderId)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_chat_default_message_sender_id
+  }
+
   /// A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update mustn't be applied
   pub fn update_chat_draft_message(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_chat_draft_message
@@ -3236,6 +3274,11 @@ impl EventLout {
   /// The list of chat filters or a chat filter has changed
   pub fn update_chat_filters(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatFilters)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_chat_filters
+  }
+
+  /// A chat content was allowed or restricted for saving
+  pub fn update_chat_has_protected_content(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatHasProtectedContent)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_chat_has_protected_content
   }
 
   /// A chat's has_scheduled_messages field has changed
@@ -3558,7 +3601,7 @@ impl EventLout {
     &self.listener.update_selected_background
   }
 
-  /// Service notification from the server. Upon receiving this the application must show a popup with the content of the notification
+  /// A service notification from the server was received. Upon receiving this the application must show a popup with the content of the notification
   pub fn update_service_notification(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateServiceNotification)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_service_notification
   }
@@ -3578,7 +3621,7 @@ impl EventLout {
     &self.listener.update_supergroup
   }
 
-  /// Some data from supergroupFullInfo has been changed
+  /// Some data in supergroupFullInfo has been changed
   pub fn update_supergroup_full_info(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateSupergroupFullInfo)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_supergroup_full_info
   }
@@ -3608,12 +3651,7 @@ impl EventLout {
     &self.listener.update_user
   }
 
-  /// User activity in the chat has changed
-  pub fn update_user_chat_action(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateUserChatAction)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.update_user_chat_action
-  }
-
-  /// Some data from userFullInfo has been changed
+  /// Some data in userFullInfo has been changed
   pub fn update_user_full_info(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateUserFullInfo)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_user_full_info
   }

@@ -40,13 +40,19 @@ impl Observer {
 
       TdType::UpdateCall(value) => value.extra(),
 
+      TdType::UpdateChatAction(value) => value.extra(),
+
       TdType::UpdateChatActionBar(value) => value.extra(),
 
       TdType::UpdateChatDefaultDisableNotification(value) => value.extra(),
 
+      TdType::UpdateChatDefaultMessageSenderId(value) => value.extra(),
+
       TdType::UpdateChatDraftMessage(value) => value.extra(),
 
       TdType::UpdateChatFilters(value) => value.extra(),
+
+      TdType::UpdateChatHasProtectedContent(value) => value.extra(),
 
       TdType::UpdateChatHasScheduledMessages(value) => value.extra(),
 
@@ -195,8 +201,6 @@ impl Observer {
       TdType::UpdateUnreadMessageCount(value) => value.extra(),
 
       TdType::UpdateUser(value) => value.extra(),
-
-      TdType::UpdateUserChatAction(value) => value.extra(),
 
       TdType::UpdateUserFullInfo(value) => value.extra(),
 

@@ -146,11 +146,6 @@ impl AsyncApi {
     async_caller(&self.api, answer_shipping_query.as_ref()).await
   }
 
-  pub async fn approve_chat_join_request<C: AsRef<ApproveChatJoinRequest>>(&self, approve_chat_join_request: C) -> RTDResult<Ok> {
-    async_caller!(Ok);
-    async_caller(&self.api, approve_chat_join_request.as_ref()).await
-  }
-
   pub async fn ban_chat_member<C: AsRef<BanChatMember>>(&self, ban_chat_member: C) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, ban_chat_member.as_ref()).await
@@ -386,11 +381,6 @@ impl AsyncApi {
     async_caller(&self.api, create_video_chat.as_ref()).await
   }
 
-  pub async fn decline_chat_join_request<C: AsRef<DeclineChatJoinRequest>>(&self, decline_chat_join_request: C) -> RTDResult<Ok> {
-    async_caller!(Ok);
-    async_caller(&self.api, decline_chat_join_request.as_ref()).await
-  }
-
   pub async fn delete_account<C: AsRef<DeleteAccount>>(&self, delete_account: C) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, delete_account.as_ref()).await
@@ -426,9 +416,9 @@ impl AsyncApi {
     async_caller(&self.api, delete_chat_messages_by_date.as_ref()).await
   }
 
-  pub async fn delete_chat_messages_from_user<C: AsRef<DeleteChatMessagesFromUser>>(&self, delete_chat_messages_from_user: C) -> RTDResult<Ok> {
+  pub async fn delete_chat_messages_by_sender<C: AsRef<DeleteChatMessagesBySender>>(&self, delete_chat_messages_by_sender: C) -> RTDResult<Ok> {
     async_caller!(Ok);
-    async_caller(&self.api, delete_chat_messages_from_user.as_ref()).await
+    async_caller(&self.api, delete_chat_messages_by_sender.as_ref()).await
   }
 
   pub async fn delete_chat_reply_markup<C: AsRef<DeleteChatReplyMarkup>>(&self, delete_chat_reply_markup: C) -> RTDResult<Ok> {
@@ -719,6 +709,11 @@ impl AsyncApi {
   pub async fn get_chat_administrators<C: AsRef<GetChatAdministrators>>(&self, get_chat_administrators: C) -> RTDResult<ChatAdministrators> {
     async_caller!(ChatAdministrators);
     async_caller(&self.api, get_chat_administrators.as_ref()).await
+  }
+
+  pub async fn get_chat_available_message_senders<C: AsRef<GetChatAvailableMessageSenders>>(&self, get_chat_available_message_senders: C) -> RTDResult<MessageSenders> {
+    async_caller!(MessageSenders);
+    async_caller(&self.api, get_chat_available_message_senders.as_ref()).await
   }
 
   pub async fn get_chat_event_log<C: AsRef<GetChatEventLog>>(&self, get_chat_event_log: C) -> RTDResult<ChatEvents> {
@@ -1456,6 +1451,16 @@ impl AsyncApi {
     async_caller(&self.api, ping_proxy.as_ref()).await
   }
 
+  pub async fn process_chat_join_request<C: AsRef<ProcessChatJoinRequest>>(&self, process_chat_join_request: C) -> RTDResult<Ok> {
+    async_caller!(Ok);
+    async_caller(&self.api, process_chat_join_request.as_ref()).await
+  }
+
+  pub async fn process_chat_join_requests<C: AsRef<ProcessChatJoinRequests>>(&self, process_chat_join_requests: C) -> RTDResult<Ok> {
+    async_caller!(Ok);
+    async_caller(&self.api, process_chat_join_requests.as_ref()).await
+  }
+
   pub async fn process_push_notification<C: AsRef<ProcessPushNotification>>(&self, process_push_notification: C) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, process_push_notification.as_ref()).await
@@ -1881,6 +1886,11 @@ impl AsyncApi {
     async_caller(&self.api, set_chat_client_data.as_ref()).await
   }
 
+  pub async fn set_chat_default_message_sender<C: AsRef<SetChatDefaultMessageSender>>(&self, set_chat_default_message_sender: C) -> RTDResult<Ok> {
+    async_caller!(Ok);
+    async_caller(&self.api, set_chat_default_message_sender.as_ref()).await
+  }
+
   pub async fn set_chat_description<C: AsRef<SetChatDescription>>(&self, set_chat_description: C) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_chat_description.as_ref()).await
@@ -1984,6 +1994,11 @@ impl AsyncApi {
   pub async fn set_group_call_title<C: AsRef<SetGroupCallTitle>>(&self, set_group_call_title: C) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_group_call_title.as_ref()).await
+  }
+
+  pub async fn set_inactive_session_ttl<C: AsRef<SetInactiveSessionTtl>>(&self, set_inactive_session_ttl: C) -> RTDResult<Ok> {
+    async_caller!(Ok);
+    async_caller(&self.api, set_inactive_session_ttl.as_ref()).await
   }
 
   pub async fn set_inline_game_score<C: AsRef<SetInlineGameScore>>(&self, set_inline_game_score: C) -> RTDResult<Ok> {
@@ -2216,6 +2231,11 @@ impl AsyncApi {
     async_caller(&self.api, toggle_chat_default_disable_notification.as_ref()).await
   }
 
+  pub async fn toggle_chat_has_protected_content<C: AsRef<ToggleChatHasProtectedContent>>(&self, toggle_chat_has_protected_content: C) -> RTDResult<Ok> {
+    async_caller!(Ok);
+    async_caller(&self.api, toggle_chat_has_protected_content.as_ref()).await
+  }
+
   pub async fn toggle_chat_is_marked_as_unread<C: AsRef<ToggleChatIsMarkedAsUnread>>(&self, toggle_chat_is_marked_as_unread: C) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, toggle_chat_is_marked_as_unread.as_ref()).await
@@ -2264,6 +2284,16 @@ impl AsyncApi {
   pub async fn toggle_message_sender_is_blocked<C: AsRef<ToggleMessageSenderIsBlocked>>(&self, toggle_message_sender_is_blocked: C) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, toggle_message_sender_is_blocked.as_ref()).await
+  }
+
+  pub async fn toggle_session_can_accept_calls<C: AsRef<ToggleSessionCanAcceptCalls>>(&self, toggle_session_can_accept_calls: C) -> RTDResult<Ok> {
+    async_caller!(Ok);
+    async_caller(&self.api, toggle_session_can_accept_calls.as_ref()).await
+  }
+
+  pub async fn toggle_session_can_accept_secret_chats<C: AsRef<ToggleSessionCanAcceptSecretChats>>(&self, toggle_session_can_accept_secret_chats: C) -> RTDResult<Ok> {
+    async_caller!(Ok);
+    async_caller(&self.api, toggle_session_can_accept_secret_chats.as_ref()).await
   }
 
   pub async fn toggle_supergroup_is_all_history_available<C: AsRef<ToggleSupergroupIsAllHistoryAvailable>>(&self, toggle_supergroup_is_all_history_available: C) -> RTDResult<Ok> {
