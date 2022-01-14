@@ -216,7 +216,7 @@ fn main() {
     let api = api.event_api();
     let chat_id = message.chat_id();
     api.get_chat(GetChat::builder().chat_id(chat_id).build())?;
-    debug!("Receive new message, from: '{:?}', data: {}", message.sender(), message.to_json().expect("Can't serialize json"));
+    debug!("Receive new message, from: '{:?}', data: {}", message.sender_id(), message.to_json().expect("Can't serialize json"));
     Ok(())
   });
 
@@ -260,11 +260,6 @@ fn main() {
 
   listener.on_update_supergroup_full_info(|(_api, update)| {
     debug!("Supergroup full info => {}", update.to_json().unwrap());
-    Ok(())
-  });
-
-  listener.on_update_user_chat_action(|(_api, update)| {
-    debug!("User chat action => {}", update.to_json().unwrap());
     Ok(())
   });
 
