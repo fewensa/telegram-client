@@ -11,7 +11,7 @@ This crate use [td](https://github.com/tdlib/td) to call telegram client api. su
 
 ```toml
 [dependencies]
-telegram-client = "0.8.*"
+telegram-client = "1.8.*"
 ```
 
 ## version
