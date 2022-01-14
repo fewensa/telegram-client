@@ -23,7 +23,6 @@ pub struct EventListener {
   update_chat_action: Option<Arc<dyn Fn((&Api, &UpdateChatAction)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_action_bar: Option<Arc<dyn Fn((&Api, &UpdateChatActionBar)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_default_disable_notification: Option<Arc<dyn Fn((&Api, &UpdateChatDefaultDisableNotification)) -> TGResult<()> + Send + Sync + 'static>>,
-  update_chat_default_message_sender_id: Option<Arc<dyn Fn((&Api, &UpdateChatDefaultMessageSenderId)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_draft_message: Option<Arc<dyn Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_filters: Option<Arc<dyn Fn((&Api, &UpdateChatFilters)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_has_protected_content: Option<Arc<dyn Fn((&Api, &UpdateChatHasProtectedContent)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -32,7 +31,8 @@ pub struct EventListener {
   update_chat_is_marked_as_unread: Option<Arc<dyn Fn((&Api, &UpdateChatIsMarkedAsUnread)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_last_message: Option<Arc<dyn Fn((&Api, &UpdateChatLastMessage)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_member: Option<Arc<dyn Fn((&Api, &UpdateChatMember)) -> TGResult<()> + Send + Sync + 'static>>,
-  update_chat_message_ttl_setting: Option<Arc<dyn Fn((&Api, &UpdateChatMessageTtlSetting)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_chat_message_sender: Option<Arc<dyn Fn((&Api, &UpdateChatMessageSender)) -> TGResult<()> + Send + Sync + 'static>>,
+  update_chat_message_ttl: Option<Arc<dyn Fn((&Api, &UpdateChatMessageTtl)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_notification_settings: Option<Arc<dyn Fn((&Api, &UpdateChatNotificationSettings)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_online_member_count: Option<Arc<dyn Fn((&Api, &UpdateChatOnlineMemberCount)) -> TGResult<()> + Send + Sync + 'static>>,
   update_chat_pending_join_requests: Option<Arc<dyn Fn((&Api, &UpdateChatPendingJoinRequests)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -208,7 +208,7 @@ pub struct EventListener {
   secret_chat: Option<Arc<dyn Fn((&Api, &SecretChat)) -> TGResult<()> + Send + Sync + 'static>>,
   session: Option<Arc<dyn Fn((&Api, &Session)) -> TGResult<()> + Send + Sync + 'static>>,
   sessions: Option<Arc<dyn Fn((&Api, &Sessions)) -> TGResult<()> + Send + Sync + 'static>>,
-  sponsored_messages: Option<Arc<dyn Fn((&Api, &SponsoredMessages)) -> TGResult<()> + Send + Sync + 'static>>,
+  sponsored_message: Option<Arc<dyn Fn((&Api, &SponsoredMessage)) -> TGResult<()> + Send + Sync + 'static>>,
   sticker: Option<Arc<dyn Fn((&Api, &Sticker)) -> TGResult<()> + Send + Sync + 'static>>,
   sticker_set: Option<Arc<dyn Fn((&Api, &StickerSet)) -> TGResult<()> + Send + Sync + 'static>>,
   sticker_sets: Option<Arc<dyn Fn((&Api, &StickerSets)) -> TGResult<()> + Send + Sync + 'static>>,
@@ -343,13 +343,6 @@ impl EventListener {
     self
   }
 
-  /// The default message sender that is chosen to send messages in a chat has changed
-  pub fn on_update_chat_default_message_sender_id<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&Api, &UpdateChatDefaultMessageSenderId)) -> TGResult<()> + Send + Sync + 'static {
-    self.update_chat_default_message_sender_id = Some(Arc::new(fnc));
-    self
-  }
-
   /// A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update mustn't be applied
   pub fn on_update_chat_draft_message<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static {
@@ -406,10 +399,17 @@ impl EventListener {
     self
   }
 
+  /// The message sender that is selected to send messages in a chat has changed
+  pub fn on_update_chat_message_sender<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateChatMessageSender)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_chat_message_sender = Some(Arc::new(fnc));
+    self
+  }
+
   /// The message Time To Live setting for a chat was changed
-  pub fn on_update_chat_message_ttl_setting<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&Api, &UpdateChatMessageTtlSetting)) -> TGResult<()> + Send + Sync + 'static {
-    self.update_chat_message_ttl_setting = Some(Arc::new(fnc));
+  pub fn on_update_chat_message_ttl<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &UpdateChatMessageTtl)) -> TGResult<()> + Send + Sync + 'static {
+    self.update_chat_message_ttl = Some(Arc::new(fnc));
     self
   }
 
@@ -1178,7 +1178,7 @@ impl EventListener {
     self
   }
 
-  /// Contains a list of chat members joined a chat by an invite link
+  /// Contains a list of chat members joined a chat via an invite link
   pub fn on_chat_invite_link_members<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &ChatInviteLinkMembers)) -> TGResult<()> + Send + Sync + 'static {
     self.chat_invite_link_members = Some(Arc::new(fnc));
@@ -1192,7 +1192,7 @@ impl EventListener {
     self
   }
 
-  /// Contains a list of chat join requests
+  /// Contains a list of requests to join a chat
   pub fn on_chat_join_requests<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &ChatJoinRequests)) -> TGResult<()> + Send + Sync + 'static {
     self.chat_join_requests = Some(Arc::new(fnc));
@@ -1423,7 +1423,7 @@ impl EventListener {
     self
   }
 
-  /// Contains information about found messages, splitted by days according to the option "utc_time_offset"
+  /// Contains information about found messages, split by days according to the option "utc_time_offset"
   pub fn on_message_calendar<F>(&mut self, fnc: F) -> &mut Self
     where F: Fn((&Api, &MessageCalendar)) -> TGResult<()> + Send + Sync + 'static {
     self.message_calendar = Some(Arc::new(fnc));
@@ -1626,10 +1626,10 @@ impl EventListener {
     self
   }
 
-  /// Contains a list of sponsored messages
-  pub fn on_sponsored_messages<F>(&mut self, fnc: F) -> &mut Self
-    where F: Fn((&Api, &SponsoredMessages)) -> TGResult<()> + Send + Sync + 'static {
-    self.sponsored_messages = Some(Arc::new(fnc));
+  /// Describes a sponsored message
+  pub fn on_sponsored_message<F>(&mut self, fnc: F) -> &mut Self
+    where F: Fn((&Api, &SponsoredMessage)) -> TGResult<()> + Send + Sync + 'static {
+    self.sponsored_message = Some(Arc::new(fnc));
     self
   }
 
@@ -1848,7 +1848,6 @@ impl EventLout {
       "updateChatAction",
       "updateChatActionBar",
       "updateChatDefaultDisableNotification",
-      "updateChatDefaultMessageSenderId",
       "updateChatDraftMessage",
       "updateChatFilters",
       "updateChatHasProtectedContent",
@@ -1857,7 +1856,8 @@ impl EventLout {
       "updateChatIsMarkedAsUnread",
       "updateChatLastMessage",
       "updateChatMember",
-      "updateChatMessageTtlSetting",
+      "updateChatMessageSender",
+      "updateChatMessageTtl",
       "updateChatNotificationSettings",
       "updateChatOnlineMemberCount",
       "updateChatPendingJoinRequests",
@@ -2033,7 +2033,7 @@ impl EventLout {
       "secretChat",
       "session",
       "sessions",
-      "sponsoredMessages",
+      "sponsoredMessage",
       "sticker",
       "stickerSet",
       "stickerSets",
@@ -2132,11 +2132,6 @@ impl EventLout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
-    TdType::UpdateChatDefaultMessageSenderId(value) => match &self.listener.update_chat_default_message_sender_id {
-      None => Ok(false),
-      Some(f) => f((api, value)).map(|_|true),
-    },
-
     TdType::UpdateChatDraftMessage(value) => match &self.listener.update_chat_draft_message {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
@@ -2177,7 +2172,12 @@ impl EventLout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
-    TdType::UpdateChatMessageTtlSetting(value) => match &self.listener.update_chat_message_ttl_setting {
+    TdType::UpdateChatMessageSender(value) => match &self.listener.update_chat_message_sender {
+      None => Ok(false),
+      Some(f) => f((api, value)).map(|_|true),
+    },
+
+    TdType::UpdateChatMessageTtl(value) => match &self.listener.update_chat_message_ttl {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -3048,7 +3048,7 @@ impl EventLout {
       Some(f) => f((api, value)).map(|_|true),
     },
 
-    TdType::SponsoredMessages(value) => match &self.listener.sponsored_messages {
+    TdType::SponsoredMessage(value) => match &self.listener.sponsored_message {
       None => Ok(false),
       Some(f) => f((api, value)).map(|_|true),
     },
@@ -3261,11 +3261,6 @@ impl EventLout {
     &self.listener.update_chat_default_disable_notification
   }
 
-  /// The default message sender that is chosen to send messages in a chat has changed
-  pub fn update_chat_default_message_sender_id(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatDefaultMessageSenderId)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.update_chat_default_message_sender_id
-  }
-
   /// A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update mustn't be applied
   pub fn update_chat_draft_message(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatDraftMessage)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.update_chat_draft_message
@@ -3306,9 +3301,14 @@ impl EventLout {
     &self.listener.update_chat_member
   }
 
+  /// The message sender that is selected to send messages in a chat has changed
+  pub fn update_chat_message_sender(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatMessageSender)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_chat_message_sender
+  }
+
   /// The message Time To Live setting for a chat was changed
-  pub fn update_chat_message_ttl_setting(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatMessageTtlSetting)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.update_chat_message_ttl_setting
+  pub fn update_chat_message_ttl(&self) -> &Option<Arc<dyn Fn((&Api, &UpdateChatMessageTtl)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.update_chat_message_ttl
   }
 
   /// Notification settings for a chat were changed
@@ -3858,7 +3858,7 @@ impl EventLout {
     &self.listener.chat_invite_link_info
   }
 
-  /// Contains a list of chat members joined a chat by an invite link
+  /// Contains a list of chat members joined a chat via an invite link
   pub fn chat_invite_link_members(&self) -> &Option<Arc<dyn Fn((&Api, &ChatInviteLinkMembers)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_invite_link_members
   }
@@ -3868,7 +3868,7 @@ impl EventLout {
     &self.listener.chat_invite_links
   }
 
-  /// Contains a list of chat join requests
+  /// Contains a list of requests to join a chat
   pub fn chat_join_requests(&self) -> &Option<Arc<dyn Fn((&Api, &ChatJoinRequests)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.chat_join_requests
   }
@@ -4033,7 +4033,7 @@ impl EventLout {
     &self.listener.message
   }
 
-  /// Contains information about found messages, splitted by days according to the option "utc_time_offset"
+  /// Contains information about found messages, split by days according to the option "utc_time_offset"
   pub fn message_calendar(&self) -> &Option<Arc<dyn Fn((&Api, &MessageCalendar)) -> TGResult<()> + Send + Sync + 'static>> {
     &self.listener.message_calendar
   }
@@ -4178,9 +4178,9 @@ impl EventLout {
     &self.listener.sessions
   }
 
-  /// Contains a list of sponsored messages
-  pub fn sponsored_messages(&self) -> &Option<Arc<dyn Fn((&Api, &SponsoredMessages)) -> TGResult<()> + Send + Sync + 'static>> {
-    &self.listener.sponsored_messages
+  /// Describes a sponsored message
+  pub fn sponsored_message(&self) -> &Option<Arc<dyn Fn((&Api, &SponsoredMessage)) -> TGResult<()> + Send + Sync + 'static>> {
+    &self.listener.sponsored_message
   }
 
   /// Describes a sticker

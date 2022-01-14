@@ -377,10 +377,6 @@ impl EventApi {
     self.api.send(discard_call.as_ref())
   }
 
-  pub fn discard_group_call<C: AsRef<DiscardGroupCall>>(&self, discard_group_call: C) -> RTDResult<()> {
-    self.api.send(discard_group_call.as_ref())
-  }
-
   pub fn disconnect_all_websites<C: AsRef<DisconnectAllWebsites>>(&self, disconnect_all_websites: C) -> RTDResult<()> {
     self.api.send(disconnect_all_websites.as_ref())
   }
@@ -455,6 +451,10 @@ impl EventApi {
 
   pub fn enable_proxy<C: AsRef<EnableProxy>>(&self, enable_proxy: C) -> RTDResult<()> {
     self.api.send(enable_proxy.as_ref())
+  }
+
+  pub fn end_group_call<C: AsRef<EndGroupCall>>(&self, end_group_call: C) -> RTDResult<()> {
+    self.api.send(end_group_call.as_ref())
   }
 
   pub fn end_group_call_recording<C: AsRef<EndGroupCallRecording>>(&self, end_group_call_recording: C) -> RTDResult<()> {
@@ -633,8 +633,8 @@ impl EventApi {
     self.api.send(get_chat_sparse_message_positions.as_ref())
   }
 
-  pub fn get_chat_sponsored_messages<C: AsRef<GetChatSponsoredMessages>>(&self, get_chat_sponsored_messages: C) -> RTDResult<()> {
-    self.api.send(get_chat_sponsored_messages.as_ref())
+  pub fn get_chat_sponsored_message<C: AsRef<GetChatSponsoredMessage>>(&self, get_chat_sponsored_message: C) -> RTDResult<()> {
+    self.api.send(get_chat_sponsored_message.as_ref())
   }
 
   pub fn get_chat_statistics<C: AsRef<GetChatStatistics>>(&self, get_chat_statistics: C) -> RTDResult<()> {
@@ -1497,10 +1497,6 @@ impl EventApi {
     self.api.send(set_chat_client_data.as_ref())
   }
 
-  pub fn set_chat_default_message_sender<C: AsRef<SetChatDefaultMessageSender>>(&self, set_chat_default_message_sender: C) -> RTDResult<()> {
-    self.api.send(set_chat_default_message_sender.as_ref())
-  }
-
   pub fn set_chat_description<C: AsRef<SetChatDescription>>(&self, set_chat_description: C) -> RTDResult<()> {
     self.api.send(set_chat_description.as_ref())
   }
@@ -1521,8 +1517,12 @@ impl EventApi {
     self.api.send(set_chat_member_status.as_ref())
   }
 
-  pub fn set_chat_message_ttl_setting<C: AsRef<SetChatMessageTtlSetting>>(&self, set_chat_message_ttl_setting: C) -> RTDResult<()> {
-    self.api.send(set_chat_message_ttl_setting.as_ref())
+  pub fn set_chat_message_sender<C: AsRef<SetChatMessageSender>>(&self, set_chat_message_sender: C) -> RTDResult<()> {
+    self.api.send(set_chat_message_sender.as_ref())
+  }
+
+  pub fn set_chat_message_ttl<C: AsRef<SetChatMessageTtl>>(&self, set_chat_message_ttl: C) -> RTDResult<()> {
+    self.api.send(set_chat_message_ttl.as_ref())
   }
 
   pub fn set_chat_notification_settings<C: AsRef<SetChatNotificationSettings>>(&self, set_chat_notification_settings: C) -> RTDResult<()> {
@@ -1867,10 +1867,6 @@ impl EventApi {
 
   pub fn view_messages<C: AsRef<ViewMessages>>(&self, view_messages: C) -> RTDResult<()> {
     self.api.send(view_messages.as_ref())
-  }
-
-  pub fn view_sponsored_message<C: AsRef<ViewSponsoredMessage>>(&self, view_sponsored_message: C) -> RTDResult<()> {
-    self.api.send(view_sponsored_message.as_ref())
   }
 
   pub fn view_trending_sticker_sets<C: AsRef<ViewTrendingStickerSets>>(&self, view_trending_sticker_sets: C) -> RTDResult<()> {

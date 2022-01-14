@@ -486,11 +486,6 @@ impl AsyncApi {
     async_caller(&self.api, discard_call.as_ref()).await
   }
 
-  pub async fn discard_group_call<C: AsRef<DiscardGroupCall>>(&self, discard_group_call: C) -> RTDResult<Ok> {
-    async_caller!(Ok);
-    async_caller(&self.api, discard_group_call.as_ref()).await
-  }
-
   pub async fn disconnect_all_websites<C: AsRef<DisconnectAllWebsites>>(&self, disconnect_all_websites: C) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, disconnect_all_websites.as_ref()).await
@@ -584,6 +579,11 @@ impl AsyncApi {
   pub async fn enable_proxy<C: AsRef<EnableProxy>>(&self, enable_proxy: C) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, enable_proxy.as_ref()).await
+  }
+
+  pub async fn end_group_call<C: AsRef<EndGroupCall>>(&self, end_group_call: C) -> RTDResult<Ok> {
+    async_caller!(Ok);
+    async_caller(&self.api, end_group_call.as_ref()).await
   }
 
   pub async fn end_group_call_recording<C: AsRef<EndGroupCallRecording>>(&self, end_group_call_recording: C) -> RTDResult<Ok> {
@@ -806,9 +806,9 @@ impl AsyncApi {
     async_caller(&self.api, get_chat_sparse_message_positions.as_ref()).await
   }
 
-  pub async fn get_chat_sponsored_messages<C: AsRef<GetChatSponsoredMessages>>(&self, get_chat_sponsored_messages: C) -> RTDResult<SponsoredMessages> {
-    async_caller!(SponsoredMessages);
-    async_caller(&self.api, get_chat_sponsored_messages.as_ref()).await
+  pub async fn get_chat_sponsored_message<C: AsRef<GetChatSponsoredMessage>>(&self, get_chat_sponsored_message: C) -> RTDResult<SponsoredMessage> {
+    async_caller!(SponsoredMessage);
+    async_caller(&self.api, get_chat_sponsored_message.as_ref()).await
   }
 
   pub async fn get_chat_statistics<C: AsRef<GetChatStatistics>>(&self, get_chat_statistics: C) -> RTDResult<ChatStatistics> {
@@ -1886,11 +1886,6 @@ impl AsyncApi {
     async_caller(&self.api, set_chat_client_data.as_ref()).await
   }
 
-  pub async fn set_chat_default_message_sender<C: AsRef<SetChatDefaultMessageSender>>(&self, set_chat_default_message_sender: C) -> RTDResult<Ok> {
-    async_caller!(Ok);
-    async_caller(&self.api, set_chat_default_message_sender.as_ref()).await
-  }
-
   pub async fn set_chat_description<C: AsRef<SetChatDescription>>(&self, set_chat_description: C) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_chat_description.as_ref()).await
@@ -1916,9 +1911,14 @@ impl AsyncApi {
     async_caller(&self.api, set_chat_member_status.as_ref()).await
   }
 
-  pub async fn set_chat_message_ttl_setting<C: AsRef<SetChatMessageTtlSetting>>(&self, set_chat_message_ttl_setting: C) -> RTDResult<Ok> {
+  pub async fn set_chat_message_sender<C: AsRef<SetChatMessageSender>>(&self, set_chat_message_sender: C) -> RTDResult<Ok> {
     async_caller!(Ok);
-    async_caller(&self.api, set_chat_message_ttl_setting.as_ref()).await
+    async_caller(&self.api, set_chat_message_sender.as_ref()).await
+  }
+
+  pub async fn set_chat_message_ttl<C: AsRef<SetChatMessageTtl>>(&self, set_chat_message_ttl: C) -> RTDResult<Ok> {
+    async_caller!(Ok);
+    async_caller(&self.api, set_chat_message_ttl.as_ref()).await
   }
 
   pub async fn set_chat_notification_settings<C: AsRef<SetChatNotificationSettings>>(&self, set_chat_notification_settings: C) -> RTDResult<Ok> {
@@ -2349,11 +2349,6 @@ impl AsyncApi {
   pub async fn view_messages<C: AsRef<ViewMessages>>(&self, view_messages: C) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, view_messages.as_ref()).await
-  }
-
-  pub async fn view_sponsored_message<C: AsRef<ViewSponsoredMessage>>(&self, view_sponsored_message: C) -> RTDResult<Ok> {
-    async_caller!(Ok);
-    async_caller(&self.api, view_sponsored_message.as_ref()).await
   }
 
   pub async fn view_trending_sticker_sets<C: AsRef<ViewTrendingStickerSets>>(&self, view_trending_sticker_sets: C) -> RTDResult<Ok> {

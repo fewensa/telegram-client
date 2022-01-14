@@ -46,8 +46,6 @@ impl Observer {
 
       TdType::UpdateChatDefaultDisableNotification(value) => value.extra(),
 
-      TdType::UpdateChatDefaultMessageSenderId(value) => value.extra(),
-
       TdType::UpdateChatDraftMessage(value) => value.extra(),
 
       TdType::UpdateChatFilters(value) => value.extra(),
@@ -64,7 +62,9 @@ impl Observer {
 
       TdType::UpdateChatMember(value) => value.extra(),
 
-      TdType::UpdateChatMessageTtlSetting(value) => value.extra(),
+      TdType::UpdateChatMessageSender(value) => value.extra(),
+
+      TdType::UpdateChatMessageTtl(value) => value.extra(),
 
       TdType::UpdateChatNotificationSettings(value) => value.extra(),
 
@@ -413,7 +413,7 @@ impl Observer {
 
       TdType::Sessions(value) => value.extra(),
 
-      TdType::SponsoredMessages(value) => value.extra(),
+      TdType::SponsoredMessage(value) => value.extra(),
 
       TdType::Sticker(value) => value.extra(),
 
