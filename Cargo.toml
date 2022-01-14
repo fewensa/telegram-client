@@ -30,19 +30,19 @@ futures = "0.3"
 lazy_static = "1.4"
 
 [dev-dependencies]
-colored = "1"
+colored = "2"
 regex = "1"
 hostname = "0.1.5"
-toml = "0.5.1"
+toml = "0.5.8"
 
 serde = "1"
 serde_derive = "1"
 serde_json = "1"
 
-simple_logger = "1.3"
+simple_logger = "1.12"
 
 toolkit = "0.1"
 
-tokio = {version = "0.3.0", features = ["full"]}
+tokio = { version = "1.9.0", features = ["full"] }
 
 
