@@ -16,31 +16,7 @@ telegram-client = "1.8.*"
 
 ## version
 
-### td and rtdlib/telegram-client
-
-Version mapping
-
-| telegram-client  | td      |
-|------------------|---------|
-| 0.8.*            | [master@fa8feef](https://github.com/tdlib/td/commit/fa8feefed70d64271945e9d5fd010b957d93c8cd) |
-| 1.8.*            | 1.8.*   |
-
-The version `1.3`, `1.4`, `1.5`, `1.6`, `1.7` is outdated. the reason you can read
-
-- [A new telegram client update](https://github.com/fewensa/telegram-client/issues/29)
-- [UPDATE_APP_TO_LOGIN](https://github.com/tdlib/td/issues/1758)
-
-### telegram-client and rtdlib
-
-A fixed version is recommended, you can read [Comparison requirements](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#comparison-requirements) about the fixed version.
-Because of cargo's dependency mechanism, if you don't specify a specific version, it will be automatically upgraded, but there is usually a dependency between t and a, and the new version cannot be applied.
-The current dependencies are as follows:
-
-
-| telegram-client    | rtdlib      |
-|--------------------|-------------|
-| =0.8.0             | =0.8.0      |
-| =1.8.0             | =1.8.0      |
+Please read: [version](./version.md)
 
 
 ## Note
