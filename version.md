@@ -22,5 +22,6 @@ The current dependencies are as follows:
 | =0.8.0             | =0.8.0      | [master@fa8feef](https://github.com/tdlib/td/commit/fa8feefed70d64271945e9d5fd010b957d93c8cd) |
 | =0.8.1             | =0.8.1      | [master@789b9c0](https://github.com/tdlib/td/commit/789b9c0a554d779945db027fd2612909c676345f) |
 | =1.8.0             | =1.8.0      | [v1.8.0](https://github.com/tdlib/td/releases/tag/v1.8.0) |
+| =1.8.1             | =1.8.1      | [v1.8.0](https://github.com/tdlib/td/releases/tag/v1.8.0) |
 
 
