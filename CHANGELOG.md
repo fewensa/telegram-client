@@ -28,6 +28,7 @@ Breaking schema update. Not published yet. `rtdlib` 1.8.69 has to be on crates.i
 - Edition 2021. `lazy_static` is replaced with `std::sync::LazyLock`.
 - Example dependencies are refreshed (`colored` 3, `hostname` 0.4, `simple_logger` 5, `toml` 0.8, `tokio` 1). Unused serde dev-dependencies are dropped.
 - The receive loop locks the stop flag only for the check, so a writer is not blocked for the whole `td_json_client_receive` call.
+- Updates are handled on one long-lived worker instead of a new thread per update. Async methods such as `getChat` are completed from the receive thread. TDLib keeps thread-local buffers for every thread that calls `td_json_client_send` and does not free them when that thread exits, so the old loop grew the process by roughly a megabyte of address space per call (#27). A response that fails to deserialize still finishes the waiting call with an error instead of leaving it parked.
 - `TGError` reports its context through `Error::source`.
 - Examples compile without `API_ID` / `API_HASH` at build time. Doctests that start the client are `no_run`.
 
