@@ -4,11 +4,11 @@
 
 | Version | Supported |
 | --- | --- |
-| 1.8.2 | Yes |
+| 1.8.69 | Yes |
 | 1.8.1 and older | No |
-| 0.8.x and older snapshot line | No |
+| 0.8.x snapshot line | No |
 
-1.8.2 is a maintenance release of the 1.8.1 API. Fixes for supported releases are published as later 1.8.x versions.
+1.8.69 is the TDLib 1.8.69 schema. Older published releases are not supported.
 
 ## Reporting a vulnerability
 

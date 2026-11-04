@@ -102,20 +102,17 @@ async fn main() {
           rasync_api
             .set_tdlib_parameters(
               SetTdlibParameters::builder()
-                .parameters(
-                  TdlibParameters::builder()
-                    .database_directory("tdlib")
-                    .use_message_database(true)
-                    .use_secret_chats(true)
-                    .api_id(toolkit::number::as_i64(api_id.as_str()).unwrap())
-                    .api_hash(api_hash.as_str())
-                    .system_language_code("ru")
-                    .device_model("Desktop")
-                    .system_version("Unknown")
-                    .application_version(env!("CARGO_PKG_VERSION"))
-                    .enable_storage_optimizer(true)
-                    .build(),
-                )
+                .database_directory("tdlib")
+                .files_directory("tdlib")
+                .database_encryption_key("")
+                .use_message_database(true)
+                .use_secret_chats(true)
+                .api_id(toolkit::number::as_i64(api_id.as_str()).unwrap())
+                .api_hash(api_hash.as_str())
+                .system_language_code("ru")
+                .device_model("Desktop")
+                .system_version("Unknown")
+                .application_version(env!("CARGO_PKG_VERSION"))
                 .build(),
             )
             .await?;
@@ -132,12 +129,6 @@ async fn main() {
         AuthorizationState::WaitCode(_) => {
           thelp::tip("Please type authentication code:");
           tgfn::type_authentication_code(&api);
-        }
-        AuthorizationState::WaitEncryptionKey(_) => {
-          rasync_api
-            .check_database_encryption_key(CheckDatabaseEncryptionKey::builder().build())
-            .await?;
-          debug!("Set encryption key");
         }
         _ => {}
       }

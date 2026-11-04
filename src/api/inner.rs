@@ -168,8 +168,7 @@ mod tests {
   #[test]
   fn safe_log_redacts_tdlib_credentials() {
     let api = Api::default();
-    let raw =
-      r#"{"@type":"setTdlibParameters","parameters":{"api_id":12345,"api_hash":"0123abcdef"}}"#;
+    let raw = r#"{"@type":"setTdlibParameters","api_id":12345,"api_hash":"0123abcdef"}"#;
     let out = api.safe_log(raw);
     assert!(!out.contains("12345"));
     assert!(!out.contains("0123abcdef"));

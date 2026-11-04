@@ -4,9 +4,9 @@ Thanks for helping with `telegram-client`.
 
 ## What you need
 
-- Rust 1.80 or newer to build the library. The examples and dev-dependencies currently need Rust 1.88 or newer. CI uses current stable.
-- A `libtdjson` shared library on the linker path. `build.rs` also searches `./lib`. The unversioned library name (`libtdjson.so` on Linux) has to exist, not only the versioned soname.
-- The typed API matches `rtdlib` 1.8.1 / TDLib v1.8.0. Linking a newer `libtdjson` is expected. Adding new TDLib methods is not a small patch: `rtdlib` has to be regenerated first, then the listener tables in this crate.
+- Rust 1.89 or newer. CI uses current stable.
+- A `libtdjson` shared library on the linker path. `build.rs` also searches `./lib`. The unversioned library name (`libtdjson.so` on Linux) has to exist, not only the versioned soname. This release tracks TDLib 1.8.69.
+- The typed API is generated from `td_api.tl` by the `fantasy` generator in the `rtdlib` repository (`generate/`). Regenerating `src/api` and `src/listener` (and the `TdType` match in `src/observer.rs`) is required when the schema changes. Do not hand-edit those tables.
 
 ## Checks
 
@@ -25,7 +25,7 @@ cargo publish --dry-run
 
 ## Versioning
 
-Patch releases on 1.8.x keep the `rtdlib` 1.8.1 schema. A new TDLib schema needs a new minor or a new major, together with a matching `rtdlib` crate, and a row in `version.md`. Depend on an exact version (`=1.8.2`). Cargo will not keep this crate aligned with TDLib on its own.
+The crate version tracks the TDLib schema (`1.8.69` is TDLib 1.8.69 and `rtdlib` `=1.8.69`). Depend on an exact version. A newer TDLib schema needs a new `rtdlib` release and a regenerated client, plus a row in `version.md`. Until `rtdlib` 1.8.69 is on crates.io, `Cargo.toml` patches it from branch `agt/revive-maintenance-6901`. Remove that `[patch.crates-io]` table after the crate is published, then refresh `Cargo.lock`, before tagging this crate.
 
 ## Pull requests
 

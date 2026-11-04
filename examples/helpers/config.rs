@@ -43,15 +43,20 @@ impl Config {
     let port = v.get("port").unwrap().as_integer().unwrap();
     let enable = v.get("enable").unwrap().as_bool().unwrap();
     let type_ = v.get("type").unwrap().as_str().unwrap();
-    let mut tga = AddProxy::builder();
-    tga.server(server).port(port).enable(enable);
+    let mut proxy = Proxy::builder();
+    proxy.server(server).port(port);
     match type_ {
-      "socks5" => tga.type_(ProxyType::socks5(ProxyTypeSocks5::builder())),
-      "http" => tga.type_(ProxyType::http(ProxyTypeHttp::builder())),
-      "mtproto" => tga.type_(ProxyType::mtproto(ProxyTypeMtproto::builder())),
+      "socks5" => proxy.type_(ProxyType::socks5(ProxyTypeSocks5::builder())),
+      "http" => proxy.type_(ProxyType::http(ProxyTypeHttp::builder())),
+      "mtproto" => proxy.type_(ProxyType::mtproto(ProxyTypeMtproto::builder())),
       _ => panic!("Not found proxy type"),
     };
-    Some(tga.build())
+    Some(
+      AddProxy::builder()
+        .proxy(proxy.build())
+        .enable(enable)
+        .build(),
+    )
   }
 
   pub fn log(&self) -> Option<Log> {

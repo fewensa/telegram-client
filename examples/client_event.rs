@@ -95,30 +95,21 @@ fn main() {
       event_api
         .set_tdlib_parameters(
           SetTdlibParameters::builder()
-            .parameters(
-              TdlibParameters::builder()
-                .database_directory("tdlib")
-                .use_message_database(true)
-                .use_secret_chats(true)
-                .api_id(toolkit::number::as_i64(api_id.as_str()).unwrap())
-                .api_hash(api_hash.as_str())
-                .system_language_code("en")
-                .device_model("Desktop")
-                .system_version("Unknown")
-                .application_version(env!("CARGO_PKG_VERSION"))
-                .enable_storage_optimizer(true)
-                .build(),
-            )
+            .database_directory("tdlib")
+            .files_directory("tdlib")
+            .database_encryption_key("")
+            .use_message_database(true)
+            .use_secret_chats(true)
+            .api_id(toolkit::number::as_i64(api_id.as_str()).unwrap())
+            .api_hash(api_hash.as_str())
+            .system_language_code("en")
+            .device_model("Desktop")
+            .system_version("Unknown")
+            .application_version(env!("CARGO_PKG_VERSION"))
             .build(),
         )
         .unwrap();
       debug!("Set tdlib parameters");
-    });
-    state.on_wait_encryption_key(|_| {
-      event_api
-        .check_database_encryption_key(CheckDatabaseEncryptionKey::builder().build())
-        .unwrap();
-      debug!("Set encryption key");
     });
     state.on_wait_phone_number(|_| {
       thelp::tip(format!(
@@ -229,7 +220,7 @@ fn main() {
     Ok(())
   });
 
-  listener.on_proxy(|(_api, update)| {
+  listener.on_added_proxy(|(_api, update)| {
     debug!("Proxy info => {:?}", update);
     Ok(())
   });

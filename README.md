@@ -7,16 +7,16 @@ Telegram client for Rust.
 
 This crate uses [TDLib](https://github.com/tdlib/td) to call the Telegram client API, including an async API.
 
-The typed surface matches TDLib v1.8.0 via `rtdlib` 1.8.1. Newer TDLib JSON methods are not wrapped yet; see [CHANGELOG](./CHANGELOG.md).
+The typed surface matches TDLib 1.8.69 via `rtdlib` 1.8.69 (`td_api.tl` at `4c6377aa7386c39217878a9a56d581922ad37ca4`). See [CHANGELOG](./CHANGELOG.md) for the breaks versus 1.8.1.
 
 ## Usage
 
 ```toml
 [dependencies]
-telegram-client = "=1.8.2"
+telegram-client = "=1.8.69"
 ```
 
-The library itself builds on Rust 1.80 or newer. You also need a `libtdjson` shared library on the linker and loader path (see below). A current `libtdjson` is fine for linking; only the generated Rust types are pinned to the v1.8.0 schema. The examples pull newer dev-dependencies (`time` via `simple_logger`) and currently need Rust 1.88 or newer. CI uses current stable.
+Rust 1.89 or newer. You also need a `libtdjson` shared library on the linker and loader path (see below). Link the 1.8.69 `libtdjson` (or a build from that TDLib commit). CI uses current stable.
 
 ## version
 
@@ -94,7 +94,7 @@ When td returned json can not deserialize, or your event handler returned error.
 a sample of event handler returned error
 
 ```rust
-listener.on_proxy(|(api, pxy)| {
+listener.on_added_proxy(|(api, pxy)| {
 debug!("Proxy info => {:?}", pxy);
 Err(TGError::new("some error"))
 });
