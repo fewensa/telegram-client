@@ -1,0 +1,47 @@
+name: Bug report
+description: Something in telegram-client fails to build, link, or behave as documented.
+title: "[bug] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Security issues go to a [private advisory](https://github.com/fewensa/telegram-client/security/advisories/new), not here.
+        Do not paste `api_id`, `api_hash`, phone numbers, or TDLib session files.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you expected, and what happened instead.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: telegram-client version
+      placeholder: "1.8.2"
+    validations:
+      required: true
+  - type: input
+    id: rustc
+    attributes:
+      label: rustc version
+      description: Output of `rustc --version`.
+      placeholder: rustc 1.99.0
+    validations:
+      required: true
+  - type: input
+    id: tdlib
+    attributes:
+      label: libtdjson version
+      description: How you installed TDLib, and the library version if you know it.
+    validations:
+      required: false
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: A minimal program or the command you ran. Strip credentials.
+      render: rust
+    validations:
+      required: true

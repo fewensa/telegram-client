@@ -1,8 +1,8 @@
-use std::{io, thread};
 use std::io::Write;
 use std::sync::mpsc;
 use std::sync::mpsc::TryRecvError;
 use std::time::Duration;
+use std::{io, thread};
 
 use colored::Colorize;
 
@@ -22,35 +22,37 @@ pub fn typed_with_message<S: AsRef<str>>(message: S) -> String {
   let mut input = String::new();
   match io::stdin().read_line(&mut input) {
     Ok(_) => input.trim().to_string(),
-    Err(e) => panic!("Can not get input value: {:?}", e)
+    Err(e) => panic!("Can not get input value: {:?}", e),
   }
 }
 
 #[allow(dead_code)]
 pub fn wait_too_many_requests(api: &Api, message: &String) {
-  thelp::error(&message);
-  regex::Regex::new("(?P<time>\\d+)").map(|regex| {
-    regex.captures(&message[..]).map(|caps| {
-      let time: String = (&caps["time"].to_string()).clone();
-      thelp::tip(format!("Please wait [{}].", time));
-      let (tx, rx) = mpsc::channel();
-      thread::spawn(move || loop {
-        thread::sleep(Duration::from_millis(500));
-        match rx.try_recv() {
-          Ok(_) | Err(TryRecvError::Disconnected) => {
-            thelp::append_end();
-            break
-          },
-          _ => thelp::append_out(".")
-        }
-      });
-      thread::sleep(Duration::from_millis(toolkit::number::as_u64d(time, 0)));
-      let _ = tx.send(());
-      thelp::append_end();
-      thelp::tip("Please type telegram phone number.");
-      tgfn::type_phone_number(api);
+  thelp::error(message);
+  regex::Regex::new("(?P<time>\\d+)")
+    .map(|regex| {
+      regex.captures(&message[..]).map(|caps| {
+        let time = caps["time"].to_string();
+        thelp::tip(format!("Please wait [{}].", time));
+        let (tx, rx) = mpsc::channel();
+        thread::spawn(move || loop {
+          thread::sleep(Duration::from_millis(500));
+          match rx.try_recv() {
+            Ok(_) | Err(TryRecvError::Disconnected) => {
+              thelp::append_end();
+              break;
+            }
+            _ => thelp::append_out("."),
+          }
+        });
+        thread::sleep(Duration::from_millis(toolkit::number::as_u64d(time, 0)));
+        let _ = tx.send(());
+        thelp::append_end();
+        thelp::tip("Please type telegram phone number.");
+        tgfn::type_phone_number(api);
+      })
     })
-  }).expect("tdlib 429 error not have wait time");
+    .expect("tdlib 429 error not have wait time");
 }
 
 pub fn tip<S: AsRef<str>>(message: S) {
@@ -65,7 +67,7 @@ pub fn append_out<S: AsRef<str>>(message: S) {
 
 #[allow(dead_code)]
 pub fn append_end() {
-  print!("\n");
+  println!();
   std::io::stdout().flush().expect("failed to append output");
 }
 
@@ -76,10 +78,11 @@ pub fn error<S: AsRef<str>>(message: S) {
 
 #[allow(dead_code)]
 pub fn unknown<S: AsRef<str>>(code: i64, message: S) {
-  println!("{} [{}] {}  << {}",
-           ">>".red().bold(),
-           &code.to_string()[..].cyan().bold(),
-           message.as_ref().cyan().bold(),
-           "UNREGISTER TELEGRAM ERROR".magenta().bold()
+  println!(
+    "{} [{}] {}  << {}",
+    ">>".red().bold(),
+    code.to_string().cyan().bold(),
+    message.as_ref().cyan().bold(),
+    "UNREGISTER TELEGRAM ERROR".magenta().bold()
   )
 }

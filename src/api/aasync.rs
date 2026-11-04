@@ -8,8 +8,9 @@ use crate::observer;
 macro_rules! async_caller {
   ($td_type:ident) => {
     async fn async_caller<Fnc: RFunction>(api: &Api, fnc: Fnc) -> RTDResult<$td_type> {
-      let extra = fnc.extra()
-        .ok_or(RTDError::Custom("invalid tdjson response type, not have `extra` field".to_string()))?;
+      let extra = fnc.extra().ok_or(RTDError::Custom(
+        "invalid tdjson response type, not have `extra` field".to_string(),
+      ))?;
       let mut rec = observer::subscribe(&extra);
       api.send(&fnc)?;
       let val = rec.next().await;
@@ -18,11 +19,13 @@ macro_rules! async_caller {
         return Err(RTDError::custom(format!("[{}] {}", v.code(), v.message())));
       }
       match val {
-        Some(TdType::$td_type(v)) => { Ok(v) }
-        _ => { Err(RTDError::custom("invalid tdjson response type, unexpected `extra` field".to_string())) }
+        Some(TdType::$td_type(v)) => Ok(v),
+        _ => Err(RTDError::custom(
+          "invalid tdjson response type, unexpected `extra` field".to_string(),
+        )),
       }
     }
-  }
+  };
 }
 
 #[derive(Clone)]
@@ -32,7 +35,7 @@ pub struct AsyncApi {
 
 impl AsyncApi {
   pub fn new(api: Api) -> Self {
-    Self { api}
+    Self { api }
   }
 
   #[doc(hidden)]
@@ -40,28 +43,39 @@ impl AsyncApi {
     &self.api
   }
 
-
   pub async fn accept_call<C: AsRef<AcceptCall>>(&self, accept_call: C) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, accept_call.as_ref()).await
   }
 
-  pub async fn accept_terms_of_service<C: AsRef<AcceptTermsOfService>>(&self, accept_terms_of_service: C) -> RTDResult<Ok> {
+  pub async fn accept_terms_of_service<C: AsRef<AcceptTermsOfService>>(
+    &self,
+    accept_terms_of_service: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, accept_terms_of_service.as_ref()).await
   }
 
-  pub async fn add_chat_member<C: AsRef<AddChatMember>>(&self, add_chat_member: C) -> RTDResult<Ok> {
+  pub async fn add_chat_member<C: AsRef<AddChatMember>>(
+    &self,
+    add_chat_member: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, add_chat_member.as_ref()).await
   }
 
-  pub async fn add_chat_members<C: AsRef<AddChatMembers>>(&self, add_chat_members: C) -> RTDResult<Ok> {
+  pub async fn add_chat_members<C: AsRef<AddChatMembers>>(
+    &self,
+    add_chat_members: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, add_chat_members.as_ref()).await
   }
 
-  pub async fn add_chat_to_list<C: AsRef<AddChatToList>>(&self, add_chat_to_list: C) -> RTDResult<Ok> {
+  pub async fn add_chat_to_list<C: AsRef<AddChatToList>>(
+    &self,
+    add_chat_to_list: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, add_chat_to_list.as_ref()).await
   }
@@ -71,27 +85,42 @@ impl AsyncApi {
     async_caller(&self.api, add_contact.as_ref()).await
   }
 
-  pub async fn add_custom_server_language_pack<C: AsRef<AddCustomServerLanguagePack>>(&self, add_custom_server_language_pack: C) -> RTDResult<Ok> {
+  pub async fn add_custom_server_language_pack<C: AsRef<AddCustomServerLanguagePack>>(
+    &self,
+    add_custom_server_language_pack: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, add_custom_server_language_pack.as_ref()).await
   }
 
-  pub async fn add_favorite_sticker<C: AsRef<AddFavoriteSticker>>(&self, add_favorite_sticker: C) -> RTDResult<Ok> {
+  pub async fn add_favorite_sticker<C: AsRef<AddFavoriteSticker>>(
+    &self,
+    add_favorite_sticker: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, add_favorite_sticker.as_ref()).await
   }
 
-  pub async fn add_local_message<C: AsRef<AddLocalMessage>>(&self, add_local_message: C) -> RTDResult<Message> {
+  pub async fn add_local_message<C: AsRef<AddLocalMessage>>(
+    &self,
+    add_local_message: C,
+  ) -> RTDResult<Message> {
     async_caller!(Message);
     async_caller(&self.api, add_local_message.as_ref()).await
   }
 
-  pub async fn add_log_message<C: AsRef<AddLogMessage>>(&self, add_log_message: C) -> RTDResult<Ok> {
+  pub async fn add_log_message<C: AsRef<AddLogMessage>>(
+    &self,
+    add_log_message: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, add_log_message.as_ref()).await
   }
 
-  pub async fn add_network_statistics<C: AsRef<AddNetworkStatistics>>(&self, add_network_statistics: C) -> RTDResult<Ok> {
+  pub async fn add_network_statistics<C: AsRef<AddNetworkStatistics>>(
+    &self,
+    add_network_statistics: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, add_network_statistics.as_ref()).await
   }
@@ -101,197 +130,322 @@ impl AsyncApi {
     async_caller(&self.api, add_proxy.as_ref()).await
   }
 
-  pub async fn add_recent_sticker<C: AsRef<AddRecentSticker>>(&self, add_recent_sticker: C) -> RTDResult<Stickers> {
+  pub async fn add_recent_sticker<C: AsRef<AddRecentSticker>>(
+    &self,
+    add_recent_sticker: C,
+  ) -> RTDResult<Stickers> {
     async_caller!(Stickers);
     async_caller(&self.api, add_recent_sticker.as_ref()).await
   }
 
-  pub async fn add_recently_found_chat<C: AsRef<AddRecentlyFoundChat>>(&self, add_recently_found_chat: C) -> RTDResult<Ok> {
+  pub async fn add_recently_found_chat<C: AsRef<AddRecentlyFoundChat>>(
+    &self,
+    add_recently_found_chat: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, add_recently_found_chat.as_ref()).await
   }
 
-  pub async fn add_saved_animation<C: AsRef<AddSavedAnimation>>(&self, add_saved_animation: C) -> RTDResult<Ok> {
+  pub async fn add_saved_animation<C: AsRef<AddSavedAnimation>>(
+    &self,
+    add_saved_animation: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, add_saved_animation.as_ref()).await
   }
 
-  pub async fn add_sticker_to_set<C: AsRef<AddStickerToSet>>(&self, add_sticker_to_set: C) -> RTDResult<StickerSet> {
+  pub async fn add_sticker_to_set<C: AsRef<AddStickerToSet>>(
+    &self,
+    add_sticker_to_set: C,
+  ) -> RTDResult<StickerSet> {
     async_caller!(StickerSet);
     async_caller(&self.api, add_sticker_to_set.as_ref()).await
   }
 
-  pub async fn answer_callback_query<C: AsRef<AnswerCallbackQuery>>(&self, answer_callback_query: C) -> RTDResult<Ok> {
+  pub async fn answer_callback_query<C: AsRef<AnswerCallbackQuery>>(
+    &self,
+    answer_callback_query: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, answer_callback_query.as_ref()).await
   }
 
-  pub async fn answer_custom_query<C: AsRef<AnswerCustomQuery>>(&self, answer_custom_query: C) -> RTDResult<Ok> {
+  pub async fn answer_custom_query<C: AsRef<AnswerCustomQuery>>(
+    &self,
+    answer_custom_query: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, answer_custom_query.as_ref()).await
   }
 
-  pub async fn answer_inline_query<C: AsRef<AnswerInlineQuery>>(&self, answer_inline_query: C) -> RTDResult<Ok> {
+  pub async fn answer_inline_query<C: AsRef<AnswerInlineQuery>>(
+    &self,
+    answer_inline_query: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, answer_inline_query.as_ref()).await
   }
 
-  pub async fn answer_pre_checkout_query<C: AsRef<AnswerPreCheckoutQuery>>(&self, answer_pre_checkout_query: C) -> RTDResult<Ok> {
+  pub async fn answer_pre_checkout_query<C: AsRef<AnswerPreCheckoutQuery>>(
+    &self,
+    answer_pre_checkout_query: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, answer_pre_checkout_query.as_ref()).await
   }
 
-  pub async fn answer_shipping_query<C: AsRef<AnswerShippingQuery>>(&self, answer_shipping_query: C) -> RTDResult<Ok> {
+  pub async fn answer_shipping_query<C: AsRef<AnswerShippingQuery>>(
+    &self,
+    answer_shipping_query: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, answer_shipping_query.as_ref()).await
   }
 
-  pub async fn ban_chat_member<C: AsRef<BanChatMember>>(&self, ban_chat_member: C) -> RTDResult<Ok> {
+  pub async fn ban_chat_member<C: AsRef<BanChatMember>>(
+    &self,
+    ban_chat_member: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, ban_chat_member.as_ref()).await
   }
 
-  pub async fn block_message_sender_from_replies<C: AsRef<BlockMessageSenderFromReplies>>(&self, block_message_sender_from_replies: C) -> RTDResult<Ok> {
+  pub async fn block_message_sender_from_replies<C: AsRef<BlockMessageSenderFromReplies>>(
+    &self,
+    block_message_sender_from_replies: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, block_message_sender_from_replies.as_ref()).await
   }
 
-  pub async fn can_transfer_ownership<C: AsRef<CanTransferOwnership>>(&self, can_transfer_ownership: C) -> RTDResult<CanTransferOwnershipResult> {
+  pub async fn can_transfer_ownership<C: AsRef<CanTransferOwnership>>(
+    &self,
+    can_transfer_ownership: C,
+  ) -> RTDResult<CanTransferOwnershipResult> {
     async_caller!(CanTransferOwnershipResult);
     async_caller(&self.api, can_transfer_ownership.as_ref()).await
   }
 
-  pub async fn cancel_download_file<C: AsRef<CancelDownloadFile>>(&self, cancel_download_file: C) -> RTDResult<Ok> {
+  pub async fn cancel_download_file<C: AsRef<CancelDownloadFile>>(
+    &self,
+    cancel_download_file: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, cancel_download_file.as_ref()).await
   }
 
-  pub async fn cancel_password_reset<C: AsRef<CancelPasswordReset>>(&self, cancel_password_reset: C) -> RTDResult<Ok> {
+  pub async fn cancel_password_reset<C: AsRef<CancelPasswordReset>>(
+    &self,
+    cancel_password_reset: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, cancel_password_reset.as_ref()).await
   }
 
-  pub async fn cancel_upload_file<C: AsRef<CancelUploadFile>>(&self, cancel_upload_file: C) -> RTDResult<Ok> {
+  pub async fn cancel_upload_file<C: AsRef<CancelUploadFile>>(
+    &self,
+    cancel_upload_file: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, cancel_upload_file.as_ref()).await
   }
 
-  pub async fn change_imported_contacts<C: AsRef<ChangeImportedContacts>>(&self, change_imported_contacts: C) -> RTDResult<ImportedContacts> {
+  pub async fn change_imported_contacts<C: AsRef<ChangeImportedContacts>>(
+    &self,
+    change_imported_contacts: C,
+  ) -> RTDResult<ImportedContacts> {
     async_caller!(ImportedContacts);
     async_caller(&self.api, change_imported_contacts.as_ref()).await
   }
 
-  pub async fn change_phone_number<C: AsRef<ChangePhoneNumber>>(&self, change_phone_number: C) -> RTDResult<AuthenticationCodeInfo> {
+  pub async fn change_phone_number<C: AsRef<ChangePhoneNumber>>(
+    &self,
+    change_phone_number: C,
+  ) -> RTDResult<AuthenticationCodeInfo> {
     async_caller!(AuthenticationCodeInfo);
     async_caller(&self.api, change_phone_number.as_ref()).await
   }
 
-  pub async fn change_sticker_set<C: AsRef<ChangeStickerSet>>(&self, change_sticker_set: C) -> RTDResult<Ok> {
+  pub async fn change_sticker_set<C: AsRef<ChangeStickerSet>>(
+    &self,
+    change_sticker_set: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, change_sticker_set.as_ref()).await
   }
 
-  pub async fn check_authentication_bot_token<C: AsRef<CheckAuthenticationBotToken>>(&self, check_authentication_bot_token: C) -> RTDResult<Ok> {
+  pub async fn check_authentication_bot_token<C: AsRef<CheckAuthenticationBotToken>>(
+    &self,
+    check_authentication_bot_token: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, check_authentication_bot_token.as_ref()).await
   }
 
-  pub async fn check_authentication_code<C: AsRef<CheckAuthenticationCode>>(&self, check_authentication_code: C) -> RTDResult<Ok> {
+  pub async fn check_authentication_code<C: AsRef<CheckAuthenticationCode>>(
+    &self,
+    check_authentication_code: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, check_authentication_code.as_ref()).await
   }
 
-  pub async fn check_authentication_password<C: AsRef<CheckAuthenticationPassword>>(&self, check_authentication_password: C) -> RTDResult<Ok> {
+  pub async fn check_authentication_password<C: AsRef<CheckAuthenticationPassword>>(
+    &self,
+    check_authentication_password: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, check_authentication_password.as_ref()).await
   }
 
-  pub async fn check_authentication_password_recovery_code<C: AsRef<CheckAuthenticationPasswordRecoveryCode>>(&self, check_authentication_password_recovery_code: C) -> RTDResult<Ok> {
+  pub async fn check_authentication_password_recovery_code<
+    C: AsRef<CheckAuthenticationPasswordRecoveryCode>,
+  >(
+    &self,
+    check_authentication_password_recovery_code: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
-    async_caller(&self.api, check_authentication_password_recovery_code.as_ref()).await
+    async_caller(
+      &self.api,
+      check_authentication_password_recovery_code.as_ref(),
+    )
+    .await
   }
 
-  pub async fn check_change_phone_number_code<C: AsRef<CheckChangePhoneNumberCode>>(&self, check_change_phone_number_code: C) -> RTDResult<Ok> {
+  pub async fn check_change_phone_number_code<C: AsRef<CheckChangePhoneNumberCode>>(
+    &self,
+    check_change_phone_number_code: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, check_change_phone_number_code.as_ref()).await
   }
 
-  pub async fn check_chat_invite_link<C: AsRef<CheckChatInviteLink>>(&self, check_chat_invite_link: C) -> RTDResult<ChatInviteLinkInfo> {
+  pub async fn check_chat_invite_link<C: AsRef<CheckChatInviteLink>>(
+    &self,
+    check_chat_invite_link: C,
+  ) -> RTDResult<ChatInviteLinkInfo> {
     async_caller!(ChatInviteLinkInfo);
     async_caller(&self.api, check_chat_invite_link.as_ref()).await
   }
 
-  pub async fn check_chat_username<C: AsRef<CheckChatUsername>>(&self, check_chat_username: C) -> RTDResult<CheckChatUsernameResult> {
+  pub async fn check_chat_username<C: AsRef<CheckChatUsername>>(
+    &self,
+    check_chat_username: C,
+  ) -> RTDResult<CheckChatUsernameResult> {
     async_caller!(CheckChatUsernameResult);
     async_caller(&self.api, check_chat_username.as_ref()).await
   }
 
-  pub async fn check_created_public_chats_limit<C: AsRef<CheckCreatedPublicChatsLimit>>(&self, check_created_public_chats_limit: C) -> RTDResult<Ok> {
+  pub async fn check_created_public_chats_limit<C: AsRef<CheckCreatedPublicChatsLimit>>(
+    &self,
+    check_created_public_chats_limit: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, check_created_public_chats_limit.as_ref()).await
   }
 
-  pub async fn check_database_encryption_key<C: AsRef<CheckDatabaseEncryptionKey>>(&self, check_database_encryption_key: C) -> RTDResult<Ok> {
+  pub async fn check_database_encryption_key<C: AsRef<CheckDatabaseEncryptionKey>>(
+    &self,
+    check_database_encryption_key: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, check_database_encryption_key.as_ref()).await
   }
 
-  pub async fn check_email_address_verification_code<C: AsRef<CheckEmailAddressVerificationCode>>(&self, check_email_address_verification_code: C) -> RTDResult<Ok> {
+  pub async fn check_email_address_verification_code<
+    C: AsRef<CheckEmailAddressVerificationCode>,
+  >(
+    &self,
+    check_email_address_verification_code: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, check_email_address_verification_code.as_ref()).await
   }
 
-  pub async fn check_password_recovery_code<C: AsRef<CheckPasswordRecoveryCode>>(&self, check_password_recovery_code: C) -> RTDResult<Ok> {
+  pub async fn check_password_recovery_code<C: AsRef<CheckPasswordRecoveryCode>>(
+    &self,
+    check_password_recovery_code: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, check_password_recovery_code.as_ref()).await
   }
 
-  pub async fn check_phone_number_confirmation_code<C: AsRef<CheckPhoneNumberConfirmationCode>>(&self, check_phone_number_confirmation_code: C) -> RTDResult<Ok> {
+  pub async fn check_phone_number_confirmation_code<C: AsRef<CheckPhoneNumberConfirmationCode>>(
+    &self,
+    check_phone_number_confirmation_code: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, check_phone_number_confirmation_code.as_ref()).await
   }
 
-  pub async fn check_phone_number_verification_code<C: AsRef<CheckPhoneNumberVerificationCode>>(&self, check_phone_number_verification_code: C) -> RTDResult<Ok> {
+  pub async fn check_phone_number_verification_code<C: AsRef<CheckPhoneNumberVerificationCode>>(
+    &self,
+    check_phone_number_verification_code: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, check_phone_number_verification_code.as_ref()).await
   }
 
-  pub async fn check_recovery_email_address_code<C: AsRef<CheckRecoveryEmailAddressCode>>(&self, check_recovery_email_address_code: C) -> RTDResult<PasswordState> {
+  pub async fn check_recovery_email_address_code<C: AsRef<CheckRecoveryEmailAddressCode>>(
+    &self,
+    check_recovery_email_address_code: C,
+  ) -> RTDResult<PasswordState> {
     async_caller!(PasswordState);
     async_caller(&self.api, check_recovery_email_address_code.as_ref()).await
   }
 
-  pub async fn check_sticker_set_name<C: AsRef<CheckStickerSetName>>(&self, check_sticker_set_name: C) -> RTDResult<CheckStickerSetNameResult> {
+  pub async fn check_sticker_set_name<C: AsRef<CheckStickerSetName>>(
+    &self,
+    check_sticker_set_name: C,
+  ) -> RTDResult<CheckStickerSetNameResult> {
     async_caller!(CheckStickerSetNameResult);
     async_caller(&self.api, check_sticker_set_name.as_ref()).await
   }
 
-  pub async fn clean_file_name<C: AsRef<CleanFileName>>(&self, clean_file_name: C) -> RTDResult<Text> {
+  pub async fn clean_file_name<C: AsRef<CleanFileName>>(
+    &self,
+    clean_file_name: C,
+  ) -> RTDResult<Text> {
     async_caller!(Text);
     async_caller(&self.api, clean_file_name.as_ref()).await
   }
 
-  pub async fn clear_all_draft_messages<C: AsRef<ClearAllDraftMessages>>(&self, clear_all_draft_messages: C) -> RTDResult<Ok> {
+  pub async fn clear_all_draft_messages<C: AsRef<ClearAllDraftMessages>>(
+    &self,
+    clear_all_draft_messages: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, clear_all_draft_messages.as_ref()).await
   }
 
-  pub async fn clear_imported_contacts<C: AsRef<ClearImportedContacts>>(&self, clear_imported_contacts: C) -> RTDResult<Ok> {
+  pub async fn clear_imported_contacts<C: AsRef<ClearImportedContacts>>(
+    &self,
+    clear_imported_contacts: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, clear_imported_contacts.as_ref()).await
   }
 
-  pub async fn clear_recent_stickers<C: AsRef<ClearRecentStickers>>(&self, clear_recent_stickers: C) -> RTDResult<Ok> {
+  pub async fn clear_recent_stickers<C: AsRef<ClearRecentStickers>>(
+    &self,
+    clear_recent_stickers: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, clear_recent_stickers.as_ref()).await
   }
 
-  pub async fn clear_recently_found_chats<C: AsRef<ClearRecentlyFoundChats>>(&self, clear_recently_found_chats: C) -> RTDResult<Ok> {
+  pub async fn clear_recently_found_chats<C: AsRef<ClearRecentlyFoundChats>>(
+    &self,
+    clear_recently_found_chats: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, clear_recently_found_chats.as_ref()).await
   }
 
-  pub async fn click_animated_emoji_message<C: AsRef<ClickAnimatedEmojiMessage>>(&self, click_animated_emoji_message: C) -> RTDResult<Sticker> {
+  pub async fn click_animated_emoji_message<C: AsRef<ClickAnimatedEmojiMessage>>(
+    &self,
+    click_animated_emoji_message: C,
+  ) -> RTDResult<Sticker> {
     async_caller!(Sticker);
     async_caller(&self.api, click_animated_emoji_message.as_ref()).await
   }
@@ -306,17 +460,26 @@ impl AsyncApi {
     async_caller(&self.api, close_chat.as_ref()).await
   }
 
-  pub async fn close_secret_chat<C: AsRef<CloseSecretChat>>(&self, close_secret_chat: C) -> RTDResult<Ok> {
+  pub async fn close_secret_chat<C: AsRef<CloseSecretChat>>(
+    &self,
+    close_secret_chat: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, close_secret_chat.as_ref()).await
   }
 
-  pub async fn confirm_qr_code_authentication<C: AsRef<ConfirmQrCodeAuthentication>>(&self, confirm_qr_code_authentication: C) -> RTDResult<Session> {
+  pub async fn confirm_qr_code_authentication<C: AsRef<ConfirmQrCodeAuthentication>>(
+    &self,
+    confirm_qr_code_authentication: C,
+  ) -> RTDResult<Session> {
     async_caller!(Session);
     async_caller(&self.api, confirm_qr_code_authentication.as_ref()).await
   }
 
-  pub async fn create_basic_group_chat<C: AsRef<CreateBasicGroupChat>>(&self, create_basic_group_chat: C) -> RTDResult<Chat> {
+  pub async fn create_basic_group_chat<C: AsRef<CreateBasicGroupChat>>(
+    &self,
+    create_basic_group_chat: C,
+  ) -> RTDResult<Chat> {
     async_caller!(Chat);
     async_caller(&self.api, create_basic_group_chat.as_ref()).await
   }
@@ -326,57 +489,90 @@ impl AsyncApi {
     async_caller(&self.api, create_call.as_ref()).await
   }
 
-  pub async fn create_chat_filter<C: AsRef<CreateChatFilter>>(&self, create_chat_filter: C) -> RTDResult<ChatFilterInfo> {
+  pub async fn create_chat_filter<C: AsRef<CreateChatFilter>>(
+    &self,
+    create_chat_filter: C,
+  ) -> RTDResult<ChatFilterInfo> {
     async_caller!(ChatFilterInfo);
     async_caller(&self.api, create_chat_filter.as_ref()).await
   }
 
-  pub async fn create_chat_invite_link<C: AsRef<CreateChatInviteLink>>(&self, create_chat_invite_link: C) -> RTDResult<ChatInviteLink> {
+  pub async fn create_chat_invite_link<C: AsRef<CreateChatInviteLink>>(
+    &self,
+    create_chat_invite_link: C,
+  ) -> RTDResult<ChatInviteLink> {
     async_caller!(ChatInviteLink);
     async_caller(&self.api, create_chat_invite_link.as_ref()).await
   }
 
-  pub async fn create_new_basic_group_chat<C: AsRef<CreateNewBasicGroupChat>>(&self, create_new_basic_group_chat: C) -> RTDResult<Chat> {
+  pub async fn create_new_basic_group_chat<C: AsRef<CreateNewBasicGroupChat>>(
+    &self,
+    create_new_basic_group_chat: C,
+  ) -> RTDResult<Chat> {
     async_caller!(Chat);
     async_caller(&self.api, create_new_basic_group_chat.as_ref()).await
   }
 
-  pub async fn create_new_secret_chat<C: AsRef<CreateNewSecretChat>>(&self, create_new_secret_chat: C) -> RTDResult<Chat> {
+  pub async fn create_new_secret_chat<C: AsRef<CreateNewSecretChat>>(
+    &self,
+    create_new_secret_chat: C,
+  ) -> RTDResult<Chat> {
     async_caller!(Chat);
     async_caller(&self.api, create_new_secret_chat.as_ref()).await
   }
 
-  pub async fn create_new_sticker_set<C: AsRef<CreateNewStickerSet>>(&self, create_new_sticker_set: C) -> RTDResult<StickerSet> {
+  pub async fn create_new_sticker_set<C: AsRef<CreateNewStickerSet>>(
+    &self,
+    create_new_sticker_set: C,
+  ) -> RTDResult<StickerSet> {
     async_caller!(StickerSet);
     async_caller(&self.api, create_new_sticker_set.as_ref()).await
   }
 
-  pub async fn create_new_supergroup_chat<C: AsRef<CreateNewSupergroupChat>>(&self, create_new_supergroup_chat: C) -> RTDResult<Chat> {
+  pub async fn create_new_supergroup_chat<C: AsRef<CreateNewSupergroupChat>>(
+    &self,
+    create_new_supergroup_chat: C,
+  ) -> RTDResult<Chat> {
     async_caller!(Chat);
     async_caller(&self.api, create_new_supergroup_chat.as_ref()).await
   }
 
-  pub async fn create_private_chat<C: AsRef<CreatePrivateChat>>(&self, create_private_chat: C) -> RTDResult<Chat> {
+  pub async fn create_private_chat<C: AsRef<CreatePrivateChat>>(
+    &self,
+    create_private_chat: C,
+  ) -> RTDResult<Chat> {
     async_caller!(Chat);
     async_caller(&self.api, create_private_chat.as_ref()).await
   }
 
-  pub async fn create_secret_chat<C: AsRef<CreateSecretChat>>(&self, create_secret_chat: C) -> RTDResult<Chat> {
+  pub async fn create_secret_chat<C: AsRef<CreateSecretChat>>(
+    &self,
+    create_secret_chat: C,
+  ) -> RTDResult<Chat> {
     async_caller!(Chat);
     async_caller(&self.api, create_secret_chat.as_ref()).await
   }
 
-  pub async fn create_supergroup_chat<C: AsRef<CreateSupergroupChat>>(&self, create_supergroup_chat: C) -> RTDResult<Chat> {
+  pub async fn create_supergroup_chat<C: AsRef<CreateSupergroupChat>>(
+    &self,
+    create_supergroup_chat: C,
+  ) -> RTDResult<Chat> {
     async_caller!(Chat);
     async_caller(&self.api, create_supergroup_chat.as_ref()).await
   }
 
-  pub async fn create_temporary_password<C: AsRef<CreateTemporaryPassword>>(&self, create_temporary_password: C) -> RTDResult<TemporaryPasswordState> {
+  pub async fn create_temporary_password<C: AsRef<CreateTemporaryPassword>>(
+    &self,
+    create_temporary_password: C,
+  ) -> RTDResult<TemporaryPasswordState> {
     async_caller!(TemporaryPasswordState);
     async_caller(&self.api, create_temporary_password.as_ref()).await
   }
 
-  pub async fn create_video_chat<C: AsRef<CreateVideoChat>>(&self, create_video_chat: C) -> RTDResult<GroupCallId> {
+  pub async fn create_video_chat<C: AsRef<CreateVideoChat>>(
+    &self,
+    create_video_chat: C,
+  ) -> RTDResult<GroupCallId> {
     async_caller!(GroupCallId);
     async_caller(&self.api, create_video_chat.as_ref()).await
   }
@@ -386,12 +582,18 @@ impl AsyncApi {
     async_caller(&self.api, delete_account.as_ref()).await
   }
 
-  pub async fn delete_all_call_messages<C: AsRef<DeleteAllCallMessages>>(&self, delete_all_call_messages: C) -> RTDResult<Ok> {
+  pub async fn delete_all_call_messages<C: AsRef<DeleteAllCallMessages>>(
+    &self,
+    delete_all_call_messages: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, delete_all_call_messages.as_ref()).await
   }
 
-  pub async fn delete_all_revoked_chat_invite_links<C: AsRef<DeleteAllRevokedChatInviteLinks>>(&self, delete_all_revoked_chat_invite_links: C) -> RTDResult<Ok> {
+  pub async fn delete_all_revoked_chat_invite_links<C: AsRef<DeleteAllRevokedChatInviteLinks>>(
+    &self,
+    delete_all_revoked_chat_invite_links: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, delete_all_revoked_chat_invite_links.as_ref()).await
   }
@@ -401,32 +603,50 @@ impl AsyncApi {
     async_caller(&self.api, delete_chat.as_ref()).await
   }
 
-  pub async fn delete_chat_filter<C: AsRef<DeleteChatFilter>>(&self, delete_chat_filter: C) -> RTDResult<Ok> {
+  pub async fn delete_chat_filter<C: AsRef<DeleteChatFilter>>(
+    &self,
+    delete_chat_filter: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, delete_chat_filter.as_ref()).await
   }
 
-  pub async fn delete_chat_history<C: AsRef<DeleteChatHistory>>(&self, delete_chat_history: C) -> RTDResult<Ok> {
+  pub async fn delete_chat_history<C: AsRef<DeleteChatHistory>>(
+    &self,
+    delete_chat_history: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, delete_chat_history.as_ref()).await
   }
 
-  pub async fn delete_chat_messages_by_date<C: AsRef<DeleteChatMessagesByDate>>(&self, delete_chat_messages_by_date: C) -> RTDResult<Ok> {
+  pub async fn delete_chat_messages_by_date<C: AsRef<DeleteChatMessagesByDate>>(
+    &self,
+    delete_chat_messages_by_date: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, delete_chat_messages_by_date.as_ref()).await
   }
 
-  pub async fn delete_chat_messages_by_sender<C: AsRef<DeleteChatMessagesBySender>>(&self, delete_chat_messages_by_sender: C) -> RTDResult<Ok> {
+  pub async fn delete_chat_messages_by_sender<C: AsRef<DeleteChatMessagesBySender>>(
+    &self,
+    delete_chat_messages_by_sender: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, delete_chat_messages_by_sender.as_ref()).await
   }
 
-  pub async fn delete_chat_reply_markup<C: AsRef<DeleteChatReplyMarkup>>(&self, delete_chat_reply_markup: C) -> RTDResult<Ok> {
+  pub async fn delete_chat_reply_markup<C: AsRef<DeleteChatReplyMarkup>>(
+    &self,
+    delete_chat_reply_markup: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, delete_chat_reply_markup.as_ref()).await
   }
 
-  pub async fn delete_commands<C: AsRef<DeleteCommands>>(&self, delete_commands: C) -> RTDResult<Ok> {
+  pub async fn delete_commands<C: AsRef<DeleteCommands>>(
+    &self,
+    delete_commands: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, delete_commands.as_ref()).await
   }
@@ -436,37 +656,58 @@ impl AsyncApi {
     async_caller(&self.api, delete_file.as_ref()).await
   }
 
-  pub async fn delete_language_pack<C: AsRef<DeleteLanguagePack>>(&self, delete_language_pack: C) -> RTDResult<Ok> {
+  pub async fn delete_language_pack<C: AsRef<DeleteLanguagePack>>(
+    &self,
+    delete_language_pack: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, delete_language_pack.as_ref()).await
   }
 
-  pub async fn delete_messages<C: AsRef<DeleteMessages>>(&self, delete_messages: C) -> RTDResult<Ok> {
+  pub async fn delete_messages<C: AsRef<DeleteMessages>>(
+    &self,
+    delete_messages: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, delete_messages.as_ref()).await
   }
 
-  pub async fn delete_passport_element<C: AsRef<DeletePassportElement>>(&self, delete_passport_element: C) -> RTDResult<Ok> {
+  pub async fn delete_passport_element<C: AsRef<DeletePassportElement>>(
+    &self,
+    delete_passport_element: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, delete_passport_element.as_ref()).await
   }
 
-  pub async fn delete_profile_photo<C: AsRef<DeleteProfilePhoto>>(&self, delete_profile_photo: C) -> RTDResult<Ok> {
+  pub async fn delete_profile_photo<C: AsRef<DeleteProfilePhoto>>(
+    &self,
+    delete_profile_photo: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, delete_profile_photo.as_ref()).await
   }
 
-  pub async fn delete_revoked_chat_invite_link<C: AsRef<DeleteRevokedChatInviteLink>>(&self, delete_revoked_chat_invite_link: C) -> RTDResult<Ok> {
+  pub async fn delete_revoked_chat_invite_link<C: AsRef<DeleteRevokedChatInviteLink>>(
+    &self,
+    delete_revoked_chat_invite_link: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, delete_revoked_chat_invite_link.as_ref()).await
   }
 
-  pub async fn delete_saved_credentials<C: AsRef<DeleteSavedCredentials>>(&self, delete_saved_credentials: C) -> RTDResult<Ok> {
+  pub async fn delete_saved_credentials<C: AsRef<DeleteSavedCredentials>>(
+    &self,
+    delete_saved_credentials: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, delete_saved_credentials.as_ref()).await
   }
 
-  pub async fn delete_saved_order_info<C: AsRef<DeleteSavedOrderInfo>>(&self, delete_saved_order_info: C) -> RTDResult<Ok> {
+  pub async fn delete_saved_order_info<C: AsRef<DeleteSavedOrderInfo>>(
+    &self,
+    delete_saved_order_info: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, delete_saved_order_info.as_ref()).await
   }
@@ -486,12 +727,18 @@ impl AsyncApi {
     async_caller(&self.api, discard_call.as_ref()).await
   }
 
-  pub async fn disconnect_all_websites<C: AsRef<DisconnectAllWebsites>>(&self, disconnect_all_websites: C) -> RTDResult<Ok> {
+  pub async fn disconnect_all_websites<C: AsRef<DisconnectAllWebsites>>(
+    &self,
+    disconnect_all_websites: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, disconnect_all_websites.as_ref()).await
   }
 
-  pub async fn disconnect_website<C: AsRef<DisconnectWebsite>>(&self, disconnect_website: C) -> RTDResult<Ok> {
+  pub async fn disconnect_website<C: AsRef<DisconnectWebsite>>(
+    &self,
+    disconnect_website: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, disconnect_website.as_ref()).await
   }
@@ -501,72 +748,114 @@ impl AsyncApi {
     async_caller(&self.api, download_file.as_ref()).await
   }
 
-  pub async fn edit_chat_filter<C: AsRef<EditChatFilter>>(&self, edit_chat_filter: C) -> RTDResult<ChatFilterInfo> {
+  pub async fn edit_chat_filter<C: AsRef<EditChatFilter>>(
+    &self,
+    edit_chat_filter: C,
+  ) -> RTDResult<ChatFilterInfo> {
     async_caller!(ChatFilterInfo);
     async_caller(&self.api, edit_chat_filter.as_ref()).await
   }
 
-  pub async fn edit_chat_invite_link<C: AsRef<EditChatInviteLink>>(&self, edit_chat_invite_link: C) -> RTDResult<ChatInviteLink> {
+  pub async fn edit_chat_invite_link<C: AsRef<EditChatInviteLink>>(
+    &self,
+    edit_chat_invite_link: C,
+  ) -> RTDResult<ChatInviteLink> {
     async_caller!(ChatInviteLink);
     async_caller(&self.api, edit_chat_invite_link.as_ref()).await
   }
 
-  pub async fn edit_custom_language_pack_info<C: AsRef<EditCustomLanguagePackInfo>>(&self, edit_custom_language_pack_info: C) -> RTDResult<Ok> {
+  pub async fn edit_custom_language_pack_info<C: AsRef<EditCustomLanguagePackInfo>>(
+    &self,
+    edit_custom_language_pack_info: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, edit_custom_language_pack_info.as_ref()).await
   }
 
-  pub async fn edit_inline_message_caption<C: AsRef<EditInlineMessageCaption>>(&self, edit_inline_message_caption: C) -> RTDResult<Ok> {
+  pub async fn edit_inline_message_caption<C: AsRef<EditInlineMessageCaption>>(
+    &self,
+    edit_inline_message_caption: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, edit_inline_message_caption.as_ref()).await
   }
 
-  pub async fn edit_inline_message_live_location<C: AsRef<EditInlineMessageLiveLocation>>(&self, edit_inline_message_live_location: C) -> RTDResult<Ok> {
+  pub async fn edit_inline_message_live_location<C: AsRef<EditInlineMessageLiveLocation>>(
+    &self,
+    edit_inline_message_live_location: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, edit_inline_message_live_location.as_ref()).await
   }
 
-  pub async fn edit_inline_message_media<C: AsRef<EditInlineMessageMedia>>(&self, edit_inline_message_media: C) -> RTDResult<Ok> {
+  pub async fn edit_inline_message_media<C: AsRef<EditInlineMessageMedia>>(
+    &self,
+    edit_inline_message_media: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, edit_inline_message_media.as_ref()).await
   }
 
-  pub async fn edit_inline_message_reply_markup<C: AsRef<EditInlineMessageReplyMarkup>>(&self, edit_inline_message_reply_markup: C) -> RTDResult<Ok> {
+  pub async fn edit_inline_message_reply_markup<C: AsRef<EditInlineMessageReplyMarkup>>(
+    &self,
+    edit_inline_message_reply_markup: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, edit_inline_message_reply_markup.as_ref()).await
   }
 
-  pub async fn edit_inline_message_text<C: AsRef<EditInlineMessageText>>(&self, edit_inline_message_text: C) -> RTDResult<Ok> {
+  pub async fn edit_inline_message_text<C: AsRef<EditInlineMessageText>>(
+    &self,
+    edit_inline_message_text: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, edit_inline_message_text.as_ref()).await
   }
 
-  pub async fn edit_message_caption<C: AsRef<EditMessageCaption>>(&self, edit_message_caption: C) -> RTDResult<Message> {
+  pub async fn edit_message_caption<C: AsRef<EditMessageCaption>>(
+    &self,
+    edit_message_caption: C,
+  ) -> RTDResult<Message> {
     async_caller!(Message);
     async_caller(&self.api, edit_message_caption.as_ref()).await
   }
 
-  pub async fn edit_message_live_location<C: AsRef<EditMessageLiveLocation>>(&self, edit_message_live_location: C) -> RTDResult<Message> {
+  pub async fn edit_message_live_location<C: AsRef<EditMessageLiveLocation>>(
+    &self,
+    edit_message_live_location: C,
+  ) -> RTDResult<Message> {
     async_caller!(Message);
     async_caller(&self.api, edit_message_live_location.as_ref()).await
   }
 
-  pub async fn edit_message_media<C: AsRef<EditMessageMedia>>(&self, edit_message_media: C) -> RTDResult<Message> {
+  pub async fn edit_message_media<C: AsRef<EditMessageMedia>>(
+    &self,
+    edit_message_media: C,
+  ) -> RTDResult<Message> {
     async_caller!(Message);
     async_caller(&self.api, edit_message_media.as_ref()).await
   }
 
-  pub async fn edit_message_reply_markup<C: AsRef<EditMessageReplyMarkup>>(&self, edit_message_reply_markup: C) -> RTDResult<Message> {
+  pub async fn edit_message_reply_markup<C: AsRef<EditMessageReplyMarkup>>(
+    &self,
+    edit_message_reply_markup: C,
+  ) -> RTDResult<Message> {
     async_caller!(Message);
     async_caller(&self.api, edit_message_reply_markup.as_ref()).await
   }
 
-  pub async fn edit_message_scheduling_state<C: AsRef<EditMessageSchedulingState>>(&self, edit_message_scheduling_state: C) -> RTDResult<Ok> {
+  pub async fn edit_message_scheduling_state<C: AsRef<EditMessageSchedulingState>>(
+    &self,
+    edit_message_scheduling_state: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, edit_message_scheduling_state.as_ref()).await
   }
 
-  pub async fn edit_message_text<C: AsRef<EditMessageText>>(&self, edit_message_text: C) -> RTDResult<Message> {
+  pub async fn edit_message_text<C: AsRef<EditMessageText>>(
+    &self,
+    edit_message_text: C,
+  ) -> RTDResult<Message> {
     async_caller!(Message);
     async_caller(&self.api, edit_message_text.as_ref()).await
   }
@@ -586,117 +875,186 @@ impl AsyncApi {
     async_caller(&self.api, end_group_call.as_ref()).await
   }
 
-  pub async fn end_group_call_recording<C: AsRef<EndGroupCallRecording>>(&self, end_group_call_recording: C) -> RTDResult<Ok> {
+  pub async fn end_group_call_recording<C: AsRef<EndGroupCallRecording>>(
+    &self,
+    end_group_call_recording: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, end_group_call_recording.as_ref()).await
   }
 
-  pub async fn end_group_call_screen_sharing<C: AsRef<EndGroupCallScreenSharing>>(&self, end_group_call_screen_sharing: C) -> RTDResult<Ok> {
+  pub async fn end_group_call_screen_sharing<C: AsRef<EndGroupCallScreenSharing>>(
+    &self,
+    end_group_call_screen_sharing: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, end_group_call_screen_sharing.as_ref()).await
   }
 
-  pub async fn finish_file_generation<C: AsRef<FinishFileGeneration>>(&self, finish_file_generation: C) -> RTDResult<Ok> {
+  pub async fn finish_file_generation<C: AsRef<FinishFileGeneration>>(
+    &self,
+    finish_file_generation: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, finish_file_generation.as_ref()).await
   }
 
-  pub async fn forward_messages<C: AsRef<ForwardMessages>>(&self, forward_messages: C) -> RTDResult<Messages> {
+  pub async fn forward_messages<C: AsRef<ForwardMessages>>(
+    &self,
+    forward_messages: C,
+  ) -> RTDResult<Messages> {
     async_caller!(Messages);
     async_caller(&self.api, forward_messages.as_ref()).await
   }
 
-  pub async fn get_account_ttl<C: AsRef<GetAccountTtl>>(&self, get_account_ttl: C) -> RTDResult<AccountTtl> {
+  pub async fn get_account_ttl<C: AsRef<GetAccountTtl>>(
+    &self,
+    get_account_ttl: C,
+  ) -> RTDResult<AccountTtl> {
     async_caller!(AccountTtl);
     async_caller(&self.api, get_account_ttl.as_ref()).await
   }
 
-  pub async fn get_active_live_location_messages<C: AsRef<GetActiveLiveLocationMessages>>(&self, get_active_live_location_messages: C) -> RTDResult<Messages> {
+  pub async fn get_active_live_location_messages<C: AsRef<GetActiveLiveLocationMessages>>(
+    &self,
+    get_active_live_location_messages: C,
+  ) -> RTDResult<Messages> {
     async_caller!(Messages);
     async_caller(&self.api, get_active_live_location_messages.as_ref()).await
   }
 
-  pub async fn get_active_sessions<C: AsRef<GetActiveSessions>>(&self, get_active_sessions: C) -> RTDResult<Sessions> {
+  pub async fn get_active_sessions<C: AsRef<GetActiveSessions>>(
+    &self,
+    get_active_sessions: C,
+  ) -> RTDResult<Sessions> {
     async_caller!(Sessions);
     async_caller(&self.api, get_active_sessions.as_ref()).await
   }
 
-  pub async fn get_all_passport_elements<C: AsRef<GetAllPassportElements>>(&self, get_all_passport_elements: C) -> RTDResult<PassportElements> {
+  pub async fn get_all_passport_elements<C: AsRef<GetAllPassportElements>>(
+    &self,
+    get_all_passport_elements: C,
+  ) -> RTDResult<PassportElements> {
     async_caller!(PassportElements);
     async_caller(&self.api, get_all_passport_elements.as_ref()).await
   }
 
-  pub async fn get_animated_emoji<C: AsRef<GetAnimatedEmoji>>(&self, get_animated_emoji: C) -> RTDResult<AnimatedEmoji> {
+  pub async fn get_animated_emoji<C: AsRef<GetAnimatedEmoji>>(
+    &self,
+    get_animated_emoji: C,
+  ) -> RTDResult<AnimatedEmoji> {
     async_caller!(AnimatedEmoji);
     async_caller(&self.api, get_animated_emoji.as_ref()).await
   }
 
-  pub async fn get_application_config<C: AsRef<GetApplicationConfig>>(&self, get_application_config: C) -> RTDResult<JsonValue> {
+  pub async fn get_application_config<C: AsRef<GetApplicationConfig>>(
+    &self,
+    get_application_config: C,
+  ) -> RTDResult<JsonValue> {
     async_caller!(JsonValue);
     async_caller(&self.api, get_application_config.as_ref()).await
   }
 
-  pub async fn get_application_download_link<C: AsRef<GetApplicationDownloadLink>>(&self, get_application_download_link: C) -> RTDResult<HttpUrl> {
+  pub async fn get_application_download_link<C: AsRef<GetApplicationDownloadLink>>(
+    &self,
+    get_application_download_link: C,
+  ) -> RTDResult<HttpUrl> {
     async_caller!(HttpUrl);
     async_caller(&self.api, get_application_download_link.as_ref()).await
   }
 
-  pub async fn get_archived_sticker_sets<C: AsRef<GetArchivedStickerSets>>(&self, get_archived_sticker_sets: C) -> RTDResult<StickerSets> {
+  pub async fn get_archived_sticker_sets<C: AsRef<GetArchivedStickerSets>>(
+    &self,
+    get_archived_sticker_sets: C,
+  ) -> RTDResult<StickerSets> {
     async_caller!(StickerSets);
     async_caller(&self.api, get_archived_sticker_sets.as_ref()).await
   }
 
-  pub async fn get_attached_sticker_sets<C: AsRef<GetAttachedStickerSets>>(&self, get_attached_sticker_sets: C) -> RTDResult<StickerSets> {
+  pub async fn get_attached_sticker_sets<C: AsRef<GetAttachedStickerSets>>(
+    &self,
+    get_attached_sticker_sets: C,
+  ) -> RTDResult<StickerSets> {
     async_caller!(StickerSets);
     async_caller(&self.api, get_attached_sticker_sets.as_ref()).await
   }
 
-  pub async fn get_authorization_state<C: AsRef<GetAuthorizationState>>(&self, get_authorization_state: C) -> RTDResult<AuthorizationState> {
+  pub async fn get_authorization_state<C: AsRef<GetAuthorizationState>>(
+    &self,
+    get_authorization_state: C,
+  ) -> RTDResult<AuthorizationState> {
     async_caller!(AuthorizationState);
     async_caller(&self.api, get_authorization_state.as_ref()).await
   }
 
-  pub async fn get_auto_download_settings_presets<C: AsRef<GetAutoDownloadSettingsPresets>>(&self, get_auto_download_settings_presets: C) -> RTDResult<AutoDownloadSettingsPresets> {
+  pub async fn get_auto_download_settings_presets<C: AsRef<GetAutoDownloadSettingsPresets>>(
+    &self,
+    get_auto_download_settings_presets: C,
+  ) -> RTDResult<AutoDownloadSettingsPresets> {
     async_caller!(AutoDownloadSettingsPresets);
     async_caller(&self.api, get_auto_download_settings_presets.as_ref()).await
   }
 
-  pub async fn get_background_url<C: AsRef<GetBackgroundUrl>>(&self, get_background_url: C) -> RTDResult<HttpUrl> {
+  pub async fn get_background_url<C: AsRef<GetBackgroundUrl>>(
+    &self,
+    get_background_url: C,
+  ) -> RTDResult<HttpUrl> {
     async_caller!(HttpUrl);
     async_caller(&self.api, get_background_url.as_ref()).await
   }
 
-  pub async fn get_backgrounds<C: AsRef<GetBackgrounds>>(&self, get_backgrounds: C) -> RTDResult<Backgrounds> {
+  pub async fn get_backgrounds<C: AsRef<GetBackgrounds>>(
+    &self,
+    get_backgrounds: C,
+  ) -> RTDResult<Backgrounds> {
     async_caller!(Backgrounds);
     async_caller(&self.api, get_backgrounds.as_ref()).await
   }
 
-  pub async fn get_bank_card_info<C: AsRef<GetBankCardInfo>>(&self, get_bank_card_info: C) -> RTDResult<BankCardInfo> {
+  pub async fn get_bank_card_info<C: AsRef<GetBankCardInfo>>(
+    &self,
+    get_bank_card_info: C,
+  ) -> RTDResult<BankCardInfo> {
     async_caller!(BankCardInfo);
     async_caller(&self.api, get_bank_card_info.as_ref()).await
   }
 
-  pub async fn get_basic_group<C: AsRef<GetBasicGroup>>(&self, get_basic_group: C) -> RTDResult<BasicGroup> {
+  pub async fn get_basic_group<C: AsRef<GetBasicGroup>>(
+    &self,
+    get_basic_group: C,
+  ) -> RTDResult<BasicGroup> {
     async_caller!(BasicGroup);
     async_caller(&self.api, get_basic_group.as_ref()).await
   }
 
-  pub async fn get_basic_group_full_info<C: AsRef<GetBasicGroupFullInfo>>(&self, get_basic_group_full_info: C) -> RTDResult<BasicGroupFullInfo> {
+  pub async fn get_basic_group_full_info<C: AsRef<GetBasicGroupFullInfo>>(
+    &self,
+    get_basic_group_full_info: C,
+  ) -> RTDResult<BasicGroupFullInfo> {
     async_caller!(BasicGroupFullInfo);
     async_caller(&self.api, get_basic_group_full_info.as_ref()).await
   }
 
-  pub async fn get_blocked_message_senders<C: AsRef<GetBlockedMessageSenders>>(&self, get_blocked_message_senders: C) -> RTDResult<MessageSenders> {
+  pub async fn get_blocked_message_senders<C: AsRef<GetBlockedMessageSenders>>(
+    &self,
+    get_blocked_message_senders: C,
+  ) -> RTDResult<MessageSenders> {
     async_caller!(MessageSenders);
     async_caller(&self.api, get_blocked_message_senders.as_ref()).await
   }
 
-  pub async fn get_callback_query_answer<C: AsRef<GetCallbackQueryAnswer>>(&self, get_callback_query_answer: C) -> RTDResult<CallbackQueryAnswer> {
+  pub async fn get_callback_query_answer<C: AsRef<GetCallbackQueryAnswer>>(
+    &self,
+    get_callback_query_answer: C,
+  ) -> RTDResult<CallbackQueryAnswer> {
     async_caller!(CallbackQueryAnswer);
     async_caller(&self.api, get_callback_query_answer.as_ref()).await
   }
 
-  pub async fn get_callback_query_message<C: AsRef<GetCallbackQueryMessage>>(&self, get_callback_query_message: C) -> RTDResult<Message> {
+  pub async fn get_callback_query_message<C: AsRef<GetCallbackQueryMessage>>(
+    &self,
+    get_callback_query_message: C,
+  ) -> RTDResult<Message> {
     async_caller!(Message);
     async_caller(&self.api, get_callback_query_message.as_ref()).await
   }
@@ -706,112 +1064,184 @@ impl AsyncApi {
     async_caller(&self.api, get_chat.as_ref()).await
   }
 
-  pub async fn get_chat_administrators<C: AsRef<GetChatAdministrators>>(&self, get_chat_administrators: C) -> RTDResult<ChatAdministrators> {
+  pub async fn get_chat_administrators<C: AsRef<GetChatAdministrators>>(
+    &self,
+    get_chat_administrators: C,
+  ) -> RTDResult<ChatAdministrators> {
     async_caller!(ChatAdministrators);
     async_caller(&self.api, get_chat_administrators.as_ref()).await
   }
 
-  pub async fn get_chat_available_message_senders<C: AsRef<GetChatAvailableMessageSenders>>(&self, get_chat_available_message_senders: C) -> RTDResult<MessageSenders> {
+  pub async fn get_chat_available_message_senders<C: AsRef<GetChatAvailableMessageSenders>>(
+    &self,
+    get_chat_available_message_senders: C,
+  ) -> RTDResult<MessageSenders> {
     async_caller!(MessageSenders);
     async_caller(&self.api, get_chat_available_message_senders.as_ref()).await
   }
 
-  pub async fn get_chat_event_log<C: AsRef<GetChatEventLog>>(&self, get_chat_event_log: C) -> RTDResult<ChatEvents> {
+  pub async fn get_chat_event_log<C: AsRef<GetChatEventLog>>(
+    &self,
+    get_chat_event_log: C,
+  ) -> RTDResult<ChatEvents> {
     async_caller!(ChatEvents);
     async_caller(&self.api, get_chat_event_log.as_ref()).await
   }
 
-  pub async fn get_chat_filter<C: AsRef<GetChatFilter>>(&self, get_chat_filter: C) -> RTDResult<ChatFilter> {
+  pub async fn get_chat_filter<C: AsRef<GetChatFilter>>(
+    &self,
+    get_chat_filter: C,
+  ) -> RTDResult<ChatFilter> {
     async_caller!(ChatFilter);
     async_caller(&self.api, get_chat_filter.as_ref()).await
   }
 
-  pub async fn get_chat_filter_default_icon_name<C: AsRef<GetChatFilterDefaultIconName>>(&self, get_chat_filter_default_icon_name: C) -> RTDResult<Text> {
+  pub async fn get_chat_filter_default_icon_name<C: AsRef<GetChatFilterDefaultIconName>>(
+    &self,
+    get_chat_filter_default_icon_name: C,
+  ) -> RTDResult<Text> {
     async_caller!(Text);
     async_caller(&self.api, get_chat_filter_default_icon_name.as_ref()).await
   }
 
-  pub async fn get_chat_history<C: AsRef<GetChatHistory>>(&self, get_chat_history: C) -> RTDResult<Messages> {
+  pub async fn get_chat_history<C: AsRef<GetChatHistory>>(
+    &self,
+    get_chat_history: C,
+  ) -> RTDResult<Messages> {
     async_caller!(Messages);
     async_caller(&self.api, get_chat_history.as_ref()).await
   }
 
-  pub async fn get_chat_invite_link<C: AsRef<GetChatInviteLink>>(&self, get_chat_invite_link: C) -> RTDResult<ChatInviteLink> {
+  pub async fn get_chat_invite_link<C: AsRef<GetChatInviteLink>>(
+    &self,
+    get_chat_invite_link: C,
+  ) -> RTDResult<ChatInviteLink> {
     async_caller!(ChatInviteLink);
     async_caller(&self.api, get_chat_invite_link.as_ref()).await
   }
 
-  pub async fn get_chat_invite_link_counts<C: AsRef<GetChatInviteLinkCounts>>(&self, get_chat_invite_link_counts: C) -> RTDResult<ChatInviteLinkCounts> {
+  pub async fn get_chat_invite_link_counts<C: AsRef<GetChatInviteLinkCounts>>(
+    &self,
+    get_chat_invite_link_counts: C,
+  ) -> RTDResult<ChatInviteLinkCounts> {
     async_caller!(ChatInviteLinkCounts);
     async_caller(&self.api, get_chat_invite_link_counts.as_ref()).await
   }
 
-  pub async fn get_chat_invite_link_members<C: AsRef<GetChatInviteLinkMembers>>(&self, get_chat_invite_link_members: C) -> RTDResult<ChatInviteLinkMembers> {
+  pub async fn get_chat_invite_link_members<C: AsRef<GetChatInviteLinkMembers>>(
+    &self,
+    get_chat_invite_link_members: C,
+  ) -> RTDResult<ChatInviteLinkMembers> {
     async_caller!(ChatInviteLinkMembers);
     async_caller(&self.api, get_chat_invite_link_members.as_ref()).await
   }
 
-  pub async fn get_chat_invite_links<C: AsRef<GetChatInviteLinks>>(&self, get_chat_invite_links: C) -> RTDResult<ChatInviteLinks> {
+  pub async fn get_chat_invite_links<C: AsRef<GetChatInviteLinks>>(
+    &self,
+    get_chat_invite_links: C,
+  ) -> RTDResult<ChatInviteLinks> {
     async_caller!(ChatInviteLinks);
     async_caller(&self.api, get_chat_invite_links.as_ref()).await
   }
 
-  pub async fn get_chat_join_requests<C: AsRef<GetChatJoinRequests>>(&self, get_chat_join_requests: C) -> RTDResult<ChatJoinRequests> {
+  pub async fn get_chat_join_requests<C: AsRef<GetChatJoinRequests>>(
+    &self,
+    get_chat_join_requests: C,
+  ) -> RTDResult<ChatJoinRequests> {
     async_caller!(ChatJoinRequests);
     async_caller(&self.api, get_chat_join_requests.as_ref()).await
   }
 
-  pub async fn get_chat_lists_to_add_chat<C: AsRef<GetChatListsToAddChat>>(&self, get_chat_lists_to_add_chat: C) -> RTDResult<ChatLists> {
+  pub async fn get_chat_lists_to_add_chat<C: AsRef<GetChatListsToAddChat>>(
+    &self,
+    get_chat_lists_to_add_chat: C,
+  ) -> RTDResult<ChatLists> {
     async_caller!(ChatLists);
     async_caller(&self.api, get_chat_lists_to_add_chat.as_ref()).await
   }
 
-  pub async fn get_chat_member<C: AsRef<GetChatMember>>(&self, get_chat_member: C) -> RTDResult<ChatMember> {
+  pub async fn get_chat_member<C: AsRef<GetChatMember>>(
+    &self,
+    get_chat_member: C,
+  ) -> RTDResult<ChatMember> {
     async_caller!(ChatMember);
     async_caller(&self.api, get_chat_member.as_ref()).await
   }
 
-  pub async fn get_chat_message_by_date<C: AsRef<GetChatMessageByDate>>(&self, get_chat_message_by_date: C) -> RTDResult<Message> {
+  pub async fn get_chat_message_by_date<C: AsRef<GetChatMessageByDate>>(
+    &self,
+    get_chat_message_by_date: C,
+  ) -> RTDResult<Message> {
     async_caller!(Message);
     async_caller(&self.api, get_chat_message_by_date.as_ref()).await
   }
 
-  pub async fn get_chat_message_calendar<C: AsRef<GetChatMessageCalendar>>(&self, get_chat_message_calendar: C) -> RTDResult<MessageCalendar> {
+  pub async fn get_chat_message_calendar<C: AsRef<GetChatMessageCalendar>>(
+    &self,
+    get_chat_message_calendar: C,
+  ) -> RTDResult<MessageCalendar> {
     async_caller!(MessageCalendar);
     async_caller(&self.api, get_chat_message_calendar.as_ref()).await
   }
 
-  pub async fn get_chat_message_count<C: AsRef<GetChatMessageCount>>(&self, get_chat_message_count: C) -> RTDResult<Count> {
+  pub async fn get_chat_message_count<C: AsRef<GetChatMessageCount>>(
+    &self,
+    get_chat_message_count: C,
+  ) -> RTDResult<Count> {
     async_caller!(Count);
     async_caller(&self.api, get_chat_message_count.as_ref()).await
   }
 
-  pub async fn get_chat_notification_settings_exceptions<C: AsRef<GetChatNotificationSettingsExceptions>>(&self, get_chat_notification_settings_exceptions: C) -> RTDResult<Chats> {
+  pub async fn get_chat_notification_settings_exceptions<
+    C: AsRef<GetChatNotificationSettingsExceptions>,
+  >(
+    &self,
+    get_chat_notification_settings_exceptions: C,
+  ) -> RTDResult<Chats> {
     async_caller!(Chats);
-    async_caller(&self.api, get_chat_notification_settings_exceptions.as_ref()).await
+    async_caller(
+      &self.api,
+      get_chat_notification_settings_exceptions.as_ref(),
+    )
+    .await
   }
 
-  pub async fn get_chat_pinned_message<C: AsRef<GetChatPinnedMessage>>(&self, get_chat_pinned_message: C) -> RTDResult<Message> {
+  pub async fn get_chat_pinned_message<C: AsRef<GetChatPinnedMessage>>(
+    &self,
+    get_chat_pinned_message: C,
+  ) -> RTDResult<Message> {
     async_caller!(Message);
     async_caller(&self.api, get_chat_pinned_message.as_ref()).await
   }
 
-  pub async fn get_chat_scheduled_messages<C: AsRef<GetChatScheduledMessages>>(&self, get_chat_scheduled_messages: C) -> RTDResult<Messages> {
+  pub async fn get_chat_scheduled_messages<C: AsRef<GetChatScheduledMessages>>(
+    &self,
+    get_chat_scheduled_messages: C,
+  ) -> RTDResult<Messages> {
     async_caller!(Messages);
     async_caller(&self.api, get_chat_scheduled_messages.as_ref()).await
   }
 
-  pub async fn get_chat_sparse_message_positions<C: AsRef<GetChatSparseMessagePositions>>(&self, get_chat_sparse_message_positions: C) -> RTDResult<MessagePositions> {
+  pub async fn get_chat_sparse_message_positions<C: AsRef<GetChatSparseMessagePositions>>(
+    &self,
+    get_chat_sparse_message_positions: C,
+  ) -> RTDResult<MessagePositions> {
     async_caller!(MessagePositions);
     async_caller(&self.api, get_chat_sparse_message_positions.as_ref()).await
   }
 
-  pub async fn get_chat_sponsored_message<C: AsRef<GetChatSponsoredMessage>>(&self, get_chat_sponsored_message: C) -> RTDResult<SponsoredMessage> {
+  pub async fn get_chat_sponsored_message<C: AsRef<GetChatSponsoredMessage>>(
+    &self,
+    get_chat_sponsored_message: C,
+  ) -> RTDResult<SponsoredMessage> {
     async_caller!(SponsoredMessage);
     async_caller(&self.api, get_chat_sponsored_message.as_ref()).await
   }
 
-  pub async fn get_chat_statistics<C: AsRef<GetChatStatistics>>(&self, get_chat_statistics: C) -> RTDResult<ChatStatistics> {
+  pub async fn get_chat_statistics<C: AsRef<GetChatStatistics>>(
+    &self,
+    get_chat_statistics: C,
+  ) -> RTDResult<ChatStatistics> {
     async_caller!(ChatStatistics);
     async_caller(&self.api, get_chat_statistics.as_ref()).await
   }
@@ -821,12 +1251,18 @@ impl AsyncApi {
     async_caller(&self.api, get_chats.as_ref()).await
   }
 
-  pub async fn get_commands<C: AsRef<GetCommands>>(&self, get_commands: C) -> RTDResult<BotCommands> {
+  pub async fn get_commands<C: AsRef<GetCommands>>(
+    &self,
+    get_commands: C,
+  ) -> RTDResult<BotCommands> {
     async_caller!(BotCommands);
     async_caller(&self.api, get_commands.as_ref()).await
   }
 
-  pub async fn get_connected_websites<C: AsRef<GetConnectedWebsites>>(&self, get_connected_websites: C) -> RTDResult<ConnectedWebsites> {
+  pub async fn get_connected_websites<C: AsRef<GetConnectedWebsites>>(
+    &self,
+    get_connected_websites: C,
+  ) -> RTDResult<ConnectedWebsites> {
     async_caller!(ConnectedWebsites);
     async_caller(&self.api, get_connected_websites.as_ref()).await
   }
@@ -836,52 +1272,82 @@ impl AsyncApi {
     async_caller(&self.api, get_contacts.as_ref()).await
   }
 
-  pub async fn get_countries<C: AsRef<GetCountries>>(&self, get_countries: C) -> RTDResult<Countries> {
+  pub async fn get_countries<C: AsRef<GetCountries>>(
+    &self,
+    get_countries: C,
+  ) -> RTDResult<Countries> {
     async_caller!(Countries);
     async_caller(&self.api, get_countries.as_ref()).await
   }
 
-  pub async fn get_country_code<C: AsRef<GetCountryCode>>(&self, get_country_code: C) -> RTDResult<Text> {
+  pub async fn get_country_code<C: AsRef<GetCountryCode>>(
+    &self,
+    get_country_code: C,
+  ) -> RTDResult<Text> {
     async_caller!(Text);
     async_caller(&self.api, get_country_code.as_ref()).await
   }
 
-  pub async fn get_created_public_chats<C: AsRef<GetCreatedPublicChats>>(&self, get_created_public_chats: C) -> RTDResult<Chats> {
+  pub async fn get_created_public_chats<C: AsRef<GetCreatedPublicChats>>(
+    &self,
+    get_created_public_chats: C,
+  ) -> RTDResult<Chats> {
     async_caller!(Chats);
     async_caller(&self.api, get_created_public_chats.as_ref()).await
   }
 
-  pub async fn get_current_state<C: AsRef<GetCurrentState>>(&self, get_current_state: C) -> RTDResult<Updates> {
+  pub async fn get_current_state<C: AsRef<GetCurrentState>>(
+    &self,
+    get_current_state: C,
+  ) -> RTDResult<Updates> {
     async_caller!(Updates);
     async_caller(&self.api, get_current_state.as_ref()).await
   }
 
-  pub async fn get_database_statistics<C: AsRef<GetDatabaseStatistics>>(&self, get_database_statistics: C) -> RTDResult<DatabaseStatistics> {
+  pub async fn get_database_statistics<C: AsRef<GetDatabaseStatistics>>(
+    &self,
+    get_database_statistics: C,
+  ) -> RTDResult<DatabaseStatistics> {
     async_caller!(DatabaseStatistics);
     async_caller(&self.api, get_database_statistics.as_ref()).await
   }
 
-  pub async fn get_deep_link_info<C: AsRef<GetDeepLinkInfo>>(&self, get_deep_link_info: C) -> RTDResult<DeepLinkInfo> {
+  pub async fn get_deep_link_info<C: AsRef<GetDeepLinkInfo>>(
+    &self,
+    get_deep_link_info: C,
+  ) -> RTDResult<DeepLinkInfo> {
     async_caller!(DeepLinkInfo);
     async_caller(&self.api, get_deep_link_info.as_ref()).await
   }
 
-  pub async fn get_emoji_suggestions_url<C: AsRef<GetEmojiSuggestionsUrl>>(&self, get_emoji_suggestions_url: C) -> RTDResult<HttpUrl> {
+  pub async fn get_emoji_suggestions_url<C: AsRef<GetEmojiSuggestionsUrl>>(
+    &self,
+    get_emoji_suggestions_url: C,
+  ) -> RTDResult<HttpUrl> {
     async_caller!(HttpUrl);
     async_caller(&self.api, get_emoji_suggestions_url.as_ref()).await
   }
 
-  pub async fn get_external_link<C: AsRef<GetExternalLink>>(&self, get_external_link: C) -> RTDResult<HttpUrl> {
+  pub async fn get_external_link<C: AsRef<GetExternalLink>>(
+    &self,
+    get_external_link: C,
+  ) -> RTDResult<HttpUrl> {
     async_caller!(HttpUrl);
     async_caller(&self.api, get_external_link.as_ref()).await
   }
 
-  pub async fn get_external_link_info<C: AsRef<GetExternalLinkInfo>>(&self, get_external_link_info: C) -> RTDResult<LoginUrlInfo> {
+  pub async fn get_external_link_info<C: AsRef<GetExternalLinkInfo>>(
+    &self,
+    get_external_link_info: C,
+  ) -> RTDResult<LoginUrlInfo> {
     async_caller!(LoginUrlInfo);
     async_caller(&self.api, get_external_link_info.as_ref()).await
   }
 
-  pub async fn get_favorite_stickers<C: AsRef<GetFavoriteStickers>>(&self, get_favorite_stickers: C) -> RTDResult<Stickers> {
+  pub async fn get_favorite_stickers<C: AsRef<GetFavoriteStickers>>(
+    &self,
+    get_favorite_stickers: C,
+  ) -> RTDResult<Stickers> {
     async_caller!(Stickers);
     async_caller(&self.api, get_favorite_stickers.as_ref()).await
   }
@@ -891,112 +1357,178 @@ impl AsyncApi {
     async_caller(&self.api, get_file.as_ref()).await
   }
 
-  pub async fn get_file_downloaded_prefix_size<C: AsRef<GetFileDownloadedPrefixSize>>(&self, get_file_downloaded_prefix_size: C) -> RTDResult<Count> {
+  pub async fn get_file_downloaded_prefix_size<C: AsRef<GetFileDownloadedPrefixSize>>(
+    &self,
+    get_file_downloaded_prefix_size: C,
+  ) -> RTDResult<Count> {
     async_caller!(Count);
     async_caller(&self.api, get_file_downloaded_prefix_size.as_ref()).await
   }
 
-  pub async fn get_file_extension<C: AsRef<GetFileExtension>>(&self, get_file_extension: C) -> RTDResult<Text> {
+  pub async fn get_file_extension<C: AsRef<GetFileExtension>>(
+    &self,
+    get_file_extension: C,
+  ) -> RTDResult<Text> {
     async_caller!(Text);
     async_caller(&self.api, get_file_extension.as_ref()).await
   }
 
-  pub async fn get_file_mime_type<C: AsRef<GetFileMimeType>>(&self, get_file_mime_type: C) -> RTDResult<Text> {
+  pub async fn get_file_mime_type<C: AsRef<GetFileMimeType>>(
+    &self,
+    get_file_mime_type: C,
+  ) -> RTDResult<Text> {
     async_caller!(Text);
     async_caller(&self.api, get_file_mime_type.as_ref()).await
   }
 
-  pub async fn get_game_high_scores<C: AsRef<GetGameHighScores>>(&self, get_game_high_scores: C) -> RTDResult<GameHighScores> {
+  pub async fn get_game_high_scores<C: AsRef<GetGameHighScores>>(
+    &self,
+    get_game_high_scores: C,
+  ) -> RTDResult<GameHighScores> {
     async_caller!(GameHighScores);
     async_caller(&self.api, get_game_high_scores.as_ref()).await
   }
 
-  pub async fn get_group_call<C: AsRef<GetGroupCall>>(&self, get_group_call: C) -> RTDResult<GroupCall> {
+  pub async fn get_group_call<C: AsRef<GetGroupCall>>(
+    &self,
+    get_group_call: C,
+  ) -> RTDResult<GroupCall> {
     async_caller!(GroupCall);
     async_caller(&self.api, get_group_call.as_ref()).await
   }
 
-  pub async fn get_group_call_invite_link<C: AsRef<GetGroupCallInviteLink>>(&self, get_group_call_invite_link: C) -> RTDResult<HttpUrl> {
+  pub async fn get_group_call_invite_link<C: AsRef<GetGroupCallInviteLink>>(
+    &self,
+    get_group_call_invite_link: C,
+  ) -> RTDResult<HttpUrl> {
     async_caller!(HttpUrl);
     async_caller(&self.api, get_group_call_invite_link.as_ref()).await
   }
 
-  pub async fn get_group_call_stream_segment<C: AsRef<GetGroupCallStreamSegment>>(&self, get_group_call_stream_segment: C) -> RTDResult<FilePart> {
+  pub async fn get_group_call_stream_segment<C: AsRef<GetGroupCallStreamSegment>>(
+    &self,
+    get_group_call_stream_segment: C,
+  ) -> RTDResult<FilePart> {
     async_caller!(FilePart);
     async_caller(&self.api, get_group_call_stream_segment.as_ref()).await
   }
 
-  pub async fn get_groups_in_common<C: AsRef<GetGroupsInCommon>>(&self, get_groups_in_common: C) -> RTDResult<Chats> {
+  pub async fn get_groups_in_common<C: AsRef<GetGroupsInCommon>>(
+    &self,
+    get_groups_in_common: C,
+  ) -> RTDResult<Chats> {
     async_caller!(Chats);
     async_caller(&self.api, get_groups_in_common.as_ref()).await
   }
 
-  pub async fn get_imported_contact_count<C: AsRef<GetImportedContactCount>>(&self, get_imported_contact_count: C) -> RTDResult<Count> {
+  pub async fn get_imported_contact_count<C: AsRef<GetImportedContactCount>>(
+    &self,
+    get_imported_contact_count: C,
+  ) -> RTDResult<Count> {
     async_caller!(Count);
     async_caller(&self.api, get_imported_contact_count.as_ref()).await
   }
 
-  pub async fn get_inactive_supergroup_chats<C: AsRef<GetInactiveSupergroupChats>>(&self, get_inactive_supergroup_chats: C) -> RTDResult<Chats> {
+  pub async fn get_inactive_supergroup_chats<C: AsRef<GetInactiveSupergroupChats>>(
+    &self,
+    get_inactive_supergroup_chats: C,
+  ) -> RTDResult<Chats> {
     async_caller!(Chats);
     async_caller(&self.api, get_inactive_supergroup_chats.as_ref()).await
   }
 
-  pub async fn get_inline_game_high_scores<C: AsRef<GetInlineGameHighScores>>(&self, get_inline_game_high_scores: C) -> RTDResult<GameHighScores> {
+  pub async fn get_inline_game_high_scores<C: AsRef<GetInlineGameHighScores>>(
+    &self,
+    get_inline_game_high_scores: C,
+  ) -> RTDResult<GameHighScores> {
     async_caller!(GameHighScores);
     async_caller(&self.api, get_inline_game_high_scores.as_ref()).await
   }
 
-  pub async fn get_inline_query_results<C: AsRef<GetInlineQueryResults>>(&self, get_inline_query_results: C) -> RTDResult<InlineQueryResults> {
+  pub async fn get_inline_query_results<C: AsRef<GetInlineQueryResults>>(
+    &self,
+    get_inline_query_results: C,
+  ) -> RTDResult<InlineQueryResults> {
     async_caller!(InlineQueryResults);
     async_caller(&self.api, get_inline_query_results.as_ref()).await
   }
 
-  pub async fn get_installed_sticker_sets<C: AsRef<GetInstalledStickerSets>>(&self, get_installed_sticker_sets: C) -> RTDResult<StickerSets> {
+  pub async fn get_installed_sticker_sets<C: AsRef<GetInstalledStickerSets>>(
+    &self,
+    get_installed_sticker_sets: C,
+  ) -> RTDResult<StickerSets> {
     async_caller!(StickerSets);
     async_caller(&self.api, get_installed_sticker_sets.as_ref()).await
   }
 
-  pub async fn get_internal_link_type<C: AsRef<GetInternalLinkType>>(&self, get_internal_link_type: C) -> RTDResult<InternalLinkType> {
+  pub async fn get_internal_link_type<C: AsRef<GetInternalLinkType>>(
+    &self,
+    get_internal_link_type: C,
+  ) -> RTDResult<InternalLinkType> {
     async_caller!(InternalLinkType);
     async_caller(&self.api, get_internal_link_type.as_ref()).await
   }
 
-  pub async fn get_json_string<C: AsRef<GetJsonString>>(&self, get_json_string: C) -> RTDResult<Text> {
+  pub async fn get_json_string<C: AsRef<GetJsonString>>(
+    &self,
+    get_json_string: C,
+  ) -> RTDResult<Text> {
     async_caller!(Text);
     async_caller(&self.api, get_json_string.as_ref()).await
   }
 
-  pub async fn get_json_value<C: AsRef<GetJsonValue>>(&self, get_json_value: C) -> RTDResult<JsonValue> {
+  pub async fn get_json_value<C: AsRef<GetJsonValue>>(
+    &self,
+    get_json_value: C,
+  ) -> RTDResult<JsonValue> {
     async_caller!(JsonValue);
     async_caller(&self.api, get_json_value.as_ref()).await
   }
 
-  pub async fn get_language_pack_info<C: AsRef<GetLanguagePackInfo>>(&self, get_language_pack_info: C) -> RTDResult<LanguagePackInfo> {
+  pub async fn get_language_pack_info<C: AsRef<GetLanguagePackInfo>>(
+    &self,
+    get_language_pack_info: C,
+  ) -> RTDResult<LanguagePackInfo> {
     async_caller!(LanguagePackInfo);
     async_caller(&self.api, get_language_pack_info.as_ref()).await
   }
 
-  pub async fn get_language_pack_string<C: AsRef<GetLanguagePackString>>(&self, get_language_pack_string: C) -> RTDResult<LanguagePackStringValue> {
+  pub async fn get_language_pack_string<C: AsRef<GetLanguagePackString>>(
+    &self,
+    get_language_pack_string: C,
+  ) -> RTDResult<LanguagePackStringValue> {
     async_caller!(LanguagePackStringValue);
     async_caller(&self.api, get_language_pack_string.as_ref()).await
   }
 
-  pub async fn get_language_pack_strings<C: AsRef<GetLanguagePackStrings>>(&self, get_language_pack_strings: C) -> RTDResult<LanguagePackStrings> {
+  pub async fn get_language_pack_strings<C: AsRef<GetLanguagePackStrings>>(
+    &self,
+    get_language_pack_strings: C,
+  ) -> RTDResult<LanguagePackStrings> {
     async_caller!(LanguagePackStrings);
     async_caller(&self.api, get_language_pack_strings.as_ref()).await
   }
 
-  pub async fn get_localization_target_info<C: AsRef<GetLocalizationTargetInfo>>(&self, get_localization_target_info: C) -> RTDResult<LocalizationTargetInfo> {
+  pub async fn get_localization_target_info<C: AsRef<GetLocalizationTargetInfo>>(
+    &self,
+    get_localization_target_info: C,
+  ) -> RTDResult<LocalizationTargetInfo> {
     async_caller!(LocalizationTargetInfo);
     async_caller(&self.api, get_localization_target_info.as_ref()).await
   }
 
-  pub async fn get_log_stream<C: AsRef<GetLogStream>>(&self, get_log_stream: C) -> RTDResult<LogStream> {
+  pub async fn get_log_stream<C: AsRef<GetLogStream>>(
+    &self,
+    get_log_stream: C,
+  ) -> RTDResult<LogStream> {
     async_caller!(LogStream);
     async_caller(&self.api, get_log_stream.as_ref()).await
   }
 
-  pub async fn get_log_tag_verbosity_level<C: AsRef<GetLogTagVerbosityLevel>>(&self, get_log_tag_verbosity_level: C) -> RTDResult<LogVerbosityLevel> {
+  pub async fn get_log_tag_verbosity_level<C: AsRef<GetLogTagVerbosityLevel>>(
+    &self,
+    get_log_tag_verbosity_level: C,
+  ) -> RTDResult<LogVerbosityLevel> {
     async_caller!(LogVerbosityLevel);
     async_caller(&self.api, get_log_tag_verbosity_level.as_ref()).await
   }
@@ -1006,7 +1538,10 @@ impl AsyncApi {
     async_caller(&self.api, get_log_tags.as_ref()).await
   }
 
-  pub async fn get_log_verbosity_level<C: AsRef<GetLogVerbosityLevel>>(&self, get_log_verbosity_level: C) -> RTDResult<LogVerbosityLevel> {
+  pub async fn get_log_verbosity_level<C: AsRef<GetLogVerbosityLevel>>(
+    &self,
+    get_log_verbosity_level: C,
+  ) -> RTDResult<LogVerbosityLevel> {
     async_caller!(LogVerbosityLevel);
     async_caller(&self.api, get_log_verbosity_level.as_ref()).await
   }
@@ -1016,17 +1551,26 @@ impl AsyncApi {
     async_caller(&self.api, get_login_url.as_ref()).await
   }
 
-  pub async fn get_login_url_info<C: AsRef<GetLoginUrlInfo>>(&self, get_login_url_info: C) -> RTDResult<LoginUrlInfo> {
+  pub async fn get_login_url_info<C: AsRef<GetLoginUrlInfo>>(
+    &self,
+    get_login_url_info: C,
+  ) -> RTDResult<LoginUrlInfo> {
     async_caller!(LoginUrlInfo);
     async_caller(&self.api, get_login_url_info.as_ref()).await
   }
 
-  pub async fn get_map_thumbnail_file<C: AsRef<GetMapThumbnailFile>>(&self, get_map_thumbnail_file: C) -> RTDResult<File> {
+  pub async fn get_map_thumbnail_file<C: AsRef<GetMapThumbnailFile>>(
+    &self,
+    get_map_thumbnail_file: C,
+  ) -> RTDResult<File> {
     async_caller!(File);
     async_caller(&self.api, get_map_thumbnail_file.as_ref()).await
   }
 
-  pub async fn get_markdown_text<C: AsRef<GetMarkdownText>>(&self, get_markdown_text: C) -> RTDResult<FormattedText> {
+  pub async fn get_markdown_text<C: AsRef<GetMarkdownText>>(
+    &self,
+    get_markdown_text: C,
+  ) -> RTDResult<FormattedText> {
     async_caller!(FormattedText);
     async_caller(&self.api, get_markdown_text.as_ref()).await
   }
@@ -1041,57 +1585,90 @@ impl AsyncApi {
     async_caller(&self.api, get_message.as_ref()).await
   }
 
-  pub async fn get_message_embedding_code<C: AsRef<GetMessageEmbeddingCode>>(&self, get_message_embedding_code: C) -> RTDResult<Text> {
+  pub async fn get_message_embedding_code<C: AsRef<GetMessageEmbeddingCode>>(
+    &self,
+    get_message_embedding_code: C,
+  ) -> RTDResult<Text> {
     async_caller!(Text);
     async_caller(&self.api, get_message_embedding_code.as_ref()).await
   }
 
-  pub async fn get_message_file_type<C: AsRef<GetMessageFileType>>(&self, get_message_file_type: C) -> RTDResult<MessageFileType> {
+  pub async fn get_message_file_type<C: AsRef<GetMessageFileType>>(
+    &self,
+    get_message_file_type: C,
+  ) -> RTDResult<MessageFileType> {
     async_caller!(MessageFileType);
     async_caller(&self.api, get_message_file_type.as_ref()).await
   }
 
-  pub async fn get_message_import_confirmation_text<C: AsRef<GetMessageImportConfirmationText>>(&self, get_message_import_confirmation_text: C) -> RTDResult<Text> {
+  pub async fn get_message_import_confirmation_text<C: AsRef<GetMessageImportConfirmationText>>(
+    &self,
+    get_message_import_confirmation_text: C,
+  ) -> RTDResult<Text> {
     async_caller!(Text);
     async_caller(&self.api, get_message_import_confirmation_text.as_ref()).await
   }
 
-  pub async fn get_message_link<C: AsRef<GetMessageLink>>(&self, get_message_link: C) -> RTDResult<MessageLink> {
+  pub async fn get_message_link<C: AsRef<GetMessageLink>>(
+    &self,
+    get_message_link: C,
+  ) -> RTDResult<MessageLink> {
     async_caller!(MessageLink);
     async_caller(&self.api, get_message_link.as_ref()).await
   }
 
-  pub async fn get_message_link_info<C: AsRef<GetMessageLinkInfo>>(&self, get_message_link_info: C) -> RTDResult<MessageLinkInfo> {
+  pub async fn get_message_link_info<C: AsRef<GetMessageLinkInfo>>(
+    &self,
+    get_message_link_info: C,
+  ) -> RTDResult<MessageLinkInfo> {
     async_caller!(MessageLinkInfo);
     async_caller(&self.api, get_message_link_info.as_ref()).await
   }
 
-  pub async fn get_message_locally<C: AsRef<GetMessageLocally>>(&self, get_message_locally: C) -> RTDResult<Message> {
+  pub async fn get_message_locally<C: AsRef<GetMessageLocally>>(
+    &self,
+    get_message_locally: C,
+  ) -> RTDResult<Message> {
     async_caller!(Message);
     async_caller(&self.api, get_message_locally.as_ref()).await
   }
 
-  pub async fn get_message_public_forwards<C: AsRef<GetMessagePublicForwards>>(&self, get_message_public_forwards: C) -> RTDResult<FoundMessages> {
+  pub async fn get_message_public_forwards<C: AsRef<GetMessagePublicForwards>>(
+    &self,
+    get_message_public_forwards: C,
+  ) -> RTDResult<FoundMessages> {
     async_caller!(FoundMessages);
     async_caller(&self.api, get_message_public_forwards.as_ref()).await
   }
 
-  pub async fn get_message_statistics<C: AsRef<GetMessageStatistics>>(&self, get_message_statistics: C) -> RTDResult<MessageStatistics> {
+  pub async fn get_message_statistics<C: AsRef<GetMessageStatistics>>(
+    &self,
+    get_message_statistics: C,
+  ) -> RTDResult<MessageStatistics> {
     async_caller!(MessageStatistics);
     async_caller(&self.api, get_message_statistics.as_ref()).await
   }
 
-  pub async fn get_message_thread<C: AsRef<GetMessageThread>>(&self, get_message_thread: C) -> RTDResult<MessageThreadInfo> {
+  pub async fn get_message_thread<C: AsRef<GetMessageThread>>(
+    &self,
+    get_message_thread: C,
+  ) -> RTDResult<MessageThreadInfo> {
     async_caller!(MessageThreadInfo);
     async_caller(&self.api, get_message_thread.as_ref()).await
   }
 
-  pub async fn get_message_thread_history<C: AsRef<GetMessageThreadHistory>>(&self, get_message_thread_history: C) -> RTDResult<Messages> {
+  pub async fn get_message_thread_history<C: AsRef<GetMessageThreadHistory>>(
+    &self,
+    get_message_thread_history: C,
+  ) -> RTDResult<Messages> {
     async_caller!(Messages);
     async_caller(&self.api, get_message_thread_history.as_ref()).await
   }
 
-  pub async fn get_message_viewers<C: AsRef<GetMessageViewers>>(&self, get_message_viewers: C) -> RTDResult<Users> {
+  pub async fn get_message_viewers<C: AsRef<GetMessageViewers>>(
+    &self,
+    get_message_viewers: C,
+  ) -> RTDResult<Users> {
     async_caller!(Users);
     async_caller(&self.api, get_message_viewers.as_ref()).await
   }
@@ -1101,7 +1678,10 @@ impl AsyncApi {
     async_caller(&self.api, get_messages.as_ref()).await
   }
 
-  pub async fn get_network_statistics<C: AsRef<GetNetworkStatistics>>(&self, get_network_statistics: C) -> RTDResult<NetworkStatistics> {
+  pub async fn get_network_statistics<C: AsRef<GetNetworkStatistics>>(
+    &self,
+    get_network_statistics: C,
+  ) -> RTDResult<NetworkStatistics> {
     async_caller!(NetworkStatistics);
     async_caller(&self.api, get_network_statistics.as_ref()).await
   }
@@ -1111,52 +1691,88 @@ impl AsyncApi {
     async_caller(&self.api, get_option.as_ref()).await
   }
 
-  pub async fn get_passport_authorization_form<C: AsRef<GetPassportAuthorizationForm>>(&self, get_passport_authorization_form: C) -> RTDResult<PassportAuthorizationForm> {
+  pub async fn get_passport_authorization_form<C: AsRef<GetPassportAuthorizationForm>>(
+    &self,
+    get_passport_authorization_form: C,
+  ) -> RTDResult<PassportAuthorizationForm> {
     async_caller!(PassportAuthorizationForm);
     async_caller(&self.api, get_passport_authorization_form.as_ref()).await
   }
 
-  pub async fn get_passport_authorization_form_available_elements<C: AsRef<GetPassportAuthorizationFormAvailableElements>>(&self, get_passport_authorization_form_available_elements: C) -> RTDResult<PassportElementsWithErrors> {
+  pub async fn get_passport_authorization_form_available_elements<
+    C: AsRef<GetPassportAuthorizationFormAvailableElements>,
+  >(
+    &self,
+    get_passport_authorization_form_available_elements: C,
+  ) -> RTDResult<PassportElementsWithErrors> {
     async_caller!(PassportElementsWithErrors);
-    async_caller(&self.api, get_passport_authorization_form_available_elements.as_ref()).await
+    async_caller(
+      &self.api,
+      get_passport_authorization_form_available_elements.as_ref(),
+    )
+    .await
   }
 
-  pub async fn get_passport_element<C: AsRef<GetPassportElement>>(&self, get_passport_element: C) -> RTDResult<PassportElement> {
+  pub async fn get_passport_element<C: AsRef<GetPassportElement>>(
+    &self,
+    get_passport_element: C,
+  ) -> RTDResult<PassportElement> {
     async_caller!(PassportElement);
     async_caller(&self.api, get_passport_element.as_ref()).await
   }
 
-  pub async fn get_password_state<C: AsRef<GetPasswordState>>(&self, get_password_state: C) -> RTDResult<PasswordState> {
+  pub async fn get_password_state<C: AsRef<GetPasswordState>>(
+    &self,
+    get_password_state: C,
+  ) -> RTDResult<PasswordState> {
     async_caller!(PasswordState);
     async_caller(&self.api, get_password_state.as_ref()).await
   }
 
-  pub async fn get_payment_form<C: AsRef<GetPaymentForm>>(&self, get_payment_form: C) -> RTDResult<PaymentForm> {
+  pub async fn get_payment_form<C: AsRef<GetPaymentForm>>(
+    &self,
+    get_payment_form: C,
+  ) -> RTDResult<PaymentForm> {
     async_caller!(PaymentForm);
     async_caller(&self.api, get_payment_form.as_ref()).await
   }
 
-  pub async fn get_payment_receipt<C: AsRef<GetPaymentReceipt>>(&self, get_payment_receipt: C) -> RTDResult<PaymentReceipt> {
+  pub async fn get_payment_receipt<C: AsRef<GetPaymentReceipt>>(
+    &self,
+    get_payment_receipt: C,
+  ) -> RTDResult<PaymentReceipt> {
     async_caller!(PaymentReceipt);
     async_caller(&self.api, get_payment_receipt.as_ref()).await
   }
 
-  pub async fn get_phone_number_info<C: AsRef<GetPhoneNumberInfo>>(&self, get_phone_number_info: C) -> RTDResult<PhoneNumberInfo> {
+  pub async fn get_phone_number_info<C: AsRef<GetPhoneNumberInfo>>(
+    &self,
+    get_phone_number_info: C,
+  ) -> RTDResult<PhoneNumberInfo> {
     async_caller!(PhoneNumberInfo);
     async_caller(&self.api, get_phone_number_info.as_ref()).await
   }
 
-  pub async fn get_phone_number_info_sync<C: AsRef<GetPhoneNumberInfoSync>>(&self, get_phone_number_info_sync: C) -> RTDResult<PhoneNumberInfo> {
+  pub async fn get_phone_number_info_sync<C: AsRef<GetPhoneNumberInfoSync>>(
+    &self,
+    get_phone_number_info_sync: C,
+  ) -> RTDResult<PhoneNumberInfo> {
     async_caller!(PhoneNumberInfo);
     async_caller(&self.api, get_phone_number_info_sync.as_ref()).await
   }
 
-  pub async fn get_poll_voters<C: AsRef<GetPollVoters>>(&self, get_poll_voters: C) -> RTDResult<Users> {
+  pub async fn get_poll_voters<C: AsRef<GetPollVoters>>(
+    &self,
+    get_poll_voters: C,
+  ) -> RTDResult<Users> {
     async_caller!(Users);
     async_caller(&self.api, get_poll_voters.as_ref()).await
   }
 
-  pub async fn get_preferred_country_language<C: AsRef<GetPreferredCountryLanguage>>(&self, get_preferred_country_language: C) -> RTDResult<Text> {
+  pub async fn get_preferred_country_language<C: AsRef<GetPreferredCountryLanguage>>(
+    &self,
+    get_preferred_country_language: C,
+  ) -> RTDResult<Text> {
     async_caller!(Text);
     async_caller(&self.api, get_preferred_country_language.as_ref()).await
   }
@@ -1166,87 +1782,138 @@ impl AsyncApi {
     async_caller(&self.api, get_proxies.as_ref()).await
   }
 
-  pub async fn get_proxy_link<C: AsRef<GetProxyLink>>(&self, get_proxy_link: C) -> RTDResult<HttpUrl> {
+  pub async fn get_proxy_link<C: AsRef<GetProxyLink>>(
+    &self,
+    get_proxy_link: C,
+  ) -> RTDResult<HttpUrl> {
     async_caller!(HttpUrl);
     async_caller(&self.api, get_proxy_link.as_ref()).await
   }
 
-  pub async fn get_push_receiver_id<C: AsRef<GetPushReceiverId>>(&self, get_push_receiver_id: C) -> RTDResult<PushReceiverId> {
+  pub async fn get_push_receiver_id<C: AsRef<GetPushReceiverId>>(
+    &self,
+    get_push_receiver_id: C,
+  ) -> RTDResult<PushReceiverId> {
     async_caller!(PushReceiverId);
     async_caller(&self.api, get_push_receiver_id.as_ref()).await
   }
 
-  pub async fn get_recent_inline_bots<C: AsRef<GetRecentInlineBots>>(&self, get_recent_inline_bots: C) -> RTDResult<Users> {
+  pub async fn get_recent_inline_bots<C: AsRef<GetRecentInlineBots>>(
+    &self,
+    get_recent_inline_bots: C,
+  ) -> RTDResult<Users> {
     async_caller!(Users);
     async_caller(&self.api, get_recent_inline_bots.as_ref()).await
   }
 
-  pub async fn get_recent_stickers<C: AsRef<GetRecentStickers>>(&self, get_recent_stickers: C) -> RTDResult<Stickers> {
+  pub async fn get_recent_stickers<C: AsRef<GetRecentStickers>>(
+    &self,
+    get_recent_stickers: C,
+  ) -> RTDResult<Stickers> {
     async_caller!(Stickers);
     async_caller(&self.api, get_recent_stickers.as_ref()).await
   }
 
-  pub async fn get_recently_opened_chats<C: AsRef<GetRecentlyOpenedChats>>(&self, get_recently_opened_chats: C) -> RTDResult<Chats> {
+  pub async fn get_recently_opened_chats<C: AsRef<GetRecentlyOpenedChats>>(
+    &self,
+    get_recently_opened_chats: C,
+  ) -> RTDResult<Chats> {
     async_caller!(Chats);
     async_caller(&self.api, get_recently_opened_chats.as_ref()).await
   }
 
-  pub async fn get_recently_visited_t_me_urls<C: AsRef<GetRecentlyVisitedTMeUrls>>(&self, get_recently_visited_t_me_urls: C) -> RTDResult<TMeUrls> {
+  pub async fn get_recently_visited_t_me_urls<C: AsRef<GetRecentlyVisitedTMeUrls>>(
+    &self,
+    get_recently_visited_t_me_urls: C,
+  ) -> RTDResult<TMeUrls> {
     async_caller!(TMeUrls);
     async_caller(&self.api, get_recently_visited_t_me_urls.as_ref()).await
   }
 
-  pub async fn get_recommended_chat_filters<C: AsRef<GetRecommendedChatFilters>>(&self, get_recommended_chat_filters: C) -> RTDResult<RecommendedChatFilters> {
+  pub async fn get_recommended_chat_filters<C: AsRef<GetRecommendedChatFilters>>(
+    &self,
+    get_recommended_chat_filters: C,
+  ) -> RTDResult<RecommendedChatFilters> {
     async_caller!(RecommendedChatFilters);
     async_caller(&self.api, get_recommended_chat_filters.as_ref()).await
   }
 
-  pub async fn get_recovery_email_address<C: AsRef<GetRecoveryEmailAddress>>(&self, get_recovery_email_address: C) -> RTDResult<RecoveryEmailAddress> {
+  pub async fn get_recovery_email_address<C: AsRef<GetRecoveryEmailAddress>>(
+    &self,
+    get_recovery_email_address: C,
+  ) -> RTDResult<RecoveryEmailAddress> {
     async_caller!(RecoveryEmailAddress);
     async_caller(&self.api, get_recovery_email_address.as_ref()).await
   }
 
-  pub async fn get_remote_file<C: AsRef<GetRemoteFile>>(&self, get_remote_file: C) -> RTDResult<File> {
+  pub async fn get_remote_file<C: AsRef<GetRemoteFile>>(
+    &self,
+    get_remote_file: C,
+  ) -> RTDResult<File> {
     async_caller!(File);
     async_caller(&self.api, get_remote_file.as_ref()).await
   }
 
-  pub async fn get_replied_message<C: AsRef<GetRepliedMessage>>(&self, get_replied_message: C) -> RTDResult<Message> {
+  pub async fn get_replied_message<C: AsRef<GetRepliedMessage>>(
+    &self,
+    get_replied_message: C,
+  ) -> RTDResult<Message> {
     async_caller!(Message);
     async_caller(&self.api, get_replied_message.as_ref()).await
   }
 
-  pub async fn get_saved_animations<C: AsRef<GetSavedAnimations>>(&self, get_saved_animations: C) -> RTDResult<Animations> {
+  pub async fn get_saved_animations<C: AsRef<GetSavedAnimations>>(
+    &self,
+    get_saved_animations: C,
+  ) -> RTDResult<Animations> {
     async_caller!(Animations);
     async_caller(&self.api, get_saved_animations.as_ref()).await
   }
 
-  pub async fn get_saved_order_info<C: AsRef<GetSavedOrderInfo>>(&self, get_saved_order_info: C) -> RTDResult<OrderInfo> {
+  pub async fn get_saved_order_info<C: AsRef<GetSavedOrderInfo>>(
+    &self,
+    get_saved_order_info: C,
+  ) -> RTDResult<OrderInfo> {
     async_caller!(OrderInfo);
     async_caller(&self.api, get_saved_order_info.as_ref()).await
   }
 
-  pub async fn get_scope_notification_settings<C: AsRef<GetScopeNotificationSettings>>(&self, get_scope_notification_settings: C) -> RTDResult<ScopeNotificationSettings> {
+  pub async fn get_scope_notification_settings<C: AsRef<GetScopeNotificationSettings>>(
+    &self,
+    get_scope_notification_settings: C,
+  ) -> RTDResult<ScopeNotificationSettings> {
     async_caller!(ScopeNotificationSettings);
     async_caller(&self.api, get_scope_notification_settings.as_ref()).await
   }
 
-  pub async fn get_secret_chat<C: AsRef<GetSecretChat>>(&self, get_secret_chat: C) -> RTDResult<SecretChat> {
+  pub async fn get_secret_chat<C: AsRef<GetSecretChat>>(
+    &self,
+    get_secret_chat: C,
+  ) -> RTDResult<SecretChat> {
     async_caller!(SecretChat);
     async_caller(&self.api, get_secret_chat.as_ref()).await
   }
 
-  pub async fn get_statistical_graph<C: AsRef<GetStatisticalGraph>>(&self, get_statistical_graph: C) -> RTDResult<StatisticalGraph> {
+  pub async fn get_statistical_graph<C: AsRef<GetStatisticalGraph>>(
+    &self,
+    get_statistical_graph: C,
+  ) -> RTDResult<StatisticalGraph> {
     async_caller!(StatisticalGraph);
     async_caller(&self.api, get_statistical_graph.as_ref()).await
   }
 
-  pub async fn get_sticker_emojis<C: AsRef<GetStickerEmojis>>(&self, get_sticker_emojis: C) -> RTDResult<Emojis> {
+  pub async fn get_sticker_emojis<C: AsRef<GetStickerEmojis>>(
+    &self,
+    get_sticker_emojis: C,
+  ) -> RTDResult<Emojis> {
     async_caller!(Emojis);
     async_caller(&self.api, get_sticker_emojis.as_ref()).await
   }
 
-  pub async fn get_sticker_set<C: AsRef<GetStickerSet>>(&self, get_sticker_set: C) -> RTDResult<StickerSet> {
+  pub async fn get_sticker_set<C: AsRef<GetStickerSet>>(
+    &self,
+    get_sticker_set: C,
+  ) -> RTDResult<StickerSet> {
     async_caller!(StickerSet);
     async_caller(&self.api, get_sticker_set.as_ref()).await
   }
@@ -1256,57 +1923,90 @@ impl AsyncApi {
     async_caller(&self.api, get_stickers.as_ref()).await
   }
 
-  pub async fn get_storage_statistics<C: AsRef<GetStorageStatistics>>(&self, get_storage_statistics: C) -> RTDResult<StorageStatistics> {
+  pub async fn get_storage_statistics<C: AsRef<GetStorageStatistics>>(
+    &self,
+    get_storage_statistics: C,
+  ) -> RTDResult<StorageStatistics> {
     async_caller!(StorageStatistics);
     async_caller(&self.api, get_storage_statistics.as_ref()).await
   }
 
-  pub async fn get_storage_statistics_fast<C: AsRef<GetStorageStatisticsFast>>(&self, get_storage_statistics_fast: C) -> RTDResult<StorageStatisticsFast> {
+  pub async fn get_storage_statistics_fast<C: AsRef<GetStorageStatisticsFast>>(
+    &self,
+    get_storage_statistics_fast: C,
+  ) -> RTDResult<StorageStatisticsFast> {
     async_caller!(StorageStatisticsFast);
     async_caller(&self.api, get_storage_statistics_fast.as_ref()).await
   }
 
-  pub async fn get_suggested_file_name<C: AsRef<GetSuggestedFileName>>(&self, get_suggested_file_name: C) -> RTDResult<Text> {
+  pub async fn get_suggested_file_name<C: AsRef<GetSuggestedFileName>>(
+    &self,
+    get_suggested_file_name: C,
+  ) -> RTDResult<Text> {
     async_caller!(Text);
     async_caller(&self.api, get_suggested_file_name.as_ref()).await
   }
 
-  pub async fn get_suggested_sticker_set_name<C: AsRef<GetSuggestedStickerSetName>>(&self, get_suggested_sticker_set_name: C) -> RTDResult<Text> {
+  pub async fn get_suggested_sticker_set_name<C: AsRef<GetSuggestedStickerSetName>>(
+    &self,
+    get_suggested_sticker_set_name: C,
+  ) -> RTDResult<Text> {
     async_caller!(Text);
     async_caller(&self.api, get_suggested_sticker_set_name.as_ref()).await
   }
 
-  pub async fn get_suitable_discussion_chats<C: AsRef<GetSuitableDiscussionChats>>(&self, get_suitable_discussion_chats: C) -> RTDResult<Chats> {
+  pub async fn get_suitable_discussion_chats<C: AsRef<GetSuitableDiscussionChats>>(
+    &self,
+    get_suitable_discussion_chats: C,
+  ) -> RTDResult<Chats> {
     async_caller!(Chats);
     async_caller(&self.api, get_suitable_discussion_chats.as_ref()).await
   }
 
-  pub async fn get_supergroup<C: AsRef<GetSupergroup>>(&self, get_supergroup: C) -> RTDResult<Supergroup> {
+  pub async fn get_supergroup<C: AsRef<GetSupergroup>>(
+    &self,
+    get_supergroup: C,
+  ) -> RTDResult<Supergroup> {
     async_caller!(Supergroup);
     async_caller(&self.api, get_supergroup.as_ref()).await
   }
 
-  pub async fn get_supergroup_full_info<C: AsRef<GetSupergroupFullInfo>>(&self, get_supergroup_full_info: C) -> RTDResult<SupergroupFullInfo> {
+  pub async fn get_supergroup_full_info<C: AsRef<GetSupergroupFullInfo>>(
+    &self,
+    get_supergroup_full_info: C,
+  ) -> RTDResult<SupergroupFullInfo> {
     async_caller!(SupergroupFullInfo);
     async_caller(&self.api, get_supergroup_full_info.as_ref()).await
   }
 
-  pub async fn get_supergroup_members<C: AsRef<GetSupergroupMembers>>(&self, get_supergroup_members: C) -> RTDResult<ChatMembers> {
+  pub async fn get_supergroup_members<C: AsRef<GetSupergroupMembers>>(
+    &self,
+    get_supergroup_members: C,
+  ) -> RTDResult<ChatMembers> {
     async_caller!(ChatMembers);
     async_caller(&self.api, get_supergroup_members.as_ref()).await
   }
 
-  pub async fn get_support_user<C: AsRef<GetSupportUser>>(&self, get_support_user: C) -> RTDResult<User> {
+  pub async fn get_support_user<C: AsRef<GetSupportUser>>(
+    &self,
+    get_support_user: C,
+  ) -> RTDResult<User> {
     async_caller!(User);
     async_caller(&self.api, get_support_user.as_ref()).await
   }
 
-  pub async fn get_temporary_password_state<C: AsRef<GetTemporaryPasswordState>>(&self, get_temporary_password_state: C) -> RTDResult<TemporaryPasswordState> {
+  pub async fn get_temporary_password_state<C: AsRef<GetTemporaryPasswordState>>(
+    &self,
+    get_temporary_password_state: C,
+  ) -> RTDResult<TemporaryPasswordState> {
     async_caller!(TemporaryPasswordState);
     async_caller(&self.api, get_temporary_password_state.as_ref()).await
   }
 
-  pub async fn get_text_entities<C: AsRef<GetTextEntities>>(&self, get_text_entities: C) -> RTDResult<TextEntities> {
+  pub async fn get_text_entities<C: AsRef<GetTextEntities>>(
+    &self,
+    get_text_entities: C,
+  ) -> RTDResult<TextEntities> {
     async_caller!(TextEntities);
     async_caller(&self.api, get_text_entities.as_ref()).await
   }
@@ -1316,7 +2016,10 @@ impl AsyncApi {
     async_caller(&self.api, get_top_chats.as_ref()).await
   }
 
-  pub async fn get_trending_sticker_sets<C: AsRef<GetTrendingStickerSets>>(&self, get_trending_sticker_sets: C) -> RTDResult<StickerSets> {
+  pub async fn get_trending_sticker_sets<C: AsRef<GetTrendingStickerSets>>(
+    &self,
+    get_trending_sticker_sets: C,
+  ) -> RTDResult<StickerSets> {
     async_caller!(StickerSets);
     async_caller(&self.api, get_trending_sticker_sets.as_ref()).await
   }
@@ -1326,52 +2029,84 @@ impl AsyncApi {
     async_caller(&self.api, get_user.as_ref()).await
   }
 
-  pub async fn get_user_full_info<C: AsRef<GetUserFullInfo>>(&self, get_user_full_info: C) -> RTDResult<UserFullInfo> {
+  pub async fn get_user_full_info<C: AsRef<GetUserFullInfo>>(
+    &self,
+    get_user_full_info: C,
+  ) -> RTDResult<UserFullInfo> {
     async_caller!(UserFullInfo);
     async_caller(&self.api, get_user_full_info.as_ref()).await
   }
 
-  pub async fn get_user_privacy_setting_rules<C: AsRef<GetUserPrivacySettingRules>>(&self, get_user_privacy_setting_rules: C) -> RTDResult<UserPrivacySettingRules> {
+  pub async fn get_user_privacy_setting_rules<C: AsRef<GetUserPrivacySettingRules>>(
+    &self,
+    get_user_privacy_setting_rules: C,
+  ) -> RTDResult<UserPrivacySettingRules> {
     async_caller!(UserPrivacySettingRules);
     async_caller(&self.api, get_user_privacy_setting_rules.as_ref()).await
   }
 
-  pub async fn get_user_profile_photos<C: AsRef<GetUserProfilePhotos>>(&self, get_user_profile_photos: C) -> RTDResult<ChatPhotos> {
+  pub async fn get_user_profile_photos<C: AsRef<GetUserProfilePhotos>>(
+    &self,
+    get_user_profile_photos: C,
+  ) -> RTDResult<ChatPhotos> {
     async_caller!(ChatPhotos);
     async_caller(&self.api, get_user_profile_photos.as_ref()).await
   }
 
-  pub async fn get_video_chat_available_participants<C: AsRef<GetVideoChatAvailableParticipants>>(&self, get_video_chat_available_participants: C) -> RTDResult<MessageSenders> {
+  pub async fn get_video_chat_available_participants<
+    C: AsRef<GetVideoChatAvailableParticipants>,
+  >(
+    &self,
+    get_video_chat_available_participants: C,
+  ) -> RTDResult<MessageSenders> {
     async_caller!(MessageSenders);
     async_caller(&self.api, get_video_chat_available_participants.as_ref()).await
   }
 
-  pub async fn get_web_page_instant_view<C: AsRef<GetWebPageInstantView>>(&self, get_web_page_instant_view: C) -> RTDResult<WebPageInstantView> {
+  pub async fn get_web_page_instant_view<C: AsRef<GetWebPageInstantView>>(
+    &self,
+    get_web_page_instant_view: C,
+  ) -> RTDResult<WebPageInstantView> {
     async_caller!(WebPageInstantView);
     async_caller(&self.api, get_web_page_instant_view.as_ref()).await
   }
 
-  pub async fn get_web_page_preview<C: AsRef<GetWebPagePreview>>(&self, get_web_page_preview: C) -> RTDResult<WebPage> {
+  pub async fn get_web_page_preview<C: AsRef<GetWebPagePreview>>(
+    &self,
+    get_web_page_preview: C,
+  ) -> RTDResult<WebPage> {
     async_caller!(WebPage);
     async_caller(&self.api, get_web_page_preview.as_ref()).await
   }
 
-  pub async fn hide_suggested_action<C: AsRef<HideSuggestedAction>>(&self, hide_suggested_action: C) -> RTDResult<Ok> {
+  pub async fn hide_suggested_action<C: AsRef<HideSuggestedAction>>(
+    &self,
+    hide_suggested_action: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, hide_suggested_action.as_ref()).await
   }
 
-  pub async fn import_contacts<C: AsRef<ImportContacts>>(&self, import_contacts: C) -> RTDResult<ImportedContacts> {
+  pub async fn import_contacts<C: AsRef<ImportContacts>>(
+    &self,
+    import_contacts: C,
+  ) -> RTDResult<ImportedContacts> {
     async_caller!(ImportedContacts);
     async_caller(&self.api, import_contacts.as_ref()).await
   }
 
-  pub async fn import_messages<C: AsRef<ImportMessages>>(&self, import_messages: C) -> RTDResult<Ok> {
+  pub async fn import_messages<C: AsRef<ImportMessages>>(
+    &self,
+    import_messages: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, import_messages.as_ref()).await
   }
 
-  pub async fn invite_group_call_participants<C: AsRef<InviteGroupCallParticipants>>(&self, invite_group_call_participants: C) -> RTDResult<Ok> {
+  pub async fn invite_group_call_participants<C: AsRef<InviteGroupCallParticipants>>(
+    &self,
+    invite_group_call_participants: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, invite_group_call_participants.as_ref()).await
   }
@@ -1381,12 +2116,18 @@ impl AsyncApi {
     async_caller(&self.api, join_chat.as_ref()).await
   }
 
-  pub async fn join_chat_by_invite_link<C: AsRef<JoinChatByInviteLink>>(&self, join_chat_by_invite_link: C) -> RTDResult<Chat> {
+  pub async fn join_chat_by_invite_link<C: AsRef<JoinChatByInviteLink>>(
+    &self,
+    join_chat_by_invite_link: C,
+  ) -> RTDResult<Chat> {
     async_caller!(Chat);
     async_caller(&self.api, join_chat_by_invite_link.as_ref()).await
   }
 
-  pub async fn join_group_call<C: AsRef<JoinGroupCall>>(&self, join_group_call: C) -> RTDResult<Text> {
+  pub async fn join_group_call<C: AsRef<JoinGroupCall>>(
+    &self,
+    join_group_call: C,
+  ) -> RTDResult<Text> {
     async_caller!(Text);
     async_caller(&self.api, join_group_call.as_ref()).await
   }
@@ -1396,7 +2137,10 @@ impl AsyncApi {
     async_caller(&self.api, leave_chat.as_ref()).await
   }
 
-  pub async fn leave_group_call<C: AsRef<LeaveGroupCall>>(&self, leave_group_call: C) -> RTDResult<Ok> {
+  pub async fn leave_group_call<C: AsRef<LeaveGroupCall>>(
+    &self,
+    leave_group_call: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, leave_group_call.as_ref()).await
   }
@@ -1406,7 +2150,10 @@ impl AsyncApi {
     async_caller(&self.api, load_chats.as_ref()).await
   }
 
-  pub async fn load_group_call_participants<C: AsRef<LoadGroupCallParticipants>>(&self, load_group_call_participants: C) -> RTDResult<Ok> {
+  pub async fn load_group_call_participants<C: AsRef<LoadGroupCallParticipants>>(
+    &self,
+    load_group_call_participants: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, load_group_call_participants.as_ref()).await
   }
@@ -1421,27 +2168,42 @@ impl AsyncApi {
     async_caller(&self.api, open_chat.as_ref()).await
   }
 
-  pub async fn open_message_content<C: AsRef<OpenMessageContent>>(&self, open_message_content: C) -> RTDResult<Ok> {
+  pub async fn open_message_content<C: AsRef<OpenMessageContent>>(
+    &self,
+    open_message_content: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, open_message_content.as_ref()).await
   }
 
-  pub async fn optimize_storage<C: AsRef<OptimizeStorage>>(&self, optimize_storage: C) -> RTDResult<StorageStatistics> {
+  pub async fn optimize_storage<C: AsRef<OptimizeStorage>>(
+    &self,
+    optimize_storage: C,
+  ) -> RTDResult<StorageStatistics> {
     async_caller!(StorageStatistics);
     async_caller(&self.api, optimize_storage.as_ref()).await
   }
 
-  pub async fn parse_markdown<C: AsRef<ParseMarkdown>>(&self, parse_markdown: C) -> RTDResult<FormattedText> {
+  pub async fn parse_markdown<C: AsRef<ParseMarkdown>>(
+    &self,
+    parse_markdown: C,
+  ) -> RTDResult<FormattedText> {
     async_caller!(FormattedText);
     async_caller(&self.api, parse_markdown.as_ref()).await
   }
 
-  pub async fn parse_text_entities<C: AsRef<ParseTextEntities>>(&self, parse_text_entities: C) -> RTDResult<FormattedText> {
+  pub async fn parse_text_entities<C: AsRef<ParseTextEntities>>(
+    &self,
+    parse_text_entities: C,
+  ) -> RTDResult<FormattedText> {
     async_caller!(FormattedText);
     async_caller(&self.api, parse_text_entities.as_ref()).await
   }
 
-  pub async fn pin_chat_message<C: AsRef<PinChatMessage>>(&self, pin_chat_message: C) -> RTDResult<Ok> {
+  pub async fn pin_chat_message<C: AsRef<PinChatMessage>>(
+    &self,
+    pin_chat_message: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, pin_chat_message.as_ref()).await
   }
@@ -1451,42 +2213,66 @@ impl AsyncApi {
     async_caller(&self.api, ping_proxy.as_ref()).await
   }
 
-  pub async fn process_chat_join_request<C: AsRef<ProcessChatJoinRequest>>(&self, process_chat_join_request: C) -> RTDResult<Ok> {
+  pub async fn process_chat_join_request<C: AsRef<ProcessChatJoinRequest>>(
+    &self,
+    process_chat_join_request: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, process_chat_join_request.as_ref()).await
   }
 
-  pub async fn process_chat_join_requests<C: AsRef<ProcessChatJoinRequests>>(&self, process_chat_join_requests: C) -> RTDResult<Ok> {
+  pub async fn process_chat_join_requests<C: AsRef<ProcessChatJoinRequests>>(
+    &self,
+    process_chat_join_requests: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, process_chat_join_requests.as_ref()).await
   }
 
-  pub async fn process_push_notification<C: AsRef<ProcessPushNotification>>(&self, process_push_notification: C) -> RTDResult<Ok> {
+  pub async fn process_push_notification<C: AsRef<ProcessPushNotification>>(
+    &self,
+    process_push_notification: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, process_push_notification.as_ref()).await
   }
 
-  pub async fn read_all_chat_mentions<C: AsRef<ReadAllChatMentions>>(&self, read_all_chat_mentions: C) -> RTDResult<Ok> {
+  pub async fn read_all_chat_mentions<C: AsRef<ReadAllChatMentions>>(
+    &self,
+    read_all_chat_mentions: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, read_all_chat_mentions.as_ref()).await
   }
 
-  pub async fn read_file_part<C: AsRef<ReadFilePart>>(&self, read_file_part: C) -> RTDResult<FilePart> {
+  pub async fn read_file_part<C: AsRef<ReadFilePart>>(
+    &self,
+    read_file_part: C,
+  ) -> RTDResult<FilePart> {
     async_caller!(FilePart);
     async_caller(&self.api, read_file_part.as_ref()).await
   }
 
-  pub async fn recover_authentication_password<C: AsRef<RecoverAuthenticationPassword>>(&self, recover_authentication_password: C) -> RTDResult<Ok> {
+  pub async fn recover_authentication_password<C: AsRef<RecoverAuthenticationPassword>>(
+    &self,
+    recover_authentication_password: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, recover_authentication_password.as_ref()).await
   }
 
-  pub async fn recover_password<C: AsRef<RecoverPassword>>(&self, recover_password: C) -> RTDResult<PasswordState> {
+  pub async fn recover_password<C: AsRef<RecoverPassword>>(
+    &self,
+    recover_password: C,
+  ) -> RTDResult<PasswordState> {
     async_caller!(PasswordState);
     async_caller(&self.api, recover_password.as_ref()).await
   }
 
-  pub async fn register_device<C: AsRef<RegisterDevice>>(&self, register_device: C) -> RTDResult<PushReceiverId> {
+  pub async fn register_device<C: AsRef<RegisterDevice>>(
+    &self,
+    register_device: C,
+  ) -> RTDResult<PushReceiverId> {
     async_caller!(PushReceiverId);
     async_caller(&self.api, register_device.as_ref()).await
   }
@@ -1496,32 +2282,50 @@ impl AsyncApi {
     async_caller(&self.api, register_user.as_ref()).await
   }
 
-  pub async fn remove_background<C: AsRef<RemoveBackground>>(&self, remove_background: C) -> RTDResult<Ok> {
+  pub async fn remove_background<C: AsRef<RemoveBackground>>(
+    &self,
+    remove_background: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, remove_background.as_ref()).await
   }
 
-  pub async fn remove_chat_action_bar<C: AsRef<RemoveChatActionBar>>(&self, remove_chat_action_bar: C) -> RTDResult<Ok> {
+  pub async fn remove_chat_action_bar<C: AsRef<RemoveChatActionBar>>(
+    &self,
+    remove_chat_action_bar: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, remove_chat_action_bar.as_ref()).await
   }
 
-  pub async fn remove_contacts<C: AsRef<RemoveContacts>>(&self, remove_contacts: C) -> RTDResult<Ok> {
+  pub async fn remove_contacts<C: AsRef<RemoveContacts>>(
+    &self,
+    remove_contacts: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, remove_contacts.as_ref()).await
   }
 
-  pub async fn remove_favorite_sticker<C: AsRef<RemoveFavoriteSticker>>(&self, remove_favorite_sticker: C) -> RTDResult<Ok> {
+  pub async fn remove_favorite_sticker<C: AsRef<RemoveFavoriteSticker>>(
+    &self,
+    remove_favorite_sticker: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, remove_favorite_sticker.as_ref()).await
   }
 
-  pub async fn remove_notification<C: AsRef<RemoveNotification>>(&self, remove_notification: C) -> RTDResult<Ok> {
+  pub async fn remove_notification<C: AsRef<RemoveNotification>>(
+    &self,
+    remove_notification: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, remove_notification.as_ref()).await
   }
 
-  pub async fn remove_notification_group<C: AsRef<RemoveNotificationGroup>>(&self, remove_notification_group: C) -> RTDResult<Ok> {
+  pub async fn remove_notification_group<C: AsRef<RemoveNotificationGroup>>(
+    &self,
+    remove_notification_group: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, remove_notification_group.as_ref()).await
   }
@@ -1531,47 +2335,74 @@ impl AsyncApi {
     async_caller(&self.api, remove_proxy.as_ref()).await
   }
 
-  pub async fn remove_recent_hashtag<C: AsRef<RemoveRecentHashtag>>(&self, remove_recent_hashtag: C) -> RTDResult<Ok> {
+  pub async fn remove_recent_hashtag<C: AsRef<RemoveRecentHashtag>>(
+    &self,
+    remove_recent_hashtag: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, remove_recent_hashtag.as_ref()).await
   }
 
-  pub async fn remove_recent_sticker<C: AsRef<RemoveRecentSticker>>(&self, remove_recent_sticker: C) -> RTDResult<Ok> {
+  pub async fn remove_recent_sticker<C: AsRef<RemoveRecentSticker>>(
+    &self,
+    remove_recent_sticker: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, remove_recent_sticker.as_ref()).await
   }
 
-  pub async fn remove_recently_found_chat<C: AsRef<RemoveRecentlyFoundChat>>(&self, remove_recently_found_chat: C) -> RTDResult<Ok> {
+  pub async fn remove_recently_found_chat<C: AsRef<RemoveRecentlyFoundChat>>(
+    &self,
+    remove_recently_found_chat: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, remove_recently_found_chat.as_ref()).await
   }
 
-  pub async fn remove_saved_animation<C: AsRef<RemoveSavedAnimation>>(&self, remove_saved_animation: C) -> RTDResult<Ok> {
+  pub async fn remove_saved_animation<C: AsRef<RemoveSavedAnimation>>(
+    &self,
+    remove_saved_animation: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, remove_saved_animation.as_ref()).await
   }
 
-  pub async fn remove_sticker_from_set<C: AsRef<RemoveStickerFromSet>>(&self, remove_sticker_from_set: C) -> RTDResult<Ok> {
+  pub async fn remove_sticker_from_set<C: AsRef<RemoveStickerFromSet>>(
+    &self,
+    remove_sticker_from_set: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, remove_sticker_from_set.as_ref()).await
   }
 
-  pub async fn remove_top_chat<C: AsRef<RemoveTopChat>>(&self, remove_top_chat: C) -> RTDResult<Ok> {
+  pub async fn remove_top_chat<C: AsRef<RemoveTopChat>>(
+    &self,
+    remove_top_chat: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, remove_top_chat.as_ref()).await
   }
 
-  pub async fn reorder_chat_filters<C: AsRef<ReorderChatFilters>>(&self, reorder_chat_filters: C) -> RTDResult<Ok> {
+  pub async fn reorder_chat_filters<C: AsRef<ReorderChatFilters>>(
+    &self,
+    reorder_chat_filters: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, reorder_chat_filters.as_ref()).await
   }
 
-  pub async fn reorder_installed_sticker_sets<C: AsRef<ReorderInstalledStickerSets>>(&self, reorder_installed_sticker_sets: C) -> RTDResult<Ok> {
+  pub async fn reorder_installed_sticker_sets<C: AsRef<ReorderInstalledStickerSets>>(
+    &self,
+    reorder_installed_sticker_sets: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, reorder_installed_sticker_sets.as_ref()).await
   }
 
-  pub async fn replace_primary_chat_invite_link<C: AsRef<ReplacePrimaryChatInviteLink>>(&self, replace_primary_chat_invite_link: C) -> RTDResult<ChatInviteLink> {
+  pub async fn replace_primary_chat_invite_link<C: AsRef<ReplacePrimaryChatInviteLink>>(
+    &self,
+    replace_primary_chat_invite_link: C,
+  ) -> RTDResult<ChatInviteLink> {
     async_caller!(ChatInviteLink);
     async_caller(&self.api, replace_primary_chat_invite_link.as_ref()).await
   }
@@ -1581,122 +2412,202 @@ impl AsyncApi {
     async_caller(&self.api, report_chat.as_ref()).await
   }
 
-  pub async fn report_chat_photo<C: AsRef<ReportChatPhoto>>(&self, report_chat_photo: C) -> RTDResult<Ok> {
+  pub async fn report_chat_photo<C: AsRef<ReportChatPhoto>>(
+    &self,
+    report_chat_photo: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, report_chat_photo.as_ref()).await
   }
 
-  pub async fn report_supergroup_spam<C: AsRef<ReportSupergroupSpam>>(&self, report_supergroup_spam: C) -> RTDResult<Ok> {
+  pub async fn report_supergroup_spam<C: AsRef<ReportSupergroupSpam>>(
+    &self,
+    report_supergroup_spam: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, report_supergroup_spam.as_ref()).await
   }
 
-  pub async fn request_authentication_password_recovery<C: AsRef<RequestAuthenticationPasswordRecovery>>(&self, request_authentication_password_recovery: C) -> RTDResult<Ok> {
+  pub async fn request_authentication_password_recovery<
+    C: AsRef<RequestAuthenticationPasswordRecovery>,
+  >(
+    &self,
+    request_authentication_password_recovery: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, request_authentication_password_recovery.as_ref()).await
   }
 
-  pub async fn request_password_recovery<C: AsRef<RequestPasswordRecovery>>(&self, request_password_recovery: C) -> RTDResult<EmailAddressAuthenticationCodeInfo> {
+  pub async fn request_password_recovery<C: AsRef<RequestPasswordRecovery>>(
+    &self,
+    request_password_recovery: C,
+  ) -> RTDResult<EmailAddressAuthenticationCodeInfo> {
     async_caller!(EmailAddressAuthenticationCodeInfo);
     async_caller(&self.api, request_password_recovery.as_ref()).await
   }
 
-  pub async fn request_qr_code_authentication<C: AsRef<RequestQrCodeAuthentication>>(&self, request_qr_code_authentication: C) -> RTDResult<Ok> {
+  pub async fn request_qr_code_authentication<C: AsRef<RequestQrCodeAuthentication>>(
+    &self,
+    request_qr_code_authentication: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, request_qr_code_authentication.as_ref()).await
   }
 
-  pub async fn resend_authentication_code<C: AsRef<ResendAuthenticationCode>>(&self, resend_authentication_code: C) -> RTDResult<Ok> {
+  pub async fn resend_authentication_code<C: AsRef<ResendAuthenticationCode>>(
+    &self,
+    resend_authentication_code: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, resend_authentication_code.as_ref()).await
   }
 
-  pub async fn resend_change_phone_number_code<C: AsRef<ResendChangePhoneNumberCode>>(&self, resend_change_phone_number_code: C) -> RTDResult<AuthenticationCodeInfo> {
+  pub async fn resend_change_phone_number_code<C: AsRef<ResendChangePhoneNumberCode>>(
+    &self,
+    resend_change_phone_number_code: C,
+  ) -> RTDResult<AuthenticationCodeInfo> {
     async_caller!(AuthenticationCodeInfo);
     async_caller(&self.api, resend_change_phone_number_code.as_ref()).await
   }
 
-  pub async fn resend_email_address_verification_code<C: AsRef<ResendEmailAddressVerificationCode>>(&self, resend_email_address_verification_code: C) -> RTDResult<EmailAddressAuthenticationCodeInfo> {
+  pub async fn resend_email_address_verification_code<
+    C: AsRef<ResendEmailAddressVerificationCode>,
+  >(
+    &self,
+    resend_email_address_verification_code: C,
+  ) -> RTDResult<EmailAddressAuthenticationCodeInfo> {
     async_caller!(EmailAddressAuthenticationCodeInfo);
     async_caller(&self.api, resend_email_address_verification_code.as_ref()).await
   }
 
-  pub async fn resend_messages<C: AsRef<ResendMessages>>(&self, resend_messages: C) -> RTDResult<Messages> {
+  pub async fn resend_messages<C: AsRef<ResendMessages>>(
+    &self,
+    resend_messages: C,
+  ) -> RTDResult<Messages> {
     async_caller!(Messages);
     async_caller(&self.api, resend_messages.as_ref()).await
   }
 
-  pub async fn resend_phone_number_confirmation_code<C: AsRef<ResendPhoneNumberConfirmationCode>>(&self, resend_phone_number_confirmation_code: C) -> RTDResult<AuthenticationCodeInfo> {
+  pub async fn resend_phone_number_confirmation_code<
+    C: AsRef<ResendPhoneNumberConfirmationCode>,
+  >(
+    &self,
+    resend_phone_number_confirmation_code: C,
+  ) -> RTDResult<AuthenticationCodeInfo> {
     async_caller!(AuthenticationCodeInfo);
     async_caller(&self.api, resend_phone_number_confirmation_code.as_ref()).await
   }
 
-  pub async fn resend_phone_number_verification_code<C: AsRef<ResendPhoneNumberVerificationCode>>(&self, resend_phone_number_verification_code: C) -> RTDResult<AuthenticationCodeInfo> {
+  pub async fn resend_phone_number_verification_code<
+    C: AsRef<ResendPhoneNumberVerificationCode>,
+  >(
+    &self,
+    resend_phone_number_verification_code: C,
+  ) -> RTDResult<AuthenticationCodeInfo> {
     async_caller!(AuthenticationCodeInfo);
     async_caller(&self.api, resend_phone_number_verification_code.as_ref()).await
   }
 
-  pub async fn resend_recovery_email_address_code<C: AsRef<ResendRecoveryEmailAddressCode>>(&self, resend_recovery_email_address_code: C) -> RTDResult<PasswordState> {
+  pub async fn resend_recovery_email_address_code<C: AsRef<ResendRecoveryEmailAddressCode>>(
+    &self,
+    resend_recovery_email_address_code: C,
+  ) -> RTDResult<PasswordState> {
     async_caller!(PasswordState);
     async_caller(&self.api, resend_recovery_email_address_code.as_ref()).await
   }
 
-  pub async fn reset_all_notification_settings<C: AsRef<ResetAllNotificationSettings>>(&self, reset_all_notification_settings: C) -> RTDResult<Ok> {
+  pub async fn reset_all_notification_settings<C: AsRef<ResetAllNotificationSettings>>(
+    &self,
+    reset_all_notification_settings: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, reset_all_notification_settings.as_ref()).await
   }
 
-  pub async fn reset_backgrounds<C: AsRef<ResetBackgrounds>>(&self, reset_backgrounds: C) -> RTDResult<Ok> {
+  pub async fn reset_backgrounds<C: AsRef<ResetBackgrounds>>(
+    &self,
+    reset_backgrounds: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, reset_backgrounds.as_ref()).await
   }
 
-  pub async fn reset_network_statistics<C: AsRef<ResetNetworkStatistics>>(&self, reset_network_statistics: C) -> RTDResult<Ok> {
+  pub async fn reset_network_statistics<C: AsRef<ResetNetworkStatistics>>(
+    &self,
+    reset_network_statistics: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, reset_network_statistics.as_ref()).await
   }
 
-  pub async fn reset_password<C: AsRef<ResetPassword>>(&self, reset_password: C) -> RTDResult<ResetPasswordResult> {
+  pub async fn reset_password<C: AsRef<ResetPassword>>(
+    &self,
+    reset_password: C,
+  ) -> RTDResult<ResetPasswordResult> {
     async_caller!(ResetPasswordResult);
     async_caller(&self.api, reset_password.as_ref()).await
   }
 
-  pub async fn revoke_chat_invite_link<C: AsRef<RevokeChatInviteLink>>(&self, revoke_chat_invite_link: C) -> RTDResult<ChatInviteLinks> {
+  pub async fn revoke_chat_invite_link<C: AsRef<RevokeChatInviteLink>>(
+    &self,
+    revoke_chat_invite_link: C,
+  ) -> RTDResult<ChatInviteLinks> {
     async_caller!(ChatInviteLinks);
     async_caller(&self.api, revoke_chat_invite_link.as_ref()).await
   }
 
-  pub async fn revoke_group_call_invite_link<C: AsRef<RevokeGroupCallInviteLink>>(&self, revoke_group_call_invite_link: C) -> RTDResult<Ok> {
+  pub async fn revoke_group_call_invite_link<C: AsRef<RevokeGroupCallInviteLink>>(
+    &self,
+    revoke_group_call_invite_link: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, revoke_group_call_invite_link.as_ref()).await
   }
 
-  pub async fn save_application_log_event<C: AsRef<SaveApplicationLogEvent>>(&self, save_application_log_event: C) -> RTDResult<Ok> {
+  pub async fn save_application_log_event<C: AsRef<SaveApplicationLogEvent>>(
+    &self,
+    save_application_log_event: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, save_application_log_event.as_ref()).await
   }
 
-  pub async fn search_background<C: AsRef<SearchBackground>>(&self, search_background: C) -> RTDResult<Background> {
+  pub async fn search_background<C: AsRef<SearchBackground>>(
+    &self,
+    search_background: C,
+  ) -> RTDResult<Background> {
     async_caller!(Background);
     async_caller(&self.api, search_background.as_ref()).await
   }
 
-  pub async fn search_call_messages<C: AsRef<SearchCallMessages>>(&self, search_call_messages: C) -> RTDResult<Messages> {
+  pub async fn search_call_messages<C: AsRef<SearchCallMessages>>(
+    &self,
+    search_call_messages: C,
+  ) -> RTDResult<Messages> {
     async_caller!(Messages);
     async_caller(&self.api, search_call_messages.as_ref()).await
   }
 
-  pub async fn search_chat_members<C: AsRef<SearchChatMembers>>(&self, search_chat_members: C) -> RTDResult<ChatMembers> {
+  pub async fn search_chat_members<C: AsRef<SearchChatMembers>>(
+    &self,
+    search_chat_members: C,
+  ) -> RTDResult<ChatMembers> {
     async_caller!(ChatMembers);
     async_caller(&self.api, search_chat_members.as_ref()).await
   }
 
-  pub async fn search_chat_messages<C: AsRef<SearchChatMessages>>(&self, search_chat_messages: C) -> RTDResult<Messages> {
+  pub async fn search_chat_messages<C: AsRef<SearchChatMessages>>(
+    &self,
+    search_chat_messages: C,
+  ) -> RTDResult<Messages> {
     async_caller!(Messages);
     async_caller(&self.api, search_chat_messages.as_ref()).await
   }
 
-  pub async fn search_chat_recent_location_messages<C: AsRef<SearchChatRecentLocationMessages>>(&self, search_chat_recent_location_messages: C) -> RTDResult<Messages> {
+  pub async fn search_chat_recent_location_messages<C: AsRef<SearchChatRecentLocationMessages>>(
+    &self,
+    search_chat_recent_location_messages: C,
+  ) -> RTDResult<Messages> {
     async_caller!(Messages);
     async_caller(&self.api, search_chat_recent_location_messages.as_ref()).await
   }
@@ -1706,17 +2617,26 @@ impl AsyncApi {
     async_caller(&self.api, search_chats.as_ref()).await
   }
 
-  pub async fn search_chats_nearby<C: AsRef<SearchChatsNearby>>(&self, search_chats_nearby: C) -> RTDResult<ChatsNearby> {
+  pub async fn search_chats_nearby<C: AsRef<SearchChatsNearby>>(
+    &self,
+    search_chats_nearby: C,
+  ) -> RTDResult<ChatsNearby> {
     async_caller!(ChatsNearby);
     async_caller(&self.api, search_chats_nearby.as_ref()).await
   }
 
-  pub async fn search_chats_on_server<C: AsRef<SearchChatsOnServer>>(&self, search_chats_on_server: C) -> RTDResult<Chats> {
+  pub async fn search_chats_on_server<C: AsRef<SearchChatsOnServer>>(
+    &self,
+    search_chats_on_server: C,
+  ) -> RTDResult<Chats> {
     async_caller!(Chats);
     async_caller(&self.api, search_chats_on_server.as_ref()).await
   }
 
-  pub async fn search_contacts<C: AsRef<SearchContacts>>(&self, search_contacts: C) -> RTDResult<Users> {
+  pub async fn search_contacts<C: AsRef<SearchContacts>>(
+    &self,
+    search_contacts: C,
+  ) -> RTDResult<Users> {
     async_caller!(Users);
     async_caller(&self.api, search_contacts.as_ref()).await
   }
@@ -1726,92 +2646,148 @@ impl AsyncApi {
     async_caller(&self.api, search_emojis.as_ref()).await
   }
 
-  pub async fn search_hashtags<C: AsRef<SearchHashtags>>(&self, search_hashtags: C) -> RTDResult<Hashtags> {
+  pub async fn search_hashtags<C: AsRef<SearchHashtags>>(
+    &self,
+    search_hashtags: C,
+  ) -> RTDResult<Hashtags> {
     async_caller!(Hashtags);
     async_caller(&self.api, search_hashtags.as_ref()).await
   }
 
-  pub async fn search_installed_sticker_sets<C: AsRef<SearchInstalledStickerSets>>(&self, search_installed_sticker_sets: C) -> RTDResult<StickerSets> {
+  pub async fn search_installed_sticker_sets<C: AsRef<SearchInstalledStickerSets>>(
+    &self,
+    search_installed_sticker_sets: C,
+  ) -> RTDResult<StickerSets> {
     async_caller!(StickerSets);
     async_caller(&self.api, search_installed_sticker_sets.as_ref()).await
   }
 
-  pub async fn search_messages<C: AsRef<SearchMessages>>(&self, search_messages: C) -> RTDResult<Messages> {
+  pub async fn search_messages<C: AsRef<SearchMessages>>(
+    &self,
+    search_messages: C,
+  ) -> RTDResult<Messages> {
     async_caller!(Messages);
     async_caller(&self.api, search_messages.as_ref()).await
   }
 
-  pub async fn search_public_chat<C: AsRef<SearchPublicChat>>(&self, search_public_chat: C) -> RTDResult<Chat> {
+  pub async fn search_public_chat<C: AsRef<SearchPublicChat>>(
+    &self,
+    search_public_chat: C,
+  ) -> RTDResult<Chat> {
     async_caller!(Chat);
     async_caller(&self.api, search_public_chat.as_ref()).await
   }
 
-  pub async fn search_public_chats<C: AsRef<SearchPublicChats>>(&self, search_public_chats: C) -> RTDResult<Chats> {
+  pub async fn search_public_chats<C: AsRef<SearchPublicChats>>(
+    &self,
+    search_public_chats: C,
+  ) -> RTDResult<Chats> {
     async_caller!(Chats);
     async_caller(&self.api, search_public_chats.as_ref()).await
   }
 
-  pub async fn search_secret_messages<C: AsRef<SearchSecretMessages>>(&self, search_secret_messages: C) -> RTDResult<FoundMessages> {
+  pub async fn search_secret_messages<C: AsRef<SearchSecretMessages>>(
+    &self,
+    search_secret_messages: C,
+  ) -> RTDResult<FoundMessages> {
     async_caller!(FoundMessages);
     async_caller(&self.api, search_secret_messages.as_ref()).await
   }
 
-  pub async fn search_sticker_set<C: AsRef<SearchStickerSet>>(&self, search_sticker_set: C) -> RTDResult<StickerSet> {
+  pub async fn search_sticker_set<C: AsRef<SearchStickerSet>>(
+    &self,
+    search_sticker_set: C,
+  ) -> RTDResult<StickerSet> {
     async_caller!(StickerSet);
     async_caller(&self.api, search_sticker_set.as_ref()).await
   }
 
-  pub async fn search_sticker_sets<C: AsRef<SearchStickerSets>>(&self, search_sticker_sets: C) -> RTDResult<StickerSets> {
+  pub async fn search_sticker_sets<C: AsRef<SearchStickerSets>>(
+    &self,
+    search_sticker_sets: C,
+  ) -> RTDResult<StickerSets> {
     async_caller!(StickerSets);
     async_caller(&self.api, search_sticker_sets.as_ref()).await
   }
 
-  pub async fn search_stickers<C: AsRef<SearchStickers>>(&self, search_stickers: C) -> RTDResult<Stickers> {
+  pub async fn search_stickers<C: AsRef<SearchStickers>>(
+    &self,
+    search_stickers: C,
+  ) -> RTDResult<Stickers> {
     async_caller!(Stickers);
     async_caller(&self.api, search_stickers.as_ref()).await
   }
 
-  pub async fn send_bot_start_message<C: AsRef<SendBotStartMessage>>(&self, send_bot_start_message: C) -> RTDResult<Message> {
+  pub async fn send_bot_start_message<C: AsRef<SendBotStartMessage>>(
+    &self,
+    send_bot_start_message: C,
+  ) -> RTDResult<Message> {
     async_caller!(Message);
     async_caller(&self.api, send_bot_start_message.as_ref()).await
   }
 
-  pub async fn send_call_debug_information<C: AsRef<SendCallDebugInformation>>(&self, send_call_debug_information: C) -> RTDResult<Ok> {
+  pub async fn send_call_debug_information<C: AsRef<SendCallDebugInformation>>(
+    &self,
+    send_call_debug_information: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, send_call_debug_information.as_ref()).await
   }
 
-  pub async fn send_call_rating<C: AsRef<SendCallRating>>(&self, send_call_rating: C) -> RTDResult<Ok> {
+  pub async fn send_call_rating<C: AsRef<SendCallRating>>(
+    &self,
+    send_call_rating: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, send_call_rating.as_ref()).await
   }
 
-  pub async fn send_call_signaling_data<C: AsRef<SendCallSignalingData>>(&self, send_call_signaling_data: C) -> RTDResult<Ok> {
+  pub async fn send_call_signaling_data<C: AsRef<SendCallSignalingData>>(
+    &self,
+    send_call_signaling_data: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, send_call_signaling_data.as_ref()).await
   }
 
-  pub async fn send_chat_action<C: AsRef<SendChatAction>>(&self, send_chat_action: C) -> RTDResult<Ok> {
+  pub async fn send_chat_action<C: AsRef<SendChatAction>>(
+    &self,
+    send_chat_action: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, send_chat_action.as_ref()).await
   }
 
-  pub async fn send_chat_screenshot_taken_notification<C: AsRef<SendChatScreenshotTakenNotification>>(&self, send_chat_screenshot_taken_notification: C) -> RTDResult<Ok> {
+  pub async fn send_chat_screenshot_taken_notification<
+    C: AsRef<SendChatScreenshotTakenNotification>,
+  >(
+    &self,
+    send_chat_screenshot_taken_notification: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, send_chat_screenshot_taken_notification.as_ref()).await
   }
 
-  pub async fn send_custom_request<C: AsRef<SendCustomRequest>>(&self, send_custom_request: C) -> RTDResult<CustomRequestResult> {
+  pub async fn send_custom_request<C: AsRef<SendCustomRequest>>(
+    &self,
+    send_custom_request: C,
+  ) -> RTDResult<CustomRequestResult> {
     async_caller!(CustomRequestResult);
     async_caller(&self.api, send_custom_request.as_ref()).await
   }
 
-  pub async fn send_email_address_verification_code<C: AsRef<SendEmailAddressVerificationCode>>(&self, send_email_address_verification_code: C) -> RTDResult<EmailAddressAuthenticationCodeInfo> {
+  pub async fn send_email_address_verification_code<C: AsRef<SendEmailAddressVerificationCode>>(
+    &self,
+    send_email_address_verification_code: C,
+  ) -> RTDResult<EmailAddressAuthenticationCodeInfo> {
     async_caller!(EmailAddressAuthenticationCodeInfo);
     async_caller(&self.api, send_email_address_verification_code.as_ref()).await
   }
 
-  pub async fn send_inline_query_result_message<C: AsRef<SendInlineQueryResultMessage>>(&self, send_inline_query_result_message: C) -> RTDResult<Message> {
+  pub async fn send_inline_query_result_message<C: AsRef<SendInlineQueryResultMessage>>(
+    &self,
+    send_inline_query_result_message: C,
+  ) -> RTDResult<Message> {
     async_caller!(Message);
     async_caller(&self.api, send_inline_query_result_message.as_ref()).await
   }
@@ -1821,32 +2797,50 @@ impl AsyncApi {
     async_caller(&self.api, send_message.as_ref()).await
   }
 
-  pub async fn send_message_album<C: AsRef<SendMessageAlbum>>(&self, send_message_album: C) -> RTDResult<Messages> {
+  pub async fn send_message_album<C: AsRef<SendMessageAlbum>>(
+    &self,
+    send_message_album: C,
+  ) -> RTDResult<Messages> {
     async_caller!(Messages);
     async_caller(&self.api, send_message_album.as_ref()).await
   }
 
-  pub async fn send_passport_authorization_form<C: AsRef<SendPassportAuthorizationForm>>(&self, send_passport_authorization_form: C) -> RTDResult<Ok> {
+  pub async fn send_passport_authorization_form<C: AsRef<SendPassportAuthorizationForm>>(
+    &self,
+    send_passport_authorization_form: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, send_passport_authorization_form.as_ref()).await
   }
 
-  pub async fn send_payment_form<C: AsRef<SendPaymentForm>>(&self, send_payment_form: C) -> RTDResult<PaymentResult> {
+  pub async fn send_payment_form<C: AsRef<SendPaymentForm>>(
+    &self,
+    send_payment_form: C,
+  ) -> RTDResult<PaymentResult> {
     async_caller!(PaymentResult);
     async_caller(&self.api, send_payment_form.as_ref()).await
   }
 
-  pub async fn send_phone_number_confirmation_code<C: AsRef<SendPhoneNumberConfirmationCode>>(&self, send_phone_number_confirmation_code: C) -> RTDResult<AuthenticationCodeInfo> {
+  pub async fn send_phone_number_confirmation_code<C: AsRef<SendPhoneNumberConfirmationCode>>(
+    &self,
+    send_phone_number_confirmation_code: C,
+  ) -> RTDResult<AuthenticationCodeInfo> {
     async_caller!(AuthenticationCodeInfo);
     async_caller(&self.api, send_phone_number_confirmation_code.as_ref()).await
   }
 
-  pub async fn send_phone_number_verification_code<C: AsRef<SendPhoneNumberVerificationCode>>(&self, send_phone_number_verification_code: C) -> RTDResult<AuthenticationCodeInfo> {
+  pub async fn send_phone_number_verification_code<C: AsRef<SendPhoneNumberVerificationCode>>(
+    &self,
+    send_phone_number_verification_code: C,
+  ) -> RTDResult<AuthenticationCodeInfo> {
     async_caller!(AuthenticationCodeInfo);
     async_caller(&self.api, send_phone_number_verification_code.as_ref()).await
   }
 
-  pub async fn set_account_ttl<C: AsRef<SetAccountTtl>>(&self, set_account_ttl: C) -> RTDResult<Ok> {
+  pub async fn set_account_ttl<C: AsRef<SetAccountTtl>>(
+    &self,
+    set_account_ttl: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_account_ttl.as_ref()).await
   }
@@ -1856,17 +2850,26 @@ impl AsyncApi {
     async_caller(&self.api, set_alarm.as_ref()).await
   }
 
-  pub async fn set_authentication_phone_number<C: AsRef<SetAuthenticationPhoneNumber>>(&self, set_authentication_phone_number: C) -> RTDResult<Ok> {
+  pub async fn set_authentication_phone_number<C: AsRef<SetAuthenticationPhoneNumber>>(
+    &self,
+    set_authentication_phone_number: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_authentication_phone_number.as_ref()).await
   }
 
-  pub async fn set_auto_download_settings<C: AsRef<SetAutoDownloadSettings>>(&self, set_auto_download_settings: C) -> RTDResult<Ok> {
+  pub async fn set_auto_download_settings<C: AsRef<SetAutoDownloadSettings>>(
+    &self,
+    set_auto_download_settings: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_auto_download_settings.as_ref()).await
   }
 
-  pub async fn set_background<C: AsRef<SetBackground>>(&self, set_background: C) -> RTDResult<Background> {
+  pub async fn set_background<C: AsRef<SetBackground>>(
+    &self,
+    set_background: C,
+  ) -> RTDResult<Background> {
     async_caller!(Background);
     async_caller(&self.api, set_background.as_ref()).await
   }
@@ -1876,57 +2879,90 @@ impl AsyncApi {
     async_caller(&self.api, set_bio.as_ref()).await
   }
 
-  pub async fn set_bot_updates_status<C: AsRef<SetBotUpdatesStatus>>(&self, set_bot_updates_status: C) -> RTDResult<Ok> {
+  pub async fn set_bot_updates_status<C: AsRef<SetBotUpdatesStatus>>(
+    &self,
+    set_bot_updates_status: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_bot_updates_status.as_ref()).await
   }
 
-  pub async fn set_chat_client_data<C: AsRef<SetChatClientData>>(&self, set_chat_client_data: C) -> RTDResult<Ok> {
+  pub async fn set_chat_client_data<C: AsRef<SetChatClientData>>(
+    &self,
+    set_chat_client_data: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_chat_client_data.as_ref()).await
   }
 
-  pub async fn set_chat_description<C: AsRef<SetChatDescription>>(&self, set_chat_description: C) -> RTDResult<Ok> {
+  pub async fn set_chat_description<C: AsRef<SetChatDescription>>(
+    &self,
+    set_chat_description: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_chat_description.as_ref()).await
   }
 
-  pub async fn set_chat_discussion_group<C: AsRef<SetChatDiscussionGroup>>(&self, set_chat_discussion_group: C) -> RTDResult<Ok> {
+  pub async fn set_chat_discussion_group<C: AsRef<SetChatDiscussionGroup>>(
+    &self,
+    set_chat_discussion_group: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_chat_discussion_group.as_ref()).await
   }
 
-  pub async fn set_chat_draft_message<C: AsRef<SetChatDraftMessage>>(&self, set_chat_draft_message: C) -> RTDResult<Ok> {
+  pub async fn set_chat_draft_message<C: AsRef<SetChatDraftMessage>>(
+    &self,
+    set_chat_draft_message: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_chat_draft_message.as_ref()).await
   }
 
-  pub async fn set_chat_location<C: AsRef<SetChatLocation>>(&self, set_chat_location: C) -> RTDResult<Ok> {
+  pub async fn set_chat_location<C: AsRef<SetChatLocation>>(
+    &self,
+    set_chat_location: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_chat_location.as_ref()).await
   }
 
-  pub async fn set_chat_member_status<C: AsRef<SetChatMemberStatus>>(&self, set_chat_member_status: C) -> RTDResult<Ok> {
+  pub async fn set_chat_member_status<C: AsRef<SetChatMemberStatus>>(
+    &self,
+    set_chat_member_status: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_chat_member_status.as_ref()).await
   }
 
-  pub async fn set_chat_message_sender<C: AsRef<SetChatMessageSender>>(&self, set_chat_message_sender: C) -> RTDResult<Ok> {
+  pub async fn set_chat_message_sender<C: AsRef<SetChatMessageSender>>(
+    &self,
+    set_chat_message_sender: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_chat_message_sender.as_ref()).await
   }
 
-  pub async fn set_chat_message_ttl<C: AsRef<SetChatMessageTtl>>(&self, set_chat_message_ttl: C) -> RTDResult<Ok> {
+  pub async fn set_chat_message_ttl<C: AsRef<SetChatMessageTtl>>(
+    &self,
+    set_chat_message_ttl: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_chat_message_ttl.as_ref()).await
   }
 
-  pub async fn set_chat_notification_settings<C: AsRef<SetChatNotificationSettings>>(&self, set_chat_notification_settings: C) -> RTDResult<Ok> {
+  pub async fn set_chat_notification_settings<C: AsRef<SetChatNotificationSettings>>(
+    &self,
+    set_chat_notification_settings: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_chat_notification_settings.as_ref()).await
   }
 
-  pub async fn set_chat_permissions<C: AsRef<SetChatPermissions>>(&self, set_chat_permissions: C) -> RTDResult<Ok> {
+  pub async fn set_chat_permissions<C: AsRef<SetChatPermissions>>(
+    &self,
+    set_chat_permissions: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_chat_permissions.as_ref()).await
   }
@@ -1936,7 +2972,10 @@ impl AsyncApi {
     async_caller(&self.api, set_chat_photo.as_ref()).await
   }
 
-  pub async fn set_chat_slow_mode_delay<C: AsRef<SetChatSlowModeDelay>>(&self, set_chat_slow_mode_delay: C) -> RTDResult<Ok> {
+  pub async fn set_chat_slow_mode_delay<C: AsRef<SetChatSlowModeDelay>>(
+    &self,
+    set_chat_slow_mode_delay: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_chat_slow_mode_delay.as_ref()).await
   }
@@ -1956,52 +2995,86 @@ impl AsyncApi {
     async_caller(&self.api, set_commands.as_ref()).await
   }
 
-  pub async fn set_custom_language_pack<C: AsRef<SetCustomLanguagePack>>(&self, set_custom_language_pack: C) -> RTDResult<Ok> {
+  pub async fn set_custom_language_pack<C: AsRef<SetCustomLanguagePack>>(
+    &self,
+    set_custom_language_pack: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_custom_language_pack.as_ref()).await
   }
 
-  pub async fn set_custom_language_pack_string<C: AsRef<SetCustomLanguagePackString>>(&self, set_custom_language_pack_string: C) -> RTDResult<Ok> {
+  pub async fn set_custom_language_pack_string<C: AsRef<SetCustomLanguagePackString>>(
+    &self,
+    set_custom_language_pack_string: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_custom_language_pack_string.as_ref()).await
   }
 
-  pub async fn set_database_encryption_key<C: AsRef<SetDatabaseEncryptionKey>>(&self, set_database_encryption_key: C) -> RTDResult<Ok> {
+  pub async fn set_database_encryption_key<C: AsRef<SetDatabaseEncryptionKey>>(
+    &self,
+    set_database_encryption_key: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_database_encryption_key.as_ref()).await
   }
 
-  pub async fn set_file_generation_progress<C: AsRef<SetFileGenerationProgress>>(&self, set_file_generation_progress: C) -> RTDResult<Ok> {
+  pub async fn set_file_generation_progress<C: AsRef<SetFileGenerationProgress>>(
+    &self,
+    set_file_generation_progress: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_file_generation_progress.as_ref()).await
   }
 
-  pub async fn set_game_score<C: AsRef<SetGameScore>>(&self, set_game_score: C) -> RTDResult<Message> {
+  pub async fn set_game_score<C: AsRef<SetGameScore>>(
+    &self,
+    set_game_score: C,
+  ) -> RTDResult<Message> {
     async_caller!(Message);
     async_caller(&self.api, set_game_score.as_ref()).await
   }
 
-  pub async fn set_group_call_participant_is_speaking<C: AsRef<SetGroupCallParticipantIsSpeaking>>(&self, set_group_call_participant_is_speaking: C) -> RTDResult<Ok> {
+  pub async fn set_group_call_participant_is_speaking<
+    C: AsRef<SetGroupCallParticipantIsSpeaking>,
+  >(
+    &self,
+    set_group_call_participant_is_speaking: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_group_call_participant_is_speaking.as_ref()).await
   }
 
-  pub async fn set_group_call_participant_volume_level<C: AsRef<SetGroupCallParticipantVolumeLevel>>(&self, set_group_call_participant_volume_level: C) -> RTDResult<Ok> {
+  pub async fn set_group_call_participant_volume_level<
+    C: AsRef<SetGroupCallParticipantVolumeLevel>,
+  >(
+    &self,
+    set_group_call_participant_volume_level: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_group_call_participant_volume_level.as_ref()).await
   }
 
-  pub async fn set_group_call_title<C: AsRef<SetGroupCallTitle>>(&self, set_group_call_title: C) -> RTDResult<Ok> {
+  pub async fn set_group_call_title<C: AsRef<SetGroupCallTitle>>(
+    &self,
+    set_group_call_title: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_group_call_title.as_ref()).await
   }
 
-  pub async fn set_inactive_session_ttl<C: AsRef<SetInactiveSessionTtl>>(&self, set_inactive_session_ttl: C) -> RTDResult<Ok> {
+  pub async fn set_inactive_session_ttl<C: AsRef<SetInactiveSessionTtl>>(
+    &self,
+    set_inactive_session_ttl: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_inactive_session_ttl.as_ref()).await
   }
 
-  pub async fn set_inline_game_score<C: AsRef<SetInlineGameScore>>(&self, set_inline_game_score: C) -> RTDResult<Ok> {
+  pub async fn set_inline_game_score<C: AsRef<SetInlineGameScore>>(
+    &self,
+    set_inline_game_score: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_inline_game_score.as_ref()).await
   }
@@ -2016,12 +3089,18 @@ impl AsyncApi {
     async_caller(&self.api, set_log_stream.as_ref()).await
   }
 
-  pub async fn set_log_tag_verbosity_level<C: AsRef<SetLogTagVerbosityLevel>>(&self, set_log_tag_verbosity_level: C) -> RTDResult<Ok> {
+  pub async fn set_log_tag_verbosity_level<C: AsRef<SetLogTagVerbosityLevel>>(
+    &self,
+    set_log_tag_verbosity_level: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_log_tag_verbosity_level.as_ref()).await
   }
 
-  pub async fn set_log_verbosity_level<C: AsRef<SetLogVerbosityLevel>>(&self, set_log_verbosity_level: C) -> RTDResult<Ok> {
+  pub async fn set_log_verbosity_level<C: AsRef<SetLogVerbosityLevel>>(
+    &self,
+    set_log_verbosity_level: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_log_verbosity_level.as_ref()).await
   }
@@ -2031,7 +3110,10 @@ impl AsyncApi {
     async_caller(&self.api, set_name.as_ref()).await
   }
 
-  pub async fn set_network_type<C: AsRef<SetNetworkType>>(&self, set_network_type: C) -> RTDResult<Ok> {
+  pub async fn set_network_type<C: AsRef<SetNetworkType>>(
+    &self,
+    set_network_type: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_network_type.as_ref()).await
   }
@@ -2041,72 +3123,114 @@ impl AsyncApi {
     async_caller(&self.api, set_option.as_ref()).await
   }
 
-  pub async fn set_passport_element<C: AsRef<SetPassportElement>>(&self, set_passport_element: C) -> RTDResult<PassportElement> {
+  pub async fn set_passport_element<C: AsRef<SetPassportElement>>(
+    &self,
+    set_passport_element: C,
+  ) -> RTDResult<PassportElement> {
     async_caller!(PassportElement);
     async_caller(&self.api, set_passport_element.as_ref()).await
   }
 
-  pub async fn set_passport_element_errors<C: AsRef<SetPassportElementErrors>>(&self, set_passport_element_errors: C) -> RTDResult<Ok> {
+  pub async fn set_passport_element_errors<C: AsRef<SetPassportElementErrors>>(
+    &self,
+    set_passport_element_errors: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_passport_element_errors.as_ref()).await
   }
 
-  pub async fn set_password<C: AsRef<SetPassword>>(&self, set_password: C) -> RTDResult<PasswordState> {
+  pub async fn set_password<C: AsRef<SetPassword>>(
+    &self,
+    set_password: C,
+  ) -> RTDResult<PasswordState> {
     async_caller!(PasswordState);
     async_caller(&self.api, set_password.as_ref()).await
   }
 
-  pub async fn set_pinned_chats<C: AsRef<SetPinnedChats>>(&self, set_pinned_chats: C) -> RTDResult<Ok> {
+  pub async fn set_pinned_chats<C: AsRef<SetPinnedChats>>(
+    &self,
+    set_pinned_chats: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_pinned_chats.as_ref()).await
   }
 
-  pub async fn set_poll_answer<C: AsRef<SetPollAnswer>>(&self, set_poll_answer: C) -> RTDResult<Ok> {
+  pub async fn set_poll_answer<C: AsRef<SetPollAnswer>>(
+    &self,
+    set_poll_answer: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_poll_answer.as_ref()).await
   }
 
-  pub async fn set_profile_photo<C: AsRef<SetProfilePhoto>>(&self, set_profile_photo: C) -> RTDResult<Ok> {
+  pub async fn set_profile_photo<C: AsRef<SetProfilePhoto>>(
+    &self,
+    set_profile_photo: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_profile_photo.as_ref()).await
   }
 
-  pub async fn set_recovery_email_address<C: AsRef<SetRecoveryEmailAddress>>(&self, set_recovery_email_address: C) -> RTDResult<PasswordState> {
+  pub async fn set_recovery_email_address<C: AsRef<SetRecoveryEmailAddress>>(
+    &self,
+    set_recovery_email_address: C,
+  ) -> RTDResult<PasswordState> {
     async_caller!(PasswordState);
     async_caller(&self.api, set_recovery_email_address.as_ref()).await
   }
 
-  pub async fn set_scope_notification_settings<C: AsRef<SetScopeNotificationSettings>>(&self, set_scope_notification_settings: C) -> RTDResult<Ok> {
+  pub async fn set_scope_notification_settings<C: AsRef<SetScopeNotificationSettings>>(
+    &self,
+    set_scope_notification_settings: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_scope_notification_settings.as_ref()).await
   }
 
-  pub async fn set_sticker_position_in_set<C: AsRef<SetStickerPositionInSet>>(&self, set_sticker_position_in_set: C) -> RTDResult<Ok> {
+  pub async fn set_sticker_position_in_set<C: AsRef<SetStickerPositionInSet>>(
+    &self,
+    set_sticker_position_in_set: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_sticker_position_in_set.as_ref()).await
   }
 
-  pub async fn set_sticker_set_thumbnail<C: AsRef<SetStickerSetThumbnail>>(&self, set_sticker_set_thumbnail: C) -> RTDResult<StickerSet> {
+  pub async fn set_sticker_set_thumbnail<C: AsRef<SetStickerSetThumbnail>>(
+    &self,
+    set_sticker_set_thumbnail: C,
+  ) -> RTDResult<StickerSet> {
     async_caller!(StickerSet);
     async_caller(&self.api, set_sticker_set_thumbnail.as_ref()).await
   }
 
-  pub async fn set_supergroup_sticker_set<C: AsRef<SetSupergroupStickerSet>>(&self, set_supergroup_sticker_set: C) -> RTDResult<Ok> {
+  pub async fn set_supergroup_sticker_set<C: AsRef<SetSupergroupStickerSet>>(
+    &self,
+    set_supergroup_sticker_set: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_supergroup_sticker_set.as_ref()).await
   }
 
-  pub async fn set_supergroup_username<C: AsRef<SetSupergroupUsername>>(&self, set_supergroup_username: C) -> RTDResult<Ok> {
+  pub async fn set_supergroup_username<C: AsRef<SetSupergroupUsername>>(
+    &self,
+    set_supergroup_username: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_supergroup_username.as_ref()).await
   }
 
-  pub async fn set_tdlib_parameters<C: AsRef<SetTdlibParameters>>(&self, set_tdlib_parameters: C) -> RTDResult<Ok> {
+  pub async fn set_tdlib_parameters<C: AsRef<SetTdlibParameters>>(
+    &self,
+    set_tdlib_parameters: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_tdlib_parameters.as_ref()).await
   }
 
-  pub async fn set_user_privacy_setting_rules<C: AsRef<SetUserPrivacySettingRules>>(&self, set_user_privacy_setting_rules: C) -> RTDResult<Ok> {
+  pub async fn set_user_privacy_setting_rules<C: AsRef<SetUserPrivacySettingRules>>(
+    &self,
+    set_user_privacy_setting_rules: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_user_privacy_setting_rules.as_ref()).await
   }
@@ -2116,27 +3240,42 @@ impl AsyncApi {
     async_caller(&self.api, set_username.as_ref()).await
   }
 
-  pub async fn set_video_chat_default_participant<C: AsRef<SetVideoChatDefaultParticipant>>(&self, set_video_chat_default_participant: C) -> RTDResult<Ok> {
+  pub async fn set_video_chat_default_participant<C: AsRef<SetVideoChatDefaultParticipant>>(
+    &self,
+    set_video_chat_default_participant: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, set_video_chat_default_participant.as_ref()).await
   }
 
-  pub async fn share_phone_number<C: AsRef<SharePhoneNumber>>(&self, share_phone_number: C) -> RTDResult<Ok> {
+  pub async fn share_phone_number<C: AsRef<SharePhoneNumber>>(
+    &self,
+    share_phone_number: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, share_phone_number.as_ref()).await
   }
 
-  pub async fn start_group_call_recording<C: AsRef<StartGroupCallRecording>>(&self, start_group_call_recording: C) -> RTDResult<Ok> {
+  pub async fn start_group_call_recording<C: AsRef<StartGroupCallRecording>>(
+    &self,
+    start_group_call_recording: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, start_group_call_recording.as_ref()).await
   }
 
-  pub async fn start_group_call_screen_sharing<C: AsRef<StartGroupCallScreenSharing>>(&self, start_group_call_screen_sharing: C) -> RTDResult<Text> {
+  pub async fn start_group_call_screen_sharing<C: AsRef<StartGroupCallScreenSharing>>(
+    &self,
+    start_group_call_screen_sharing: C,
+  ) -> RTDResult<Text> {
     async_caller!(Text);
     async_caller(&self.api, start_group_call_screen_sharing.as_ref()).await
   }
 
-  pub async fn start_scheduled_group_call<C: AsRef<StartScheduledGroupCall>>(&self, start_scheduled_group_call: C) -> RTDResult<Ok> {
+  pub async fn start_scheduled_group_call<C: AsRef<StartScheduledGroupCall>>(
+    &self,
+    start_scheduled_group_call: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, start_scheduled_group_call.as_ref()).await
   }
@@ -2146,57 +3285,90 @@ impl AsyncApi {
     async_caller(&self.api, stop_poll.as_ref()).await
   }
 
-  pub async fn synchronize_language_pack<C: AsRef<SynchronizeLanguagePack>>(&self, synchronize_language_pack: C) -> RTDResult<Ok> {
+  pub async fn synchronize_language_pack<C: AsRef<SynchronizeLanguagePack>>(
+    &self,
+    synchronize_language_pack: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, synchronize_language_pack.as_ref()).await
   }
 
-  pub async fn terminate_all_other_sessions<C: AsRef<TerminateAllOtherSessions>>(&self, terminate_all_other_sessions: C) -> RTDResult<Ok> {
+  pub async fn terminate_all_other_sessions<C: AsRef<TerminateAllOtherSessions>>(
+    &self,
+    terminate_all_other_sessions: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, terminate_all_other_sessions.as_ref()).await
   }
 
-  pub async fn terminate_session<C: AsRef<TerminateSession>>(&self, terminate_session: C) -> RTDResult<Ok> {
+  pub async fn terminate_session<C: AsRef<TerminateSession>>(
+    &self,
+    terminate_session: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, terminate_session.as_ref()).await
   }
 
-  pub async fn test_call_bytes<C: AsRef<TestCallBytes>>(&self, test_call_bytes: C) -> RTDResult<TestBytes> {
+  pub async fn test_call_bytes<C: AsRef<TestCallBytes>>(
+    &self,
+    test_call_bytes: C,
+  ) -> RTDResult<TestBytes> {
     async_caller!(TestBytes);
     async_caller(&self.api, test_call_bytes.as_ref()).await
   }
 
-  pub async fn test_call_empty<C: AsRef<TestCallEmpty>>(&self, test_call_empty: C) -> RTDResult<Ok> {
+  pub async fn test_call_empty<C: AsRef<TestCallEmpty>>(
+    &self,
+    test_call_empty: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, test_call_empty.as_ref()).await
   }
 
-  pub async fn test_call_string<C: AsRef<TestCallString>>(&self, test_call_string: C) -> RTDResult<TestString> {
+  pub async fn test_call_string<C: AsRef<TestCallString>>(
+    &self,
+    test_call_string: C,
+  ) -> RTDResult<TestString> {
     async_caller!(TestString);
     async_caller(&self.api, test_call_string.as_ref()).await
   }
 
-  pub async fn test_call_vector_int<C: AsRef<TestCallVectorInt>>(&self, test_call_vector_int: C) -> RTDResult<TestVectorInt> {
+  pub async fn test_call_vector_int<C: AsRef<TestCallVectorInt>>(
+    &self,
+    test_call_vector_int: C,
+  ) -> RTDResult<TestVectorInt> {
     async_caller!(TestVectorInt);
     async_caller(&self.api, test_call_vector_int.as_ref()).await
   }
 
-  pub async fn test_call_vector_int_object<C: AsRef<TestCallVectorIntObject>>(&self, test_call_vector_int_object: C) -> RTDResult<TestVectorIntObject> {
+  pub async fn test_call_vector_int_object<C: AsRef<TestCallVectorIntObject>>(
+    &self,
+    test_call_vector_int_object: C,
+  ) -> RTDResult<TestVectorIntObject> {
     async_caller!(TestVectorIntObject);
     async_caller(&self.api, test_call_vector_int_object.as_ref()).await
   }
 
-  pub async fn test_call_vector_string<C: AsRef<TestCallVectorString>>(&self, test_call_vector_string: C) -> RTDResult<TestVectorString> {
+  pub async fn test_call_vector_string<C: AsRef<TestCallVectorString>>(
+    &self,
+    test_call_vector_string: C,
+  ) -> RTDResult<TestVectorString> {
     async_caller!(TestVectorString);
     async_caller(&self.api, test_call_vector_string.as_ref()).await
   }
 
-  pub async fn test_call_vector_string_object<C: AsRef<TestCallVectorStringObject>>(&self, test_call_vector_string_object: C) -> RTDResult<TestVectorStringObject> {
+  pub async fn test_call_vector_string_object<C: AsRef<TestCallVectorStringObject>>(
+    &self,
+    test_call_vector_string_object: C,
+  ) -> RTDResult<TestVectorStringObject> {
     async_caller!(TestVectorStringObject);
     async_caller(&self.api, test_call_vector_string_object.as_ref()).await
   }
 
-  pub async fn test_get_difference<C: AsRef<TestGetDifference>>(&self, test_get_difference: C) -> RTDResult<Ok> {
+  pub async fn test_get_difference<C: AsRef<TestGetDifference>>(
+    &self,
+    test_get_difference: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, test_get_difference.as_ref()).await
   }
@@ -2211,124 +3383,234 @@ impl AsyncApi {
     async_caller(&self.api, test_proxy.as_ref()).await
   }
 
-  pub async fn test_return_error<C: AsRef<TestReturnError>>(&self, test_return_error: C) -> RTDResult<Error> {
+  pub async fn test_return_error<C: AsRef<TestReturnError>>(
+    &self,
+    test_return_error: C,
+  ) -> RTDResult<Error> {
     async_caller!(Error);
     async_caller(&self.api, test_return_error.as_ref()).await
   }
 
-  pub async fn test_square_int<C: AsRef<TestSquareInt>>(&self, test_square_int: C) -> RTDResult<TestInt> {
+  pub async fn test_square_int<C: AsRef<TestSquareInt>>(
+    &self,
+    test_square_int: C,
+  ) -> RTDResult<TestInt> {
     async_caller!(TestInt);
     async_caller(&self.api, test_square_int.as_ref()).await
   }
 
-  pub async fn test_use_update<C: AsRef<TestUseUpdate>>(&self, test_use_update: C) -> RTDResult<Update> {
+  pub async fn test_use_update<C: AsRef<TestUseUpdate>>(
+    &self,
+    test_use_update: C,
+  ) -> RTDResult<Update> {
     async_caller!(Update);
     async_caller(&self.api, test_use_update.as_ref()).await
   }
 
-  pub async fn toggle_chat_default_disable_notification<C: AsRef<ToggleChatDefaultDisableNotification>>(&self, toggle_chat_default_disable_notification: C) -> RTDResult<Ok> {
+  pub async fn toggle_chat_default_disable_notification<
+    C: AsRef<ToggleChatDefaultDisableNotification>,
+  >(
+    &self,
+    toggle_chat_default_disable_notification: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, toggle_chat_default_disable_notification.as_ref()).await
   }
 
-  pub async fn toggle_chat_has_protected_content<C: AsRef<ToggleChatHasProtectedContent>>(&self, toggle_chat_has_protected_content: C) -> RTDResult<Ok> {
+  pub async fn toggle_chat_has_protected_content<C: AsRef<ToggleChatHasProtectedContent>>(
+    &self,
+    toggle_chat_has_protected_content: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, toggle_chat_has_protected_content.as_ref()).await
   }
 
-  pub async fn toggle_chat_is_marked_as_unread<C: AsRef<ToggleChatIsMarkedAsUnread>>(&self, toggle_chat_is_marked_as_unread: C) -> RTDResult<Ok> {
+  pub async fn toggle_chat_is_marked_as_unread<C: AsRef<ToggleChatIsMarkedAsUnread>>(
+    &self,
+    toggle_chat_is_marked_as_unread: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, toggle_chat_is_marked_as_unread.as_ref()).await
   }
 
-  pub async fn toggle_chat_is_pinned<C: AsRef<ToggleChatIsPinned>>(&self, toggle_chat_is_pinned: C) -> RTDResult<Ok> {
+  pub async fn toggle_chat_is_pinned<C: AsRef<ToggleChatIsPinned>>(
+    &self,
+    toggle_chat_is_pinned: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, toggle_chat_is_pinned.as_ref()).await
   }
 
-  pub async fn toggle_group_call_enabled_start_notification<C: AsRef<ToggleGroupCallEnabledStartNotification>>(&self, toggle_group_call_enabled_start_notification: C) -> RTDResult<Ok> {
+  pub async fn toggle_group_call_enabled_start_notification<
+    C: AsRef<ToggleGroupCallEnabledStartNotification>,
+  >(
+    &self,
+    toggle_group_call_enabled_start_notification: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
-    async_caller(&self.api, toggle_group_call_enabled_start_notification.as_ref()).await
+    async_caller(
+      &self.api,
+      toggle_group_call_enabled_start_notification.as_ref(),
+    )
+    .await
   }
 
-  pub async fn toggle_group_call_is_my_video_enabled<C: AsRef<ToggleGroupCallIsMyVideoEnabled>>(&self, toggle_group_call_is_my_video_enabled: C) -> RTDResult<Ok> {
+  pub async fn toggle_group_call_is_my_video_enabled<C: AsRef<ToggleGroupCallIsMyVideoEnabled>>(
+    &self,
+    toggle_group_call_is_my_video_enabled: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, toggle_group_call_is_my_video_enabled.as_ref()).await
   }
 
-  pub async fn toggle_group_call_is_my_video_paused<C: AsRef<ToggleGroupCallIsMyVideoPaused>>(&self, toggle_group_call_is_my_video_paused: C) -> RTDResult<Ok> {
+  pub async fn toggle_group_call_is_my_video_paused<C: AsRef<ToggleGroupCallIsMyVideoPaused>>(
+    &self,
+    toggle_group_call_is_my_video_paused: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, toggle_group_call_is_my_video_paused.as_ref()).await
   }
 
-  pub async fn toggle_group_call_mute_new_participants<C: AsRef<ToggleGroupCallMuteNewParticipants>>(&self, toggle_group_call_mute_new_participants: C) -> RTDResult<Ok> {
+  pub async fn toggle_group_call_mute_new_participants<
+    C: AsRef<ToggleGroupCallMuteNewParticipants>,
+  >(
+    &self,
+    toggle_group_call_mute_new_participants: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, toggle_group_call_mute_new_participants.as_ref()).await
   }
 
-  pub async fn toggle_group_call_participant_is_hand_raised<C: AsRef<ToggleGroupCallParticipantIsHandRaised>>(&self, toggle_group_call_participant_is_hand_raised: C) -> RTDResult<Ok> {
+  pub async fn toggle_group_call_participant_is_hand_raised<
+    C: AsRef<ToggleGroupCallParticipantIsHandRaised>,
+  >(
+    &self,
+    toggle_group_call_participant_is_hand_raised: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
-    async_caller(&self.api, toggle_group_call_participant_is_hand_raised.as_ref()).await
+    async_caller(
+      &self.api,
+      toggle_group_call_participant_is_hand_raised.as_ref(),
+    )
+    .await
   }
 
-  pub async fn toggle_group_call_participant_is_muted<C: AsRef<ToggleGroupCallParticipantIsMuted>>(&self, toggle_group_call_participant_is_muted: C) -> RTDResult<Ok> {
+  pub async fn toggle_group_call_participant_is_muted<
+    C: AsRef<ToggleGroupCallParticipantIsMuted>,
+  >(
+    &self,
+    toggle_group_call_participant_is_muted: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, toggle_group_call_participant_is_muted.as_ref()).await
   }
 
-  pub async fn toggle_group_call_screen_sharing_is_paused<C: AsRef<ToggleGroupCallScreenSharingIsPaused>>(&self, toggle_group_call_screen_sharing_is_paused: C) -> RTDResult<Ok> {
+  pub async fn toggle_group_call_screen_sharing_is_paused<
+    C: AsRef<ToggleGroupCallScreenSharingIsPaused>,
+  >(
+    &self,
+    toggle_group_call_screen_sharing_is_paused: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
-    async_caller(&self.api, toggle_group_call_screen_sharing_is_paused.as_ref()).await
+    async_caller(
+      &self.api,
+      toggle_group_call_screen_sharing_is_paused.as_ref(),
+    )
+    .await
   }
 
-  pub async fn toggle_message_sender_is_blocked<C: AsRef<ToggleMessageSenderIsBlocked>>(&self, toggle_message_sender_is_blocked: C) -> RTDResult<Ok> {
+  pub async fn toggle_message_sender_is_blocked<C: AsRef<ToggleMessageSenderIsBlocked>>(
+    &self,
+    toggle_message_sender_is_blocked: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, toggle_message_sender_is_blocked.as_ref()).await
   }
 
-  pub async fn toggle_session_can_accept_calls<C: AsRef<ToggleSessionCanAcceptCalls>>(&self, toggle_session_can_accept_calls: C) -> RTDResult<Ok> {
+  pub async fn toggle_session_can_accept_calls<C: AsRef<ToggleSessionCanAcceptCalls>>(
+    &self,
+    toggle_session_can_accept_calls: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, toggle_session_can_accept_calls.as_ref()).await
   }
 
-  pub async fn toggle_session_can_accept_secret_chats<C: AsRef<ToggleSessionCanAcceptSecretChats>>(&self, toggle_session_can_accept_secret_chats: C) -> RTDResult<Ok> {
+  pub async fn toggle_session_can_accept_secret_chats<
+    C: AsRef<ToggleSessionCanAcceptSecretChats>,
+  >(
+    &self,
+    toggle_session_can_accept_secret_chats: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, toggle_session_can_accept_secret_chats.as_ref()).await
   }
 
-  pub async fn toggle_supergroup_is_all_history_available<C: AsRef<ToggleSupergroupIsAllHistoryAvailable>>(&self, toggle_supergroup_is_all_history_available: C) -> RTDResult<Ok> {
+  pub async fn toggle_supergroup_is_all_history_available<
+    C: AsRef<ToggleSupergroupIsAllHistoryAvailable>,
+  >(
+    &self,
+    toggle_supergroup_is_all_history_available: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
-    async_caller(&self.api, toggle_supergroup_is_all_history_available.as_ref()).await
+    async_caller(
+      &self.api,
+      toggle_supergroup_is_all_history_available.as_ref(),
+    )
+    .await
   }
 
-  pub async fn toggle_supergroup_is_broadcast_group<C: AsRef<ToggleSupergroupIsBroadcastGroup>>(&self, toggle_supergroup_is_broadcast_group: C) -> RTDResult<Ok> {
+  pub async fn toggle_supergroup_is_broadcast_group<C: AsRef<ToggleSupergroupIsBroadcastGroup>>(
+    &self,
+    toggle_supergroup_is_broadcast_group: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, toggle_supergroup_is_broadcast_group.as_ref()).await
   }
 
-  pub async fn toggle_supergroup_sign_messages<C: AsRef<ToggleSupergroupSignMessages>>(&self, toggle_supergroup_sign_messages: C) -> RTDResult<Ok> {
+  pub async fn toggle_supergroup_sign_messages<C: AsRef<ToggleSupergroupSignMessages>>(
+    &self,
+    toggle_supergroup_sign_messages: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, toggle_supergroup_sign_messages.as_ref()).await
   }
 
-  pub async fn transfer_chat_ownership<C: AsRef<TransferChatOwnership>>(&self, transfer_chat_ownership: C) -> RTDResult<Ok> {
+  pub async fn transfer_chat_ownership<C: AsRef<TransferChatOwnership>>(
+    &self,
+    transfer_chat_ownership: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, transfer_chat_ownership.as_ref()).await
   }
 
-  pub async fn unpin_all_chat_messages<C: AsRef<UnpinAllChatMessages>>(&self, unpin_all_chat_messages: C) -> RTDResult<Ok> {
+  pub async fn unpin_all_chat_messages<C: AsRef<UnpinAllChatMessages>>(
+    &self,
+    unpin_all_chat_messages: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, unpin_all_chat_messages.as_ref()).await
   }
 
-  pub async fn unpin_chat_message<C: AsRef<UnpinChatMessage>>(&self, unpin_chat_message: C) -> RTDResult<Ok> {
+  pub async fn unpin_chat_message<C: AsRef<UnpinChatMessage>>(
+    &self,
+    unpin_chat_message: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, unpin_chat_message.as_ref()).await
   }
 
-  pub async fn upgrade_basic_group_chat_to_supergroup_chat<C: AsRef<UpgradeBasicGroupChatToSupergroupChat>>(&self, upgrade_basic_group_chat_to_supergroup_chat: C) -> RTDResult<Chat> {
+  pub async fn upgrade_basic_group_chat_to_supergroup_chat<
+    C: AsRef<UpgradeBasicGroupChatToSupergroupChat>,
+  >(
+    &self,
+    upgrade_basic_group_chat_to_supergroup_chat: C,
+  ) -> RTDResult<Chat> {
     async_caller!(Chat);
-    async_caller(&self.api, upgrade_basic_group_chat_to_supergroup_chat.as_ref()).await
+    async_caller(
+      &self.api,
+      upgrade_basic_group_chat_to_supergroup_chat.as_ref(),
+    )
+    .await
   }
 
   pub async fn upload_file<C: AsRef<UploadFile>>(&self, upload_file: C) -> RTDResult<File> {
@@ -2336,12 +3618,18 @@ impl AsyncApi {
     async_caller(&self.api, upload_file.as_ref()).await
   }
 
-  pub async fn upload_sticker_file<C: AsRef<UploadStickerFile>>(&self, upload_sticker_file: C) -> RTDResult<File> {
+  pub async fn upload_sticker_file<C: AsRef<UploadStickerFile>>(
+    &self,
+    upload_sticker_file: C,
+  ) -> RTDResult<File> {
     async_caller!(File);
     async_caller(&self.api, upload_sticker_file.as_ref()).await
   }
 
-  pub async fn validate_order_info<C: AsRef<ValidateOrderInfo>>(&self, validate_order_info: C) -> RTDResult<ValidatedOrderInfo> {
+  pub async fn validate_order_info<C: AsRef<ValidateOrderInfo>>(
+    &self,
+    validate_order_info: C,
+  ) -> RTDResult<ValidatedOrderInfo> {
     async_caller!(ValidatedOrderInfo);
     async_caller(&self.api, validate_order_info.as_ref()).await
   }
@@ -2351,16 +3639,19 @@ impl AsyncApi {
     async_caller(&self.api, view_messages.as_ref()).await
   }
 
-  pub async fn view_trending_sticker_sets<C: AsRef<ViewTrendingStickerSets>>(&self, view_trending_sticker_sets: C) -> RTDResult<Ok> {
+  pub async fn view_trending_sticker_sets<C: AsRef<ViewTrendingStickerSets>>(
+    &self,
+    view_trending_sticker_sets: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, view_trending_sticker_sets.as_ref()).await
   }
 
-  pub async fn write_generated_file_part<C: AsRef<WriteGeneratedFilePart>>(&self, write_generated_file_part: C) -> RTDResult<Ok> {
+  pub async fn write_generated_file_part<C: AsRef<WriteGeneratedFilePart>>(
+    &self,
+    write_generated_file_part: C,
+  ) -> RTDResult<Ok> {
     async_caller!(Ok);
     async_caller(&self.api, write_generated_file_part.as_ref()).await
   }
-
-
 }
-

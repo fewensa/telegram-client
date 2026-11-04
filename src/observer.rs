@@ -1,13 +1,10 @@
-use std::sync::{RwLock};
 use std::collections::HashMap;
+use std::sync::{LazyLock, RwLock};
+
 use futures::channel::mpsc;
 use rtdlib::types::{RObject, TdType};
 
-lazy_static! {
-  static ref OBSERVER: Observer = {
-    Observer::new()
-  };
-}
+static OBSERVER: LazyLock<Observer> = LazyLock::new(Observer::new);
 
 struct Observer {
   channels: RwLock<HashMap<String, mpsc::Sender<TdType>>>,
@@ -16,14 +13,12 @@ struct Observer {
 impl Observer {
   fn new() -> Self {
     Self {
-      channels: RwLock::new(HashMap::new())
+      channels: RwLock::new(HashMap::new()),
     }
   }
 
   fn notify(&self, payload: TdType) {
     let extra = match &payload {
-
-
       TdType::TestUseUpdate(value) => value.extra(),
 
       TdType::UpdateActiveNotifications(value) => value.extra(),
@@ -209,7 +204,6 @@ impl Observer {
       TdType::UpdateUserStatus(value) => value.extra(),
 
       TdType::UpdateUsersNearby(value) => value.extra(),
-
 
       TdType::AuthorizationState(value) => value.extra(),
 
@@ -468,51 +462,38 @@ impl Observer {
       TdType::WebPage(value) => value.extra(),
 
       TdType::WebPageInstantView(value) => value.extra(),
-
-
     };
-    match extra {
-      Some(extra) => {
-        let mut map = self.channels.write().unwrap();
-        if let Some(sender) = map.get_mut(&extra) {
-          sender.try_send(payload).unwrap();
-        }
-      },
-      None => {}
+    if let Some(extra) = extra {
+      let mut map = self.channels.write().unwrap();
+      if let Some(sender) = map.get_mut(&extra) {
+        sender.try_send(payload).unwrap();
+      }
     }
   }
 
   fn subscribe(&self, extra: String) -> mpsc::Receiver<TdType> {
     let (sender, receiver) = mpsc::channel::<TdType>(1);
-    match self.channels.write() {
-      Ok(mut map) => {
-        map.insert(extra, sender);
-      }
-      _ => {}
-    };
+    if let Ok(mut map) = self.channels.write() {
+      map.insert(extra, sender);
+    }
     receiver
   }
 
   fn unsubscribe(&self, extra: &str) {
-    match self.channels.write() {
-      Ok(mut map) => {
-        map.remove(extra);
-      }
-      _ => {}
-    };
+    if let Ok(mut map) = self.channels.write() {
+      map.remove(extra);
+    }
   }
 }
-
 
 pub fn notify(payload: TdType) {
   OBSERVER.notify(payload)
 }
 
-pub fn subscribe<T: AsRef<str>>(extra: T) -> mpsc::Receiver<TdType>{
+pub fn subscribe<T: AsRef<str>>(extra: T) -> mpsc::Receiver<TdType> {
   OBSERVER.subscribe(extra.as_ref().to_string())
 }
 
 pub fn unsubscribe<T: AsRef<str>>(extra: T) {
   OBSERVER.unsubscribe(extra.as_ref())
 }
-

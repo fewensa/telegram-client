@@ -1,18 +1,22 @@
 telegram-client
 ===
 
-[![Build Status](https://api.travis-ci.org/fewensa/telegram-client.svg)](https://travis-ci.org/fewensa/telegram-client/)
+[![CI](https://github.com/fewensa/telegram-client/actions/workflows/ci.yml/badge.svg)](https://github.com/fewensa/telegram-client/actions/workflows/ci.yml)
 
-Telegram client for rust.
+Telegram client for Rust.
 
-This crate use [td](https://github.com/tdlib/td) to call telegram client api. support async api.
+This crate uses [TDLib](https://github.com/tdlib/td) to call the Telegram client API, including an async API.
+
+The typed surface matches TDLib v1.8.0 via `rtdlib` 1.8.1. Newer TDLib JSON methods are not wrapped yet; see [CHANGELOG](./CHANGELOG.md).
 
 ## Usage
 
 ```toml
 [dependencies]
-telegram-client = "1.8.*"
+telegram-client = "=1.8.2"
 ```
+
+The library itself builds on Rust 1.80 or newer. You also need a `libtdjson` shared library on the linker and loader path (see below). A current `libtdjson` is fine for linking; only the generated Rust types are pinned to the v1.8.0 schema. The examples pull newer dev-dependencies (`time` via `simple_logger`) and currently need Rust 1.88 or newer. CI uses current stable.
 
 ## version
 
@@ -21,7 +25,16 @@ Please read: [version](./version.md)
 
 ## Note
 
-Note that you need [tdjson](https://github.com/tdlib/td) dylib file in your path for building and running your application. See also [rtdlib-sys](https://github.com/fewensa/rtdlib-sys) for more details.
+Building and running needs the [tdjson](https://github.com/tdlib/td) shared library (`libtdjson.so`, `libtdjson.dylib`, or `tdjson.dll`) on the linker path. `build.rs` also searches `./lib`. See [rtdlib-sys](https://github.com/fewensa/rtdlib-sys).
+
+On Ubuntu 25.10 and newer, `libtdjson` is packaged. On older releases, install a current `libtdjson` build and make sure `libtdjson.so` (not only the versioned soname) is visible to the linker.
+
+## Project
+
+- [Security policy](./SECURITY.md)
+- [Contributing](./CONTRIBUTING.md)
+- [Code of conduct](./CODE_OF_CONDUCT.md)
+- [Changelog](./CHANGELOG.md)
 
 ## Examples
 

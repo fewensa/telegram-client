@@ -1,0 +1,26 @@
+name: Feature request
+description: Suggest an improvement that fits the current TDLib schema, or a schema upgrade.
+title: "[feature] "
+labels: []
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What you cannot do with the crate today.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: What you would like changed. If this needs TDLib methods newer than v1.8.0, say so. Those methods are not wrapped until rtdlib is regenerated.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: Workarounds you already considered.
+    validations:
+      required: false

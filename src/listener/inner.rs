@@ -7,6 +7,11 @@ pub struct Listener {
   rasync_listener: RasyncListener,
 }
 
+impl Default for Listener {
+  fn default() -> Self {
+    Self::new()
+  }
+}
 
 impl Listener {
   pub fn new() -> Self {

@@ -1,8 +1,6 @@
-
-pub use self::api::*;
+pub use self::inner::*;
 
 pub mod aasync;
 pub mod aevent;
 
-mod api;
-
+mod inner;

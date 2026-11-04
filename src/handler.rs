@@ -1,3 +1,4 @@
+use log::{error, warn};
 use rtdlib::types as rtd_types;
 use rtdlib::types::RObject;
 
@@ -20,7 +21,7 @@ impl<'a> Handler<'a> {
     api: &'a Api,
     event_lout: &'a EventLout,
     rasync_lout: &'a RasyncLout,
-    warn_unregister_listener: &'a bool
+    warn_unregister_listener: &'a bool,
   ) -> Self {
     Self {
       api,
@@ -50,7 +51,6 @@ impl<'a> Handler<'a> {
 
     match rtd_types::from_json::<rtd_types::TdType>(json) {
       Ok(t) => {
-
         // observer handler
         observer::notify(t.clone());
 
@@ -71,7 +71,7 @@ impl<'a> Handler<'a> {
 
         // async listener
         match self.rasync_lout.handle_type(self.api, &t).await {
-          Ok(true) => return,
+          Ok(true) => {}
           Ok(false) => {
             if *self.warn_unregister_listener {
               warn!("{}", tip::un_register_listener(t.td_name()));
@@ -83,7 +83,6 @@ impl<'a> Handler<'a> {
             }
           }
         }
-
       }
       Err(e) => {
         error!("{}", tip::data_fail_with_json(json));
@@ -101,7 +100,3 @@ impl<'a> Handler<'a> {
     }
   }
 }
-
-
-
-
