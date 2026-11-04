@@ -34,6 +34,10 @@ The crate version tracks the TDLib schema (`1.8.69` is TDLib 1.8.69 and `rtdlib`
 - Keep the `authors` field as it is. Do not add personal names.
 - Do not commit Telegram session data, `api_id`, or `api_hash`.
 
+## Releases
+
+Tag `v<version>` on the commit that matches `Cargo.toml`. `.github/workflows/publish.yml` publishes that tag to crates.io. Cargo reads `CARGO_REGISTRY_TOKEN`; the workflow sets it from the Actions secret `TOKEN_CRATES_IO`.
+
 ## Security
 
 Report vulnerabilities through GitHub Security Advisories. See [SECURITY.md](./SECURITY.md). Do not file a public issue for a security bug.
