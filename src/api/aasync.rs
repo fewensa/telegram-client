@@ -2,7 +2,6 @@
 // Callback signatures are the public API.
 #![allow(clippy::type_complexity)]
 
-use futures::StreamExt;
 use rtdlib::errors::{RTDError, RTDResult};
 use rtdlib::types::*;
 
@@ -15,10 +14,10 @@ macro_rules! async_caller {
       let extra = fnc.extra().ok_or(RTDError::Custom(
         "invalid tdjson response type, not have `extra` field".to_string(),
       ))?;
-      let mut rec = observer::subscribe(&extra);
+      // Drop unsubscribes, including when `send` fails or this future is dropped.
+      let mut subscription = observer::subscribe(&extra);
       api.send(&fnc)?;
-      let val = rec.next().await;
-      observer::unsubscribe(&extra);
+      let val = subscription.recv().await;
       if let Some(TdType::Error(v)) = val {
         return Err(RTDError::custom(format!("[{}] {}", v.code(), v.message())));
       }

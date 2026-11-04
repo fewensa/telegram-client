@@ -3,7 +3,8 @@ use std::collections::HashMap;
 use std::sync::{LazyLock, RwLock};
 
 use futures::channel::mpsc;
-use rtdlib::types::{RObject, TdType};
+use futures::StreamExt;
+use rtdlib::types::{detect_td_type_and_extra, from_json, RObject, TdType};
 
 static OBSERVER: LazyLock<Observer> = LazyLock::new(Observer::new);
 
@@ -1043,7 +1044,10 @@ impl Observer {
     if let Some(extra) = extra {
       let mut map = self.channels.write().unwrap();
       if let Some(sender) = map.get_mut(&extra) {
-        sender.try_send(payload).unwrap();
+        // The slot holds the one response this request is waiting for.
+        // A second object with the same @extra, or a receiver that is
+        // already gone, must not panic the receive thread.
+        let _ = sender.try_send(payload);
       }
     }
   }
@@ -1061,16 +1065,170 @@ impl Observer {
       map.remove(extra);
     }
   }
+
+  #[cfg(test)]
+  fn subscriber_count(&self) -> usize {
+    self.channels.read().map(|map| map.len()).unwrap_or(0)
+  }
+}
+
+/// Waiting for one TDLib object with this `@extra`.
+///
+/// Dropping it removes the waiter. That covers `send` failing and the
+/// calling future being dropped before the response arrives.
+#[must_use = "dropping the subscription unsubscribes the request"]
+pub struct Subscription {
+  extra: String,
+  receiver: mpsc::Receiver<TdType>,
+}
+
+impl Subscription {
+  pub async fn recv(&mut self) -> Option<TdType> {
+    self.receiver.next().await
+  }
+}
+
+impl Drop for Subscription {
+  fn drop(&mut self) {
+    OBSERVER.unsubscribe(&self.extra);
+  }
 }
 
 pub fn notify(payload: TdType) {
   OBSERVER.notify(payload)
 }
 
-pub fn subscribe<T: AsRef<str>>(extra: T) -> mpsc::Receiver<TdType> {
-  OBSERVER.subscribe(extra.as_ref().to_string())
+pub fn subscribe<T: AsRef<str>>(extra: T) -> Subscription {
+  let extra = extra.as_ref().to_string();
+  let receiver = OBSERVER.subscribe(extra.clone());
+  Subscription { extra, receiver }
 }
 
-pub fn unsubscribe<T: AsRef<str>>(extra: T) {
-  OBSERVER.unsubscribe(extra.as_ref())
+/// Deliver `json` to whoever called an async method with the same `@extra`.
+///
+/// Runs on the receive thread, before listener callbacks. A listener may be
+/// blocked inside `get_chat` (or any other async method); the worker that
+/// runs listeners cannot be the thread that wakes that wait.
+pub fn publish(json: &str) {
+  match from_json::<TdType>(json) {
+    Ok(object) => notify(object),
+    Err(_) => {
+      let (_td_type, extra) = detect_td_type_and_extra(json);
+      if let Some(extra) = extra {
+        let fallback = format!(
+          "{{\"@type\":\"error\",\"code\":400,\"message\":{},\"@extra\":{}}}",
+          json_string("failed to deserialize TDLib response"),
+          json_string(&extra),
+        );
+        if let Ok(object) = from_json::<TdType>(&fallback) {
+          notify(object);
+        }
+      }
+    }
+  }
+}
+
+fn json_string(value: &str) -> String {
+  let mut out = String::with_capacity(value.len() + 2);
+  out.push('"');
+  for c in value.chars() {
+    match c {
+      '"' => out.push_str("\\\""),
+      '\\' => out.push_str("\\\\"),
+      '\n' => out.push_str("\\n"),
+      '\r' => out.push_str("\\r"),
+      '\t' => out.push_str("\\t"),
+      c if (c as u32) < 0x20 => out.push_str(&format!("\\u{:04x}", c as u32)),
+      c => out.push(c),
+    }
+  }
+  out.push('"');
+  out
+}
+
+#[cfg(test)]
+fn subscriber_count() -> usize {
+  OBSERVER.subscriber_count()
+}
+
+#[cfg(test)]
+pub(crate) fn test_lock() -> std::sync::MutexGuard<'static, ()> {
+  static LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());
+  LOCK.lock().unwrap()
+}
+
+#[cfg(test)]
+mod tests {
+  use rtdlib::types::TdType;
+
+  use super::*;
+
+  /// `from_json::<TdType>` overflows the 2 MiB test-thread stack in debug.
+  fn on_td_stack(f: impl FnOnce() + Send + 'static) {
+    let result = std::thread::Builder::new()
+      .stack_size(8 * 1024 * 1024)
+      .spawn(f)
+      .expect("spawn")
+      .join();
+    if let Err(panic) = result {
+      std::panic::resume_unwind(panic);
+    }
+  }
+
+  #[test]
+  fn dropping_a_subscription_removes_it() {
+    on_td_stack(|| {
+      let _lock = test_lock();
+      let before = subscriber_count();
+      let subscription = subscribe("drop-me");
+      assert_eq!(subscriber_count(), before + 1);
+      drop(subscription);
+      assert_eq!(subscriber_count(), before);
+    });
+  }
+
+  #[test]
+  fn publish_delivers_a_typed_object() {
+    on_td_stack(|| {
+      let _lock = test_lock();
+      let mut subscription = subscribe("good");
+      publish(r#"{"@type":"ok","@extra":"good"}"#);
+      let value = futures::executor::block_on(subscription.recv());
+      assert!(matches!(value, Some(TdType::Ok(_))));
+      drop(subscription);
+    });
+  }
+
+  #[test]
+  fn publish_of_an_unknown_type_wakes_the_waiter_with_an_error() {
+    on_td_stack(|| {
+      let _lock = test_lock();
+      let mut subscription = subscribe("say \"hi\"");
+      publish(r#"{"@type":"notARealTdType","@extra":"say \"hi\"","broken":true}"#);
+      let value = futures::executor::block_on(subscription.recv());
+      match value {
+        Some(TdType::Error(error)) => {
+          assert_eq!(error.code(), 400);
+          assert!(error.message().contains("deserialize"));
+        }
+        other => panic!("waiter was not completed: {other:?}"),
+      }
+      drop(subscription);
+    });
+  }
+
+  #[test]
+  fn a_second_publish_does_not_panic_and_garbage_is_ignored() {
+    on_td_stack(|| {
+      let _lock = test_lock();
+      let mut subscription = subscribe("twice");
+      publish(r#"{"@type":"ok","@extra":"twice"}"#);
+      publish(r#"{"@type":"ok","@extra":"twice"}"#);
+      publish("this is not json");
+      publish(r#"{"@type":"ok"}"#);
+      let value = futures::executor::block_on(subscription.recv());
+      assert!(matches!(value, Some(TdType::Ok(_))));
+      drop(subscription);
+    });
+  }
 }
