@@ -1,6 +1,6 @@
-use std::{error, fmt};
 use std::any::Any;
 use std::fmt::Debug;
+use std::{error, fmt};
 
 use rtdlib::errors::RTDError;
 
@@ -13,7 +13,7 @@ pub struct TGError {
   key: &'static str,
   message: Option<String>,
   data: Option<Box<dyn TGDatable>>,
-  context: Option<Box<dyn std::error::Error>>
+  context: Option<Box<dyn std::error::Error>>,
 }
 
 pub type TGResult<T> = Result<T, TGError>;
@@ -24,7 +24,7 @@ impl TGError {
       key,
       message: None,
       data: None,
-      context: None
+      context: None,
     }
   }
   pub fn custom(message: impl AsRef<str>) -> Self {
@@ -55,22 +55,34 @@ impl TGError {
     self
   }
 
-  pub fn key(&self) -> &'static str { self.key }
-  pub fn message(&self) -> &Option<String> { &self.message }
-  pub fn data(&self) -> &Option<Box<dyn TGDatable>> { &self.data }
-  pub fn context(&self) -> &Option<Box<dyn std::error::Error>> { &self.context }
+  pub fn key(&self) -> &'static str {
+    self.key
+  }
+  pub fn message(&self) -> &Option<String> {
+    &self.message
+  }
+  pub fn data(&self) -> &Option<Box<dyn TGDatable>> {
+    &self.data
+  }
+  pub fn context(&self) -> &Option<Box<dyn std::error::Error>> {
+    &self.context
+  }
 }
-
 
 impl fmt::Display for TGError {
   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    write!(f, "[{}]: {}", self.key, self.message.clone().map_or("".to_string(), |v| v))
+    write!(
+      f,
+      "[{}]: {}",
+      self.key,
+      self.message.as_deref().unwrap_or("")
+    )
   }
 }
 
 impl error::Error for TGError {
-  fn cause(&self) -> Option<&dyn error::Error> {
-    None
+  fn source(&self) -> Option<&(dyn error::Error + 'static)> {
+    self.context.as_deref()
   }
 }
 
@@ -83,3 +95,20 @@ impl From<RTDError> for TGError {
   }
 }
 
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  #[test]
+  fn display_includes_key_and_message() {
+    let mut err = TGError::new("CUSTOM");
+    err.set_message("boom");
+    assert_eq!(err.to_string(), "[CUSTOM]: boom");
+  }
+
+  #[test]
+  fn display_without_message_is_key_only() {
+    let err = TGError::new("CUSTOM");
+    assert_eq!(err.to_string(), "[CUSTOM]: ");
+  }
+}

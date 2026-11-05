@@ -4,18 +4,23 @@ use rtdlib::types::*;
 
 #[derive(Debug, Clone)]
 pub struct Config {
-  toml: toml::Value
+  toml: toml::Value,
 }
 
 impl Default for Config {
   fn default() -> Self {
-    let toml_file = match hostname::get_hostname() {
+    let host = hostname::get()
+      .ok()
+      .and_then(|name| name.into_string().ok());
+    let toml_file = match host {
       Some(name) => format!("telegram-client.{}.toml", name),
-      None => "telegram-client.toml".to_string()
+      None => "telegram-client.toml".to_string(),
     };
     let mut toml_file = Path::new("conf").join(&toml_file[..]);
     if !toml_file.exists() {
-      toml_file = toolkit::path::root_dir().join("conf").join("telegram-client.toml");
+      toml_file = toolkit::path::root_dir()
+        .join("conf")
+        .join("telegram-client.toml");
     }
     if !toml_file.exists() {
       panic!("Not found config file");
@@ -33,52 +38,43 @@ impl Config {
   }
 
   pub fn proxy(&self) -> Option<AddProxy> {
-    self.toml.get("proxy")
-      .filter(|&v| v.is_table())
-      .map(|v| v.as_table())
-      .filter(|v| v.is_some())
-      .map(|v| v.unwrap())
-      .map(|v| {
-        let server = v.get("server").unwrap().as_str().unwrap();
-        let port = v.get("port").unwrap().as_integer().unwrap();
-        let enable = v.get("enable").unwrap().as_bool().unwrap();
-        let type_ = v.get("type").unwrap().as_str().unwrap();
-        let mut tga = AddProxy::builder();
-        tga.server(server)
-          .port(port as i64)
-          .enable(enable);
-        match type_ {
-          "socks5" => tga.type_(ProxyType::socks5(ProxyTypeSocks5::builder())),
-          "http" => tga.type_(ProxyType::http(ProxyTypeHttp::builder())),
-          "mtproto" => tga.type_(ProxyType::mtproto(ProxyTypeMtproto::builder())),
-          _ => panic!("Not found proxy type")
-        };
-        tga.build()
-      })
+    let v = self.toml.get("proxy").and_then(|value| value.as_table())?;
+    let server = v.get("server").unwrap().as_str().unwrap();
+    let port = v.get("port").unwrap().as_integer().unwrap();
+    let enable = v.get("enable").unwrap().as_bool().unwrap();
+    let type_ = v.get("type").unwrap().as_str().unwrap();
+    let mut proxy = Proxy::builder();
+    proxy.server(server).port(port);
+    match type_ {
+      "socks5" => proxy.type_(ProxyType::socks5(ProxyTypeSocks5::builder())),
+      "http" => proxy.type_(ProxyType::http(ProxyTypeHttp::builder())),
+      "mtproto" => proxy.type_(ProxyType::mtproto(ProxyTypeMtproto::builder())),
+      _ => panic!("Not found proxy type"),
+    };
+    Some(
+      AddProxy::builder()
+        .proxy(proxy.build())
+        .enable(enable)
+        .build(),
+    )
   }
 
   pub fn log(&self) -> Option<Log> {
-    self.toml.get("log")
-      .filter(|&v| v.is_table())
-      .map(|v| v.as_table())
-      .filter(|&v| v.is_some())
-      .map(|v| v.unwrap())
-      .map(|v| {
-        let type_ = match v.get("type").unwrap().as_str().unwrap() {
-          "console" => LogType::Console,
-          "file" => LogType::File,
-          _ => LogType::Console
-        };
-        let path = v.get("path").filter(|&v| v.is_str())
-          .map(|v| v.as_str())
-          .filter(|&v| v.is_some())
-          .map(|v| v.unwrap().to_string());
-        let level = v.get("level").filter(|&v| v.is_integer())
-          .map(|v| v.as_integer())
-          .map(|v| v.unwrap())
-          .map_or(1, |v| v);
-        Log { type_, path, level }
-      })
+    let v = self.toml.get("log").and_then(|value| value.as_table())?;
+    let type_ = match v.get("type").unwrap().as_str().unwrap() {
+      "console" => LogType::Console,
+      "file" => LogType::File,
+      _ => LogType::Console,
+    };
+    let path = v
+      .get("path")
+      .and_then(|value| value.as_str())
+      .map(|value| value.to_string());
+    let level = v
+      .get("level")
+      .and_then(|value| value.as_integer())
+      .unwrap_or(1);
+    Some(Log { type_, path, level })
   }
 }
 
@@ -94,7 +90,3 @@ pub enum LogType {
   Console,
   File,
 }
-
-
-
-

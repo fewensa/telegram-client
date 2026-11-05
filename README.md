@@ -1,18 +1,22 @@
 telegram-client
 ===
 
-[![Build Status](https://api.travis-ci.org/fewensa/telegram-client.svg)](https://travis-ci.org/fewensa/telegram-client/)
+[![CI](https://github.com/fewensa/telegram-client/actions/workflows/ci.yml/badge.svg)](https://github.com/fewensa/telegram-client/actions/workflows/ci.yml)
 
-Telegram client for rust.
+Telegram client for Rust.
 
-This crate use [td](https://github.com/tdlib/td) to call telegram client api. support async api.
+This crate uses [TDLib](https://github.com/tdlib/td) to call the Telegram client API, including an async API.
+
+The typed surface matches TDLib 1.8.69 via `rtdlib` 1.8.69 (`td_api.tl` at `4c6377aa7386c39217878a9a56d581922ad37ca4`). See [CHANGELOG](./CHANGELOG.md) for the breaks versus 1.8.1.
 
 ## Usage
 
 ```toml
 [dependencies]
-telegram-client = "1.8.*"
+telegram-client = "=1.8.69"
 ```
+
+Rust 1.89 or newer. You also need a `libtdjson` shared library on the linker and loader path (see below). Link the 1.8.69 `libtdjson` (or a build from that TDLib commit). CI uses current stable.
 
 ## version
 
@@ -21,7 +25,16 @@ Please read: [version](./version.md)
 
 ## Note
 
-Note that you need [tdjson](https://github.com/tdlib/td) dylib file in your path for building and running your application. See also [rtdlib-sys](https://github.com/fewensa/rtdlib-sys) for more details.
+Building and running needs the [tdjson](https://github.com/tdlib/td) shared library (`libtdjson.so`, `libtdjson.dylib`, or `tdjson.dll`) on the linker path. `build.rs` also searches `./lib`. See [rtdlib-sys](https://github.com/fewensa/rtdlib-sys).
+
+On Ubuntu 25.10 and newer, `libtdjson` is packaged. On older releases, install a current `libtdjson` build and make sure `libtdjson.so` (not only the versioned soname) is visible to the linker.
+
+## Project
+
+- [Security policy](./SECURITY.md)
+- [Contributing](./CONTRIBUTING.md)
+- [Code of conduct](./CODE_OF_CONDUCT.md)
+- [Changelog](./CHANGELOG.md)
 
 ## Examples
 
@@ -81,7 +94,7 @@ When td returned json can not deserialize, or your event handler returned error.
 a sample of event handler returned error
 
 ```rust
-listener.on_proxy(|(api, pxy)| {
+listener.on_added_proxy(|(api, pxy)| {
 debug!("Proxy info => {:?}", pxy);
 Err(TGError::new("some error"))
 });

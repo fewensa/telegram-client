@@ -1,8 +1,8 @@
 [package]
 name = "telegram-client"
-version = "0.8.1"
+version = "1.8.69"
 authors = ["fewensa <fewensa@protonmail.com>"]
-description = "Telegram client"
+description = "Telegram client bindings for TDLib"
 homepage = "https://github.com/fewensa/telegram-client"
 repository = "https://github.com/fewensa/telegram-client"
 license = "MIT"
@@ -12,37 +12,31 @@ include = [
   "Cargo.toml",
   "**/*.rs",
   "README.md",
-  "LICENSE"
+  "LICENSE",
+  "version.md",
+  "CHANGELOG.md",
 ]
 readme = "README.md"
-edition = "2018"
+edition = "2021"
+rust-version = "1.89"
 
 build = "build.rs"
 
 [dependencies]
-rtdlib = { version = "=0.8.1", features = [ "sys" ] }
+rtdlib = { version = "=1.8.69", features = [ "sys" ] }
 #rtdlib = { path = "../rtdlib", features = [ "sys" ] }
-#rtdlib = { git = "https://github.com/fewensa/rtdlib.git", features = [ "sys" ] }
 
 log = "0.4"
 regex = "1"
 futures = "0.3"
-lazy_static = "1.4"
 
 [dev-dependencies]
-colored = "2"
-regex = "1"
-hostname = "0.1.5"
-toml = "0.5.8"
+colored = "3"
+hostname = "0.4"
+toml = "0.8"
 
-serde = "1"
-serde_derive = "1"
-serde_json = "1"
-
-simple_logger = "1.12"
+simple_logger = "5"
 
 toolkit = "0.1"
 
-tokio = { version = "1.9.0", features = ["full"] }
-
-
+tokio = { version = "1", features = ["full"] }

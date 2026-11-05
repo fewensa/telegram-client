@@ -1,5 +1,3 @@
-
-
-pub mod thelp;
-pub mod tgfn;
 pub mod config;
+pub mod tgfn;
+pub mod thelp;

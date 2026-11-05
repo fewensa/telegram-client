@@ -46,7 +46,7 @@ impl Client {
   ///
   /// ```
   /// use telegram_client::client::Client;
-  /// Client::set_log_verbosity_level(3);
+  /// Client::set_log_verbosity_level(3).unwrap();
   /// ```
   pub fn set_log_verbosity_level<'a>(level: i32) -> Result<(), &'a str> {
     Tdlib::set_log_verbosity_level(level)
@@ -111,10 +111,10 @@ impl Client {
   ///
   /// # Examples
   ///
-  /// ```
+  /// ```no_run
   /// use telegram_client::client::Client;
   /// let client = Client::default();
-  /// client.start();
+  /// let _handle = client.start();
   /// ```
   pub fn start(&self) -> JoinHandle<()> {
     let tdrecv = TdRecv::new();
@@ -122,7 +122,7 @@ impl Client {
       Arc::new(self.api.clone()),
       self.stop_flag.clone(),
       &self.listener,
-      Arc::new(self.warn_unregister_listener)
+      Arc::new(self.warn_unregister_listener),
     )
   }
 
@@ -130,29 +130,13 @@ impl Client {
   ///
   /// # Examples
   ///
-  /// ```
+  /// ```no_run
   /// use telegram_client::client::Client;
   /// let client = Client::default();
-  /// client.daemon("tgclient");
+  /// client.daemon("tgclient").unwrap();
   /// ```
   pub fn daemon<S: AsRef<str>>(self, _name: S) -> std::thread::Result<()> {
     self.start().join()
-//    debug!("Telegram client started.");
-//    let daemon = Daemon {
-//      name: name.as_ref().to_string(),
-//    };
-//    daemon.run(move |rx: Receiver<State>| {
-//      debug!("Worker started.");
-//      for signal in rx.iter() {
-//        match signal {
-//          State::Start => debug!("Worker: Start"),
-//          State::Reload => debug!("Worker: Reload"),
-//          State::Stop => debug!("Worker: Stop"),
-//        };
-//      }
-//      debug!("Worker finished.");
-//    }).expect("Can not start daemon");
-//    debug!("{} finished.", name.as_ref());
   }
 
   pub fn listener(&mut self) -> &mut Listener {
@@ -161,5 +145,18 @@ impl Client {
 
   pub fn warn_unregister_listener(&mut self, value: bool) {
     self.warn_unregister_listener = value
+  }
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  #[test]
+  fn client_can_be_constructed() {
+    // Keep TDLib quiet while the test process creates a client.
+    let _ = Client::set_log_verbosity_level(0);
+    let client = Client::default();
+    assert!(client.warn_unregister_listener);
   }
 }
