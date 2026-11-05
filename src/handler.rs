@@ -6,7 +6,6 @@ use crate::api::Api;
 use crate::errors::TGError;
 use crate::listener::lasync::RasyncLout;
 use crate::listener::levent::EventLout;
-use crate::observer;
 use crate::tip;
 
 pub struct Handler<'a> {
@@ -31,7 +30,7 @@ impl<'a> Handler<'a> {
     }
   }
 
-  pub async fn handle(&self, json: &'a String) {
+  pub async fn handle(&self, json: &String) {
     // event listener
     if let Some(ev) = self.event_lout.receive() {
       if let Err(e) = ev((self.api, json)) {
@@ -51,10 +50,10 @@ impl<'a> Handler<'a> {
 
     match rtd_types::from_json::<rtd_types::TdType>(json) {
       Ok(t) => {
-        // observer handler
-        observer::notify(t.clone());
-
-        // event listener
+        // The receive thread already published this object to async callers.
+        // Notifying again from the worker deadlocks a caller that is waiting
+        // inside one of the listeners below: the response would sit in this
+        // same worker's queue until that wait finished.
         match self.event_lout.handle_type(self.api, &t) {
           Ok(true) => return,
           Ok(false) => {

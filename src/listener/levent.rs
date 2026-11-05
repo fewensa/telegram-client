@@ -6208,11 +6208,7 @@ impl EventLout {
   }
 
   pub fn is_support<S: AsRef<str>>(&self, name: S) -> bool {
-    self
-      .supports
-      .iter()
-      .find(|&&item| item == name.as_ref())
-      .is_some()
+    self.supports.iter().any(|&item| item == name.as_ref())
   }
 
   pub fn handle_type(&self, api: &Api, td_type: &TdType) -> TGResult<bool> {
