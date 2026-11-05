@@ -32,6 +32,10 @@ Breaking schema update. Not published yet. `rtdlib` 1.8.69 has to be on crates.i
 - `TGError` reports its context through `Error::source`.
 - Examples compile without `API_ID` / `API_HASH` at build time. Doctests that start the client are `no_run`.
 
+### Fixed
+
+- `Api::event`, `Api::rasync`, and `Api::new` open one TDLib client. `ApiBuilder::new` used to call `Tdlib::new`, and those constructors replaced that client, so TDLib logged a second `Create client`, then `Destroy Client` and `authorizationStateClosing` / `authorizationStateClosed` for the client that was thrown away. An `ApiBuilder` that is never built no longer opens a client. `build` still returns the same client on later calls. Method signatures are unchanged.
+
 ## 1.8.1 - 2022-01-29
 
 - Last published release. Binds `rtdlib` 1.8.1 / TDLib v1.8.0.
