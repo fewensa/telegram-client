@@ -33,7 +33,7 @@ futures = "0.3"
 [dev-dependencies]
 colored = "3"
 hostname = "0.4"
-toml = "0.8"
+toml = "1.1"
 
 simple_logger = "5"
 
