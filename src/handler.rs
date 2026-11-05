@@ -1,5 +1,4 @@
 use log::{error, warn};
-use rtdlib::types as rtd_types;
 use rtdlib::types::RObject;
 
 use crate::api::Api;
@@ -48,7 +47,7 @@ impl<'a> Handler<'a> {
       }
     }
 
-    match rtd_types::from_json::<rtd_types::TdType>(json) {
+    match crate::response::read_object(json) {
       Ok(t) => {
         // The receive thread already published this object to async callers.
         // Notifying again from the worker deadlocks a caller that is waiting
