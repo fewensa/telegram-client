@@ -40,10 +40,3 @@ simple_logger = "5"
 toolkit = "0.1"
 
 tokio = { version = "1", features = ["full"] }
-
-# rtdlib 1.8.69 is not on crates.io yet. This patch builds that exact
-# schema from the open pull request. Delete this table after 1.8.69 is
-# published, then refresh Cargo.lock, before tagging telegram-client.
-# `cargo publish` does not include [patch].
-[patch.crates-io]
-rtdlib = { git = "https://github.com/fewensa/rtdlib.git", branch = "agt/revive-maintenance-6901" }

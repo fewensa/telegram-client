@@ -25,7 +25,7 @@ cargo publish --dry-run
 
 ## Versioning
 
-The crate version tracks the TDLib schema (`1.8.69` is TDLib 1.8.69 and `rtdlib` `=1.8.69`). Depend on an exact version. A newer TDLib schema needs a new `rtdlib` release and a regenerated client, plus a row in `version.md`. Until `rtdlib` 1.8.69 is on crates.io, `Cargo.toml` patches it from branch `agt/revive-maintenance-6901`. Remove that `[patch.crates-io]` table after the crate is published, then refresh `Cargo.lock`, before tagging this crate.
+The crate version tracks the TDLib schema (`1.8.69` is TDLib 1.8.69 and `rtdlib` `=1.8.69` from crates.io). Depend on an exact version. A newer TDLib schema needs a new `rtdlib` release and a regenerated client, plus a row in `version.md`.
 
 ## Pull requests
 
