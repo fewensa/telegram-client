@@ -4,11 +4,11 @@
 
 | Version | Supported |
 | --- | --- |
-| 1.8.69 | Yes |
-| 1.8.1 and older | No |
+| 1.8.70 | Yes |
+| 1.8.69 and older | No |
 | 0.8.x snapshot line | No |
 
-1.8.69 is the TDLib 1.8.69 schema. Older published releases are not supported.
+1.8.70 is the TDLib 1.8.69 schema, through `rtdlib` 1.8.70. Older published releases are not supported.
 
 ## Reporting a vulnerability
 

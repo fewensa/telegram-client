@@ -25,7 +25,7 @@ cargo publish --dry-run
 
 ## Versioning
 
-The crate version tracks the TDLib schema (`1.8.69` is TDLib 1.8.69 and `rtdlib` `=1.8.69` from crates.io). Depend on an exact version. A newer TDLib schema needs a new `rtdlib` release and a regenerated client, plus a row in `version.md`.
+The crate version tracks the TDLib schema. 1.8.70 still binds TDLib 1.8.69 (`td_api.tl` at `4c6377aa7386c39217878a9a56d581922ad37ca4`) through `rtdlib` `=1.8.70` from crates.io. Depend on an exact version. A newer TDLib schema needs a new `rtdlib` release and a regenerated client, plus a row in `version.md`.
 
 ## Pull requests
 

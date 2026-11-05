@@ -451,9 +451,9 @@ checksum = "d6f6ff9a378485b298a5286656da665ba74413d36db0979633275d2e708145d4"
 
 [[package]]
 name = "rtdlib"
-version = "1.8.69"
+version = "1.8.70"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e5a01174e483c3e3b93cb7f4cb3d7444b81e8f1ac66bb5792538602ad9d6eb7b"
+checksum = "86f64a7b9ade16a8dc83c558e3ebf631900fbb5f88c8f4b667b102e77cb1788f"
 dependencies = [
  "rtdlib-sys",
  "serde",
@@ -632,7 +632,7 @@ dependencies = [
 
 [[package]]
 name = "telegram-client"
-version = "1.8.69"
+version = "1.8.70"
 dependencies = [
  "colored",
  "futures",
