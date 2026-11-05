@@ -1,5 +1,5 @@
 use std::borrow::Borrow;
-use std::sync::{Arc, LazyLock};
+use std::sync::{Arc, LazyLock, OnceLock};
 
 use log::{debug, info};
 use rtdlib::errors::RTDResult;
@@ -26,7 +26,12 @@ pub(crate) fn redact_secrets(text: &str) -> String {
 
 #[derive(Debug, Clone)]
 pub struct ApiBuilder {
-  inner: Api,
+  // Shared so `build` can fill it through `&self`, and so a cloned builder
+  // still returns the same client. `Api::new` stores the caller's client
+  // before the first `build`.
+  tdlib: Arc<OnceLock<Arc<Tdlib>>>,
+  log: bool,
+  unsafe_log: bool,
 }
 
 impl Default for ApiBuilder {
@@ -36,32 +41,44 @@ impl Default for ApiBuilder {
 }
 
 impl ApiBuilder {
+  /// Does not call `Tdlib::new`. The client is created on [`Self::build`],
+  /// or taken from [`Api::new`] when the caller already has one.
+  ///
+  /// Creating it here opened a client that `Api::event` and `Api::rasync`
+  /// immediately replaced. TDLib then destroyed that extra client and logged
+  /// `authorizationStateClosing` / `authorizationStateClosed` for it.
   pub fn new() -> Self {
     Self {
-      inner: Api {
-        tdlib: Arc::new(Tdlib::new()),
-        log: true,
-        unsafe_log: false,
-      },
+      tdlib: Arc::new(OnceLock::new()),
+      log: true,
+      unsafe_log: false,
     }
   }
 
   pub fn build(&self) -> Api {
-    self.inner.clone()
+    let tdlib = Arc::clone(self.tdlib.get_or_init(|| Arc::new(Tdlib::new())));
+    Api {
+      tdlib,
+      log: self.log,
+      unsafe_log: self.unsafe_log,
+    }
   }
 
   fn tdlib(&mut self, tdlib: Tdlib) -> &mut Self {
-    self.inner.tdlib = Arc::new(tdlib);
+    self
+      .tdlib
+      .set(Arc::new(tdlib))
+      .expect("TDLib client is already set on this builder");
     self
   }
 
   pub fn log(&mut self, open: bool) -> &mut Self {
-    self.inner.log = open;
+    self.log = open;
     self
   }
 
   pub fn unsafe_log(&mut self, unsafe_log: bool) -> &mut Self {
-    self.inner.unsafe_log = unsafe_log;
+    self.unsafe_log = unsafe_log;
     self
   }
 }
@@ -89,7 +106,7 @@ impl Api {
   }
 
   pub fn event() -> EventApi {
-    Api::event_with_tdlib(Tdlib::new())
+    Api::event_with_api(Api::default())
   }
 
   pub fn event_with_tdlib(tdlib: Tdlib) -> EventApi {
@@ -101,7 +118,7 @@ impl Api {
   }
 
   pub fn rasync() -> AsyncApi {
-    Api::rasync_with_tdlib(Tdlib::new())
+    Api::rasync_with_api(Api::default())
   }
 
   pub fn rasync_with_tdlib(tdlib: Tdlib) -> AsyncApi {
