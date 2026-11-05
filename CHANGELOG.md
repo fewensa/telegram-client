@@ -35,6 +35,7 @@ Breaking schema update. Not published yet. `rtdlib` 1.8.69 has to be on crates.i
 ### Fixed
 
 - `Api::event`, `Api::rasync`, and `Api::new` open one TDLib client. `ApiBuilder::new` used to call `Tdlib::new`, and those constructors replaced that client, so TDLib logged a second `Create client`, then `Destroy Client` and `authorizationStateClosing` / `authorizationStateClosed` for the client that was thrown away. An `ApiBuilder` that is never built no longer opens a client. `build` still returns the same client on later calls. Method signatures are unchanged.
+- Async methods whose result is an abstract TDLib class now return that class. `getOption` is the case callers hit: TDLib answers `{"@type":"optionValueString","value":"1.8.69"}`, and `optionValue*` lives under `OptionValue` rather than as a `TdType` variant, so `from_json::<TdType>` rejected the body. The same decode covers the other abstract results (`getAuthorizationState`, `getJsonValue`, `joinChat`, and the rest of that set). `testUseUpdate` returns `Update`, whose constructors are already `TdType` variants for listeners; a response carrying `@extra` is handed to the waiter as `TdType::Update`.
 
 ## 1.8.1 - 2022-01-29
 

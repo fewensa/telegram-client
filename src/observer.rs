@@ -1109,23 +1109,30 @@ pub fn subscribe<T: AsRef<str>>(extra: T) -> Subscription {
 /// Runs on the receive thread, before listener callbacks. A listener may be
 /// blocked inside `get_chat` (or any other async method); the worker that
 /// runs listeners cannot be the thread that wakes that wait.
+///
+/// A response that cannot be decoded still completes the waiter. Leaving the
+/// channel idle parks `get_option` (and every other async method) forever.
 pub fn publish(json: &str) {
-  match from_json::<TdType>(json) {
+  match crate::response::read_response(json) {
     Ok(object) => notify(object),
     Err(_) => {
-      let (_td_type, extra) = detect_td_type_and_extra(json);
-      if let Some(extra) = extra {
-        let fallback = format!(
-          "{{\"@type\":\"error\",\"code\":400,\"message\":{},\"@extra\":{}}}",
-          json_string("failed to deserialize TDLib response"),
-          json_string(&extra),
-        );
-        if let Ok(object) = from_json::<TdType>(&fallback) {
-          notify(object);
-        }
+      if let Some(extra) = detect_td_type_and_extra(json).1 {
+        notify(deserialize_failure(&extra));
       }
     }
   }
+}
+
+/// `Error` keeps `extra` private and the builder assigns a fresh one, so the
+/// failure sent to a waiter is built as JSON. `extra` is escaped, and `error`
+/// is a `TdType`, so this parse holds for every string `@extra`.
+fn deserialize_failure(extra: &str) -> TdType {
+  let fallback = format!(
+    "{{\"@type\":\"error\",\"code\":400,\"message\":{},\"@extra\":{}}}",
+    json_string("failed to deserialize TDLib response"),
+    json_string(extra),
+  );
+  from_json::<TdType>(&fallback).expect("constructed error response")
 }
 
 fn json_string(value: &str) -> String {
@@ -1159,7 +1166,9 @@ pub(crate) fn test_lock() -> std::sync::MutexGuard<'static, ()> {
 
 #[cfg(test)]
 mod tests {
-  use rtdlib::types::TdType;
+  use std::time::Duration;
+
+  use rtdlib::types::{RObject, TdType};
 
   use super::*;
 
@@ -1187,15 +1196,111 @@ mod tests {
     });
   }
 
+  fn published(extra: &str, json: &str) -> Option<TdType> {
+    let mut subscription = subscribe(extra);
+    publish(json);
+    let (tx, rx) = std::sync::mpsc::channel();
+    std::thread::spawn(move || {
+      let value = futures::executor::block_on(subscription.recv());
+      let _ = tx.send(value);
+    });
+    rx.recv_timeout(Duration::from_secs(2)).ok().flatten()
+  }
+
   #[test]
   fn publish_delivers_a_typed_object() {
     on_td_stack(|| {
       let _lock = test_lock();
-      let mut subscription = subscribe("good");
-      publish(r#"{"@type":"ok","@extra":"good"}"#);
-      let value = futures::executor::block_on(subscription.recv());
+      let value = published("good", r#"{"@type":"ok","@extra":"good"}"#);
       assert!(matches!(value, Some(TdType::Ok(_))));
-      drop(subscription);
+    });
+  }
+
+  #[test]
+  fn publish_delivers_option_values() {
+    on_td_stack(|| {
+      let _lock = test_lock();
+      // Recorded shapes. TDLib sends int64 as a JSON string.
+      let cases = [
+        (
+          "opt-string",
+          r#"{"@type":"optionValueString","value":"1.8.69","@extra":"opt-string"}"#,
+        ),
+        (
+          "opt-int",
+          r#"{"@type":"optionValueInteger","value":"42","@extra":"opt-int"}"#,
+        ),
+        (
+          "opt-bool",
+          r#"{"@type":"optionValueBoolean","value":true,"@extra":"opt-bool"}"#,
+        ),
+        (
+          "opt-empty",
+          r#"{"@type":"optionValueEmpty","@extra":"opt-empty"}"#,
+        ),
+      ];
+      for (extra, json) in cases {
+        match published(extra, json) {
+          Some(TdType::OptionValue(value)) => match extra {
+            "opt-string" => {
+              assert_eq!(
+                value.as_string().map(|item| item.value().as_str()),
+                Some("1.8.69")
+              );
+            }
+            "opt-int" => assert_eq!(value.as_integer().map(|item| item.value()), Some(42)),
+            "opt-bool" => assert_eq!(value.as_boolean().map(|item| item.value()), Some(true)),
+            "opt-empty" => assert!(value.is_empty()),
+            _ => unreachable!(),
+          },
+          other => panic!("{extra} was not an OptionValue: {other:?}"),
+        }
+      }
+    });
+  }
+
+  #[test]
+  fn publish_delivers_other_abstract_results() {
+    on_td_stack(|| {
+      let _lock = test_lock();
+      let auth = published(
+        "auth",
+        r#"{"@type":"authorizationStateWaitPhoneNumber","@extra":"auth"}"#,
+      );
+      assert!(matches!(auth, Some(TdType::AuthorizationState(_))));
+      let stream = published("log", r#"{"@type":"logStreamEmpty","@extra":"log"}"#);
+      assert!(matches!(stream, Some(TdType::LogStream(_))));
+      let json = published(
+        "json",
+        r#"{"@type":"jsonValueString","value":"cfg","@extra":"json"}"#,
+      );
+      match json {
+        Some(TdType::JsonValue(value)) => {
+          assert_eq!(
+            value.as_string().map(|item| item.value().as_str()),
+            Some("cfg")
+          );
+        }
+        other => panic!("json value was not delivered: {other:?}"),
+      }
+    });
+  }
+
+  #[test]
+  fn publish_wraps_an_update_response_as_update() {
+    on_td_stack(|| {
+      let _lock = test_lock();
+      let value = published(
+        "use-update",
+        r#"{"@type":"updateOption","name":"version","value":{"@type":"optionValueString","value":"1.8.69"},"@extra":"use-update"}"#,
+      );
+      match value {
+        Some(TdType::Update(update)) => {
+          assert!(update.is_option());
+          assert_eq!(update.extra().as_deref(), Some("use-update"));
+        }
+        other => panic!("testUseUpdate response was not Update: {other:?}"),
+      }
     });
   }
 
@@ -1203,17 +1308,38 @@ mod tests {
   fn publish_of_an_unknown_type_wakes_the_waiter_with_an_error() {
     on_td_stack(|| {
       let _lock = test_lock();
-      let mut subscription = subscribe("say \"hi\"");
-      publish(r#"{"@type":"notARealTdType","@extra":"say \"hi\"","broken":true}"#);
-      let value = futures::executor::block_on(subscription.recv());
+      let value = published(
+        "say \"hi\"",
+        r#"{"@type":"notARealTdType","@extra":"say \"hi\"","broken":true}"#,
+      );
       match value {
         Some(TdType::Error(error)) => {
           assert_eq!(error.code(), 400);
           assert!(error.message().contains("deserialize"));
+          assert_eq!(error.extra().as_deref(), Some("say \"hi\""));
         }
         other => panic!("waiter was not completed: {other:?}"),
       }
-      drop(subscription);
+    });
+  }
+
+  #[test]
+  fn a_broken_abstract_result_wakes_the_waiter() {
+    on_td_stack(|| {
+      let _lock = test_lock();
+      // `@type` is a real constructor, but the body cannot be decoded.
+      let value = published(
+        "bad-opt",
+        r#"{"@type":"optionValueBoolean","@extra":"bad-opt"}"#,
+      );
+      match value {
+        Some(TdType::Error(error)) => {
+          assert_eq!(error.code(), 400);
+          assert!(error.message().contains("deserialize"));
+          assert_eq!(error.extra().as_deref(), Some("bad-opt"));
+        }
+        other => panic!("waiter was not completed: {other:?}"),
+      }
     });
   }
 

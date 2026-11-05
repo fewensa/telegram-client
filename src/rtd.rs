@@ -221,4 +221,57 @@ mod tests {
       .expect("worker stayed blocked after the response was published");
     assert_eq!(*result.lock().unwrap(), Some(true));
   }
+
+  #[test]
+  fn an_option_value_reaches_the_listener_and_the_waiter() {
+    on_td_stack(an_option_value_reaches_the_listener_and_the_waiter_body);
+  }
+
+  fn an_option_value_reaches_the_listener_and_the_waiter_body() {
+    let _lock = observer::test_lock();
+    let seen = Arc::new(Mutex::new(None));
+    let mut listener = Listener::new();
+    let slot = seen.clone();
+    listener
+      .event_listener_mut()
+      .on_option_value(move |(_api, value)| {
+        *slot.lock().unwrap() = value.as_string().map(|item| item.value().clone());
+        Ok(())
+      });
+    let mut subscription = observer::subscribe("opt-listener");
+    drive(
+      &listener,
+      vec![r#"{"@type":"optionValueString","value":"1.8.69","@extra":"opt-listener"}"#.to_string()],
+    );
+    let value = futures::executor::block_on(subscription.recv());
+    assert!(matches!(value, Some(TdType::OptionValue(_))));
+    assert_eq!(seen.lock().unwrap().as_deref(), Some("1.8.69"));
+    drop(subscription);
+  }
+
+  #[test]
+  fn a_pushed_update_still_reaches_its_listener() {
+    on_td_stack(a_pushed_update_still_reaches_its_listener_body);
+  }
+
+  fn a_pushed_update_still_reaches_its_listener_body() {
+    let _lock = observer::test_lock();
+    let seen = Arc::new(Mutex::new(None));
+    let mut listener = Listener::new();
+    let slot = seen.clone();
+    listener
+      .event_listener_mut()
+      .on_update_option(move |(_api, update)| {
+        *slot.lock().unwrap() = Some(update.name().clone());
+        Ok(())
+      });
+    drive(
+      &listener,
+      vec![
+        r#"{"@type":"updateOption","name":"version","value":{"@type":"optionValueEmpty"}}"#
+          .to_string(),
+      ],
+    );
+    assert_eq!(seen.lock().unwrap().as_deref(), Some("version"));
+  }
 }

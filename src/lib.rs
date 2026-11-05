@@ -1,5 +1,6 @@
 mod handler;
 mod observer;
+mod response;
 mod rtd;
 mod tip;
 
