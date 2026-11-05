@@ -32,6 +32,10 @@ Breaking schema update. Not published yet. `rtdlib` 1.8.69 has to be on crates.i
 - `TGError` reports its context through `Error::source`.
 - Examples compile without `API_ID` / `API_HASH` at build time. Doctests that start the client are `no_run`.
 
+### Fixed
+
+- Async methods whose result is an abstract TDLib class now return that class. `getOption` is the case callers hit: TDLib answers `{"@type":"optionValueString","value":"1.8.69"}`, and `optionValue*` lives under `OptionValue` rather than as a `TdType` variant, so `from_json::<TdType>` rejected the body. The same decode covers the other abstract results (`getAuthorizationState`, `getJsonValue`, `joinChat`, and the rest of that set). `testUseUpdate` returns `Update`, whose constructors are already `TdType` variants for listeners; a response carrying `@extra` is handed to the waiter as `TdType::Update`.
+
 ## 1.8.1 - 2022-01-29
 
 - Last published release. Binds `rtdlib` 1.8.1 / TDLib v1.8.0.
