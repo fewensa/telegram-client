@@ -24,5 +24,6 @@ The current dependencies are as follows:
 | =1.8.0             | =1.8.0      | [v1.8.0](https://github.com/tdlib/td/releases/tag/v1.8.0) |
 | =1.8.1             | =1.8.1      | [v1.8.0](https://github.com/tdlib/td/releases/tag/v1.8.0) |
 | =1.8.69            | =1.8.69     | TDLib 1.8.69, `td_api.tl` at [4c6377aa](https://github.com/tdlib/td/commit/4c6377aa7386c39217878a9a56d581922ad37ca4) |
+| =1.8.70            | =1.8.70     | TDLib 1.8.69, `td_api.tl` at [4c6377aa](https://github.com/tdlib/td/commit/4c6377aa7386c39217878a9a56d581922ad37ca4) |
 
 
